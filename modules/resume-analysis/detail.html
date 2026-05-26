@@ -14,16 +14,19 @@
   --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
   --bg-page: #F6F9FC; --border: #E8EDF3;
   --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
-  --grad-side: linear-gradient(180deg, #0067AC 0%, #123F6D 80%, #0d2d50 100%);
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
   --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
   --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
   --hl-bg: #FFF4D6; --hl-border: #F0C040;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); line-height: 1.6; }
 
-.layout { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+.layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
 
 .sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
 .sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
@@ -135,6 +138,15 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .btn-secondary { background: white; color: var(--main-1); border: 1px solid var(--main-1); }
 .btn-secondary:hover { background: #F5F9FD; }
 
+
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
   .sidebar { display: none; }
@@ -148,24 +160,22 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 <div class="layout">
 
   <div class="sidebar">
-    <a class="brand" href="../../dashboard-hr.html">
+      <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+      <a class="brand" href="../../dashboard-hr.html">
       <div class="brand-name">RECRUIT AI</div>
       <div class="brand-sub">ABL × HEROs</div>
     </a>
     <div class="nav">
       <div class="nav-section-title">메인</div>
-      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> 대시보드</a>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
       <div class="nav-section-title">채용 업무</div>
-      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> JD 작성</a>
-      <a class="nav-item active" href="index.html"><i class="ti ti-file-search"></i> 자소서 분석</a>
-      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> 면접 일정</a>
-      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> 면접 진행</a>
-      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> 채용 리포트</a>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
     </div>
-    <div class="sidebar-footer">
-      <img src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
-      <span class="sidebar-footer-text">우리금융그룹 자회사</span>
-    </div>
+    
   </div>
 
   <div class="main-area">
