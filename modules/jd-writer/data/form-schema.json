@@ -1,0 +1,50 @@
+{
+  "_note": "이 파일은 충원요청서 양식 정의입니다. 실제 ABL 양식을 받으면 sections 배열만 교체하면 됩니다.",
+  "form_title": "충원요청서",
+  "form_subtitle": "현업 부서의 인재 요구사항을 입력하면 AI가 JD 작성을 도와드립니다.",
+
+  "sections": [
+    {
+      "id": "basic",
+      "title": "기본 정보",
+      "icon": "ti-info-circle",
+      "fields": [
+        {"id": "dept", "label": "요청 부서", "type": "text", "placeholder": "예: 마케팅팀", "required": true},
+        {"id": "position", "label": "채용 직무", "type": "text", "placeholder": "예: 디지털 마케팅 매니저", "required": true},
+        {"id": "level", "label": "직급", "type": "select", "options": ["사원", "대리", "과장", "차장", "부장"], "required": true},
+        {"id": "type", "label": "채용 유형", "type": "radio", "options": ["신입", "경력"], "required": true},
+        {"id": "headcount", "label": "채용 인원", "type": "number", "placeholder": "1", "required": true},
+        {"id": "desired_date", "label": "희망 입사일", "type": "date", "required": false}
+      ]
+    },
+    {
+      "id": "job",
+      "title": "직무 정보",
+      "icon": "ti-briefcase",
+      "fields": [
+        {"id": "main_duties", "label": "담당 업무", "type": "textarea", "placeholder": "이 포지션이 수행할 핵심 업무를 자유롭게 작성해주세요.", "required": true, "ai_hint": "AI가 자동으로 항목별로 정리해드립니다."},
+        {"id": "required_qual", "label": "필수 자격요건", "type": "textarea", "placeholder": "반드시 갖춰야 할 학력·경력·자격증 등", "required": true},
+        {"id": "preferred_qual", "label": "우대 사항", "type": "textarea", "placeholder": "있으면 좋은 추가 역량·경험", "required": false}
+      ]
+    },
+    {
+      "id": "talent",
+      "title": "인재 요건",
+      "icon": "ti-user-star",
+      "fields": [
+        {"id": "career_years", "label": "필요 경력 연차", "type": "select", "options": ["무관", "1~3년", "3~5년", "5~7년", "7~10년", "10년 이상"], "required": true, "show_if": {"field": "type", "value": "경력"}},
+        {"id": "key_skills", "label": "핵심 역량 (최대 5개)", "type": "tags", "placeholder": "예: 데이터 분석, 프로젝트 관리", "max": 5},
+        {"id": "core_values", "label": "ABL 5대 핵심가치 중 우선순위 (최대 2개)", "type": "checkbox", "options": ["배려", "든든함", "전문성", "스마트", "선진"], "max": 2, "required": true}
+      ]
+    },
+    {
+      "id": "context",
+      "title": "채용 배경",
+      "icon": "ti-file-text",
+      "fields": [
+        {"id": "reason", "label": "채용 사유", "type": "select", "options": ["결원 충원", "신규 사업", "조직 확대", "인력 보강", "기타"], "required": true},
+        {"id": "etc", "label": "기타 요구사항", "type": "textarea", "placeholder": "면접 시 강조하고 싶은 점, 특별한 요구사항 등 자유롭게 작성", "required": false}
+      ]
+    }
+  ]
+}

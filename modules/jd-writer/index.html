@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD 워크플로우 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
+
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 32px 28px; }
+  .topbar { padding: 14px 24px; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 24px 16px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+}
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+
+.main-area { display: flex; flex-direction: column; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge.manager-role { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+
+.content { padding: 32px 32px; max-width: 1200px; }
+
+.page-header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.page-title-area h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 14px; }
+
+.btn-primary { background: var(--grad-blue); color: white; border: none; padding: 11px 22px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2); }
+.btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-primary i { font-size: 16px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: white; border-radius: 12px; padding: 18px 22px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--grad-blue); }
+.stat-label { font-size: 12px; color: var(--text-3); font-weight: 700; margin-bottom: 6px; }
+.stat-value { font-size: 26px; font-weight: 700; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
+
+.request-list { display: flex; flex-direction: column; gap: 12px; }
+.request-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; display: block; position: relative; overflow: hidden; }
+.request-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.request-card:hover { border-color: rgba(0, 103, 172, 0.3); box-shadow: 0 8px 24px rgba(0, 103, 172, 0.08); transform: translateY(-2px); }
+.request-card:hover::after { transform: scaleX(1); }
+
+.request-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.request-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.request-meta { font-size: 12px; color: var(--text-3); display: flex; gap: 8px; flex-wrap: wrap; }
+
+.status-pill { font-size: 11px; padding: 5px 12px; border-radius: 12px; font-weight: 700; white-space: nowrap; }
+.status-amber { background: linear-gradient(135deg, #FFF4D6, #FCE9B0); color: #9A6D00; }
+.status-blue { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.status-green { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); color: #2E7D32; }
+.status-teal { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+
+.progress-bar { display: flex; gap: 4px; margin-top: 14px; }
+.progress-step { flex: 1; height: 6px; background: var(--bg-page); border-radius: 3px; position: relative; overflow: hidden; }
+.progress-step.done { background: var(--grad-blue); }
+.progress-step.current { background: var(--grad-blue); opacity: 0.5; }
+
+.progress-labels { display: flex; gap: 4px; margin-top: 6px; }
+.progress-label { flex: 1; font-size: 10px; color: var(--text-3); text-align: center; }
+.progress-label.done { color: var(--main-1); font-weight: 700; }
+.progress-label.current { color: var(--sub-3); font-weight: 700; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-3); background: white; border: 1px dashed var(--border); border-radius: 12px; }
+.empty-state i { font-size: 40px; color: var(--text-3); margin-bottom: 12px; display: block; }
+
+.role-banner { background: linear-gradient(135deg, #E6F1FB, #E0F5F7); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+.role-banner i { font-size: 24px; color: var(--main-1); }
+.role-banner-text { flex: 1; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+.role-banner-text strong { color: var(--main-1); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" id="brandLink" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav" id="navMenu"></div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="role-banner" id="roleBanner"></div>
+
+      <div class="page-header">
+        <div class="page-title-area">
+          <h1 id="pageTitle">JD 워크플로우</h1>
+          <p class="page-subtitle" id="pageSubtitle">충원요청서 작성부터 채용공고 등재까지</p>
+        </div>
+        <a href="form.html" class="btn-primary" id="newBtn"><i class="ti ti-plus"></i> <span id="newBtnText">새 충원요청서</span></a>
+      </div>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="section-title" id="listTitle">진행 중인 요청서</div>
+      <div class="request-list" id="requestList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const empId = sessionStorage.getItem('empId');
+const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
+if (!empId) window.location.href = '../../index.html';
+document.getElementById('userId').textContent = '사번 ' + empId;
+
+const STEPS = ['요청서 작성', 'JD 초안 생성', 'JD 검토 요청', '현업 검토', '공고 등재'];
+
+function renderNav() {
+  const isHR = role === 'hr';
+  const items = isHR ? [
+    { href: '../../dashboard-hr.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: 'JD 작성', section: '채용 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '자소서 분석', section: '채용 업무' },
+    { href: '../schedule/index.html', icon: 'ti-calendar-event', label: '면접 일정', section: '채용 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 진행', section: '채용 업무' },
+    { href: '../report/index.html', icon: 'ti-chart-histogram', label: '채용 리포트', section: '채용 업무' }
+  ] : [
+    { href: '../../dashboard-manager.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: '채용 니즈 입력', section: '참여 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '서류 평가', section: '참여 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 지원', section: '참여 업무' }
+  ];
+
+  const nav = document.getElementById('navMenu');
+  let html = '';
+  let lastSection = '';
+  items.forEach(it => {
+    if (it.section !== lastSection) {
+      html += `<div class="nav-section-title">${it.section}</div>`;
+      lastSection = it.section;
+    }
+    html += `<a class="nav-item ${it.active ? 'active' : ''}" href="${it.href}"><i class="ti ${it.icon}"></i> <span class="label">${it.label}</span></a>`;
+  });
+  nav.innerHTML = html;
+
+  document.getElementById('brandLink').href = isHR ? '../../dashboard-hr.html' : '../../dashboard-manager.html';
+
+  const badge = document.getElementById('userBadge');
+  if (!isHR) {
+    badge.classList.add('manager-role');
+    badge.innerHTML = '<i class="ti ti-user-check"></i> 현업 리더';
+  }
+}
+
+function renderRoleBanner() {
+  const banner = document.getElementById('roleBanner');
+  if (role === 'manager') {
+    banner.innerHTML = `
+      <i class="ti ti-bulb"></i>
+      <div class="role-banner-text">
+        <strong>현업 리더 화면:</strong> 충원이 필요한 인재 요건을 입력하면, AI가 인사팀의 JD 작성을 도와드립니다.
+        작성된 JD 초안은 검토 후 자연어로 의견을 남기시면 AI가 즉시 반영해 다시 작성합니다.
+      </div>`;
+    document.getElementById('pageTitle').textContent = '채용 니즈 입력';
+    document.getElementById('pageSubtitle').textContent = '충원이 필요한 포지션의 인재 요건을 작성해주세요.';
+    document.getElementById('listTitle').textContent = '내 요청 현황';
+    document.getElementById('newBtnText').textContent = '새 충원요청서 작성';
+  } else {
+    banner.innerHTML = `
+      <i class="ti ti-bulb"></i>
+      <div class="role-banner-text">
+        <strong>HR 담당자 화면:</strong> 현업이 작성한 충원요청서를 기반으로 AI가 JD 초안을 자동 생성합니다.
+        현업 검토 의견을 받아 AI가 즉시 반영하며, 최종 확정 후 채용공고로 등재됩니다.
+      </div>`;
+    document.getElementById('listTitle').textContent = '진행 중인 요청서';
+    document.getElementById('newBtnText').textContent = '새 JD 작성';
+  }
+}
+
+function renderStats(reqs) {
+  const stats = role === 'manager' ? [
+    { label: '내가 작성한 요청', value: reqs.length },
+    { label: '검토 대기 중', value: reqs.filter(r => r.status.includes('검토')).length },
+    { label: '공고 등재 완료', value: reqs.filter(r => r.status.includes('완료')).length }
+  ] : [
+    { label: '전체 요청', value: reqs.length },
+    { label: '작성 중', value: reqs.filter(r => r.status.includes('작성')).length },
+    { label: '검토 대기', value: reqs.filter(r => r.status.includes('대기')).length },
+    { label: '완료', value: reqs.filter(r => r.status.includes('완료')).length }
+  ];
+  document.getElementById('statsRow').innerHTML = stats.map(s => `
+    <div class="stat-card">
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-value">${s.value}</div>
+    </div>
+  `).join('');
+}
+
+function renderList(reqs) {
+  const list = document.getElementById('requestList');
+  if (reqs.length === 0) {
+    list.innerHTML = `<div class="empty-state"><i class="ti ti-file-off"></i><p>아직 등록된 충원요청서가 없습니다.</p></div>`;
+    return;
+  }
+  list.innerHTML = reqs.map(r => `
+    <a href="detail.html?id=${r.id}" class="request-card">
+      <div class="request-top">
+        <div>
+          <div class="request-title">${r.position}</div>
+          <div class="request-meta">
+            <span><i class="ti ti-building" style="font-size:13px;vertical-align:-2px"></i> ${r.dept}</span>
+            <span>·</span>
+            <span>${r.type} · ${r.level}</span>
+            <span>·</span>
+            <span>${r.headcount}명</span>
+            <span>·</span>
+            <span>${r.created_at} 등록</span>
+          </div>
+        </div>
+        <span class="status-pill status-${r.status_color}">${r.status}</span>
+      </div>
+      <div class="progress-bar">
+        ${STEPS.map((_, i) => {
+          const stepNum = i + 1;
+          let cls = '';
+          if (stepNum < r.current_step) cls = 'done';
+          else if (stepNum === r.current_step) cls = 'current';
+          return `<div class="progress-step ${cls}"></div>`;
+        }).join('')}
+      </div>
+      <div class="progress-labels">
+        ${STEPS.map((s, i) => {
+          const stepNum = i + 1;
+          let cls = '';
+          if (stepNum < r.current_step) cls = 'done';
+          else if (stepNum === r.current_step) cls = 'current';
+          return `<div class="progress-label ${cls}">${s}</div>`;
+        }).join('')}
+      </div>
+    </a>
+  `).join('');
+}
+
+renderNav();
+renderRoleBanner();
+
+fetch('data/requests.json').then(r => r.json()).then(data => {
+  const reqs = data.requests;
+  renderStats(reqs);
+  renderList(reqs);
+});
+
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+</script>
+
+</body>
+</html>
