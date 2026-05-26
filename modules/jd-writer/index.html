@@ -187,7 +187,7 @@ const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ?
 if (!empId) window.location.href = '../../index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
 
-const STEPS = ['요청서 작성', 'JD 초안 생성', 'JD 검토 요청', '현업 검토', '공고 등재'];
+const STEPS = ['요청서 작성', 'JD 작성·검토 요청', '현업 검토', '공고 등재'];
 
 function renderNav() {
   const isHR = role === 'hr';
