@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD 상세 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px; --sidebar-w-collapsed: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
+
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff, #B5E0F2); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); margin-bottom: 2px; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
+@media (max-width: 1200px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .split-layout { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .mobile-menu-btn { display: flex; }
+}
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); }
+
+.main-area { display: flex; flex-direction: column; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge.manager-role { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+
+.back-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-2); text-decoration: none; margin-bottom: 14px; }
+.back-link:hover { color: var(--main-1); }
+
+.content { padding: 24px 28px 40px; max-width: 1400px; }
+
+.page-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.page-title-area h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.3px; }
+.page-meta { font-size: 13px; color: var(--text-2); display: flex; gap: 8px; flex-wrap: wrap; }
+.status-pill { font-size: 12px; padding: 6px 14px; border-radius: 14px; font-weight: 700; }
+.status-amber { background: linear-gradient(135deg, #FFF4D6, #FCE9B0); color: #9A6D00; }
+.status-blue { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.status-green { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); color: #2E7D32; }
+
+.stepper { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+.stepper-row { display: flex; gap: 8px; align-items: center; }
+.step { flex: 1; display: flex; align-items: center; gap: 10px; }
+.step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.step-circle.done { background: var(--grad-blue); color: white; }
+.step-circle.current { background: white; color: var(--main-1); border: 2px solid var(--main-1); box-shadow: 0 0 0 4px rgba(0, 103, 172, 0.1); }
+.step-circle.pending { background: var(--bg-page); color: var(--text-3); border: 1.5px solid var(--border); }
+.step-circle.done i { font-size: 16px; }
+.step-text { font-size: 12px; }
+.step-name { font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+.step.pending .step-name { color: var(--text-3); }
+.step-status { font-size: 10px; color: var(--text-3); }
+.step-line { flex: 0 1 30px; height: 2px; background: var(--border); margin-top: 16px; }
+.step-line.done { background: var(--grad-blue); }
+
+.split-layout { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; align-items: flex-start; }
+
+.panel { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+.panel-title { font-size: 14px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.panel-title i { color: var(--main-1); font-size: 18px; }
+
+.req-block { margin-bottom: 14px; }
+.req-block:last-child { margin-bottom: 0; }
+.req-label { font-size: 11px; color: var(--text-3); font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.req-value { font-size: 13px; color: var(--text-1); line-height: 1.6; }
+.req-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.req-tag { background: var(--bg-page); color: var(--text-2); padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.req-tag.value-tag { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+
+.action-section { background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border-radius: 12px; padding: 16px; margin-top: 16px; }
+.action-title { font-size: 12px; font-weight: 700; color: var(--main-1); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+
+.btn { font-family: inherit; padding: 11px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; justify-content: center; width: 100%; }
+.btn-primary { background: var(--grad-blue); color: white; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2); }
+.btn-primary:hover { opacity: 0.92; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.btn-secondary { background: white; color: var(--main-1); border: 1.5px solid var(--main-1); margin-top: 8px; }
+
+.jd-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+.jd-title-area { display: flex; align-items: center; gap: 10px; }
+.jd-title-text { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.jd-version { font-size: 11px; color: var(--text-3); }
+
+.jd-content { font-size: 13px; line-height: 1.8; color: var(--text-1); }
+.jd-content h3 { font-size: 13px; font-weight: 700; color: var(--main-1); margin: 20px 0 8px; padding-left: 8px; border-left: 3px solid var(--main-1); }
+.jd-content h3:first-child { margin-top: 0; }
+.jd-content p { margin-bottom: 8px; }
+.jd-content ul { padding-left: 18px; margin-bottom: 8px; }
+.jd-content li { margin-bottom: 4px; }
+.jd-content h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; color: var(--text-1); }
+
+.empty-jd { text-align: center; padding: 50px 20px; color: var(--text-3); }
+.empty-jd i { font-size: 48px; color: var(--text-3); margin-bottom: 14px; display: block; }
+.empty-jd .empty-title { font-size: 15px; font-weight: 700; color: var(--text-2); margin-bottom: 6px; }
+.empty-jd .empty-desc { font-size: 12px; margin-bottom: 16px; }
+
+.ai-generate-btn { background: var(--grad-blue); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(0, 103, 172, 0.25); }
+.ai-generate-btn i { font-size: 16px; }
+
+.generating-overlay { padding: 40px 20px; text-align: center; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--main-1); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.generating-text { font-size: 14px; font-weight: 700; color: var(--main-1); margin-bottom: 6px; }
+.generating-sub { font-size: 12px; color: var(--text-3); }
+
+.cursor { display: inline-block; width: 2px; height: 1em; background: var(--main-1); vertical-align: text-bottom; animation: blink 1s infinite; margin-left: 1px; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.comment-section { background: linear-gradient(135deg, #FFF8E5, #FFF0CC); border: 1px solid #F0C040; border-radius: 12px; padding: 20px 24px; margin-top: 16px; }
+.comment-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: #9A6D00; }
+.comment-title i { font-size: 18px; }
+
+.comment-input { width: 100%; padding: 14px 16px; border: 1.5px solid #F0C040; border-radius: 8px; font-family: inherit; font-size: 13px; outline: none; resize: vertical; min-height: 80px; line-height: 1.6; background: white; }
+.comment-input:focus { box-shadow: 0 0 0 3px rgba(240, 192, 64, 0.2); }
+
+.comment-actions { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+.comment-hint { font-size: 11px; color: var(--text-2); flex: 1; }
+.btn-ai-rewrite { background: var(--grad-blue); color: white; padding: 10px 18px; border: none; border-radius: 8px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+
+.comment-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.comment-example { background: white; border: 1px solid #F0C040; color: #9A6D00; padding: 5px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; cursor: pointer; }
+.comment-example:hover { background: #FFF4D6; }
+
+.review-history { margin-top: 16px; }
+.review-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 12px; }
+.review-item:last-child { border-bottom: none; }
+.review-icon { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.review-icon.ai { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.review-icon.hr { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+.review-icon.manager { background: linear-gradient(135deg, #FFF4D6, #FCE9B0); color: #9A6D00; }
+.review-icon i { font-size: 14px; }
+.review-content { flex: 1; }
+.review-top { display: flex; gap: 6px; align-items: center; }
+.review-actor { font-weight: 700; color: var(--text-1); }
+.review-time { font-size: 11px; color: var(--text-3); }
+.review-detail { color: var(--text-2); margin-top: 2px; }
+
+.role-banner { background: linear-gradient(135deg, #E6F1FB, #E0F5F7); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-2); }
+.role-banner i { color: var(--main-1); font-size: 18px; flex-shrink: 0; }
+.role-banner strong { color: var(--main-1); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" id="brandLink" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav" id="navMenu"></div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> 사용자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <a href="index.html" class="back-link"><i class="ti ti-arrow-left"></i> 목록으로</a>
+      <div id="mainContent">
+        <div style="text-align:center; padding: 60px; color: var(--text-3);">로딩 중...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const empId = sessionStorage.getItem('empId');
+const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
+if (!empId) window.location.href = '../../index.html';
+document.getElementById('userId').textContent = '사번 ' + empId;
+
+const STEPS = [
+  { name: '요청서 작성', actor: '현업' },
+  { name: 'JD 초안 생성', actor: 'AI + HR' },
+  { name: 'JD 검토 요청', actor: 'HR' },
+  { name: '현업 검토', actor: '현업' },
+  { name: '공고 등재', actor: 'HR' }
+];
+
+function renderNav() {
+  const isHR = role === 'hr';
+  const items = isHR ? [
+    { href: '../../dashboard-hr.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: 'JD 작성', section: '채용 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '자소서 분석', section: '채용 업무' },
+    { href: '../schedule/index.html', icon: 'ti-calendar-event', label: '면접 일정', section: '채용 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 진행', section: '채용 업무' },
+    { href: '../report/index.html', icon: 'ti-chart-histogram', label: '채용 리포트', section: '채용 업무' }
+  ] : [
+    { href: '../../dashboard-manager.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: '채용 니즈 입력', section: '참여 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '서류 평가', section: '참여 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 지원', section: '참여 업무' }
+  ];
+
+  const nav = document.getElementById('navMenu');
+  let html = '';
+  let lastSection = '';
+  items.forEach(it => {
+    if (it.section !== lastSection) { html += `<div class="nav-section-title">${it.section}</div>`; lastSection = it.section; }
+    html += `<a class="nav-item ${it.active ? 'active' : ''}" href="${it.href}"><i class="ti ${it.icon}"></i> <span class="label">${it.label}</span></a>`;
+  });
+  nav.innerHTML = html;
+
+  document.getElementById('brandLink').href = isHR ? '../../dashboard-hr.html' : '../../dashboard-manager.html';
+  const badge = document.getElementById('userBadge');
+  if (isHR) badge.innerHTML = '<i class="ti ti-user"></i> HR 담당자';
+  else { badge.classList.add('manager-role'); badge.innerHTML = '<i class="ti ti-user-check"></i> 현업 리더'; }
+}
+
+function renderStepper(currentStep) {
+  let html = '<div class="stepper-row">';
+  STEPS.forEach((s, i) => {
+    const stepNum = i + 1;
+    let state = 'pending';
+    if (stepNum < currentStep) state = 'done';
+    else if (stepNum === currentStep) state = 'current';
+    const icon = state === 'done' ? '<i class="ti ti-check"></i>' : stepNum;
+    html += `<div class="step ${state}"><div class="step-circle ${state}">${icon}</div><div class="step-text"><div class="step-name">${s.name}</div><div class="step-status">${s.actor}</div></div></div>`;
+    if (i < STEPS.length - 1) {
+      const lineClass = stepNum < currentStep ? 'done' : '';
+      html += `<div class="step-line ${lineClass}"></div>`;
+    }
+  });
+  html += '</div>';
+  return `<div class="stepper">${html}</div>`;
+}
+
+function renderRequestPanel(req) {
+  return `
+    <div class="panel">
+      <div class="panel-title"><i class="ti ti-clipboard-text"></i> 충원요청서</div>
+      <div class="req-block">
+        <div class="req-label">요청 부서 · 직무</div>
+        <div class="req-value"><strong>${req.dept}</strong> · ${req.position}</div>
+      </div>
+      <div class="req-block">
+        <div class="req-label">기본 정보</div>
+        <div class="req-value">${req.type} · ${req.level}급 · ${req.headcount}명 모집</div>
+      </div>
+      <div class="req-block">
+        <div class="req-label">담당 업무</div>
+        <div class="req-value">${req.main_duties}</div>
+      </div>
+      <div class="req-block">
+        <div class="req-label">필수 자격요건</div>
+        <div class="req-value">${req.required_qual}</div>
+      </div>
+      ${req.preferred_qual ? `<div class="req-block"><div class="req-label">우대 사항</div><div class="req-value">${req.preferred_qual}</div></div>` : ''}
+      ${req.key_skills && req.key_skills.length ? `<div class="req-block"><div class="req-label">핵심 역량</div><div class="req-tags">${req.key_skills.map(s => `<span class="req-tag">${s}</span>`).join('')}</div></div>` : ''}
+      ${req.core_values && req.core_values.length ? `<div class="req-block"><div class="req-label">우선 핵심가치</div><div class="req-tags">${req.core_values.map(v => `<span class="req-tag value-tag">${v}</span>`).join('')}</div></div>` : ''}
+      <div class="req-block">
+        <div class="req-label">작성자</div>
+        <div class="req-value" style="font-size:12px; color: var(--text-2);">${req.creator} · ${req.created_at}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderJDPanel(data) {
+  const jd = data.jd_draft;
+  const isHR = role === 'hr';
+
+  if (!jd) {
+    return `
+      <div class="panel">
+        <div class="empty-jd">
+          <i class="ti ti-file-text"></i>
+          <div class="empty-title">JD 초안이 아직 생성되지 않았습니다</div>
+          <div class="empty-desc">${isHR ? '아래 버튼을 클릭하면 AI가 충원요청서를 분석하여 JD 초안을 자동 생성합니다.' : '인사팀이 JD 초안을 생성하면 검토 요청이 도착합니다.'}</div>
+          ${isHR ? '<button class="ai-generate-btn" onclick="startAIGenerate()"><i class="ti ti-sparkles"></i> AI로 JD 초안 생성</button>' : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="panel">
+      <div class="jd-header">
+        <div class="jd-title-area">
+          <div class="jd-title-text"><i class="ti ti-file-text" style="color: var(--main-1);"></i> JD 초안</div>
+          <span class="jd-version">v${jd.version} · ${jd.last_updated}</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          ${isHR ? '<button class="btn" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>' : ''}
+        </div>
+      </div>
+
+      <div class="jd-content" id="jdContent">
+        <h2>${jd.title}</h2>
+        <h3>회사 소개</h3>
+        <p>${jd.company_intro}</p>
+        <h3>이런 분을 찾고 있어요</h3>
+        <p>${jd.role_summary}</p>
+        <h3>주요 업무</h3>
+        <ul>${jd.main_duties.map(d => `<li>${d}</li>`).join('')}</ul>
+        <h3>필수 자격요건</h3>
+        <ul>${jd.required.map(r => `<li>${r}</li>`).join('')}</ul>
+        <h3>우대 사항</h3>
+        <ul>${jd.preferred.map(p => `<li>${p}</li>`).join('')}</ul>
+        <h3>인재상</h3>
+        <p>${jd.talent_profile}</p>
+        <h3>처우 및 복지</h3>
+        <p><strong>고용 형태:</strong> ${jd.employment_type}<br>
+        <strong>근무 위치:</strong> ${jd.location}<br>
+        <strong>처우:</strong> ${jd.salary}<br>
+        <strong>복리후생:</strong> ${jd.benefits}</p>
+      </div>
+
+      ${isHR && data.current_step <= 3 ? `
+        <div class="action-section">
+          <div class="action-title"><i class="ti ti-send"></i> 다음 단계</div>
+          <button class="btn btn-primary" onclick="requestReview()"><i class="ti ti-mail"></i> 현업에게 검토 요청 보내기</button>
+        </div>
+      ` : ''}
+
+      ${!isHR && data.current_step === 4 ? `
+        <div class="comment-section">
+          <div class="comment-title"><i class="ti ti-message-2"></i> JD 검토 의견</div>
+          <p style="font-size: 12px; color: var(--text-2); margin-bottom: 10px;">JD에 대한 의견을 자연어로 입력하시면 AI가 즉시 반영해 다시 작성합니다.</p>
+          <textarea class="comment-input" id="commentInput" placeholder="예: 주요 업무에 신규 사업 영역 책임을 더 강조하고, 데이터 분석 도구를 GA4 외에 Tableau, Looker 등도 추가해주세요."></textarea>
+          <div class="comment-examples">
+            <span class="comment-example" onclick="useExample(this)">담당 업무를 더 구체화해주세요</span>
+            <span class="comment-example" onclick="useExample(this)">필수 자격요건을 더 엄격하게</span>
+            <span class="comment-example" onclick="useExample(this)">'스마트' 가치를 더 강조</span>
+            <span class="comment-example" onclick="useExample(this)">신입급 표현으로 톤 변경</span>
+          </div>
+          <div class="comment-actions">
+            <span class="comment-hint">AI가 의견을 반영해 JD를 다시 작성합니다 (보통 5~10초)</span>
+            <button class="btn-ai-rewrite" onclick="rewriteJD()"><i class="ti ti-sparkles"></i> AI로 재작성</button>
+          </div>
+        </div>
+
+        <div class="action-section">
+          <div class="action-title"><i class="ti ti-check"></i> JD가 만족스러우면</div>
+          <button class="btn btn-primary" onclick="approveJD()"><i class="ti ti-check"></i> 이 내용으로 확정하기</button>
+        </div>
+      ` : ''}
+
+      ${isHR && data.current_step === 5 ? `
+        <div class="action-section">
+          <div class="action-title"><i class="ti ti-rocket"></i> 최종 단계</div>
+          <button class="btn btn-primary" onclick="alert('채용공고가 등재되었습니다. (시연용)')"><i class="ti ti-send"></i> 채용공고 등재하기</button>
+        </div>
+      ` : ''}
+
+      <div class="review-history">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-3); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px;">활동 기록</div>
+        ${data.review_history.map(h => {
+          const iconMap = { ai: 'ti-sparkles', hr: 'ti-user', manager: 'ti-user-check' };
+          return `
+            <div class="review-item">
+              <div class="review-icon ${h.actor_role}"><i class="ti ${iconMap[h.actor_role]}"></i></div>
+              <div class="review-content">
+                <div class="review-top">
+                  <span class="review-actor">${h.actor}</span>
+                  <span style="color: var(--text-3);">·</span>
+                  <span style="color: var(--text-2);">${h.action}</span>
+                  <span class="review-time">${h.timestamp}</span>
+                </div>
+                <div class="review-detail">${h.detail}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+let currentData = null;
+
+function render(data) {
+  currentData = data;
+  const isHR = role === 'hr';
+  const banner = isHR
+    ? '<i class="ti ti-info-circle"></i><span><strong>HR 담당자 화면:</strong> 충원요청서를 검토하고 AI로 JD 초안을 생성하세요. 현업 검토 의견이 들어오면 자동 반영됩니다.</span>'
+    : '<i class="ti ti-info-circle"></i><span><strong>현업 리더 화면:</strong> 인사팀이 작성한 JD를 검토해주세요. 자연어로 의견을 남기면 AI가 즉시 반영해 다시 작성합니다.</span>';
+
+  const statusClass = data.status.includes('완료') ? 'green' : data.status.includes('검토') ? 'amber' : 'blue';
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="role-banner">${banner}</div>
+    <div class="page-top">
+      <div class="page-title-area">
+        <h1>${data.request.position}</h1>
+        <div class="page-meta">
+          <span>${data.request.dept}</span><span>·</span>
+          <span>${data.request.type} · ${data.request.level}</span><span>·</span>
+          <span>${data.request.headcount}명</span><span>·</span>
+          <span>${data.request.created_at} 등록</span>
+        </div>
+      </div>
+      <span class="status-pill status-${statusClass}">${data.status}</span>
+    </div>
+    ${renderStepper(data.current_step)}
+    <div class="split-layout">
+      ${renderRequestPanel(data.request)}
+      <div id="jdPanel">${renderJDPanel(data)}</div>
+    </div>
+  `;
+}
+
+function startAIGenerate() {
+  const panel = document.getElementById('jdPanel');
+  panel.innerHTML = `
+    <div class="panel">
+      <div class="generating-overlay">
+        <div class="spinner"></div>
+        <div class="generating-text">AI가 JD 초안을 작성하고 있습니다</div>
+        <div class="generating-sub" id="genSub">충원요청서 분석 중...</div>
+      </div>
+    </div>
+  `;
+  const sub = document.getElementById('genSub');
+  const msgs = ['충원요청서 분석 중...', 'ABL 표준 JD 양식 적용 중...', '핵심가치 매칭 중...', '문구 다듬는 중...'];
+  let idx = 0;
+  const interval = setInterval(() => {
+    idx++;
+    if (idx < msgs.length) sub.textContent = msgs[idx];
+    else {
+      clearInterval(interval);
+      currentData.current_step = 3;
+      fetch('data/req-001.json').then(r => r.json()).then(full => {
+        currentData.jd_draft = full.jd_draft;
+        currentData.review_history = full.review_history;
+        render(currentData);
+      });
+    }
+  }, 1200);
+}
+
+function requestReview() {
+  alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
+  currentData.current_step = 4;
+  render(currentData);
+}
+
+function useExample(el) {
+  document.getElementById('commentInput').value = el.textContent;
+}
+
+function rewriteJD() {
+  const comment = document.getElementById('commentInput').value.trim();
+  if (!comment) {
+    alert('의견을 입력해주세요.');
+    return;
+  }
+
+  const panel = document.getElementById('jdPanel');
+  panel.innerHTML = `
+    <div class="panel">
+      <div class="generating-overlay">
+        <div class="spinner"></div>
+        <div class="generating-text">AI가 의견을 반영하고 있습니다</div>
+        <div class="generating-sub" id="genSub">"${comment.length > 40 ? comment.substring(0, 40) + '...' : comment}"</div>
+      </div>
+    </div>
+  `;
+
+  setTimeout(() => {
+    const subEl = document.getElementById('genSub');
+    if (subEl) subEl.textContent = 'JD 본문 재작성 중...';
+  }, 1500);
+
+  setTimeout(() => {
+    if (currentData.jd_draft) {
+      currentData.jd_draft.version = (currentData.jd_draft.version || 1) + 1;
+      currentData.jd_draft.last_updated = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      if (comment.includes('스마트')) {
+        currentData.jd_draft.talent_profile = "특히 '스마트' 가치를 중요시합니다. 빠른 학습력과 실험적 사고를 가진 분, 가설을 세우고 데이터로 검증하는 과정을 즐기는 분, 기존의 마케팅 방식에 도전적으로 접근하는 분을 찾습니다.";
+      } else if (comment.includes('구체화') || comment.includes('업무')) {
+        currentData.jd_draft.main_duties = [
+          "디지털 마케팅 캠페인 통합 운영 (검색·디스플레이·SNS·CRM 전 채널)",
+          "GA4 및 Tableau 기반 사용자 행동 분석 및 LTV/CAC 모니터링",
+          "주 단위 A/B 테스트 설계·실행 (월 4건 이상 목표)",
+          "Braze 기반 마케팅 자동화 시나리오 설계 및 30+ 트리거 운영",
+          "신규 디지털 채널 발굴 및 PoC 추진 (분기 1건 이상)",
+          "예산 관리 및 ROI 리포팅 (월간 경영진 보고)",
+          "주니어 마케터 1~2명 멘토링 및 코칭"
+        ];
+      } else if (comment.includes('엄격') || comment.includes('자격')) {
+        currentData.jd_draft.required = [
+          "디지털 마케팅 직무 5년 이상의 실무 경력 (B2C 우대)",
+          "Google Analytics 4 (GA4) 전문가 수준 활용",
+          "A/B 테스트 설계·실행 50건 이상 경험",
+          "SQL 중급 이상 (조인, 윈도우 함수 활용 가능)",
+          "정량적 성과 입증 가능한 프로젝트 3건 이상",
+          "마케팅 자동화 툴 1년 이상 실무 운영 경험"
+        ];
+      } else {
+        currentData.jd_draft.role_summary = "마케팅팀 소속 디지털 마케팅 매니저로서, 신규 사업 확장과 기존 고객 활성화를 동시에 추진할 핵심 인재입니다. 데이터에 기반한 의사결정으로 마케팅 ROI를 혁신해 나갈 분을 찾습니다. (의견 반영: " + comment.substring(0, 30) + "...)";
+      }
+
+      currentData.review_history.push({
+        actor: "마케팅팀 김부장",
+        actor_role: "manager",
+        timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+        action: "검토 의견 제출",
+        detail: comment
+      });
+      currentData.review_history.push({
+        actor: "AI",
+        actor_role: "ai",
+        timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+        action: "의견 반영 재작성",
+        detail: `v${currentData.jd_draft.version}으로 업데이트. 의견을 분석하여 해당 섹션을 자동 재작성했습니다.`
+      });
+    }
+    render(currentData);
+  }, 3500);
+}
+
+function approveJD() {
+  if (confirm('이 JD로 확정하시겠습니까? 인사팀에 전달되어 채용공고로 등재됩니다.')) {
+    currentData.current_step = 5;
+    currentData.status = '공고 등재 대기';
+    currentData.review_history.push({
+      actor: "마케팅팀 김부장",
+      actor_role: "manager",
+      timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      action: "JD 최종 승인",
+      detail: "현업 검토 완료. 채용공고 등재 요청."
+    });
+    render(currentData);
+    setTimeout(() => alert('JD가 최종 확정되었습니다. 인사팀이 채용공고로 등재할 예정입니다.'), 100);
+  }
+}
+
+function getParam(name) { return new URLSearchParams(window.location.search).get(name); }
+
+renderNav();
+const id = getParam('id') || 'req-001';
+fetch(`data/${id}.json`).then(r => r.json()).then(render)
+  .catch(() => { document.getElementById('mainContent').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-3);">요청서를 불러올 수 없습니다.</div>'; });
+
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+</script>
+
+</body>
+</html>
