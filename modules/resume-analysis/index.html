@@ -3,232 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>자소서 분석 - ABL 채용 AI</title>
+<title>자소서 분석 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
 
 :root {
-  --main-1: #0067AC;
-  --main-2: #2482C5;
-  --sub-2: #123F6D;
-  --sub-3: #00AEC6;
-  --bg-page: #F7F9FC;
-  --border: #E5E9F0;
-  --text-1: #1A2233;
-  --text-2: #5A6478;
-  --text-3: #8A93A6;
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #0067AC 0%, #123F6D 80%, #0d2d50 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
 
-body {
-  font-family: 'Wooridaum', 'Malgun Gothic', sans-serif;
-  background: var(--bg-page);
-  color: var(--text-1);
-  min-height: 100vh;
-}
+.layout { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
 
-.header {
-  background: white;
-  border-bottom: 1px solid var(--border);
-  padding: 14px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
 
-.header-left { display: flex; align-items: center; gap: 16px; }
-.platform-name { font-size: 16px; font-weight: 700; color: var(--main-1); text-decoration: none; letter-spacing: -0.3px; }
-.platform-name:hover { color: var(--sub-2); }
-.header-divider { width: 1px; height: 22px; background: var(--border); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+
+.sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
+.sidebar-footer img { height: 24px; opacity: 0.85; filter: brightness(0) invert(1); }
+.sidebar-footer-text { font-size: 10px; opacity: 0.55; }
+
+.main-area { display: flex; flex-direction: column; }
+
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 36px; display: flex; justify-content: space-between; align-items: center; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
 .logo-abl { height: 32px; }
 .logo-woori { height: 22px; opacity: 0.85; }
-.header-title { font-size: 15px; font-weight: 700; color: var(--main-1); }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
 
-.back-btn {
-  background: none;
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 12px;
-  color: var(--text-2);
-  cursor: pointer;
-  text-decoration: none;
-}
-.back-btn:hover { background: var(--bg-page); }
+.content { padding: 38px 40px; max-width: 1200px; }
 
-.main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+.page-header { margin-bottom: 28px; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 14px; }
 
-.page-title {
-  margin-bottom: 8px;
-  font-size: 24px;
-  font-weight: 700;
-}
+.toolbar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+.search-wrap { flex: 1; min-width: 200px; position: relative; }
+.search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 16px; }
+.search-box { width: 100%; padding: 10px 14px 10px 38px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; outline: none; }
+.search-box:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0, 103, 172, 0.08); }
+.filter-btn { padding: 9px 16px; background: white; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.filter-btn.active { background: var(--grad-blue); color: white; border-color: transparent; }
 
-.page-subtitle {
-  color: var(--text-2);
-  font-size: 14px;
-  margin-bottom: 24px;
-}
+.applicant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.applicant-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 22px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: inherit; position: relative; overflow: hidden; }
+.applicant-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.applicant-card:hover { border-color: rgba(0, 103, 172, 0.3); box-shadow: 0 10px 30px rgba(0, 103, 172, 0.1); transform: translateY(-3px); }
+.applicant-card:hover::after { transform: scaleX(1); }
 
-.toolbar {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 20px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  flex: 1;
-  min-width: 200px;
-  padding: 9px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 13px;
-  outline: none;
-}
-.search-box:focus { border-color: var(--main-1); }
-
-.filter-btn {
-  padding: 8px 14px;
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 12px;
-  color: var(--text-2);
-  cursor: pointer;
-}
-.filter-btn.active { background: var(--main-1); color: white; border-color: var(--main-1); }
-
-.applicant-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.applicant-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-  color: inherit;
-}
-
-.applicant-card:hover {
-  border-color: var(--main-1);
-  transform: translateY(-2px);
-}
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
 .applicant-info { flex: 1; }
 .applicant-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .applicant-position { font-size: 12px; color: var(--text-2); }
 
-.status-badge {
-  font-size: 10px;
-  padding: 3px 8px;
-  border-radius: 10px;
-  font-weight: 700;
-  white-space: nowrap;
-}
+.status-badge { font-size: 10px; padding: 4px 10px; border-radius: 10px; font-weight: 700; white-space: nowrap; }
+.status-1 { background: linear-gradient(135deg, #FFF4D6, #FCE9B0); color: #9A6D00; }
+.status-2 { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.status-3 { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+.status-4 { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); color: #2E7D32; }
 
-.status-1 { background: #FFF4D6; color: #9A6D00; }
-.status-2 { background: #E0F5F7; color: #00798A; }
-.status-3 { background: #E6F1FB; color: var(--main-1); }
-.status-4 { background: #E8F5E9; color: #2E7D32; }
+.card-meta { font-size: 11px; color: var(--text-3); margin-bottom: 16px; display: flex; gap: 10px; }
+.scores { display: flex; gap: 8px; margin-bottom: 14px; }
+.score-item { flex: 1; background: var(--bg-page); border-radius: 8px; padding: 12px; text-align: center; }
+.score-label { font-size: 10px; color: var(--text-3); margin-bottom: 4px; font-weight: 700; }
+.score-value { font-size: 20px; font-weight: 700; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
-.card-meta {
-  font-size: 11px;
-  color: var(--text-3);
-  margin-bottom: 16px;
-  display: flex;
-  gap: 10px;
-}
+.value-tag { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; padding: 4px 12px; border-radius: 12px; font-weight: 700; }
+.value-tag i { font-size: 13px; }
 
-.scores {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
+.empty-state { text-align: center; padding: 60px; color: var(--text-3); grid-column: 1/-1; }
 
-.score-item {
-  flex: 1;
-  background: var(--bg-page);
-  border-radius: 6px;
-  padding: 10px;
-  text-align: center;
-}
-
-.score-label { font-size: 10px; color: var(--text-3); margin-bottom: 4px; }
-.score-value { font-size: 18px; font-weight: 700; color: var(--main-1); }
-
-.value-tag {
-  display: inline-block;
-  background: #E6F1FB;
-  color: var(--main-1);
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-weight: 700;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 60px;
-  color: var(--text-3);
-}
-
-@media (max-width: 600px) {
-  .applicant-grid { grid-template-columns: 1fr; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <a class="platform-name" href="../../dashboard-hr.html">RECRUIT AI</a>
-    <div class="header-divider"></div>
-    <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
-    <div class="header-divider"></div>
-    <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
-    <div class="header-divider"></div>
-    <span class="header-title">자소서 AI 분석</span>
+<div class="layout">
+
+  <div class="sidebar">
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> 대시보드</a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> JD 작성</a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-file-search"></i> 자소서 분석</a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> 면접 일정</a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> 면접 진행</a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> 채용 리포트</a>
+    </div>
+    <div class="sidebar-footer">
+      <img src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      <span class="sidebar-footer-text">우리금융그룹 자회사</span>
+    </div>
   </div>
-  <a href="../../dashboard-hr.html" class="back-btn">← 대시보드</a>
-</div>
 
-<div class="main">
-  <h1 class="page-title">지원자 목록</h1>
-  <p class="page-subtitle">AI가 자소서를 분석하여 핵심 역량과 컬쳐핏을 자동으로 평가했습니다.</p>
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
 
-  <div class="toolbar">
-    <input type="text" class="search-box" id="searchInput" placeholder="이름 또는 직무로 검색">
-    <button class="filter-btn active" data-filter="all">전체</button>
-    <button class="filter-btn" data-filter="진행 중">진행 중</button>
-    <button class="filter-btn" data-filter="완료">평가 완료</button>
+    <div class="content">
+      <div class="page-header">
+        <h1 class="page-title">자소서 AI 분석</h1>
+        <p class="page-subtitle">AI가 자소서를 분석하여 핵심 역량과 컬쳐핏을 자동으로 평가했습니다.</p>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i class="ti ti-search"></i>
+          <input type="text" class="search-box" id="searchInput" placeholder="이름 또는 직무로 검색">
+        </div>
+        <button class="filter-btn active" data-filter="all">전체</button>
+        <button class="filter-btn" data-filter="진행 중">진행 중</button>
+        <button class="filter-btn" data-filter="완료">평가 완료</button>
+      </div>
+
+      <div class="applicant-grid" id="grid"></div>
+    </div>
   </div>
 
-  <div class="applicant-grid" id="grid"></div>
 </div>
 
 <script>
@@ -236,33 +170,27 @@ let allApplicants = [];
 let currentFilter = 'all';
 let currentSearch = '';
 
-function statusClass(status) {
-  if (status.includes('대기')) return 'status-1';
-  if (status.includes('서류')) return 'status-2';
-  if (status.includes('면접')) return 'status-3';
-  if (status.includes('완료')) return 'status-4';
+function statusClass(s) {
+  if (s.includes('대기')) return 'status-1';
+  if (s.includes('서류')) return 'status-2';
+  if (s.includes('면접')) return 'status-3';
+  if (s.includes('완료')) return 'status-4';
   return 'status-1';
 }
 
 function render() {
   const grid = document.getElementById('grid');
   let filtered = allApplicants;
-
   if (currentFilter === '진행 중') filtered = filtered.filter(a => !a.status.includes('완료'));
   if (currentFilter === '완료') filtered = filtered.filter(a => a.status.includes('완료'));
-
   if (currentSearch) {
     const q = currentSearch.toLowerCase();
-    filtered = filtered.filter(a =>
-      a.name.toLowerCase().includes(q) || a.position.toLowerCase().includes(q)
-    );
+    filtered = filtered.filter(a => a.name.toLowerCase().includes(q) || a.position.toLowerCase().includes(q));
   }
-
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;">조건에 맞는 지원자가 없습니다.</div>';
+    grid.innerHTML = '<div class="empty-state">조건에 맞는 지원자가 없습니다.</div>';
     return;
   }
-
   grid.innerHTML = filtered.map(a => `
     <a href="detail.html?id=${a.id}" class="applicant-card">
       <div class="card-top">
@@ -273,9 +201,7 @@ function render() {
         <span class="status-badge ${statusClass(a.status)}">${a.status}</span>
       </div>
       <div class="card-meta">
-        <span>경력 ${a.career_years}년</span>
-        <span>·</span>
-        <span>${a.applied_date} 지원</span>
+        <span>경력 ${a.career_years}년</span><span>·</span><span>${a.applied_date} 지원</span>
       </div>
       <div class="scores">
         <div class="score-item">
@@ -287,35 +213,27 @@ function render() {
           <div class="score-value">${a.ai_match_score}</div>
         </div>
       </div>
-      <span class="value-tag">주요 가치 · ${a.top_value}</span>
+      <span class="value-tag"><i class="ti ti-sparkles"></i> ${a.top_value}</span>
     </a>
   `).join('');
 }
 
-fetch('data/applicants.json')
-  .then(r => r.json())
-  .then(data => {
-    allApplicants = data.applicants;
-    render();
-  });
+fetch('data/applicants.json').then(r => r.json()).then(d => { allApplicants = d.applicants; render(); });
 
-document.getElementById('searchInput').addEventListener('input', e => {
-  currentSearch = e.target.value;
-  render();
-});
-
+document.getElementById('searchInput').addEventListener('input', e => { currentSearch = e.target.value; render(); });
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
-    render();
+    currentFilter = btn.dataset.filter; render();
   });
 });
 
-if (!sessionStorage.getItem('empId')) {
-  window.location.href = '../../index.html';
-}
+const empId = sessionStorage.getItem('empId');
+if (!empId) window.location.href = '../../index.html';
+document.getElementById('userId').textContent = '사번 ' + empId;
+
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
 </script>
 
 </body>
