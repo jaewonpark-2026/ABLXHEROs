@@ -7,12 +7,12 @@
       "type": "경력",
       "level": "과장",
       "headcount": 1,
-      "status": "JD 검토 대기",
+      "status": "JD 초안 대기",
       "status_color": "amber",
       "created_at": "2026-05-22",
       "creator": "마케팅팀 김부장",
       "assignee_hr": "최병현 책임",
-      "current_step": 4
+      "current_step": 2
     },
     {
       "id": "req-002",
