@@ -373,8 +373,25 @@ function renderJDPanel(data) {
       ` : ''}
 
       ${!isHR && data.current_step === 4 ? `
-        <div class="comment-section">
-          <div class="comment-title"><i class="ti ti-message-2"></i> JD 검토 의견</div>
+        <div style="background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border: 1px solid var(--main-1); border-radius: 12px; padding: 18px 22px; margin-top: 20px;">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--main-1); display: flex; align-items: center; gap: 8px;">
+            <i class="ti ti-help-circle" style="font-size: 18px;"></i> JD 검토를 마쳤다면
+          </div>
+          <p style="font-size: 12px; color: var(--text-2); margin-bottom: 14px; line-height: 1.6;">
+            아래 JD가 만족스러우면 <strong style="color: var(--main-1);">공고 등재를 요청</strong>하고, 수정이 필요하면 <strong style="color: #9A6D00;">수정 의견을 작성</strong>해 AI 재작성을 요청하세요.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button onclick="document.getElementById('commentSection').scrollIntoView({behavior:'smooth'}); document.getElementById('commentInput').focus();" style="background: white; border: 1.5px solid #F0C040; color: #9A6D00; padding: 12px 16px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <i class="ti ti-edit"></i> 수정 의견 작성
+            </button>
+            <button onclick="approveJD()" style="background: var(--grad-blue); border: none; color: white; padding: 12px 16px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2);">
+              <i class="ti ti-check"></i> 공고 등재 요청
+            </button>
+          </div>
+        </div>
+
+        <div class="comment-section" id="commentSection">
+          <div class="comment-title"><i class="ti ti-message-2"></i> 수정 의견 (AI 재작성)</div>
           <p style="font-size: 12px; color: var(--text-2); margin-bottom: 10px;">JD에 대한 의견을 자연어로 입력하시면 AI가 즉시 반영해 다시 작성합니다.</p>
           <textarea class="comment-input" id="commentInput" placeholder="예: 주요 업무에 신규 사업 영역 책임을 더 강조하고, 데이터 분석 도구를 GA4 외에 Tableau, Looker 등도 추가해주세요."></textarea>
           <div class="comment-examples">
@@ -387,11 +404,6 @@ function renderJDPanel(data) {
             <span class="comment-hint">AI가 의견을 반영해 JD를 다시 작성합니다 (보통 5~10초)</span>
             <button class="btn-ai-rewrite" onclick="rewriteJD()"><i class="ti ti-sparkles"></i> AI로 재작성</button>
           </div>
-        </div>
-
-        <div class="action-section">
-          <div class="action-title"><i class="ti ti-check"></i> JD가 만족스러우면</div>
-          <button class="btn btn-primary" onclick="approveJD()"><i class="ti ti-check"></i> 이 내용으로 확정하기</button>
         </div>
       ` : ''}
 
@@ -499,8 +511,11 @@ function startAIGenerate() {
 }
 
 function requestReview() {
+  // 현업이 들어올 때 JD가 보이도록 sessionStorage에 플래그 저장
+  sessionStorage.setItem('req-001-jd-sent', 'true');
   alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 4;
+  currentData.status = "JD 검토 대기";
   render(currentData);
 }
 
@@ -580,18 +595,18 @@ function rewriteJD() {
 }
 
 function approveJD() {
-  if (confirm('이 JD로 확정하시겠습니까? 인사팀에 전달되어 채용공고로 등재됩니다.')) {
+  if (confirm('이 JD로 공고 등재를 요청하시겠습니까?\n\n인사팀에 전달되어 채용공고로 등재됩니다.')) {
     currentData.current_step = 5;
     currentData.status = '공고 등재 대기';
     currentData.review_history.push({
       actor: "마케팅팀 김부장",
       actor_role: "manager",
       timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
-      action: "JD 최종 승인",
-      detail: "현업 검토 완료. 채용공고 등재 요청."
+      action: "공고 등재 요청",
+      detail: "JD 검토 완료. 수정사항 없이 채용공고 등재 요청."
     });
     render(currentData);
-    setTimeout(() => alert('JD가 최종 확정되었습니다. 인사팀이 채용공고로 등재할 예정입니다.'), 100);
+    setTimeout(() => alert('공고 등재 요청이 인사팀에 전달되었습니다. (시연용)'), 100);
   }
 }
 
@@ -599,8 +614,46 @@ function getParam(name) { return new URLSearchParams(window.location.search).get
 
 renderNav();
 const id = getParam('id') || 'req-001';
-fetch(`data/${id}.json`).then(r => r.json()).then(render)
-  .catch(() => { document.getElementById('mainContent').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-3);">요청서를 불러올 수 없습니다.</div>'; });
+
+// 현업 모드 진입 시: HR이 JD 보낸 상태면 풀데이터 자동 로드
+async function loadData() {
+  try {
+    const r = await fetch(`data/${id}.json`);
+    let data = await r.json();
+
+    // 시연용: HR이 JD 검토 요청 보낸 상태면 풀데이터로 교체
+    const jdSent = sessionStorage.getItem('req-001-jd-sent') === 'true';
+    if (id === 'req-001' && jdSent && !data.jd_draft) {
+      const fullR = await fetch('data/req-001-full.json');
+      const full = await fullR.json();
+      data.jd_draft = full.jd_draft;
+      data.current_step = 4;
+      data.status = "JD 검토 대기";
+      data.review_history = [
+        ...data.review_history,
+        {
+          actor: "AI",
+          actor_role: "ai",
+          timestamp: "2026-05-23 14:20",
+          action: "JD 초안 생성",
+          detail: "충원요청서 분석 완료. ABL 표준 JD 양식으로 v1 초안 자동 생성."
+        },
+        {
+          actor: "최병현 책임",
+          actor_role: "hr",
+          timestamp: "2026-05-23 14:32",
+          action: "현업 검토 요청",
+          detail: "마케팅팀 김부장에게 JD 검토 요청 발송."
+        }
+      ];
+    }
+
+    render(data);
+  } catch (e) {
+    document.getElementById('mainContent').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-3);">요청서를 불러올 수 없습니다.</div>';
+  }
+}
+loadData();
 
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
 </script>
