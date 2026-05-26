@@ -26,7 +26,7 @@
 
 body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
 
-.layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
 .layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
 
 .sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
@@ -50,7 +50,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 
 .main-area { display: flex; flex-direction: column; }
 
-.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 36px; display: flex; justify-content: space-between; align-items: center; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .topbar-left { display: flex; align-items: center; gap: 14px; }
 .divider { width: 1px; height: 22px; background: var(--border); }
 .logo-abl { height: 32px; }
@@ -61,14 +61,14 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
 .logout-btn:hover { background: var(--bg-page); }
 
-.content { padding: 38px 40px; max-width: 1200px; }
+.content { padding: 32px 32px; max-width: 1200px; }
 
 .welcome { margin-bottom: 32px; }
-.welcome h1 { font-size: 27px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.welcome h1 { font-size: clamp(20px, 3vw, 27px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; word-break: keep-all; }
 .welcome p { color: var(--text-2); font-size: 14px; display: flex; align-items: center; gap: 8px; }
 .welcome p i { font-size: 16px; color: var(--main-1); }
 
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 36px; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 36px; }
 .stat-card { background: white; border-radius: 12px; padding: 20px 22px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: all 0.2s; }
 .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 103, 172, 0.08); }
 .stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--grad-blue); }
@@ -106,12 +106,46 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
 .layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
 
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .module-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .module-grid { grid-template-columns: 1fr; }
+  .content { padding: 32px 28px; }
+  .topbar { padding: 14px 24px; }
+  .applicant-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 }
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-section-title { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .module-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .content { padding: 24px 16px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .user-info span { display: none; }
+  .user-info .user-badge { display: flex; }
+  .user-info .logout-btn { display: block; }
+  .applicant-grid { grid-template-columns: 1fr; }
+  .profile-card { flex-direction: column; align-items: flex-start; }
+  .strengths-list { grid-template-columns: 1fr; }
+  .tab-bar { flex-wrap: wrap; }
+  .tab { flex: 1 1 45%; }
+}
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+.mobile-menu-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn i { font-size: 18px; }
+
 </style>
 </head>
 <body>
@@ -143,6 +177,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
   <div class="main-area">
     <div class="topbar">
       <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
         <img class="logo-abl" src="assets/logos/abl-logo.png" alt="ABL생명">
         <div class="divider"></div>
         <img class="logo-woori" src="assets/logos/woori-logo.png" alt="우리금융그룹">
