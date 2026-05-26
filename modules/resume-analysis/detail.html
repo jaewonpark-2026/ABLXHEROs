@@ -44,8 +44,11 @@ body {
 }
 
 .header-left { display: flex; align-items: center; gap: 16px; }
-.header-left img { height: 28px; }
+.platform-name { font-size: 16px; font-weight: 700; color: var(--main-1); text-decoration: none; letter-spacing: -0.3px; }
+.platform-name:hover { color: var(--sub-2); }
 .header-divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
 .header-title { font-size: 15px; font-weight: 700; color: var(--main-1); }
 
 .back-btn {
@@ -397,9 +400,11 @@ body {
 
 <div class="header">
   <div class="header-left">
-    <img src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+    <a class="platform-name" href="../../dashboard-hr.html">RECRUIT AI</a>
     <div class="header-divider"></div>
-    <img src="../../assets/logos/abl-logo.png" alt="ABL생명">
+    <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+    <div class="header-divider"></div>
+    <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
     <div class="header-divider"></div>
     <span class="header-title">자소서 AI 분석</span>
   </div>
