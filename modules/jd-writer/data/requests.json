@@ -7,12 +7,12 @@
       "type": "경력",
       "level": "과장",
       "headcount": 1,
-      "status": "JD 초안 대기",
+      "status": "요청서 도착 · JD 대기",
       "status_color": "amber",
       "created_at": "2026-05-22",
       "creator": "마케팅팀 김부장",
       "assignee_hr": "최병현 책임",
-      "current_step": 2
+      "current_step": 1
     },
     {
       "id": "req-002",
@@ -26,7 +26,7 @@
       "created_at": "2026-05-20",
       "creator": "전략기획팀 박이사",
       "assignee_hr": "최병현 책임",
-      "current_step": 2
+      "current_step": 1
     },
     {
       "id": "req-003",
@@ -40,7 +40,7 @@
       "created_at": "2026-05-15",
       "creator": "마케팅팀 김부장",
       "assignee_hr": "김지용 매니저",
-      "current_step": 5
+      "current_step": 4
     }
   ]
 }
