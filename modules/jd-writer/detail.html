@@ -229,8 +229,7 @@ document.getElementById('userId').textContent = '사번 ' + empId;
 
 const STEPS = [
   { name: '요청서 작성', actor: '현업' },
-  { name: 'JD 초안 생성', actor: 'AI + HR' },
-  { name: 'JD 검토 요청', actor: 'HR' },
+  { name: 'JD 작성·검토 요청', actor: 'AI + HR' },
   { name: '현업 검토', actor: '현업' },
   { name: '공고 등재', actor: 'HR' }
 ];
@@ -365,14 +364,14 @@ function renderJDPanel(data) {
         <strong>복리후생:</strong> ${jd.benefits}</p>
       </div>
 
-      ${isHR && data.current_step <= 3 ? `
+      ${isHR && data.current_step === 2 ? `
         <div class="action-section">
           <div class="action-title"><i class="ti ti-send"></i> 다음 단계</div>
           <button class="btn btn-primary" onclick="requestReview()"><i class="ti ti-mail"></i> 현업에게 검토 요청 보내기</button>
         </div>
       ` : ''}
 
-      ${!isHR && data.current_step === 4 ? `
+      ${!isHR && data.current_step === 3 ? `
         <div style="background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border: 1px solid var(--main-1); border-radius: 12px; padding: 18px 22px; margin-top: 20px;">
           <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--main-1); display: flex; align-items: center; gap: 8px;">
             <i class="ti ti-help-circle" style="font-size: 18px;"></i> JD 검토를 마쳤다면
@@ -407,7 +406,7 @@ function renderJDPanel(data) {
         </div>
       ` : ''}
 
-      ${isHR && data.current_step === 5 ? `
+      ${isHR && data.current_step === 4 ? `
         <div class="action-section">
           <div class="action-title"><i class="ti ti-rocket"></i> 최종 단계</div>
           <button class="btn btn-primary" onclick="alert('채용공고가 등재되었습니다. (시연용)')"><i class="ti ti-send"></i> 채용공고 등재하기</button>
@@ -490,7 +489,7 @@ function startAIGenerate() {
     if (idx < msgs.length) sub.textContent = msgs[idx];
     else {
       clearInterval(interval);
-      currentData.current_step = 3;
+      currentData.current_step = 2;
       fetch('data/req-001-full.json').then(r => r.json()).then(full => {
         currentData.jd_draft = full.jd_draft;
         currentData.review_history = [
@@ -511,10 +510,9 @@ function startAIGenerate() {
 }
 
 function requestReview() {
-  // 현업이 들어올 때 JD가 보이도록 sessionStorage에 플래그 저장
   sessionStorage.setItem('req-001-jd-sent', 'true');
   alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
-  currentData.current_step = 4;
+  currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
   render(currentData);
 }
@@ -596,7 +594,7 @@ function rewriteJD() {
 
 function approveJD() {
   if (confirm('이 JD로 공고 등재를 요청하시겠습니까?\n\n인사팀에 전달되어 채용공고로 등재됩니다.')) {
-    currentData.current_step = 5;
+    currentData.current_step = 4;
     currentData.status = '공고 등재 대기';
     currentData.review_history.push({
       actor: "마케팅팀 김부장",
@@ -621,13 +619,17 @@ async function loadData() {
     const r = await fetch(`data/${id}.json`);
     let data = await r.json();
 
-    // 시연용: HR이 JD 검토 요청 보낸 상태면 풀데이터로 교체
+    // 시연 흐름:
+    // - HR이 들어가면: 초기 상태 (JD 없음) → "AI 생성" 버튼 클릭 시 풀데이터 로드
+    // - 현업이 들어가면: 무조건 JD 있는 상태로 표시 (HR이 이미 보냈다는 가정)
+    const isManager = role === 'manager';
     const jdSent = sessionStorage.getItem('req-001-jd-sent') === 'true';
-    if (id === 'req-001' && jdSent && !data.jd_draft) {
+
+    if (id === 'req-001' && (isManager || jdSent) && !data.jd_draft) {
       const fullR = await fetch('data/req-001-full.json');
       const full = await fullR.json();
       data.jd_draft = full.jd_draft;
-      data.current_step = 4;
+      data.current_step = 3;
       data.status = "JD 검토 대기";
       data.review_history = [
         ...data.review_history,
