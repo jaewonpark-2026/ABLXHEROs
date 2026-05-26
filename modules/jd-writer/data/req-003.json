@@ -1,0 +1,22 @@
+{
+  "id": "req-003",
+  "request": {
+    "dept": "샘플 부서",
+    "position": "샘플 직무",
+    "level": "과장",
+    "type": "경력",
+    "headcount": 1,
+    "creator": "샘플 작성자",
+    "created_at": "2026-05-20",
+    "main_duties": "이 요청서는 시연용 더미입니다.",
+    "required_qual": "샘플 요건",
+    "preferred_qual": "",
+    "key_skills": [],
+    "core_values": ["전문성"]
+  },
+  "current_step": 2,
+  "status": "JD 작성 중",
+  "jd_draft": null,
+  "review_history": [],
+  "manager_comments": []
+}
