@@ -3,252 +3,230 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABL 채용 AI · 현업 리더 대시보드</title>
+<title>RECRUIT AI · 현업 리더 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
 @font-face { font-family: 'Wooridaum'; src: url('assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
 @font-face { font-family: 'Wooridaum'; src: url('assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
 @font-face { font-family: 'Wooridaum'; src: url('assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
 
 :root {
-  --main-1: #0067AC;
-  --main-2: #2482C5;
-  --sub-2: #123F6D;
-  --sub-3: #00AEC6;
-  --sub-4: #00AFAD;
-  --bg-page: #F7F9FC;
-  --border: #E5E9F0;
-  --text-1: #1A2233;
-  --text-2: #5A6478;
-  --text-3: #8A93A6;
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #0067AC 0%, #123F6D 80%, #0d2d50 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
 
-body {
-  font-family: 'Wooridaum', 'Malgun Gothic', sans-serif;
-  background: var(--bg-page);
-  color: var(--text-1);
-  min-height: 100vh;
-}
+.layout { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
 
-.header {
-  background: white;
-  border-bottom: 1px solid var(--border);
-  padding: 14px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
 
-.header-left { display: flex; align-items: center; gap: 16px; }
-.platform-name {
-  font-size: 16px; font-weight: 700; color: var(--main-1);
-  text-decoration: none; letter-spacing: -0.3px; cursor: pointer;
-}
-.platform-name:hover { color: var(--sub-2); }
-.header-divider { width: 1px; height: 22px; background: var(--border); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+
+.sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
+.sidebar-footer img { height: 24px; opacity: 0.85; filter: brightness(0) invert(1); }
+.sidebar-footer-text { font-size: 10px; opacity: 0.55; }
+
+.main-area { display: flex; flex-direction: column; }
+
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 36px; display: flex; justify-content: space-between; align-items: center; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
 .logo-abl { height: 32px; }
 .logo-woori { height: 22px; opacity: 0.85; }
-.header-title { font-size: 15px; font-weight: 700; color: var(--main-1); }
-
-.header-right {
-  display: flex; align-items: center; gap: 12px;
-  font-size: 13px; color: var(--text-2);
-}
-
-.user-badge {
-  background: #E0F5F7;
-  color: var(--sub-3);
-  padding: 5px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.logout-btn {
-  background: none; border: 1px solid var(--border);
-  padding: 6px 14px; border-radius: 6px;
-  font-family: inherit; font-size: 12px;
-  color: var(--text-2); cursor: pointer;
-}
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
 .logout-btn:hover { background: var(--bg-page); }
 
-.main { max-width: 1100px; margin: 0 auto; padding: 40px 32px; }
+.content { padding: 38px 40px; max-width: 1200px; }
 
-.welcome { margin-bottom: 32px; }
-.welcome h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+.welcome { margin-bottom: 28px; }
+.welcome h1 { font-size: 27px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
 .welcome p { color: var(--text-2); font-size: 14px; }
 
-.todo-section {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
+.todo-section { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 28px; position: relative; overflow: hidden; }
+.todo-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
 
-.todo-section h3 {
-  font-size: 15px; font-weight: 700; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 8px;
-}
+.todo-header { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+.todo-header i { color: var(--main-1); font-size: 18px; }
+.badge-count { background: var(--main-1); color: white; font-size: 11px; padding: 2px 9px; border-radius: 10px; font-weight: 700; }
 
-.badge-count {
-  background: var(--main-1); color: white;
-  font-size: 11px; padding: 2px 8px; border-radius: 10px;
-}
-
-.todo-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; border: 1px solid var(--border);
-  border-radius: 8px; margin-bottom: 8px;
-  cursor: pointer; transition: all 0.15s;
-  text-decoration: none; color: inherit;
-}
-
+.todo-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; text-decoration: none; color: inherit; }
+.todo-item:last-child { margin-bottom: 0; }
 .todo-item:hover { border-color: var(--main-1); background: #F5F9FD; }
 
-.todo-content { flex: 1; }
-.todo-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.todo-content { display: flex; align-items: center; gap: 14px; flex: 1; }
+.todo-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--grad-card-icon); display: flex; align-items: center; justify-content: center; color: var(--main-1); flex-shrink: 0; }
+.todo-icon i { font-size: 18px; }
+.todo-text { flex: 1; }
+.todo-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
 .todo-meta { font-size: 12px; color: var(--text-3); }
+.todo-action { font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px; }
 
-.todo-action {
-  font-size: 12px; color: var(--main-1); font-weight: 700;
-}
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
 
-.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.module-card { background: white; border-radius: 12px; padding: 24px; border: 1px solid var(--border); cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+.module-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.module-card:hover { border-color: rgba(0, 103, 172, 0.3); box-shadow: 0 10px 30px rgba(0, 103, 172, 0.1); transform: translateY(-3px); }
+.module-card:hover::after { transform: scaleX(1); }
 
-.module-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.module-card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-}
-
-.module-card:hover { border-color: var(--main-1); transform: translateY(-2px); }
-
-.module-icon {
-  width: 48px; height: 48px; border-radius: 10px;
-  background: #E6F1FB;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px; font-size: 24px;
-}
-
+.module-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--grad-card-icon); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--main-1); }
+.module-icon i { font-size: 26px; }
 .module-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-.module-card p { font-size: 13px; color: var(--text-2); line-height: 1.6; flex: 1; }
+.module-card p { font-size: 13px; color: var(--text-2); line-height: 1.65; flex: 1; }
+.module-footer { margin-top: 16px; padding-top: 14px; border-top: 1px solid #F0F4F8; font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px; }
 
-.module-footer {
-  margin-top: 16px; padding-top: 12px;
-  border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--main-1); font-weight: 700;
-}
+.bottom-link { text-align: center; margin-top: 36px; }
+.bottom-link a { color: var(--text-3); font-size: 12px; text-decoration: underline; }
 
 @media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
   .module-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <a class="platform-name" href="dashboard-manager.html">RECRUIT AI</a>
-    <div class="header-divider"></div>
-    <img class="logo-abl" src="assets/logos/abl-logo.png" alt="ABL생명">
-    <div class="header-divider"></div>
-    <img class="logo-woori" src="assets/logos/woori-logo.png" alt="우리금융그룹">
-  </div>
-  <div class="header-right">
-    <span class="user-badge">현업 리더</span>
-    <span id="userId">사번 -</span>
-    <button class="logout-btn" onclick="logout()">로그아웃</button>
-  </div>
-</div>
+<div class="layout">
 
-<div class="main">
-  <div class="welcome">
-    <h1><span id="greeting">안녕하세요</span>, 마케팅팀 리더님</h1>
-    <p>현업 리더로서 인재 채용에 직접 참여하실 수 있습니다.</p>
+  <div class="sidebar">
+    <a class="brand" href="dashboard-manager.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item active" href="dashboard-manager.html"><i class="ti ti-layout-dashboard"></i> 대시보드</a>
+
+      <div class="nav-section-title">참여 업무</div>
+      <a class="nav-item" href="modules/jd-writer/index.html"><i class="ti ti-clipboard-text"></i> 채용 니즈 입력</a>
+      <a class="nav-item" href="modules/resume-analysis/index.html"><i class="ti ti-file-search"></i> 서류 평가</a>
+      <a class="nav-item" href="modules/interview/index.html"><i class="ti ti-microphone-2"></i> 면접 지원</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <img src="assets/logos/woori-logo.png" alt="우리금융그룹">
+      <span class="sidebar-footer-text">우리금융그룹 자회사</span>
+    </div>
   </div>
 
-  <div class="todo-section">
-    <h3>처리해야 할 업무 <span class="badge-count">3</span></h3>
-
-    <a href="modules/resume-analysis/index.html" class="todo-item">
-      <div class="todo-content">
-        <div class="todo-title">2차 서류 평가 요청 (3명)</div>
-        <div class="todo-meta">마케팅 경력직 공고 · 인사팀이 1차 통과시킨 지원자</div>
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <img class="logo-abl" src="assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="assets/logos/woori-logo.png" alt="우리금융그룹">
       </div>
-      <div class="todo-action">평가하기 →</div>
-    </a>
-
-    <a href="modules/interview/index.html" class="todo-item">
-      <div class="todo-content">
-        <div class="todo-title">1차 면접 일정 확인 (내일 14:00)</div>
-        <div class="todo-meta">김재원 후보자 · 마케팅 경력직</div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user-check"></i> 현업 리더</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
       </div>
-      <div class="todo-action">상세보기 →</div>
-    </a>
+    </div>
 
-    <a href="modules/jd-writer/index.html" class="todo-item">
-      <div class="todo-content">
-        <div class="todo-title">신규 채용 니즈 입력 요청</div>
-        <div class="todo-meta">인사팀 요청 · 마감일 5/30</div>
+    <div class="content">
+      <div class="welcome">
+        <h1><span id="greeting">안녕하세요</span>, 마케팅팀 리더님</h1>
+        <p>현업 리더로서 인재 채용에 직접 참여하실 수 있습니다.</p>
       </div>
-      <div class="todo-action">작성하기 →</div>
-    </a>
+
+      <div class="todo-section">
+        <div class="todo-header">
+          <i class="ti ti-bell"></i> 처리해야 할 업무 <span class="badge-count">3</span>
+        </div>
+
+        <a href="modules/resume-analysis/index.html" class="todo-item">
+          <div class="todo-content">
+            <div class="todo-icon"><i class="ti ti-file-search"></i></div>
+            <div class="todo-text">
+              <div class="todo-title">2차 서류 평가 요청 (3명)</div>
+              <div class="todo-meta">마케팅 경력직 공고 · 인사팀이 1차 통과시킨 지원자</div>
+            </div>
+          </div>
+          <div class="todo-action">평가하기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+
+        <a href="modules/interview/index.html" class="todo-item">
+          <div class="todo-content">
+            <div class="todo-icon"><i class="ti ti-calendar-event"></i></div>
+            <div class="todo-text">
+              <div class="todo-title">1차 면접 일정 확인 (내일 14:00)</div>
+              <div class="todo-meta">김재원 후보자 · 마케팅 경력직</div>
+            </div>
+          </div>
+          <div class="todo-action">상세보기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+
+        <a href="modules/jd-writer/index.html" class="todo-item">
+          <div class="todo-content">
+            <div class="todo-icon"><i class="ti ti-clipboard-text"></i></div>
+            <div class="todo-text">
+              <div class="todo-title">신규 채용 니즈 입력 요청</div>
+              <div class="todo-meta">인사팀 요청 · 마감일 5/30</div>
+            </div>
+          </div>
+          <div class="todo-action">작성하기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+      </div>
+
+      <div class="section-title">사용 가능한 기능</div>
+
+      <div class="module-grid">
+        <a href="modules/jd-writer/index.html" class="module-card">
+          <div class="module-icon"><i class="ti ti-clipboard-text"></i></div>
+          <h3>채용 니즈 입력</h3>
+          <p>필요한 인재상과 직무 요구사항을 입력하면 인사팀에 자동 전달됩니다.</p>
+          <div class="module-footer">바로가기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+
+        <a href="modules/resume-analysis/index.html" class="module-card">
+          <div class="module-icon"><i class="ti ti-file-search"></i></div>
+          <h3>서류 평가</h3>
+          <p>AI가 정리한 지원자 자소서 요약과 핵심 포인트를 확인하고 평가합니다.</p>
+          <div class="module-footer">바로가기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+
+        <a href="modules/interview/index.html" class="module-card">
+          <div class="module-icon"><i class="ti ti-microphone-2"></i></div>
+          <h3>면접 지원</h3>
+          <p>지원자 맞춤 질문과 평가 가이드를 확인하며 면접을 진행할 수 있습니다.</p>
+          <div class="module-footer">바로가기 <i class="ti ti-arrow-right"></i></div>
+        </a>
+      </div>
+
+      <div class="bottom-link">
+        <a href="dashboard-hr.html">HR 담당자 화면 보기 (시연용)</a>
+      </div>
+    </div>
   </div>
 
-  <div class="section-title">사용 가능한 기능</div>
-
-  <div class="module-grid">
-
-    <a href="modules/jd-writer/index.html" class="module-card">
-      <div class="module-icon">📋</div>
-      <h3>채용 니즈 입력</h3>
-      <p>필요한 인재상과 직무 요구사항을 입력하면 인사팀에 자동 전달됩니다.</p>
-      <div class="module-footer">바로가기 →</div>
-    </a>
-
-    <a href="modules/resume-analysis/index.html" class="module-card">
-      <div class="module-icon">📄</div>
-      <h3>서류 평가</h3>
-      <p>AI가 정리한 지원자 자소서 요약과 핵심 포인트를 확인하고 평가합니다.</p>
-      <div class="module-footer">바로가기 →</div>
-    </a>
-
-    <a href="modules/interview/index.html" class="module-card">
-      <div class="module-icon">🎤</div>
-      <h3>면접 지원</h3>
-      <p>지원자 맞춤 질문과 평가 가이드를 확인하며 면접을 진행할 수 있습니다.</p>
-      <div class="module-footer">바로가기 →</div>
-    </a>
-
-  </div>
-
-  <div style="text-align: center; margin-top: 40px;">
-    <a href="dashboard-hr.html" style="color: var(--text-3); font-size: 12px; text-decoration: underline;">HR 담당자 화면 보기 (시연용)</a>
-  </div>
 </div>
 
 <script>
 const empId = sessionStorage.getItem('empId');
-
-if (!empId) {
-  window.location.href = 'index.html';
-}
-
+if (!empId) window.location.href = 'index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
 
 const hour = new Date().getHours();
