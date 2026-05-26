@@ -183,6 +183,11 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .role-banner { background: linear-gradient(135deg, #E6F1FB, #E0F5F7); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-2); }
 .role-banner i { color: var(--main-1); font-size: 18px; flex-shrink: 0; }
 .role-banner strong { color: var(--main-1); font-weight: 700; }
+
+.action-toggle { background: white; border: 1.5px solid var(--main-1); color: var(--main-1); padding: 14px 16px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; }
+.action-toggle:hover { background: #F5F9FD; }
+.action-toggle.active { background: var(--grad-blue); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2); }
+.action-toggle i { font-size: 16px; }
 </style>
 </head>
 <body>
@@ -372,36 +377,55 @@ function renderJDPanel(data) {
       ` : ''}
 
       ${!isHR && data.current_step === 3 ? `
-        <div style="background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border: 1px solid var(--main-1); border-radius: 12px; padding: 18px 22px; margin-top: 20px;">
+        <div style="background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border: 1px solid var(--main-1); border-radius: 12px; padding: 20px 24px; margin-top: 20px;">
           <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--main-1); display: flex; align-items: center; gap: 8px;">
             <i class="ti ti-help-circle" style="font-size: 18px;"></i> JD 검토를 마쳤다면
           </div>
-          <p style="font-size: 12px; color: var(--text-2); margin-bottom: 14px; line-height: 1.6;">
-            아래 JD가 만족스러우면 <strong style="color: var(--main-1);">공고 등재를 요청</strong>하고, 수정이 필요하면 <strong style="color: #9A6D00;">수정 의견을 작성</strong>해 AI 재작성을 요청하세요.
+          <p style="font-size: 12px; color: var(--text-2); margin-bottom: 16px; line-height: 1.6;">
+            JD가 만족스러우면 <strong style="color: var(--main-1);">공고 등재를 요청</strong>하고, 수정이 필요하면 <strong style="color: var(--main-1);">수정 의견을 작성</strong>해 인사팀에 전달하세요.
           </p>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button onclick="document.getElementById('commentSection').scrollIntoView({behavior:'smooth'}); document.getElementById('commentInput').focus();" style="background: white; border: 1.5px solid #F0C040; color: #9A6D00; padding: 12px 16px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <button id="btnRevise" onclick="selectAction('revise')" class="action-toggle">
               <i class="ti ti-edit"></i> 수정 의견 작성
             </button>
-            <button onclick="approveJD()" style="background: var(--grad-blue); border: none; color: white; padding: 12px 16px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2);">
+            <button id="btnPublish" onclick="selectAction('publish')" class="action-toggle">
               <i class="ti ti-check"></i> 공고 등재 요청
             </button>
           </div>
         </div>
 
-        <div class="comment-section" id="commentSection">
-          <div class="comment-title"><i class="ti ti-message-2"></i> 수정 의견 (AI 재작성)</div>
-          <p style="font-size: 12px; color: var(--text-2); margin-bottom: 10px;">JD에 대한 의견을 자연어로 입력하시면 AI가 즉시 반영해 다시 작성합니다.</p>
-          <textarea class="comment-input" id="commentInput" placeholder="예: 주요 업무에 신규 사업 영역 책임을 더 강조하고, 데이터 분석 도구를 GA4 외에 Tableau, Looker 등도 추가해주세요."></textarea>
-          <div class="comment-examples">
-            <span class="comment-example" onclick="useExample(this)">담당 업무를 더 구체화해주세요</span>
-            <span class="comment-example" onclick="useExample(this)">필수 자격요건을 더 엄격하게</span>
-            <span class="comment-example" onclick="useExample(this)">'스마트' 가치를 더 강조</span>
-            <span class="comment-example" onclick="useExample(this)">신입급 표현으로 톤 변경</span>
+        <div id="reviseArea" style="display: none;">
+          <div class="comment-section" id="commentSection" style="margin-top: 16px;">
+            <div class="comment-title"><i class="ti ti-edit"></i> 수정 의견 작성</div>
+            <p style="font-size: 12px; color: var(--text-2); margin-bottom: 10px;">수정이 필요한 부분을 자유롭게 작성해주세요. 단답형으로 적으셔도 AI가 인사팀에 전달하기 좋은 정제된 문장으로 다듬어드립니다.</p>
+            <textarea class="comment-input" id="commentInput" placeholder="예: 담당 업무 더 구체적으로, 신규사업 영역 추가, GA4 외 다른 분석 도구도 언급, '스마트' 가치 강조"></textarea>
+            <div class="comment-actions">
+              <span class="comment-hint">AI가 인사팀이 이해하기 쉽게 정제해드립니다</span>
+              <button class="btn-ai-rewrite" onclick="refineComment()"><i class="ti ti-sparkles"></i> AI로 의견 정제</button>
+            </div>
+
+            <div id="refinedBox" style="display: none; margin-top: 16px; padding: 16px; background: white; border: 1px solid var(--main-1); border-radius: 8px;">
+              <div style="font-size: 12px; font-weight: 700; color: var(--main-1); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;"><i class="ti ti-sparkles"></i> AI가 정제한 의견</div>
+              <div id="refinedContent" style="font-size: 13px; line-height: 1.7; color: var(--text-1); white-space: pre-wrap;"></div>
+              <div style="display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end;">
+                <button onclick="document.getElementById('refinedBox').style.display='none';" style="background: white; border: 1px solid var(--border); color: var(--text-2); padding: 8px 16px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer;">다시 정제</button>
+                <button onclick="sendRefinedComment()" style="background: var(--grad-blue); border: none; color: white; padding: 8px 20px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2);"><i class="ti ti-send"></i> 인사팀에 전송</button>
+              </div>
+            </div>
           </div>
-          <div class="comment-actions">
-            <span class="comment-hint">AI가 의견을 반영해 JD를 다시 작성합니다 (보통 5~10초)</span>
-            <button class="btn-ai-rewrite" onclick="rewriteJD()"><i class="ti ti-sparkles"></i> AI로 재작성</button>
+        </div>
+
+        <div id="publishArea" style="display: none;">
+          <div style="background: linear-gradient(135deg, #E6F1FB, #D5E8F5); border: 1px solid var(--main-1); border-radius: 12px; padding: 20px 24px; margin-top: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: var(--main-1); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <i class="ti ti-check" style="font-size: 18px;"></i> 공고 등재 요청
+            </div>
+            <p style="font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 16px;">
+              현재 JD 내용 그대로 인사팀에 공고 등재를 요청합니다. 인사팀이 채용공고로 등재하면 알림이 도착합니다.
+            </p>
+            <button onclick="approveJD()" style="background: var(--grad-blue); border: none; color: white; padding: 12px 24px; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2); width: 100%; justify-content: center;">
+              <i class="ti ti-send"></i> 인사팀에 등재 요청 전송
+            </button>
           </div>
         </div>
       ` : ''}
@@ -514,6 +538,115 @@ function requestReview() {
   alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
+  render(currentData);
+}
+
+function selectAction(action) {
+  const btnR = document.getElementById('btnRevise');
+  const btnP = document.getElementById('btnPublish');
+  const areaR = document.getElementById('reviseArea');
+  const areaP = document.getElementById('publishArea');
+
+  btnR.classList.remove('active');
+  btnP.classList.remove('active');
+  if (areaR) areaR.style.display = 'none';
+  if (areaP) areaP.style.display = 'none';
+
+  if (action === 'revise') {
+    btnR.classList.add('active');
+    areaR.style.display = 'block';
+    setTimeout(() => {
+      areaR.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('commentInput').focus();
+    }, 100);
+  } else {
+    btnP.classList.add('active');
+    areaP.style.display = 'block';
+    setTimeout(() => areaP.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+}
+
+function refineComment() {
+  const raw = document.getElementById('commentInput').value.trim();
+  if (!raw) {
+    alert('수정 의견을 입력해주세요.');
+    return;
+  }
+
+  const box = document.getElementById('refinedBox');
+  const content = document.getElementById('refinedContent');
+  box.style.display = 'block';
+  content.textContent = '';
+
+  const refined = generateRefinedComment(raw);
+
+  let i = 0;
+  const typing = setInterval(() => {
+    if (i < refined.length) {
+      content.textContent += refined[i];
+      i++;
+    } else {
+      clearInterval(typing);
+    }
+  }, 18);
+}
+
+function generateRefinedComment(raw) {
+  const points = [];
+  const lower = raw.toLowerCase();
+
+  if (raw.includes('담당') || raw.includes('업무') || raw.includes('구체')) {
+    points.push('• 주요 업무 항목을 보다 구체화하여 작성 부탁드립니다. 현재 항목들이 다소 추상적으로 느껴지며, 신규 사업 영역 책임과 일상 운영 업무를 구분하여 명시해주시면 좋겠습니다.');
+  }
+  if (raw.includes('GA4') || raw.includes('분석') || raw.includes('도구') || raw.includes('tableau') || raw.includes('looker')) {
+    points.push('• 필수 자격요건의 데이터 분석 도구 항목에 GA4 외에도 Tableau, Looker 등 BI 도구 활용 경험을 추가 명시 부탁드립니다.');
+  }
+  if (raw.includes('스마트') || raw.includes('가치')) {
+    points.push("• 인재상 섹션에서 ABL의 '스마트' 핵심가치를 보다 강조하여, 데이터 기반의 실험적 사고와 빠른 학습력을 갖춘 인재임을 명확히 드러내주시기 바랍니다.");
+  }
+  if (raw.includes('자격') || raw.includes('엄격') || raw.includes('경력')) {
+    points.push('• 필수 자격요건의 경력 기준을 현재 3년에서 5년 이상으로 상향 조정 부탁드립니다. 실무 깊이가 중요한 포지션입니다.');
+  }
+  if (raw.includes('신규사업') || raw.includes('신규 사업') || raw.includes('사업')) {
+    points.push('• 직무 소개 및 주요 업무에 신규 사업(디지털 마케팅 채널 확장) 추진 책임을 명시적으로 추가해주시면 좋겠습니다.');
+  }
+  if (raw.includes('자동화') || raw.includes('braze') || raw.includes('marketo')) {
+    points.push('• 우대사항이 아닌 필수 자격요건으로 마케팅 자동화 툴 운영 경험을 격상 부탁드립니다.');
+  }
+
+  if (points.length === 0) {
+    points.push(`• ${raw.split(/[,，·]/)[0].trim()}: 해당 부분에 대한 수정 또는 보완을 부탁드립니다.`);
+    if (raw.split(/[,，·]/).length > 1) {
+      raw.split(/[,，·]/).slice(1).forEach(p => {
+        if (p.trim()) points.push(`• ${p.trim()}: 추가 검토 부탁드립니다.`);
+      });
+    }
+  }
+
+  return `안녕하세요, 인사팀.
+
+JD 검토 후 아래와 같이 수정 의견 전달드립니다:
+
+${points.join('\n\n')}
+
+빠른 시간 내 반영해주시면 감사하겠습니다.
+
+마케팅팀 김부장 드림`;
+}
+
+function sendRefinedComment() {
+  if (!confirm('정제된 의견을 인사팀에 전송하시겠습니까?')) return;
+
+  const refined = document.getElementById('refinedContent').textContent;
+  currentData.review_history.push({
+    actor: "마케팅팀 김부장",
+    actor_role: "manager",
+    timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+    action: "수정 의견 전송",
+    detail: refined.split('\n')[0] + " (AI 정제됨)"
+  });
+  currentData.status = "현업 수정 의견 도착";
+  alert('수정 의견이 인사팀에 전송되었습니다. 인사팀이 JD를 수정한 후 다시 검토 요청을 드릴 예정입니다.');
   render(currentData);
 }
 
