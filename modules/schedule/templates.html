@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메일 템플릿 관리 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --ok: #16a34a; --ok-bg: #eaf8ef;
+  --warn: #f97316; --warn-bg: #fff3e8;
+  --err: #dc2626; --err-bg: #fff1f2;
+  --info: #0067AC; --info-bg: #E6F1FB;
+  --purple: #6D28D9; --purple-bg: #ede9fe;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); font-size: 14px; line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+
+/* Notif */
+.notif-bell { position: relative; cursor: pointer; color: var(--text-2); padding: 8px; border-radius: 8px; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; }
+.notif-bell:hover { background: var(--bg-page); }
+.notif-bell i { font-size: 18px; }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #DC2626; border-radius: 50%; border: 2px solid white; }
+.notif-drop { position: absolute; top: 100%; right: 0; width: 320px; background: white; border: 1px solid var(--border); box-shadow: 0 8px 28px rgba(15,35,65,0.15); border-radius: 12px; z-index: 999; display: none; margin-top: 8px; overflow: hidden; }
+.notif-drop.show { display: block; }
+.notif-drop-hd { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, white, #fbfdff); }
+.notif-drop-hd .clear { color: var(--main-1); cursor: pointer; font-weight: 700; font-size: 11px; }
+.notif-item { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12px; cursor: pointer; display: flex; gap: 10px; transition: background 0.15s; text-decoration: none; color: inherit; }
+.notif-item:hover { background: var(--bg-page); }
+.notif-item:last-child { border-bottom: none; }
+.notif-item .ic { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-item .ic i { font-size: 14px; }
+.notif-item .ic.info { background: var(--info-bg); color: var(--info); }
+.notif-item .ic.warn { background: var(--warn-bg); color: var(--warn); }
+.notif-item .title { font-weight: 700; color: var(--text-1); }
+.notif-item .desc { color: var(--text-2); margin-top: 2px; }
+
+/* Content */
+.content { padding: 28px 32px 40px; }
+.page-header { margin-bottom: 22px; }
+.page-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.02em; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 13px; }
+
+/* Subnav */
+.subnav { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.subnav-item { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; text-decoration: none; }
+.subnav-item:hover { border-color: var(--main-1); color: var(--main-1); }
+.subnav-item.active { background: var(--grad-blue); color: white; border-color: transparent; }
+.subnav-item .count { background: rgba(255,255,255,0.25); color: inherit; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.subnav-item:not(.active) .count { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #DC2626; }
+
+/* Toolbar */
+.toolbar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.search-box { position: relative; flex: 1; min-width: 220px; max-width: 320px; }
+.search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 16px; }
+.f-inp { width: 100%; height: 36px; padding: 0 14px 0 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); }
+.f-inp:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+.f-sel { height: 36px; padding: 0 32px 0 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.f-sel:focus { border-color: var(--main-1); }
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { padding: 7px 13px; border-radius: 999px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+.chip:hover { border-color: rgba(0,103,172,0.35); }
+.chip.active { background: var(--grad-blue); color: white; border-color: transparent; }
+
+/* Btn */
+.btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+.btn-sm { height: 32px; padding: 0 12px; font-size: 12px; }
+.btn-o { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.btn-o:hover { border-color: var(--main-1); color: var(--main-1); }
+.btn-p { background: var(--grad-blue); color: white; border: none; }
+.btn-p:hover { opacity: 0.9; }
+.btn-r { background: var(--err); color: white; border: none; }
+.btn-r:hover { opacity: 0.9; }
+.btn i { font-size: 14px; }
+
+/* Template grid */
+.tmpl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.tmpl-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden; }
+.tmpl-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.tmpl-card:hover { border-color: var(--main-1); box-shadow: 0 6px 18px rgba(0,103,172,0.08); transform: translateY(-2px); }
+.tmpl-card:hover::before { transform: scaleX(1); }
+.tmpl-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.tmpl-name { font-size: 14px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; }
+.tmpl-meta { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+.pl-blue { background: var(--info-bg); color: var(--info); }
+.pl-green { background: var(--ok-bg); color: var(--ok); }
+.pl-orange { background: var(--warn-bg); color: var(--warn); }
+.pl-red { background: var(--err-bg); color: var(--err); }
+.pl-purple { background: var(--purple-bg); color: var(--purple); }
+.pl-gray { background: var(--bg-page); color: var(--text-2); }
+.pl-yellow { background: #FEF3C7; color: #92400E; }
+
+.tmpl-subj { font-size: 12px; color: var(--text-2); margin-top: 10px; padding: 9px 11px; background: var(--bg-page); border-radius: 6px; font-weight: 700; border-left: 3px solid var(--main-1); }
+.tmpl-subj-label { font-size: 9px; color: var(--text-3); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; display: block; margin-bottom: 3px; }
+.tmpl-preview { font-size: 12px; color: var(--text-2); margin-top: 10px; line-height: 1.65; max-height: 56px; overflow: hidden; position: relative; }
+.tmpl-preview::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 24px; background: linear-gradient(180deg, transparent, white); }
+
+.tmpl-actions { display: flex; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.tmpl-action-btn { flex: 1; padding: 7px 0; border-radius: 6px; font-size: 11px; font-weight: 700; color: var(--text-2); background: var(--bg-page); transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.tmpl-action-btn:hover { background: var(--info-bg); color: var(--main-1); }
+.tmpl-action-btn.danger:hover { background: var(--err-bg); color: var(--err); }
+.tmpl-action-btn i { font-size: 13px; }
+
+.empty-state { display: none; padding: 56px 20px; text-align: center; color: var(--text-2); background: white; border: 1px dashed var(--border); border-radius: 12px; }
+.empty-state strong { display: block; color: var(--text-1); font-size: 15px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; }
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.stat-lbl { font-size: 11px; color: var(--text-3); font-weight: 700; letter-spacing: 0.02em; }
+.stat-val { font-size: 28px; font-weight: 700; margin-top: 4px; line-height: 1.1; color: var(--main-1); letter-spacing: -0.02em; }
+.stat-val.green { color: var(--ok); }
+.stat-val.orange { color: var(--warn); }
+.stat-val.purple { color: var(--purple); }
+.stat-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+/* Modal */
+.mbd { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(15,35,65,0.46); }
+.mbd.show { display: flex; }
+.modal { background: white; border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.24); overflow: hidden; max-height: 92vh; display: flex; flex-direction: column; width: 100%; max-width: 95vw; }
+.m-hd { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; background: linear-gradient(180deg, white, #fbfdff); }
+.m-title { font-size: 15px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; }
+.m-close { margin-left: auto; width: 28px; height: 28px; border-radius: 6px; color: var(--text-3); font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.m-close:hover { background: var(--bg-page); color: var(--text-1); }
+.m-body { padding: 20px; overflow-y: auto; flex: 1; }
+.m-ft { padding: 14px 20px; border-top: 1px solid var(--border); background: #fbfdff; display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+
+/* Form */
+.fg { margin-bottom: 14px; }
+.fl { display: block; font-size: 12px; color: var(--text-2); font-weight: 700; margin-bottom: 6px; }
+.fl .var-hint { font-size: 10px; color: var(--text-3); font-weight: 400; margin-left: 6px; }
+.fi { width: 100%; height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); font-family: inherit; }
+.fi:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+.fs { height: 36px; padding: 0 32px 0 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-1); background: white; font-size: 13px; font-weight: 700; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; font-family: inherit; }
+.fta { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); font-family: inherit; line-height: 1.7; resize: vertical; min-height: 220px; }
+.fta:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+.w100 { width: 100%; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Variable chips (편집 모달에서 클릭 삽입) */
+.var-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; margin-bottom: 4px; }
+.var-chip { padding: 3px 8px; border-radius: 6px; background: var(--info-bg); color: var(--main-1); font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+.var-chip:hover { background: var(--main-1); color: white; }
+
+/* Preview modal */
+.preview-mail { background: var(--bg-page); border-radius: 10px; padding: 18px 20px; border: 1px solid var(--border); }
+.preview-mail .pm-subj { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.preview-mail .pm-body { font-size: 13px; color: var(--text-1); line-height: 1.85; white-space: pre-wrap; }
+.preview-vars-info { background: var(--info-bg); border-left: 3px solid var(--main-1); padding: 10px 12px; border-radius: 0 8px 8px 0; font-size: 11px; color: var(--text-2); margin-top: 12px; line-height: 1.6; }
+.preview-vars-info strong { color: var(--main-1); }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; color: white; background: rgba(15,35,65,0.94); font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.2s; z-index: 3000; box-shadow: 0 18px 30px rgba(0,0,0,0.18); display: flex; align-items: center; gap: 10px; min-width: 240px; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast-ic { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.toast-ic.ok { background: var(--ok); }
+.toast-ic.warn { background: var(--warn); }
+.toast-ic.err { background: var(--err); }
+.toast-ic.info { background: var(--main-1); }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 24px 28px 32px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .tmpl-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 20px 16px 32px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .stats-row { grid-template-columns: 1fr; }
+  .f-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <div class="notif-bell" onclick="toggleNotif(event)">
+          <i class="ti ti-bell"></i>
+          <div class="notif-dot"></div>
+          <div class="notif-drop" id="notifDropdown" onclick="event.stopPropagation()">
+            <div class="notif-drop-hd"><span>새로운 알림</span><span class="clear" onclick="markAllRead()">모두 읽음</span></div>
+            <div id="notifList"></div>
+          </div>
+        </div>
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <span class="page-eyebrow">면접 일정 관리</span>
+        <h1 class="page-title">메일 템플릿 관리</h1>
+        <p class="page-subtitle">면접 조율 단계별로 사용되는 메일 템플릿을 관리합니다. 변수를 사용하면 자동 치환되어 발송됩니다.</p>
+      </div>
+
+      <nav class="subnav">
+        <a class="subnav-item" href="index.html"><i class="ti ti-calendar"></i> 통합 캘린더</a>
+        <a class="subnav-item" href="coordinate.html"><i class="ti ti-clock"></i> 면접 일정 조율 <span class="count" id="navPendingCount">10</span></a>
+        <a class="subnav-item active" href="templates.html"><i class="ti ti-file-description"></i> 메일 템플릿 관리</a>
+      </nav>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <i class="ti ti-search"></i>
+          <input class="f-inp" id="searchInput" placeholder="템플릿명, 제목, 내용 검색">
+        </div>
+        <div class="chip-row">
+          <button class="chip active" data-type="all">전체</button>
+          <button class="chip" data-type="cand">지원자용</button>
+          <button class="chip" data-type="int">면접관용</button>
+        </div>
+        <select class="f-sel" id="stageFilter">
+          <option value="all">전체 단계</option>
+          <option value="조율요청">조율요청</option>
+          <option value="리마인드">리마인드</option>
+          <option value="확정">확정</option>
+          <option value="재조율">재조율</option>
+        </select>
+        <div style="margin-left:auto" class="flex" style="gap:8px">
+          <button class="btn btn-p" onclick="openTemplateEdit(null)"><i class="ti ti-plus"></i>새 템플릿</button>
+        </div>
+      </div>
+
+      <div class="tmpl-grid" id="tmplGrid"></div>
+      <div class="empty-state" id="emptyState">
+        <strong>조건에 맞는 템플릿이 없습니다.</strong>
+        <p>필터를 변경하거나 검색어를 다시 입력해 주세요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 템플릿 편집 -->
+<div class="mbd" id="modal-template-edit">
+  <div class="modal" style="width:680px;">
+    <div class="m-hd">
+      <div class="m-title" id="tmpl-edit-title">템플릿 편집</div>
+      <button class="m-close" onclick="closeModal('modal-template-edit')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body" id="tmpl-edit-body"></div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeModal('modal-template-edit')">취소</button>
+      <button class="btn btn-p" onclick="saveTemplate()"><i class="ti ti-device-floppy"></i>저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 미리보기 -->
+<div class="mbd" id="modal-tmpl-preview">
+  <div class="modal" style="width:640px;">
+    <div class="m-hd">
+      <i class="ti ti-eye" style="color:var(--main-1);font-size:18px"></i>
+      <div class="m-title">템플릿 미리보기</div>
+      <button class="m-close" onclick="closeModal('modal-tmpl-preview')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body" id="tmpl-preview-body"></div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeModal('modal-tmpl-preview')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 삭제 확인 -->
+<div class="mbd" id="modal-delete-confirm">
+  <div class="modal" style="width:420px;">
+    <div class="m-hd">
+      <i class="ti ti-alert-triangle" style="color:var(--err);font-size:18px"></i>
+      <div class="m-title">템플릿 삭제 확인</div>
+      <button class="m-close" onclick="closeModal('modal-delete-confirm')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body">
+      <p style="font-size:13px;color:var(--text-2);line-height:1.7">정말 <strong id="delTmplName" style="color:var(--text-1)">이 템플릿</strong>을 삭제하시겠습니까?</p>
+      <div style="margin-top:12px;padding:11px;background:var(--err-bg);color:#9a3412;border-radius:8px;font-size:12px;line-height:1.6;font-weight:700">삭제 후에는 복구할 수 없으며, 해당 템플릿을 사용 중인 조율 건의 발송에 영향을 줄 수 있습니다.</div>
+    </div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeModal('modal-delete-confirm')">취소</button>
+      <button class="btn btn-r" onclick="confirmDelete()"><i class="ti ti-trash"></i>삭제</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-ic" id="toast-ic"></div>
+  <div>
+    <div style="font-weight:700;font-size:13px;" id="toast-title"></div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;" id="toast-msg"></div>
+  </div>
+</div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== Notification =====
+function toggleNotif(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('notifDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const drop = document.getElementById('notifDropdown');
+  if (drop && drop.classList.contains('show') && !e.target.closest('.notif-bell')) drop.classList.remove('show');
+});
+function markAllRead() { showToast('info', '모든 알림을 읽음 처리했습니다', ''); document.getElementById('notifDropdown').classList.remove('show'); }
+
+// ===== Data =====
+var TEMPLATES = [];
+var NOTIFICATIONS = [];
+var CANDIDATES = { r1: [], r2: [] };
+var state = { type: 'all', stage: 'all', search: '' };
+var editingTmplId = null;
+var deletingTmplId = null;
+
+// 단계별 카테고리
+var stageMeta = {
+  '조율요청': { color: 'blue', icon: 'ti-mail-forward', desc: '면접 일정 조율을 요청할 때 사용' },
+  '리마인드': { color: 'purple', icon: 'ti-bell', desc: '응답이 늦어질 때 재안내' },
+  '확정': { color: 'green', icon: 'ti-check', desc: '면접 일정 최종 확정 안내' },
+  '재조율': { color: 'red', icon: 'ti-refresh', desc: '일정 변경이 필요할 때 재조율 요청' }
+};
+
+var typeMeta = {
+  'cand': { label: '지원자 수신', icon: 'ti-user', color: 'blue' },
+  'int': { label: '면접관 수신', icon: 'ti-users', color: 'orange' }
+};
+
+// ===== Notification render =====
+function renderNotifications() {
+  const list = document.getElementById('notifList');
+  if (!NOTIFICATIONS.length) {
+    list.innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--text-3);font-size:12px">새로운 알림이 없습니다.</div>';
+    return;
+  }
+  let html = '';
+  NOTIFICATIONS.forEach(n => {
+    const iconClass = n.type === 'warn' ? 'warn' : 'info';
+    const icon = n.type === 'warn' ? 'ti-alert-circle' : 'ti-check';
+    const link = n.target === 'schedule' ? 'coordinate.html?round=' + (n.round || 'r1') : '#';
+    html += `<a class="notif-item" href="${link}"><div class="ic ${iconClass}"><i class="ti ${icon}"></i></div><div><div class="title">${n.title}</div><div class="desc">${n.desc}</div></div></a>`;
+  });
+  list.innerHTML = html;
+}
+
+// ===== Stats =====
+function renderStats() {
+  var total = TEMPLATES.length;
+  var candCount = TEMPLATES.filter(t => t.type === 'cand').length;
+  var intCount = TEMPLATES.filter(t => t.type === 'int').length;
+  var confirmCount = TEMPLATES.filter(t => t.stage === '확정').length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-lbl">전체 템플릿</div><div class="stat-val">${total}</div><div class="stat-sub">사용 중인 메일 양식</div></div>
+    <div class="stat-card"><div class="stat-lbl">지원자 수신</div><div class="stat-val">${candCount}</div><div class="stat-sub">지원자 발송용</div></div>
+    <div class="stat-card"><div class="stat-lbl">면접관 수신</div><div class="stat-val orange">${intCount}</div><div class="stat-sub">면접관 발송용</div></div>
+    <div class="stat-card"><div class="stat-lbl">확정 메일</div><div class="stat-val green">${confirmCount}</div><div class="stat-sub">면접 일정 확정 안내</div></div>
+  `;
+}
+
+// ===== Template grid =====
+function renderTemplates() {
+  var filtered = TEMPLATES.filter(t => {
+    if (state.type !== 'all' && t.type !== state.type) return false;
+    if (state.stage !== 'all' && t.stage !== state.stage) return false;
+    if (state.search) {
+      var k = state.search.toLowerCase();
+      var hit = (t.name + ' ' + t.subj + ' ' + t.body).toLowerCase().includes(k);
+      if (!hit) return false;
+    }
+    return true;
+  });
+
+  if (!filtered.length) {
+    document.getElementById('tmplGrid').innerHTML = '';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+
+  var html = '';
+  filtered.forEach(t => {
+    var stageM = stageMeta[t.stage] || { color: 'gray', icon: 'ti-file', desc: '' };
+    var typeM = typeMeta[t.type] || { label: '기타', icon: 'ti-mail', color: 'gray' };
+    var stagePill = 'pl-' + stageM.color;
+    var typePill = 'pl-' + typeM.color;
+    var bodyPreview = t.body.split('\n').slice(0, 3).join(' ').substring(0, 130);
+
+    html += `
+      <article class="tmpl-card" onclick="openTemplatePreview('${t.id}')">
+        <div class="tmpl-head">
+          <div style="flex:1;min-width:0">
+            <div class="tmpl-name">${t.name}</div>
+            <div class="tmpl-meta">
+              <span class="pill ${typePill}"><i class="ti ${typeM.icon}" style="font-size:11px;margin-right:2px"></i>${typeM.label}</span>
+              <span class="pill ${stagePill}"><i class="ti ${stageM.icon}" style="font-size:11px;margin-right:2px"></i>${t.stage}</span>
+              ${t.round ? '<span class="pill pl-gray">' + t.round + '</span>' : ''}
+            </div>
+          </div>
+        </div>
+        <div class="tmpl-subj">
+          <span class="tmpl-subj-label">제목</span>
+          ${escapeHtml(t.subj)}
+        </div>
+        <div class="tmpl-preview">${escapeHtml(bodyPreview)}…</div>
+        <div class="tmpl-actions" onclick="event.stopPropagation()">
+          <button class="tmpl-action-btn" onclick="openTemplatePreview('${t.id}')"><i class="ti ti-eye"></i>미리보기</button>
+          <button class="tmpl-action-btn" onclick="openTemplateEdit('${t.id}')"><i class="ti ti-edit"></i>편집</button>
+          <button class="tmpl-action-btn" onclick="duplicateTemplate('${t.id}')"><i class="ti ti-copy"></i>복제</button>
+          <button class="tmpl-action-btn danger" onclick="openDeleteConfirm('${t.id}')"><i class="ti ti-trash"></i>삭제</button>
+        </div>
+      </article>
+    `;
+  });
+  document.getElementById('tmplGrid').innerHTML = html;
+}
+
+function escapeHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+// ===== Preview modal =====
+function openTemplatePreview(tmplId) {
+  var t = TEMPLATES.find(x => x.id === tmplId);
+  if (!t) return;
+
+  // 시연용 샘플 변수 치환
+  var sample = {
+    '{{지원자명}}': '김재원',
+    '{{직군}}': '마케팅팀',
+    '{{경력}}': '3년',
+    '{{전형단계}}': t.round || '1차',
+    '{{면접기간}}': '2026.06.09~2026.06.13',
+    '{{마감일}}': '2026.06.10 18:00',
+    '{{소요시간}}': '60분',
+    '{{면접장소}}': '본사 7층 면접실 A',
+    '{{확정일시}}': '2026년 6월 10일 오전 10:00',
+    '{{폼_링크}}': 'https://abllife-hr.com/form/xxx',
+    '{{면접관명}}': '박성준 상무'
+  };
+  var subj = t.subj;
+  var body = t.body;
+  Object.keys(sample).forEach(k => {
+    subj = subj.replaceAll(k, sample[k]);
+    body = body.replaceAll(k, sample[k]);
+  });
+
+  document.getElementById('tmpl-preview-body').innerHTML = `
+    <div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">
+      <span class="pill pl-blue"><i class="ti ${typeMeta[t.type].icon}" style="font-size:11px;margin-right:2px"></i>${typeMeta[t.type].label}</span>
+      <span class="pill pl-${stageMeta[t.stage].color}"><i class="ti ${stageMeta[t.stage].icon}" style="font-size:11px;margin-right:2px"></i>${t.stage}</span>
+      ${t.round ? '<span class="pill pl-gray">' + t.round + '</span>' : ''}
+    </div>
+    <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;font-weight:700">템플릿명: ${escapeHtml(t.name)}</div>
+    <div class="preview-mail">
+      <div class="pm-subj">${escapeHtml(subj)}</div>
+      <div class="pm-body">${escapeHtml(body)}</div>
+    </div>
+    <div class="preview-vars-info">
+      <strong>샘플 변수 치환 결과입니다.</strong> 실제 발송 시에는 각 지원자/면접관의 정보로 자동 변경됩니다.
+    </div>
+  `;
+  openModal('modal-tmpl-preview');
+}
+
+// ===== Edit modal =====
+function openTemplateEdit(tmplId) {
+  editingTmplId = tmplId;
+  var t = tmplId ? TEMPLATES.find(x => x.id === tmplId) : null;
+  document.getElementById('tmpl-edit-title').textContent = t ? t.name + ' 편집' : '새 템플릿 만들기';
+
+  var html = `
+    <div class="fg">
+      <label class="fl">템플릿명</label>
+      <input class="fi" id="te-name" value="${t ? escapeHtml(t.name) : ''}" placeholder="예: 1차 면접 조율 요청 (지원자)">
+    </div>
+    <div class="f-row">
+      <div class="fg">
+        <label class="fl">수신 대상</label>
+        <select class="fs w100" id="te-type">
+          <option value="cand" ${t && t.type === 'cand' ? 'selected' : ''}>지원자 수신</option>
+          <option value="int" ${t && t.type === 'int' ? 'selected' : ''}>면접관 수신</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">단계</label>
+        <select class="fs w100" id="te-stage">
+          <option value="조율요청" ${t && t.stage === '조율요청' ? 'selected' : ''}>조율요청</option>
+          <option value="리마인드" ${t && t.stage === '리마인드' ? 'selected' : ''}>리마인드</option>
+          <option value="확정" ${t && t.stage === '확정' ? 'selected' : ''}>확정</option>
+          <option value="재조율" ${t && t.stage === '재조율' ? 'selected' : ''}>재조율</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">전형 (선택사항) <span class="var-hint">조율요청 단계에서 1차/2차 구분 시 사용</span></label>
+      <select class="fs w100" id="te-round">
+        <option value="" ${!t || !t.round ? 'selected' : ''}>구분 없음 (모든 전형)</option>
+        <option value="1차" ${t && t.round === '1차' ? 'selected' : ''}>1차 면접</option>
+        <option value="2차" ${t && t.round === '2차' ? 'selected' : ''}>2차 면접</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="fl">제목 <span class="var-hint">변수 클릭 시 자동 삽입됩니다</span></label>
+      <input class="fi" id="te-subj" value="${t ? escapeHtml(t.subj) : ''}" placeholder="[ABL생명] 1차 면접 일정 조율 안내 - {{지원자명}} 님">
+      <div class="var-chips">
+        <span class="var-chip" onclick="insertVar('te-subj','{{지원자명}}')">{{지원자명}}</span>
+        <span class="var-chip" onclick="insertVar('te-subj','{{전형단계}}')">{{전형단계}}</span>
+        <span class="var-chip" onclick="insertVar('te-subj','{{면접관명}}')">{{면접관명}}</span>
+        <span class="var-chip" onclick="insertVar('te-subj','{{직군}}')">{{직군}}</span>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">본문 <span class="var-hint">변수 클릭 시 커서 위치에 삽입</span></label>
+      <textarea class="fta" id="te-body" placeholder="안녕하세요, {{지원자명}} 님...">${t ? escapeHtml(t.body) : ''}</textarea>
+      <div class="var-chips">
+        <span class="var-chip" onclick="insertVar('te-body','{{지원자명}}')">{{지원자명}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{전형단계}}')">{{전형단계}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{면접기간}}')">{{면접기간}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{마감일}}')">{{마감일}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{소요시간}}')">{{소요시간}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{면접장소}}')">{{면접장소}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{확정일시}}')">{{확정일시}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{폼_링크}}')">{{폼_링크}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{직군}}')">{{직군}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{경력}}')">{{경력}}</span>
+        <span class="var-chip" onclick="insertVar('te-body','{{면접관명}}')">{{면접관명}}</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('tmpl-edit-body').innerHTML = html;
+  openModal('modal-template-edit');
+}
+
+function insertVar(inputId, varStr) {
+  var el = document.getElementById(inputId);
+  var start = el.selectionStart;
+  var end = el.selectionEnd;
+  el.value = el.value.substring(0, start) + varStr + el.value.substring(end);
+  el.focus();
+  el.selectionStart = el.selectionEnd = start + varStr.length;
+}
+
+function saveTemplate() {
+  var name = document.getElementById('te-name').value.trim();
+  var type = document.getElementById('te-type').value;
+  var stage = document.getElementById('te-stage').value;
+  var round = document.getElementById('te-round').value;
+  var subj = document.getElementById('te-subj').value.trim();
+  var body = document.getElementById('te-body').value.trim();
+
+  if (!name) { showToast('warn', '템플릿명을 입력해주세요', ''); return; }
+  if (!subj) { showToast('warn', '제목을 입력해주세요', ''); return; }
+  if (!body) { showToast('warn', '본문을 입력해주세요', ''); return; }
+
+  if (editingTmplId) {
+    var t = TEMPLATES.find(x => x.id === editingTmplId);
+    if (t) { t.name = name; t.type = type; t.stage = stage; t.round = round; t.subj = subj; t.body = body; }
+    showToast('ok', '템플릿 저장 완료', name + ' 템플릿이 수정되었습니다.');
+  } else {
+    var newId = 't' + (TEMPLATES.length + Date.now() % 1000);
+    TEMPLATES.push({ id: newId, name: name, type: type, stage: stage, round: round, subj: subj, body: body });
+    showToast('ok', '새 템플릿 생성 완료', name + ' 템플릿이 추가되었습니다.');
+  }
+  closeModal('modal-template-edit');
+  renderStats();
+  renderTemplates();
+  editingTmplId = null;
+}
+
+// ===== Duplicate =====
+function duplicateTemplate(tmplId) {
+  var t = TEMPLATES.find(x => x.id === tmplId);
+  if (!t) return;
+  var newId = 't' + (TEMPLATES.length + Date.now() % 1000);
+  TEMPLATES.push({
+    id: newId,
+    name: t.name + ' (복사본)',
+    type: t.type, stage: t.stage, round: t.round,
+    subj: t.subj, body: t.body
+  });
+  renderStats();
+  renderTemplates();
+  showToast('info', '템플릿 복제 완료', t.name + '의 복사본이 추가되었습니다.');
+}
+
+// ===== Delete =====
+function openDeleteConfirm(tmplId) {
+  var t = TEMPLATES.find(x => x.id === tmplId);
+  if (!t) return;
+  deletingTmplId = tmplId;
+  document.getElementById('delTmplName').textContent = t.name;
+  openModal('modal-delete-confirm');
+}
+
+function confirmDelete() {
+  if (!deletingTmplId) return;
+  var t = TEMPLATES.find(x => x.id === deletingTmplId);
+  TEMPLATES = TEMPLATES.filter(x => x.id !== deletingTmplId);
+  closeModal('modal-delete-confirm');
+  renderStats();
+  renderTemplates();
+  showToast('ok', '템플릿 삭제 완료', (t ? t.name : '템플릿') + '이(가) 삭제되었습니다.');
+  deletingTmplId = null;
+}
+
+// ===== Modal =====
+function openModal(id) { document.getElementById(id).classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  if (!document.querySelectorAll('.mbd.show').length) document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    var opened = document.querySelectorAll('.mbd.show');
+    if (opened.length) opened[opened.length - 1].classList.remove('show');
+    if (!document.querySelectorAll('.mbd.show').length) document.body.style.overflow = '';
+  }
+});
+
+// ===== Filter events =====
+document.querySelectorAll('.chip[data-type]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-type]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    state.type = chip.getAttribute('data-type');
+    renderTemplates();
+  });
+});
+document.getElementById('stageFilter').addEventListener('change', e => { state.stage = e.target.value; renderTemplates(); });
+document.getElementById('searchInput').addEventListener('input', e => { state.search = e.target.value; renderTemplates(); });
+
+// ===== Toast =====
+var toastT;
+function showToast(type, title, msg) {
+  var t = document.getElementById('toast');
+  var ic = document.getElementById('toast-ic');
+  ic.className = 'toast-ic ' + type;
+  var iconMap = { ok: 'ti-check', warn: 'ti-alert-triangle', err: 'ti-x', info: 'ti-info-circle' };
+  ic.innerHTML = '<i class="ti ' + (iconMap[type] || 'ti-info-circle') + '" style="color:white;font-size:14px"></i>';
+  document.getElementById('toast-title').textContent = title || '';
+  document.getElementById('toast-msg').textContent = msg || '';
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ===== Init =====
+fetch('data/candidates.json')
+  .then(r => r.json())
+  .then(data => {
+    TEMPLATES = data.templates || [];
+    NOTIFICATIONS = data.notifications || [];
+    CANDIDATES = data.candidates || { r1: [], r2: [] };
+    renderNotifications();
+    renderStats();
+    renderTemplates();
+    // 조율 대기 카운트
+    var pending = [...CANDIDATES.r1, ...CANDIDATES.r2].filter(c => c.status === 'pending' || c.status === 'confirm-wait' || c.status === 'before').length;
+    document.getElementById('navPendingCount').textContent = pending;
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    showToast('err', '데이터 로드 실패', 'data/candidates.json 파일을 확인해주세요');
+  });
+</script>
+
+</body>
+</html>
