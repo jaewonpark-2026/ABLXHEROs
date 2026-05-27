@@ -1,705 +1,479 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자소서 분석 · RECRUIT AI</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
-  <style>
-    @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; font-display: swap; }
-    @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; font-display: swap; }
-    @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자소서 분석 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
 
-    :root {
-      --main-1: #0067AC;
-      --main-2: #2482C5;
-      --sub-1: #253A71;
-      --sub-2: #123F6D;
-      --sub-3: #00AEC6;
-      --sub-4: #00AFAD;
-      --bg-page: #F6F9FC;
-      --border: #E8EDF3;
-      --text-1: #1A2233;
-      --text-2: #5A6478;
-      --text-3: #8A93A6;
-      --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
-      --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
-      --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
-      --sidebar-w: 232px;
-      --sidebar-w-collapsed: 68px;
-      /* status colors */
-      --status-excellent: #16a34a;
-      --status-excellent-bg: #eaf8ef;
-      --status-review: #f97316;
-      --status-review-bg: #fff3e8;
-      --status-risk: #dc2626;
-      --status-risk-bg: #fff1f2;
-    }
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --status-excellent: #16a34a;
+  --status-excellent-bg: #eaf8ef;
+  --status-review: #f97316;
+  --status-review-bg: #fff3e8;
+  --status-risk: #dc2626;
+  --status-risk-bg: #fff1f2;
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body {
-      font-family: 'Wooridaum', 'Malgun Gothic', sans-serif;
-      font-weight: 400;
-      background: var(--bg-page);
-      color: var(--text-1);
-      -webkit-font-smoothing: antialiased;
-    }
-    button, input, select, textarea { font-family: inherit; font-weight: inherit; }
-    button { cursor: pointer; border: 0; background: transparent; }
-    a { color: inherit; text-decoration: none; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
 
-    /* ===== Layout ===== */
-    .layout {
-      display: grid;
-      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
-      min-height: 100vh;
-    }
-    .layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+/* ===== Layout ===== */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
 
-    /* ===== Sidebar ===== */
-    .sidebar {
-      background: var(--grad-side);
-      color: #fff;
-      padding: 0;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar-toggle {
-      position: absolute; top: 14px; right: 12px;
-      width: 30px; height: 30px;
-      color: rgba(255,255,255,.9);
-      border-radius: 8px;
-      display: grid; place-items: center;
-      font-size: 16px;
-      transition: background .15s;
-    }
-    .sidebar-toggle:hover { background: rgba(255,255,255,.14); }
-    .brand {
-      padding: 26px 22px 24px;
-      display: block;
-      color: #fff;
-      border-bottom: 1px solid rgba(255,255,255,.16);
-    }
-    .brand-name { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
-    .brand-sub { font-size: 11px; opacity: .78; margin-top: 4px; letter-spacing: .04em; }
-    .nav { padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
-    .nav-section-title {
-      padding: 14px 12px 6px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      color: rgba(255,255,255,.62);
-      text-transform: uppercase;
-    }
-    .nav-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 11px 12px;
-      border-radius: 10px;
-      color: rgba(255,255,255,.85);
-      font-size: 14px; font-weight: 400;
-      transition: background .15s, color .15s;
-    }
-    .nav-item i { font-size: 18px; flex-shrink: 0; width: 20px; text-align: center; }
-    .nav-item:hover { background: rgba(255,255,255,.12); color: #fff; }
-    .nav-item.active {
-      background: rgba(255,255,255,.18);
-      color: #fff;
-      font-weight: 700;
-    }
+/* Sidebar (기존 디자인 그대로) */
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
 
-    /* ===== Main area ===== */
-    .main-area { display: flex; flex-direction: column; min-width: 0; }
-    .topbar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 28px;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      gap: 16px;
-    }
-    .topbar-left { display: flex; align-items: center; gap: 14px; }
-    .mobile-menu-btn {
-      display: none;
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      color: var(--text-2);
-      font-size: 18px;
-      align-items: center; justify-content: center;
-    }
-    .logo-abl { height: 32px; }
-    .logo-woori { height: 22px; opacity: .85; }
-    .divider { width: 1px; height: 22px; background: var(--border); }
-    .user-info { display: flex; align-items: center; gap: 12px; font-size: 13px; }
-    .user-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #E6F1FB, #D5E8F5);
-      color: var(--main-1);
-      font-weight: 700;
-      font-size: 12px;
-    }
-    .user-badge i { font-size: 14px; }
-    #userId { color: var(--text-2); font-size: 12px; }
-    .logout-btn {
-      padding: 6px 12px;
-      border-radius: 8px;
-      color: var(--text-2);
-      font-size: 12px;
-      border: 1px solid var(--border);
-    }
-    .logout-btn:hover { background: var(--bg-page); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
 
-    /* ===== Content ===== */
-    .content { padding: 28px 28px 40px; }
-    .page-header { margin-bottom: 22px; }
-    .eyebrow {
-      display: inline-flex;
-      padding: 6px 11px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #E6F1FB, #D5E8F5);
-      color: var(--main-1);
-      font-size: 11px; font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: .02em;
-    }
-    h1 { font-size: 26px; font-weight: 700; letter-spacing: -.03em; color: var(--text-1); }
-    .page-desc { margin-top: 6px; color: var(--text-2); font-size: 13px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
 
-    /* ===== Job summary + process ===== */
-    .job-panel {
-      display: grid;
-      grid-template-columns: 1.4fr .8fr;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 1px 3px rgba(15,35,65,.04);
-    }
-    .job-card, .process-card { padding: 20px; }
-    .job-card-head {
-      display: flex; justify-content: space-between; gap: 16px;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-    .job-title { color: var(--text-1); font-size: 17px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 6px; }
-    .job-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; color: var(--text-3); font-size: 12px; }
-    .job-status {
-      padding: 5px 10px; border-radius: 999px;
-      color: var(--status-excellent); background: var(--status-excellent-bg);
-      font-size: 11px; font-weight: 700; white-space: nowrap;
-    }
-    .job-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-    .job-tab {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 12px;
-      color: var(--text-2);
-      font-size: 12px; font-weight: 700;
-    }
-    .job-tab.active { background: var(--main-1); border-color: var(--main-1); color: #fff; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
 
-    .process-card h3 { font-size: 14px; color: var(--text-1); font-weight: 700; margin-bottom: 12px; }
-    .process-steps { display: grid; gap: 8px; }
-    .process-step {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 9px 12px; border-radius: 10px;
-      background: var(--bg-page);
-      color: var(--text-2); font-size: 12px; font-weight: 700;
-    }
-    .process-step.active {
-      background: linear-gradient(135deg, #E6F1FB, #D5E8F5);
-      color: var(--main-1);
-    }
-    .process-step span:last-child { font-weight: 700; }
+/* Main */
+.main-area { display: flex; flex-direction: column; min-width: 0; }
 
-    /* ===== Toolbar / Filters ===== */
-    .content-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-    .toolbar {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-      background: #fff;
-    }
-    .toolbar-top {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 14px;
-    }
-    .section-title { font-size: 16px; font-weight: 700; color: var(--text-1); letter-spacing: -.02em; }
-    .section-desc { margin-top: 4px; color: var(--text-2); font-size: 12px; }
+/* Topbar (기존 디자인 그대로) */
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
 
-    .search-wrap { position: relative; width: min(320px, 100%); }
-    .search-wrap input {
-      width: 100%; height: 38px;
-      padding: 0 14px 0 38px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      outline: none;
-      color: var(--text-1);
-      background: #fff;
-      font-size: 13px;
-    }
-    .search-wrap input:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,.1); }
-    .search-icon {
-      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-      color: var(--text-3); font-size: 16px;
-    }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+.mobile-menu-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn i { font-size: 18px; }
 
-    .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .filter-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-    .chip {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 12px;
-      color: var(--text-2);
-      background: #fff;
-      font-size: 12px; font-weight: 700;
-      transition: border-color .15s, background .15s;
-    }
-    .chip:hover { border-color: rgba(0,103,172,.35); }
-    .chip.active { color: #fff; border-color: var(--main-1); background: var(--main-1); }
-    .select {
-      height: 34px;
-      padding: 0 32px 0 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      color: var(--text-2);
-      background: #fff;
-      font-size: 12px; font-weight: 700;
-      outline: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-    }
-    .select:focus { border-color: var(--main-1); }
-    .toggle {
-      display: inline-flex; align-items: center; gap: 8px;
-      height: 34px; padding: 0 12px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      color: var(--text-2);
-      background: #fff;
-      font-size: 12px; font-weight: 700;
-      cursor: pointer;
-    }
-    .toggle input { accent-color: var(--main-1); }
+/* Content */
+.content { padding: 28px 32px 40px; }
 
-    /* ===== Table ===== */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; }
-    thead { background: var(--bg-page); }
-    th {
-      padding: 13px 18px;
-      color: var(--text-2);
-      font-size: 11px; text-align: left; font-weight: 700;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-      letter-spacing: .02em;
-    }
-    td {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-2);
-      font-size: 13px;
-      vertical-align: middle;
-    }
-    tbody tr { transition: background .15s; }
-    tbody tr:hover { background: #fbfdff; }
-    tbody tr:last-child td { border-bottom: 0; }
-    .candidate-cell { display: flex; align-items: center; gap: 12px; min-width: 160px; }
-    .candidate-avatar {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      display: grid; place-items: center;
-      color: #fff; font-weight: 700; font-size: 14px;
-      background: var(--grad-blue);
-    }
-    .candidate-name { color: var(--text-1); font-size: 13px; font-weight: 700; }
-    .candidate-id { color: var(--text-3); font-size: 11px; margin-top: 2px; }
+.page-header { margin-bottom: 24px; }
+.page-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.02em; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 13px; }
 
-    .type-pill, .status-pill, .phase-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      font-size: 11px; font-weight: 700;
-      white-space: nowrap;
-    }
-    .type-pill.new { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
-    .type-pill.career { color: var(--sub-3); background: linear-gradient(135deg, #E0F5F7, #C5EBEF); }
-    .status-excellent { color: var(--status-excellent); background: var(--status-excellent-bg); }
-    .status-good { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
-    .status-review { color: var(--status-review); background: var(--status-review-bg); }
-    .status-risk { color: var(--status-risk); background: var(--status-risk-bg); }
-    .phase-pending { color: var(--text-2); background: var(--bg-page); border: 1px solid var(--border); }
-    .phase-done { color: var(--status-excellent); background: var(--status-excellent-bg); }
+/* Job header + Process */
+.job-panel { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 16px; margin-bottom: 18px; }
+.card { background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 3px rgba(15,35,65,.04); }
+.job-card, .process-card { padding: 20px; }
+.job-card-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+.job-title { color: var(--text-1); font-size: 17px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 6px; }
+.job-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; color: var(--text-3); font-size: 12px; }
+.job-status { padding: 5px 10px; border-radius: 999px; color: var(--status-excellent); background: var(--status-excellent-bg); font-size: 11px; font-weight: 700; white-space: nowrap; }
+.job-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.job-tab { border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; color: var(--text-2); font-size: 12px; font-weight: 700; }
+.job-tab.active { background: var(--grad-blue); border-color: transparent; color: white; }
 
-    .score-wrap { display: flex; align-items: center; gap: 8px; min-width: 110px; }
-    .score-number { width: 30px; color: var(--text-1); font-size: 16px; font-weight: 700; letter-spacing: -.02em; }
-    .score-bar { flex: 1; height: 6px; min-width: 50px; border-radius: 999px; background: var(--border); overflow: hidden; }
-    .score-fill { height: 100%; border-radius: inherit; background: var(--grad-blue); }
+.process-card h3 { font-size: 14px; color: var(--text-1); font-weight: 700; margin-bottom: 12px; }
+.process-steps { display: grid; gap: 8px; }
+.process-step { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; border-radius: 10px; background: var(--bg-page); color: var(--text-2); font-size: 12px; font-weight: 700; }
+.process-step.active { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 4px; max-width: 280px; }
-    .tag { padding: 4px 8px; border-radius: 6px; background: var(--bg-page); color: var(--text-2); font-size: 11px; font-weight: 400; white-space: nowrap; }
-    .detail-btn {
-      padding: 8px 14px;
-      border-radius: 8px;
-      color: #fff;
-      background: var(--main-1);
-      font-size: 12px; font-weight: 700;
-      white-space: nowrap;
-      display: inline-flex; align-items: center; gap: 4px;
-      transition: background .15s;
-    }
-    .detail-btn:hover { background: var(--sub-2); }
-    .detail-btn i { font-size: 14px; }
+/* Content card */
+.content-card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.toolbar { padding: 20px; border-bottom: 1px solid var(--border); }
+.toolbar-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--text-1); letter-spacing: -.02em; }
+.section-desc { margin-top: 4px; color: var(--text-2); font-size: 12px; }
 
-    .demo-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 2px 7px; margin-left: 6px;
-      border-radius: 6px;
-      background: linear-gradient(135deg, #FFF3B0, #FCD34D);
-      color: #92400E;
-      font-size: 10px; font-weight: 700;
-    }
+.search-wrap { position: relative; width: min(320px, 100%); }
+.search-wrap input { width: 100%; height: 38px; padding: 0 14px 0 38px; border: 1px solid var(--border); border-radius: 8px; outline: none; color: var(--text-1); background: white; font-size: 13px; }
+.search-wrap input:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,.08); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 16px; }
 
-    .empty-state {
-      display: none;
-      padding: 56px 20px;
-      text-align: center;
-      color: var(--text-2);
-    }
-    .empty-state strong { display: block; color: var(--text-1); font-size: 15px; margin-bottom: 6px; }
-    .empty-state p { font-size: 13px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filter-group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; }
+.chip:hover { border-color: rgba(0,103,172,.35); }
+.chip.active { color: white; border-color: transparent; background: var(--grad-blue); }
+.select { height: 34px; padding: 0 32px 0 12px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.select:focus { border-color: var(--main-1); }
+.toggle { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 999px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; cursor: pointer; }
+.toggle input { accent-color: var(--main-1); }
 
-    /* ===== Responsive ===== */
-    @media (max-width: 1100px) {
-      .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
-      .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
-      .nav-item { justify-content: center; padding: 11px 0; }
-      .brand { padding: 26px 12px 24px; text-align: center; border-bottom: 1px solid rgba(255,255,255,.16); }
-      .sidebar-toggle { display: none; }
-      .job-panel { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 720px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform .25s; z-index: 100; }
-      .layout.mobile-open .sidebar { transform: translateX(0); }
-      .layout.mobile-open .nav-item span.label { display: inline; }
-      .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title { display: block; }
-      .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 12px; }
-      .mobile-menu-btn { display: inline-flex; }
-      .content { padding: 20px 16px 32px; }
-      .topbar { padding: 12px 16px; }
-      .toolbar-top { flex-direction: column; align-items: stretch; }
-      table { min-width: 920px; }
-    }
-  </style>
+/* Table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--bg-page); }
+th { padding: 13px 18px; color: var(--text-2); font-size: 11px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); white-space: nowrap; letter-spacing: .02em; }
+td { padding: 14px 18px; border-bottom: 1px solid var(--border); color: var(--text-2); font-size: 13px; vertical-align: middle; }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: #fbfdff; }
+tbody tr:last-child td { border-bottom: 0; }
+.candidate-cell { display: flex; align-items: center; gap: 12px; min-width: 160px; }
+.candidate-avatar { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: white; font-weight: 700; font-size: 14px; background: var(--grad-blue); }
+.candidate-name { color: var(--text-1); font-size: 13px; font-weight: 700; }
+.candidate-id { color: var(--text-3); font-size: 11px; margin-top: 2px; }
+
+.type-pill, .status-pill, .phase-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.type-pill.new { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
+.type-pill.career { color: var(--sub-3); background: linear-gradient(135deg, #E0F5F7, #C5EBEF); }
+.status-excellent { color: var(--status-excellent); background: var(--status-excellent-bg); }
+.status-good { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
+.status-review { color: var(--status-review); background: var(--status-review-bg); }
+.status-risk { color: var(--status-risk); background: var(--status-risk-bg); }
+.phase-pending { color: var(--text-2); background: var(--bg-page); border: 1px solid var(--border); }
+.phase-done { color: var(--status-excellent); background: var(--status-excellent-bg); }
+
+.score-wrap { display: flex; align-items: center; gap: 8px; min-width: 110px; }
+.score-number { width: 30px; color: var(--text-1); font-size: 16px; font-weight: 700; letter-spacing: -.02em; }
+.score-bar { flex: 1; height: 6px; min-width: 50px; border-radius: 999px; background: var(--border); overflow: hidden; }
+.score-fill { height: 100%; border-radius: inherit; background: var(--grad-blue); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 4px; max-width: 280px; }
+.tag { padding: 4px 8px; border-radius: 6px; background: var(--bg-page); color: var(--text-2); font-size: 11px; font-weight: 400; white-space: nowrap; }
+.detail-btn { padding: 8px 14px; border-radius: 8px; color: white; background: var(--grad-blue); font-size: 12px; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; transition: opacity .15s; }
+.detail-btn:hover { opacity: 0.9; }
+.detail-btn i { font-size: 14px; }
+
+.demo-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; margin-left: 6px; border-radius: 6px; background: linear-gradient(135deg, #FFF4D6, #FCE9B0); color: #9A6D00; font-size: 10px; font-weight: 700; }
+
+.empty-state { display: none; padding: 56px 20px; text-align: center; color: var(--text-2); }
+.empty-state strong { display: block; color: var(--text-1); font-size: 15px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 28px; }
+  .topbar { padding: 14px 24px; }
+  .job-panel { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 20px 16px 32px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .toolbar-top { flex-direction: column; align-items: stretch; }
+  table { min-width: 920px; }
+}
+</style>
 </head>
 <body>
-  <div class="layout" id="layout">
-    <aside class="sidebar">
-      <button class="sidebar-toggle" type="button" onclick="document.getElementById('layout').classList.toggle('collapsed')" aria-label="사이드바 접기"><i class="ti ti-menu-2"></i></button>
-      <a class="brand" id="brandLink" href="../../dashboard-hr.html">
-        <div class="brand-name">RECRUIT AI</div>
-        <div class="brand-sub">ABL × HEROs</div>
-      </a>
-      <div class="nav" id="navMenu"></div>
-    </aside>
 
-    <div class="main-area">
-      <header class="topbar">
-        <div class="topbar-left">
-          <button class="mobile-menu-btn" type="button" onclick="document.getElementById('layout').classList.toggle('mobile-open')" aria-label="메뉴 열기"><i class="ti ti-menu-2"></i></button>
-          <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
-          <div class="divider"></div>
-          <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
-        </div>
-        <div class="user-info">
-          <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> HR 담당자</span>
-          <span id="userId">사번 -</span>
-          <button class="logout-btn" type="button" onclick="logout()">로그아웃</button>
-        </div>
-      </header>
+<div class="layout">
 
-      <main class="content">
-        <div class="page-header">
-          <span class="eyebrow">2026 상반기 채용 · 서류전형</span>
-          <h1>자소서 분석</h1>
-          <p class="page-desc">마지막 동기화 2026.05.27 09:18 · 담당 부서 HR채용팀</p>
-        </div>
-
-        <section class="job-panel">
-          <div class="card job-card">
-            <div class="job-card-head">
-              <div>
-                <div class="job-title">2026 상반기 신입/경력 채용</div>
-                <div class="job-meta">
-                  <span>접수기간 2026.05.01 - 2026.05.24</span>
-                  <span>·</span>
-                  <span>서류전형 2026.05.25 - 2026.05.30</span>
-                  <span>·</span>
-                  <span>공고코드 ABL-REC-2026-01</span>
-                </div>
-              </div>
-              <span class="job-status">진행 중</span>
-            </div>
-            <div class="job-tabs">
-              <button class="job-tab active" type="button">서류</button>
-              <button class="job-tab" type="button">실무면접</button>
-              <button class="job-tab" type="button">임원면접</button>
-              <button class="job-tab" type="button">처우협의</button>
-              <button class="job-tab" type="button">최종합격</button>
-            </div>
-          </div>
-
-          <div class="card process-card">
-            <h3>전형 현황</h3>
-            <div class="process-steps">
-              <div class="process-step"><span>지원 완료</span><span>142명</span></div>
-              <div class="process-step"><span>자동심사 통과</span><span>118명</span></div>
-              <div class="process-step active"><span>서류 검토 중</span><span id="stageReviewCount">94명</span></div>
-              <div class="process-step"><span>현업 전달</span><span id="stageDoneCount">24명</span></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="content-card">
-          <div class="toolbar">
-            <div class="toolbar-top">
-              <div>
-                <div class="section-title">지원자 목록</div>
-                <p class="section-desc">전체 118명 · 현재 목록 <span id="visibleCount">0</span>명 표시</p>
-              </div>
-              <div class="search-wrap">
-                <i class="ti ti-search search-icon"></i>
-                <input id="searchInput" type="search" placeholder="지원자명, 직무, 키워드 검색">
-              </div>
-            </div>
-
-            <div class="filters">
-              <div class="filter-group" aria-label="지원 유형 필터">
-                <button class="chip active" type="button" data-type="전체">전체</button>
-                <button class="chip" type="button" data-type="신입">신입</button>
-                <button class="chip" type="button" data-type="경력">경력</button>
-              </div>
-
-              <div class="filter-group" aria-label="전형 상태 필터">
-                <button class="chip active" type="button" data-phase="전체">전체 상태</button>
-                <button class="chip" type="button" data-phase="서류 검토 대기">서류 검토 대기</button>
-                <button class="chip" type="button" data-phase="현업 전달 완료">현업 전달 완료</button>
-              </div>
-
-              <select class="select" id="roleFilter" aria-label="직무별 보기">
-                <option value="전체">전체 직무</option>
-                <option value="영업관리">영업관리</option>
-                <option value="상품기획">상품기획</option>
-                <option value="디지털/IT">디지털/IT</option>
-                <option value="인사/경영지원">인사/경영지원</option>
-                <option value="재무/회계">재무/회계</option>
-                <option value="마케팅">마케팅</option>
-                <option value="총무지원">총무지원</option>
-                <option value="계리분석">계리분석</option>
-              </select>
-
-              <select class="select" id="sortFilter" aria-label="정렬 기준">
-                <option value="scoreDesc">AI 점수 높은 순</option>
-                <option value="scoreAsc">AI 점수 낮은 순</option>
-                <option value="nameAsc">이름순</option>
-              </select>
-
-              <label class="toggle"><input id="reviewOnly" type="checkbox">추가 검토 필요만 보기</label>
-            </div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>지원자</th>
-                  <th>지원 유형</th>
-                  <th>지원 직무</th>
-                  <th>경력</th>
-                  <th>AI 서류 점수</th>
-                  <th>검토 상태</th>
-                  <th>전형 상태</th>
-                  <th>주요 근거</th>
-                  <th>상세</th>
-                </tr>
-              </thead>
-              <tbody id="candidateTable"></tbody>
-            </table>
-          </div>
-
-          <div class="empty-state" id="emptyState">
-            <strong>조건에 맞는 지원자가 없습니다.</strong>
-            <p>필터를 변경하거나 검색어를 다시 입력해 주세요.</p>
-          </div>
-        </section>
-      </main>
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
     </div>
   </div>
 
-  <script>
-    // ===== Auth check (사번 권한, 분기는 일단 안 함) =====
-    const empId = sessionStorage.getItem('empId');
-    const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
-    if (!empId) {
-      // 시연 편의를 위해 데모 사번 자동 설정 (실제 배포 시에는 로그인 페이지로 리다이렉트)
-      sessionStorage.setItem('empId', '10234');
-      sessionStorage.setItem('role', 'hr');
-      window.location.reload();
-    }
-    document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
 
-    function logout() {
-      sessionStorage.clear();
-      window.location.href = '../../index.html';
-    }
+    <div class="content">
+      <div class="page-header">
+        <span class="page-eyebrow">2026 상반기 채용 · 서류전형</span>
+        <h1 class="page-title">자소서 AI 분석</h1>
+        <p class="page-subtitle">AI가 자소서를 분석하여 핵심 역량과 컬쳐핏을 자동으로 평가했습니다. · 마지막 동기화 2026.05.27 09:18</p>
+      </div>
 
-    // ===== Sidebar nav (HR 기준 렌더, 권한 분기는 나중에) =====
-    function renderNav() {
-      const items = [
-        { href: '../../dashboard-hr.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
-        { href: '../jd-writer/index.html', icon: 'ti-clipboard-text', label: 'JD 작성', section: '채용 업무' },
-        { href: 'index.html', icon: 'ti-file-search', label: '자소서 분석', section: '채용 업무', active: true },
-        { href: '../schedule/index.html', icon: 'ti-calendar-event', label: '면접 일정', section: '채용 업무' },
-        { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 진행', section: '채용 업무' },
-        { href: '../report/index.html', icon: 'ti-chart-histogram', label: '채용 리포트', section: '채용 업무' }
-      ];
-      const nav = document.getElementById('navMenu');
-      let html = '';
-      let lastSection = '';
-      items.forEach(it => {
-        if (it.section !== lastSection) {
-          html += `<div class="nav-section-title">${it.section}</div>`;
-          lastSection = it.section;
-        }
-        html += `<a class="nav-item ${it.active ? 'active' : ''}" href="${it.href}"><i class="ti ${it.icon}"></i> <span class="label">${it.label}</span></a>`;
-      });
-      nav.innerHTML = html;
-    }
-    renderNav();
+      <section class="job-panel">
+        <div class="card job-card">
+          <div class="job-card-head">
+            <div>
+              <div class="job-title">2026 상반기 신입/경력 채용</div>
+              <div class="job-meta">
+                <span>접수기간 2026.05.01 - 2026.05.24</span><span>·</span>
+                <span>서류전형 2026.05.25 - 2026.05.30</span><span>·</span>
+                <span>공고코드 ABL-REC-2026-01</span>
+              </div>
+            </div>
+            <span class="job-status">진행 중</span>
+          </div>
+          <div class="job-tabs">
+            <button class="job-tab active" type="button">서류</button>
+            <button class="job-tab" type="button">실무면접</button>
+            <button class="job-tab" type="button">임원면접</button>
+            <button class="job-tab" type="button">처우협의</button>
+            <button class="job-tab" type="button">최종합격</button>
+          </div>
+        </div>
 
-    // ===== Data & state =====
-    let candidates = [];
-    let stageCounts = { review: 94, done: 24 };
-    const state = { type: '전체', phase: '전체', role: '전체', sort: 'scoreDesc', reviewOnly: false, search: '' };
-    const statusClassMap = {
-      '우수': 'status-excellent',
-      '적합': 'status-good',
-      '추가 검토': 'status-review',
-      '검토 필요': 'status-risk'
-    };
+        <div class="card process-card">
+          <h3>전형 현황</h3>
+          <div class="process-steps">
+            <div class="process-step"><span>지원 완료</span><span>142명</span></div>
+            <div class="process-step"><span>자동심사 통과</span><span>118명</span></div>
+            <div class="process-step active"><span>서류 검토 중</span><span id="stageReviewCount">94명</span></div>
+            <div class="process-step"><span>현업 전달</span><span id="stageDoneCount">24명</span></div>
+          </div>
+        </div>
+      </section>
 
-    function isReviewStatus(s) { return s === '추가 검토' || s === '검토 필요'; }
-    function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
+      <section class="content-card">
+        <div class="toolbar">
+          <div class="toolbar-top">
+            <div>
+              <div class="section-title">지원자 목록</div>
+              <p class="section-desc">자동심사 통과 118명 · 현재 목록 <span id="visibleCount">0</span>명 표시</p>
+            </div>
+            <div class="search-wrap">
+              <i class="ti ti-search search-icon"></i>
+              <input id="searchInput" type="search" placeholder="지원자명, 직무, 키워드 검색">
+            </div>
+          </div>
 
-    function getFilteredCandidates() {
-      const keyword = state.search.trim().toLowerCase();
-      let result = candidates.filter(c => {
-        const matchType = state.type === '전체' || c.type === state.type;
-        const matchRole = state.role === '전체' || c.role === state.role;
-        const matchPhase = state.phase === '전체' || c.phase === state.phase;
-        const matchReview = !state.reviewOnly || isReviewStatus(c.status);
-        const searchable = [c.name, c.type, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
-        const matchSearch = !keyword || searchable.indexOf(keyword) !== -1;
-        return matchType && matchRole && matchPhase && matchReview && matchSearch;
-      });
-      result.sort((a, b) => {
-        if (state.sort === 'scoreDesc') return b.score - a.score;
-        if (state.sort === 'scoreAsc') return a.score - b.score;
-        if (state.sort === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
-        return 0;
-      });
-      return result;
-    }
+          <div class="filters">
+            <div class="filter-group" aria-label="지원 유형 필터">
+              <button class="chip active" type="button" data-type="전체">전체</button>
+              <button class="chip" type="button" data-type="신입">신입</button>
+              <button class="chip" type="button" data-type="경력">경력</button>
+            </div>
 
-    function renderStageCounts() {
-      document.getElementById('stageReviewCount').textContent = stageCounts.review + '명';
-      document.getElementById('stageDoneCount').textContent = stageCounts.done + '명';
-    }
+            <div class="filter-group" aria-label="전형 상태 필터">
+              <button class="chip active" type="button" data-phase="전체">전체 상태</button>
+              <button class="chip" type="button" data-phase="서류 검토 대기">서류 검토 대기</button>
+              <button class="chip" type="button" data-phase="현업 전달 완료">현업 전달 완료</button>
+            </div>
 
-    function renderTable() {
-      const table = document.getElementById('candidateTable');
-      const empty = document.getElementById('emptyState');
-      const visibleCount = document.getElementById('visibleCount');
-      const filtered = getFilteredCandidates();
-      visibleCount.textContent = filtered.length;
-      table.innerHTML = '';
+            <select class="select" id="roleFilter" aria-label="직무별 보기">
+              <option value="전체">전체 직무</option>
+              <option value="영업관리">영업관리</option>
+              <option value="상품기획">상품기획</option>
+              <option value="디지털/IT">디지털/IT</option>
+              <option value="인사/경영지원">인사/경영지원</option>
+              <option value="재무/회계">재무/회계</option>
+              <option value="마케팅">마케팅</option>
+              <option value="총무지원">총무지원</option>
+              <option value="계리분석">계리분석</option>
+            </select>
 
-      filtered.forEach(c => {
-        const tr = document.createElement('tr');
-        const typeClass = c.type === '신입' ? 'new' : 'career';
-        const statusClass = statusClassMap[c.status] || 'status-good';
-        const phaseClass = getPhaseClass(c.phase);
-        const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
-        const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
-        tr.innerHTML = `
-          <td><div class="candidate-cell"><div class="candidate-avatar">${c.name.charAt(0)}</div><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}</div></div></div></td>
-          <td><span class="type-pill ${typeClass}">${c.type}</span></td>
-          <td><strong style="color:var(--text-1)">${c.role}</strong></td>
-          <td>${c.exp}</td>
-          <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
-          <td><span class="status-pill ${statusClass}">${c.status}</span></td>
-          <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
-          <td><div class="tags">${tags}</div></td>
-          <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
-        `;
-        table.appendChild(tr);
-      });
+            <select class="select" id="sortFilter" aria-label="정렬 기준">
+              <option value="scoreDesc">AI 점수 높은 순</option>
+              <option value="scoreAsc">AI 점수 낮은 순</option>
+              <option value="nameAsc">이름순</option>
+            </select>
 
-      empty.style.display = filtered.length ? 'none' : 'block';
-    }
+            <label class="toggle"><input id="reviewOnly" type="checkbox">추가 검토 필요만 보기</label>
+          </div>
+        </div>
 
-    // ===== Load data =====
-    fetch('data/applicants.json')
-      .then(r => r.json())
-      .then(data => {
-        candidates = data.candidates;
-        stageCounts = { review: data.stage_counts.in_review, done: data.stage_counts.delivered };
-        const deliveredIds = data.initial_delivered_ids || [];
-        candidates.forEach(c => {
-          c.phase = deliveredIds.indexOf(c.id) !== -1 ? '현업 전달 완료' : '서류 검토 대기';
-        });
-        renderStageCounts();
-        renderTable();
-      })
-      .catch(err => {
-        console.error('데이터 로드 실패:', err);
-        document.getElementById('emptyState').style.display = 'block';
-      });
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>지원자</th>
+                <th>지원 유형</th>
+                <th>지원 직무</th>
+                <th>경력</th>
+                <th>AI 서류 점수</th>
+                <th>검토 상태</th>
+                <th>전형 상태</th>
+                <th>주요 근거</th>
+                <th>상세</th>
+              </tr>
+            </thead>
+            <tbody id="candidateTable"></tbody>
+          </table>
+        </div>
 
-    // ===== Filter events =====
-    document.querySelectorAll('.chip[data-type]').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.chip[data-type]').forEach(x => x.classList.remove('active'));
-        chip.classList.add('active');
-        state.type = chip.getAttribute('data-type');
-        renderTable();
-      });
+        <div class="empty-state" id="emptyState">
+          <strong>조건에 맞는 지원자가 없습니다.</strong>
+          <p>필터를 변경하거나 검색어를 다시 입력해 주세요.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== Data & state =====
+let candidates = [];
+let stageCounts = { review: 94, done: 24 };
+const state = { type: '전체', phase: '전체', role: '전체', sort: 'scoreDesc', reviewOnly: false, search: '' };
+const statusClassMap = {
+  '우수': 'status-excellent',
+  '적합': 'status-good',
+  '추가 검토': 'status-review',
+  '검토 필요': 'status-risk'
+};
+
+function isReviewStatus(s) { return s === '추가 검토' || s === '검토 필요'; }
+function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
+
+function getFilteredCandidates() {
+  const keyword = state.search.trim().toLowerCase();
+  let result = candidates.filter(c => {
+    const matchType = state.type === '전체' || c.type === state.type;
+    const matchRole = state.role === '전체' || c.role === state.role;
+    const matchPhase = state.phase === '전체' || c.phase === state.phase;
+    const matchReview = !state.reviewOnly || isReviewStatus(c.status);
+    const searchable = [c.name, c.type, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
+    const matchSearch = !keyword || searchable.indexOf(keyword) !== -1;
+    return matchType && matchRole && matchPhase && matchReview && matchSearch;
+  });
+  result.sort((a, b) => {
+    if (state.sort === 'scoreDesc') return b.score - a.score;
+    if (state.sort === 'scoreAsc') return a.score - b.score;
+    if (state.sort === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
+    return 0;
+  });
+  return result;
+}
+
+function renderStageCounts() {
+  document.getElementById('stageReviewCount').textContent = stageCounts.review + '명';
+  document.getElementById('stageDoneCount').textContent = stageCounts.done + '명';
+}
+
+function renderTable() {
+  const table = document.getElementById('candidateTable');
+  const empty = document.getElementById('emptyState');
+  const visibleCount = document.getElementById('visibleCount');
+  const filtered = getFilteredCandidates();
+  visibleCount.textContent = filtered.length;
+  table.innerHTML = '';
+
+  filtered.forEach(c => {
+    const tr = document.createElement('tr');
+    const typeClass = c.type === '신입' ? 'new' : 'career';
+    const statusClass = statusClassMap[c.status] || 'status-good';
+    const phaseClass = getPhaseClass(c.phase);
+    const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
+    tr.innerHTML = `
+      <td><div class="candidate-cell"><div class="candidate-avatar">${c.name.charAt(0)}</div><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}</div></div></div></td>
+      <td><span class="type-pill ${typeClass}">${c.type}</span></td>
+      <td><strong style="color:var(--text-1)">${c.role}</strong></td>
+      <td>${c.exp}</td>
+      <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
+      <td><span class="status-pill ${statusClass}">${c.status}</span></td>
+      <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
+      <td><div class="tags">${tags}</div></td>
+      <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
+    `;
+    table.appendChild(tr);
+  });
+
+  empty.style.display = filtered.length ? 'none' : 'block';
+}
+
+// Load data
+fetch('data/applicants.json')
+  .then(r => r.json())
+  .then(data => {
+    candidates = data.candidates;
+    stageCounts = { review: data.stage_counts.in_review, done: data.stage_counts.delivered };
+    const deliveredIds = data.initial_delivered_ids || [];
+    candidates.forEach(c => {
+      c.phase = deliveredIds.indexOf(c.id) !== -1 ? '현업 전달 완료' : '서류 검토 대기';
+      // 시연용 sessionStorage 핸드오프 반영
+      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '현업 전달 완료';
     });
-    document.querySelectorAll('.chip[data-phase]').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.chip[data-phase]').forEach(x => x.classList.remove('active'));
-        chip.classList.add('active');
-        state.phase = chip.getAttribute('data-phase');
-        renderTable();
-      });
-    });
-    document.getElementById('roleFilter').addEventListener('change', e => { state.role = e.target.value; renderTable(); });
-    document.getElementById('sortFilter').addEventListener('change', e => { state.sort = e.target.value; renderTable(); });
-    document.getElementById('reviewOnly').addEventListener('change', e => { state.reviewOnly = e.target.checked; renderTable(); });
-    document.getElementById('searchInput').addEventListener('input', e => { state.search = e.target.value; renderTable(); });
-  </script>
+    renderStageCounts();
+    renderTable();
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    document.getElementById('emptyState').style.display = 'block';
+  });
+
+// Filter events
+document.querySelectorAll('.chip[data-type]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-type]').forEach(x => x.classList.remove('active'));
+    chip.classList.add('active');
+    state.type = chip.getAttribute('data-type');
+    renderTable();
+  });
+});
+document.querySelectorAll('.chip[data-phase]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-phase]').forEach(x => x.classList.remove('active'));
+    chip.classList.add('active');
+    state.phase = chip.getAttribute('data-phase');
+    renderTable();
+  });
+});
+document.getElementById('roleFilter').addEventListener('change', e => { state.role = e.target.value; renderTable(); });
+document.getElementById('sortFilter').addEventListener('change', e => { state.sort = e.target.value; renderTable(); });
+document.getElementById('reviewOnly').addEventListener('change', e => { state.reviewOnly = e.target.checked; renderTable(); });
+document.getElementById('searchInput').addEventListener('input', e => { state.search = e.target.value; renderTable(); });
+</script>
+
 </body>
 </html>
