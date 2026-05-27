@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자소서 상세 분석 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --status-excellent: #16a34a;
+  --status-excellent-bg: #eaf8ef;
+  --status-review: #f97316;
+  --status-review-bg: #fff3e8;
+  --status-risk: #dc2626;
+  --status-risk-bg: #fff1f2;
+  --hl-bg: #FFF4D6; --hl-border: #F0C040;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== Layout (기존 디자인 그대로) ===== */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+/* Sidebar (기존) */
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
+/* Main + Topbar (기존) */
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+.mobile-menu-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn i { font-size: 18px; }
+
+/* ===== Detail header ===== */
+.detail-header { background: white; border-bottom: 1px solid var(--border); padding: 18px 32px; }
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-3); margin-bottom: 10px; }
+.breadcrumb a { color: var(--text-2); }
+.breadcrumb a:hover { color: var(--main-1); }
+.breadcrumb i { font-size: 14px; }
+.candidate-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.candidate-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.candidate-title .avatar { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; color: white; font-weight: 700; font-size: 18px; background: var(--grad-blue); }
+.candidate-title strong { display: block; color: var(--text-1); font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.candidate-title span { display: block; margin-top: 3px; color: var(--text-2); font-size: 12px; }
+.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.outline-btn { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+.outline-btn:hover { border-color: var(--main-1); color: var(--main-1); }
+.outline-btn i { font-size: 14px; }
+
+/* ===== Content: 2-column ===== */
+.content { padding: 20px 32px 40px; }
+.detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr); gap: 16px; align-items: start; }
+.left-pane, .right-pane { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.right-pane { position: sticky; top: 20px; }
+
+/* ===== Panel cards ===== */
+.panel-card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.panel-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 16px 18px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, white, #fbfdff); }
+.panel-head h3 { color: var(--text-1); font-size: 14px; font-weight: 700; letter-spacing: -.02em; display: flex; align-items: center; gap: 8px; }
+.panel-head h3::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
+.panel-head p { margin-top: 4px; color: var(--text-2); font-size: 11px; font-weight: 400; padding-left: 12px; }
+
+/* Profile grid */
+.profile-grid { padding: 16px 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.info-box { padding: 10px 12px; border-radius: 10px; background: var(--bg-page); border: 1px solid var(--border); }
+.info-label { color: var(--text-3); font-size: 10px; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.02em; }
+.info-value { color: var(--text-1); font-size: 12px; font-weight: 700; line-height: 1.45; }
+.type-pill, .status-pill, .phase-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.type-pill.new { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
+.type-pill.career { color: var(--sub-3); background: linear-gradient(135deg, #E0F5F7, #C5EBEF); }
+.status-excellent { color: var(--status-excellent); background: var(--status-excellent-bg); }
+.status-good { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
+.status-review { color: var(--status-review); background: var(--status-review-bg); }
+.status-risk { color: var(--status-risk); background: var(--status-risk-bg); }
+.phase-pending { color: var(--text-2); background: var(--bg-page); border: 1px solid var(--border); }
+.phase-done { color: var(--status-excellent); background: var(--status-excellent-bg); }
+
+/* Resume sections */
+.resume-body { padding: 16px 18px; display: grid; gap: 14px; }
+.resume-section { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: white; }
+.resume-question { padding: 12px 14px; color: var(--text-2); background: var(--bg-page); font-size: 12px; line-height: 1.65; font-weight: 700; border-bottom: 1px solid var(--border); }
+.resume-answer { padding: 14px; color: var(--text-1); font-size: 13px; line-height: 1.9; }
+.hl { background: transparent; border-radius: 4px; padding: 0 1px; transition: .2s; }
+.hl.active { background: var(--hl-bg); border-bottom: 2px solid var(--hl-border); }
+.hl.pulse { animation: highlightPulse 1.1s ease 1; }
+@keyframes highlightPulse { 0% { box-shadow: 0 0 0 0 rgba(240,192,64,.55); } 100% { box-shadow: 0 0 0 10px rgba(240,192,64,0); } }
+.evidence-note { margin-top: 12px; padding: 12px 14px; border-left: 3px solid var(--hl-border); border-radius: 0 8px 8px 0; background: linear-gradient(135deg, #FFFBEB, #FEF6D8); color: var(--text-1); font-size: 12px; line-height: 1.65; }
+.evidence-note strong { display: block; color: var(--text-1); font-size: 12px; margin-bottom: 4px; font-weight: 700; }
+
+/* ===== AI head card (sticky) ===== */
+.ai-head-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; position: relative; overflow: hidden; }
+.ai-head-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.ai-score-line { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.ai-score-line h3 { color: var(--text-1); font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+.ai-score-line p { margin-top: 4px; color: var(--text-2); font-size: 11px; }
+.ai-score { display: flex; align-items: baseline; gap: 4px; }
+.ai-score strong { font-size: 30px; font-weight: 700; letter-spacing: -.04em; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ai-score span { color: var(--text-3); font-size: 12px; font-weight: 700; }
+
+/* Tabs */
+.review-tabs, .stage-tabs { background: var(--bg-page); border-radius: 8px; padding: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 14px; }
+.review-tab, .stage-tab { border-radius: 6px; padding: 9px; color: var(--text-2); background: transparent; font-size: 12px; font-weight: 700; transition: all .15s; text-align: center; }
+.review-tab.active, .stage-tab.active { color: white; background: var(--grad-blue); }
+.review-panel, .stage-panel { display: none; }
+.review-panel.active, .stage-panel.active { display: grid; gap: 12px; }
+
+/* Summary list */
+.summary-list { display: grid; gap: 8px; padding: 16px 18px; }
+.summary-item { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: start; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; background: white; }
+.summary-num { width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; color: white; background: var(--grad-blue); font-size: 11px; font-weight: 700; }
+.summary-item p { color: var(--text-1); font-size: 12px; line-height: 1.65; }
+
+/* Item summary cards */
+.summary-summary-block { margin-bottom: 8px; }
+.summary-card { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: white; text-align: left; width: 100%; transition: .15s; cursor: pointer; }
+.summary-card:hover { border-color: rgba(0,103,172,.35); }
+.summary-card.active { border-color: var(--main-1); background: linear-gradient(135deg, #F5F9FD, #ECF4FB); }
+.summary-card-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 7px; }
+.summary-card-head strong { color: var(--text-1); font-size: 12px; font-weight: 700; }
+.summary-card-head span { padding: 4px 8px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 10px; font-weight: 700; white-space: nowrap; }
+.summary-card p { color: var(--text-2); font-size: 12px; line-height: 1.65; }
+.summary-evidence { display: none; margin-top: 8px; padding: 11px 12px; border-radius: 8px; border: 1px solid var(--border); background: #fbfdff; }
+.summary-evidence.show { display: block; }
+.summary-evidence strong { display: block; color: var(--text-1); font-size: 11px; margin-bottom: 6px; font-weight: 700; }
+.context-link { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; color: var(--main-1); font-size: 11px; font-weight: 700; padding: 0; }
+.context-link:hover { text-decoration: underline; }
+
+/* Stage 1 */
+.section-label { color: var(--text-1); font-size: 13px; font-weight: 700; letter-spacing: -.02em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.section-label::before { content: ''; width: 4px; height: 14px; border-radius: 2px; background: var(--grad-blue); }
+.radar-card { display: grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: white; }
+.radar-svg { width: 190px; height: 170px; }
+.metric-list { display: grid; gap: 6px; }
+.metric-card, .fit-card, .career-card { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 10px 12px; text-align: left; width: 100%; transition: .15s; }
+.metric-card:hover, .fit-card:hover, .career-card:hover, .metric-card.active, .fit-card.active, .career-card.active { border-color: var(--main-1); background: linear-gradient(135deg, #F5F9FD, #ECF4FB); }
+.metric-top, .fit-top, .career-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.metric-top strong, .fit-top strong, .career-top strong { color: var(--text-1); font-size: 12px; font-weight: 700; }
+.metric-top span, .fit-top span, .career-top span { color: var(--main-1); font-size: 16px; font-weight: 700; }
+.metric-card p, .fit-card p, .career-card p { margin-top: 4px; color: var(--text-3); font-size: 11px; line-height: 1.5; font-weight: 400; }
+
+/* Evidence boxes */
+.evidence-box { padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #fbfdff; }
+.evidence-box h4 { color: var(--text-1); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+.keyword-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.keyword { padding: 4px 7px; border-radius: 999px; background: var(--bg-page); color: var(--text-2); font-size: 10px; font-weight: 700; }
+.evidence-list { display: grid; gap: 5px; list-style: none; padding: 0; margin: 0; }
+.evidence-list li { position: relative; padding-left: 14px; color: var(--text-2); font-size: 11px; line-height: 1.65; }
+.evidence-list li:before { content: ""; position: absolute; left: 0; top: .7em; width: 4px; height: 4px; border-radius: 50%; background: var(--main-1); }
+
+/* Edit controls */
+.edit-header { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px; }
+.edit-toggle { border: 1px solid var(--border); background: white; color: var(--main-1); border-radius: 999px; padding: 5px 10px; font-size: 10px; font-weight: 700; }
+.edit-toggle:hover { border-color: var(--main-1); }
+.editable-row { display: grid; grid-template-columns: 80px 1fr; gap: 8px; align-items: start; margin-top: 8px; }
+.edit-label { color: var(--text-3); font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+.score-edit { width: 72px; height: 32px; border: 1px solid var(--border); border-radius: 8px; padding: 0 8px; color: var(--main-1); font-size: 14px; font-weight: 700; background: white; }
+.evidence-edit { width: 100%; min-height: 80px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; color: var(--text-2); font-size: 12px; line-height: 1.6; background: white; font-family: inherit; }
+.score-edit:disabled, .evidence-edit:disabled { background: var(--bg-page); color: var(--text-2); cursor: not-allowed; }
+.score-edit.is-editing, .evidence-edit.is-editing { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,.08); }
+.evidence-guide { margin-top: 6px; color: var(--text-3); font-size: 10px; line-height: 1.55; }
+
+/* Stage 2: Fit grid */
+.fit-grid-modal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.overall-score { display: inline-flex; align-items: baseline; gap: 3px; padding: 4px 8px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-weight: 700; font-size: 13px; }
+.overall-score small { font-size: 10px; color: var(--text-3); font-weight: 700; }
+.subscore-list { display: grid; gap: 8px; margin-top: 10px; }
+.subscore-card { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 10px 12px; text-align: left; display: grid; gap: 6px; cursor: pointer; transition: .15s; width: 100%; }
+.subscore-card:hover, .subscore-card.active { border-color: var(--main-1); background: linear-gradient(135deg, #F5F9FD, #ECF4FB); }
+.subscore-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.subscore-head strong { color: var(--text-1); font-size: 12px; font-weight: 700; }
+.subscore-card p { color: var(--text-3); font-size: 11px; line-height: 1.5; }
+
+.career-deep { display: none; gap: 8px; margin-top: 14px; }
+.career-deep.show { display: grid; }
+.inline-evidence { margin-top: 6px; }
+
+/* ===== Handoff ===== */
+.handoff-section { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; overflow: hidden; }
+.handoff-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.handoff-button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.preview-btn { height: 42px; border-radius: 8px; color: var(--main-1); background: white; border: 1px solid var(--main-1); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: .15s; }
+.preview-btn:hover { background: #F5F9FD; }
+.preview-btn i { font-size: 15px; }
+.pass-btn { width: 100%; height: 42px; border-radius: 8px; color: white; background: var(--grad-blue); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: .15s; }
+.pass-btn:hover:not(:disabled) { opacity: 0.9; }
+.pass-btn:disabled { opacity: .55; cursor: not-allowed; background: var(--text-3); }
+.pass-btn i { font-size: 15px; }
+.handoff-note { color: var(--text-3); font-size: 11px; line-height: 1.5; text-align: center; }
+.handoff-preview-panel { display: none; margin-bottom: 10px; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-page); }
+.handoff-preview-panel.show { display: grid; gap: 10px; }
+.handoff-preview-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.handoff-preview-head strong { color: var(--text-1); font-size: 12px; font-weight: 700; }
+.handoff-preview-head span { color: var(--text-3); font-size: 11px; font-weight: 400; }
+.handoff-preview-text { width: 100%; min-height: 240px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: var(--text-2); font-size: 12px; line-height: 1.7; background: white; white-space: pre-wrap; font-family: inherit; }
+.handoff-preview-text.is-editing { background: white; border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,.08); }
+.handoff-preview-text:disabled { cursor: not-allowed; background: var(--bg-page); }
+.handoff-preview-actions { display: flex; justify-content: flex-end; gap: 6px; flex-wrap: wrap; }
+.small-action-btn { height: 30px; border-radius: 999px; padding: 0 11px; border: 1px solid var(--border); background: white; color: var(--main-1); font-size: 11px; font-weight: 700; }
+.small-action-btn:hover:not(:disabled) { border-color: var(--main-1); }
+.small-action-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Score flash */
+.score-updated { animation: scoreFlash .65s ease 1; }
+@keyframes scoreFlash { 0% { filter: brightness(1.2); } 100% { filter: brightness(1); } }
+
+/* Confirm dialog */
+.confirm-backdrop { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(15,35,65,.46); }
+.confirm-backdrop.open { display: flex; }
+.confirm-card { width: min(420px, 100%); border-radius: 12px; background: white; border: 1px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,.24); overflow: hidden; }
+.confirm-head { padding: 20px 22px 12px; }
+.confirm-head strong { display: block; color: var(--text-1); font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.confirm-head p { margin-top: 8px; color: var(--text-2); font-size: 13px; line-height: 1.7; }
+.confirm-warning { margin: 0 22px 16px; padding: 11px; border-radius: 8px; background: var(--status-review-bg); color: #9a3412; font-size: 12px; line-height: 1.55; font-weight: 700; }
+.confirm-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 22px 18px; border-top: 1px solid var(--border); background: #fbfdff; }
+.confirm-cancel, .confirm-submit { height: 36px; border-radius: 8px; padding: 0 14px; font-size: 12px; font-weight: 700; }
+.confirm-cancel { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.confirm-submit { background: var(--grad-blue); color: white; }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; color: white; background: rgba(15,35,65,.94); font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; transition: .2s; z-index: 100; box-shadow: 0 18px 30px rgba(0,0,0,.18); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* Responsive */
+@media (max-width: 1280px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .right-pane { position: relative; top: 0; }
+}
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 20px 28px 32px; }
+  .detail-header { padding: 18px 28px; }
+  .topbar { padding: 14px 24px; }
+  .fit-grid-modal { grid-template-columns: 1fr; }
+  .radar-card { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .content, .detail-header { padding-left: 16px; padding-right: 16px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .candidate-header { flex-direction: column; align-items: stretch; }
+  .profile-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="detail-header">
+      <nav class="breadcrumb">
+        <a href="../../dashboard-hr.html">대시보드</a>
+        <i class="ti ti-chevron-right"></i>
+        <a href="index.html">자소서 분석</a>
+        <i class="ti ti-chevron-right"></i>
+        <span id="breadcrumbName">상세</span>
+      </nav>
+      <div class="candidate-header">
+        <div class="candidate-title">
+          <div class="avatar" id="candAvatar">-</div>
+          <div>
+            <strong id="candName">지원자 상세</strong>
+            <span id="candMeta">로딩 중...</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="outline-btn" type="button" onclick="showToast('지원서 원문을 다운로드합니다.')"><i class="ti ti-download"></i>지원서 다운로드</button>
+          <button class="outline-btn" type="button" onclick="showToast('검토 메모가 저장되었습니다.')"><i class="ti ti-edit"></i>검토 메모 저장</button>
+          <a class="outline-btn" href="index.html"><i class="ti ti-arrow-left"></i>목록으로</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="detail-grid">
+        <div class="left-pane" id="resumePane"></div>
+        <div class="right-pane" id="reviewPane"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="confirm-backdrop" id="handoffConfirm" onclick="closeHandoffConfirm(event)">
+  <section class="confirm-card" onclick="event.stopPropagation()" role="dialog" aria-modal="true">
+    <div class="confirm-head">
+      <strong>현업에게 전달하시겠습니까?</strong>
+      <p id="handoffConfirmBody">전달하면 해당 지원자는 1차 서류심사 합격 처리되어 현업 검토 단계로 이동합니다.</p>
+    </div>
+    <div class="confirm-warning">전달 후에는 AI 검토 점수, 근거, 현업 전달 내용을 수정할 수 없습니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" type="button" onclick="closeHandoffConfirm()">취소</button>
+      <button class="confirm-submit" type="button" onclick="confirmHandoffToBusiness()">전달하기</button>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast">완료되었습니다.</div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) { sessionStorage.setItem('empId', '10234'); sessionStorage.setItem('role', 'hr'); }
+document.getElementById('userId').textContent = '사번 ' + (sessionStorage.getItem('empId') || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== State =====
+let activeCandidate = null, activeProfile = null, activeScreening = null;
+let allCandidates = [], initialDeliveredIds = [];
+
+const statusClassMap = { '우수':'status-excellent', '적합':'status-good', '추가 검토':'status-review', '검토 필요':'status-risk' };
+
+const resumeQuestions = [
+  { key:'motivation', title:'1. 지원동기', question:'ABL생명의 5대 핵심가치(배려, 든든함, 전문성, 스마트, 선진) 중 하나의 키워드를 활용하여 당사 지원 동기에 대해 작성해 주세요. (최소 500자, 최대 800자 입력가능)' },
+  { key:'competency', title:'2. 직무역량', question:'지원 직무 수행을 위해 필요한 역량이 무엇이며, 어떤 준비를 했는지 구체적 사례를 중심으로 서술해 주세요. (최소 500자, 최대 800자 입력가능)' },
+  { key:'challenge', title:'3. 도전경험', question:'최근 3년 이내에 가장 도전적인 목표를 세우고 성취해 낸 경험이 있다면 구체적으로 그 과정과 결과에 대해 서술해 주세요. (최소 500자, 최대 800자 입력가능)' }
+];
+
+// ===== 직무별 평가 기준 (팀원 코드 그대로) =====
+const roleCriteriaMap = {
+  "디지털/IT": {
+    team:"디지털 IT 기획팀",
+    competencies:["시스템 개발·운영 역량","LT 프로젝트 관리 능력","현업 요구사항 분석 능력","데이터 활용 능력"],
+    content:{label:"직무 수행 내용", text:"시스템 개발·운영 과제, LT 프로젝트 추진, 현업 요구사항 분석, 데이터 기반 서비스 개선 업무를 수행할 수 있는지 검토합니다.", answer:"디지털/IT 직무는 현업의 요구사항을 구조화하고 이를 시스템 개선 과제와 LT 프로젝트 실행계획으로 연결하는 역량이 중요하다고 이해하고 있습니다.", keywords:["시스템 개발·운영","LT 프로젝트","요구사항 분석","데이터 활용"]},
+    attitude:{label:"직무 수행 태도", text:"현업과 개발 조직 사이에서 요구사항을 조율하고, 일정과 이슈를 책임감 있게 관리하는 태도를 검토합니다.", answer:"현업과 개발 조직의 관점이 다를 때도 기준을 세워 요구사항을 정리하고 일정에 맞춰 실행하려는 태도를 보여주고 있습니다.", keywords:["조율","책임감","일정관리","협업"]},
+    knowledge:{label:"필요 지식", text:"IT 시스템 구조, 프로젝트 관리 방식, 업무 프로세스 및 데이터 활용에 대한 기본 이해를 검토합니다.", answer:"시스템과 업무 프로세스를 함께 이해해야 한다는 관점에서 자료를 정리하고 판단 기준을 세운 경험을 제시하고 있습니다.", keywords:["IT 시스템","프로젝트 관리","업무 프로세스","데이터"]},
+    skill:{label:"필요 기술", text:"요구사항 정리, 데이터 분석, 문서화, 프로젝트 관리 도구 활용 등 실무 수행 기술을 검토합니다.", answer:"흩어진 정보를 기준별로 분류하고 진행상황을 표로 정리한 경험은 요구사항 정리와 프로젝트 관리 기술로 연결됩니다.", keywords:["요구사항 정리","데이터 분석","문서화","PM"]}
+  },
+  "상품기획": {
+    team:"상품본부",
+    competencies:["시장분석력","고객 니즈 분석","상품 기획력","데이터 기반 사고"],
+    content:{label:"직무 수행 내용", text:"보험시장, 고객 니즈, 경쟁상품을 분석하고 상품 콘셉트와 보장 구조를 기획할 수 있는지 검토합니다.", answer:"상품기획 직무는 시장과 고객 니즈를 분석해 상품 아이디어와 기획 방향으로 구체화하는 업무라고 이해하고 있습니다.", keywords:["시장분석","고객 니즈","상품기획","보장 구조"]},
+    attitude:{label:"직무 수행 태도", text:"고객 관점에서 문제를 정의하고, 수익성·리스크·규제 요소를 균형 있게 고려하는 태도를 검토합니다.", answer:"아이디어를 제시하는 데 그치지 않고 고객 관점과 실행 가능성을 함께 고려하려는 태도가 드러납니다.", keywords:["고객 관점","균형감","리스크 감수성","실행 가능성"]},
+    knowledge:{label:"필요 지식", text:"보험상품 구조, 보장 니즈, 시장 트렌드, 규제·리스크에 대한 이해를 검토합니다.", answer:"시장조사와 고객 문제 정의 경험을 통해 상품기획에 필요한 기본 분석 관점을 제시하고 있습니다.", keywords:["보험상품 구조","보장 니즈","시장 트렌드","리스크"]},
+    skill:{label:"필요 기술", text:"시장조사, 데이터 분석, 기획서 작성, 상품 아이디어 구조화 역량을 검토합니다.", answer:"시장조사 결과를 정리해 제안서와 발표 자료로 연결한 경험은 상품 기획서 작성 역량과 연결됩니다.", keywords:["시장조사","데이터 분석","기획서 작성","아이디어 구조화"]}
+  },
+  "마케팅": {
+    team:"마케팅팀",
+    competencies:["브랜드 커뮤니케이션 역량","콘텐츠 기획 역량","디자인 역량"],
+    content:{label:"직무 수행 내용", text:"브랜드 메시지, 캠페인, 콘텐츠를 기획하고 고객 접점에서 일관된 커뮤니케이션을 운영할 수 있는지 검토합니다.", answer:"마케팅 직무는 브랜드 방향성을 고객 메시지로 전환하고, 콘텐츠와 캠페인으로 고객 접점을 운영하는 업무라고 이해하고 있습니다.", keywords:["브랜드 커뮤니케이션","캠페인","콘텐츠 기획","고객 접점"]},
+    attitude:{label:"직무 수행 태도", text:"고객 반응을 관찰하고 유관부서·대행사와 협업하며 결과물을 개선하는 실행 태도를 검토합니다.", answer:"콘텐츠 성과와 고객 반응을 확인하고, 협업 과정에서 메시지와 디자인 방향을 조율하려는 태도가 드러납니다.", keywords:["고객 반응","협업","개선","실행력"]},
+    knowledge:{label:"필요 지식", text:"브랜드 전략, 고객 인사이트, 디지털 채널, 금융소비자 커뮤니케이션에 대한 이해를 검토합니다.", answer:"타깃 고객과 채널 특성을 고려해 메시지를 구성해야 한다는 관점이 드러납니다.", keywords:["브랜드 전략","고객 인사이트","디지털 채널","금융소비자"]},
+    skill:{label:"필요 기술", text:"콘텐츠 기획, 카피라이팅, 디자인 협업, 캠페인 성과 분석 기술을 검토합니다.", answer:"콘텐츠 기획과 디자인 협업 경험은 마케팅 실행에 필요한 실무 기술로 연결됩니다.", keywords:["콘텐츠 기획","카피라이팅","디자인 협업","성과 분석"]}
+  },
+  "총무지원": {
+    team:"총무지원팀",
+    competencies:["운영관리 역량","구매·계약 처리 역량","책임감·꼼꼼함","자산 관리 이해도"],
+    content:{label:"직무 수행 내용", text:"사내 운영 환경, 구매·계약, 자산·시설, 비용 정산 업무를 안정적으로 지원할 수 있는지 검토합니다.", answer:"총무지원 직무는 조직 운영에 필요한 자산, 구매, 계약, 비용 처리를 정확하게 관리하는 업무라고 이해하고 있습니다.", keywords:["운영관리","구매·계약","자산관리","비용 정산"]},
+    attitude:{label:"직무 수행 태도", text:"누락 없이 확인하고 규정과 절차를 준수하며 내부 구성원의 요청을 책임감 있게 처리하는 태도를 검토합니다.", answer:"여러 요청사항을 정리하고 기한과 절차에 맞게 처리하려는 책임감과 꼼꼼함이 드러납니다.", keywords:["책임감","꼼꼼함","규정 준수","기한 관리"]},
+    knowledge:{label:"필요 지식", text:"구매·계약 프로세스, 자산·시설 관리, 예산·비용 처리 절차에 대한 이해를 검토합니다.", answer:"구매와 비용 처리 흐름을 기준별로 정리한 경험은 총무지원 업무 지식과 연결됩니다.", keywords:["계약 프로세스","자산관리","예산","비용 처리"]},
+    skill:{label:"필요 기술", text:"견적 비교, 문서화, 비용 정산, 업체 커뮤니케이션, 운영 프로세스 관리 기술을 검토합니다.", answer:"자료를 표로 정리하고 담당자별 이슈를 구분해 공유한 경험은 운영 문서화와 커뮤니케이션 기술로 연결됩니다.", keywords:["견적 비교","문서화","비용 정산","업체 커뮤니케이션"]}
+  },
+  "계리분석": {
+    team:"계리분석부",
+    competencies:["수리력","분석력","보험상품 이해","데이터 해석력"],
+    content:{label:"직무 수행 내용", text:"보험상품과 리스크 요인을 수리·통계적으로 분석하고 산출 결과를 검증할 수 있는지 검토합니다.", answer:"계리분석 직무는 보험상품 구조와 리스크를 수리적으로 분석하고 데이터 결과를 해석하는 업무라고 이해하고 있습니다.", keywords:["수리력","리스크 분석","산출 검증","보험상품"]},
+    attitude:{label:"직무 수행 태도", text:"정확성과 논리성을 바탕으로 반복 검증을 수행하고 오류 가능성을 끝까지 확인하는 태도를 검토합니다.", answer:"자료를 기준별로 분류하고 논리적으로 검토한 경험에서 정확성과 검증 태도가 일부 확인됩니다.", keywords:["정확성","검증","논리성","책임감"]},
+    knowledge:{label:"필요 지식", text:"보험수리, 통계, 보험상품 구조, 리스크 요인에 대한 기본 지식을 검토합니다.", answer:"통계 분석과 보험상품 구조에 대한 학습 경험은 계리분석에 필요한 기본 지식과 연결됩니다.", keywords:["보험수리","통계","보험상품 구조","리스크"]},
+    skill:{label:"필요 기술", text:"데이터 분석, 산출 모델 이해, 결과 해석, 보고서 작성 기술을 검토합니다.", answer:"데이터를 분석하고 결과를 해석해 보고 형태로 정리한 경험은 계리분석 실무 기술과 연결됩니다.", keywords:["데이터 분석","모델 이해","결과 해석","보고서 작성"]}
+  },
+  "영업관리": {
+    team:"영업관리",
+    competencies:["영업채널 관리 역량","커뮤니케이션 역량","성과관리 역량","문제해결력"],
+    content:{label:"직무 수행 내용", text:"영업채널 운영, FC·고객 커뮤니케이션, 목표 수립과 실적 관리 업무를 수행할 수 있는지 검토합니다.", answer:"영업관리 직무는 영업채널의 목표를 관리하고, FC·고객·유관부서와 소통하며 현장 이슈를 해결하는 업무라고 이해하고 있습니다.", keywords:["영업채널","성과관리","FC 커뮤니케이션","현장 이슈"]},
+    attitude:{label:"직무 수행 태도", text:"현장의 의견을 듣고 목표 달성을 위해 끈기 있게 조율하며 책임감 있게 실행하는 태도를 검토합니다.", answer:"여러 이해관계자 사이에서 기준을 세우고 역할을 조율한 경험은 영업관리 수행 태도와 연결됩니다.", keywords:["책임감","조율","현장 중심","목표 지향"]},
+    knowledge:{label:"필요 지식", text:"보험 영업채널 구조, 고객 니즈, 실적 관리 지표에 대한 이해를 검토합니다.", answer:"고객 접점 경험을 통해 고객 니즈와 신뢰 형성의 중요성을 이해하고 있습니다.", keywords:["영업채널 구조","고객 니즈","실적 지표","보험 영업"]},
+    skill:{label:"필요 기술", text:"커뮤니케이션, 데이터 기반 실적 관리, 문제해결, 보고·문서화 기술을 검토합니다.", answer:"고객 커뮤니케이션과 조직 내 조율 경험은 영업관리 실무 기술과 연결됩니다.", keywords:["커뮤니케이션","실적 관리","문제해결","보고"]}
+  },
+  "인사/경영지원": {
+    team:"경영지원",
+    competencies:["커뮤니케이션 역량","제도 운영 역량","문서 및 프로세스 관리 능력"],
+    content:{label:"직무 수행 내용", text:"인사·경영지원 제도 운영, 조직 커뮤니케이션, 문서·프로세스 관리 업무를 수행할 수 있는지 검토합니다.", answer:"경영지원 직무는 구성원과 유관부서가 안정적으로 일할 수 있도록 제도와 프로세스를 운영하는 업무라고 이해하고 있습니다.", keywords:["제도 운영","조직 커뮤니케이션","문서 관리","프로세스"]},
+    attitude:{label:"직무 수행 태도", text:"구성원 관점에서 신뢰를 형성하고 세부 운영 업무를 책임감 있게 수행하는 태도를 검토합니다.", answer:"구성원의 입장에서 필요한 정보를 정리하고 협업 과정에서 신뢰를 만드는 태도가 확인됩니다.", keywords:["구성원 관점","신뢰","책임감","협업"]},
+    knowledge:{label:"필요 지식", text:"조직 운영, 인사제도, 교육·조직문화, 업무 프로세스에 대한 이해를 검토합니다.", answer:"조직문화와 교육 운영에 대한 관심을 직무 이해로 연결하고 있습니다.", keywords:["조직 운영","인사제도","교육","조직문화"]},
+    skill:{label:"필요 기술", text:"문서 작성, 안내·운영자료 제작, 일정 관리, 유관부서 커뮤니케이션 기술을 검토합니다.", answer:"운영 자료를 정리하고 협업 일정을 관리한 경험은 경영지원 실무 기술과 연결됩니다.", keywords:["문서 작성","운영자료","일정관리","커뮤니케이션"]}
+  },
+  "재무/회계": {
+    team:"재무/회계",
+    competencies:["회계·재무 지식","숫자 정확성","리포팅 역량","내부통제 이해"],
+    content:{label:"직무 수행 내용", text:"월마감, 재무 데이터 관리, 비용·예산 관리, 재무 리포팅 업무를 수행할 수 있는지 검토합니다.", answer:"재무/회계 직무는 숫자 데이터를 정확하게 관리하고 회계 기준에 맞춰 재무 현황을 보고하는 업무라고 이해하고 있습니다.", keywords:["월마감","비용관리","리포팅","재무 데이터"]},
+    attitude:{label:"직무 수행 태도", text:"정확성, 책임감, 검증 태도, 내부통제 기준 준수 여부를 검토합니다.", answer:"자료를 누락 없이 검토하고 기준에 따라 정리하려는 태도는 재무/회계 직무와 연결됩니다.", keywords:["정확성","책임감","검증","내부통제"]},
+    knowledge:{label:"필요 지식", text:"회계 기준, 재무제표, 관리회계, 비용·예산 처리에 대한 이해를 검토합니다.", answer:"월마감과 관리회계 경험은 재무/회계 필요 지식과 연결됩니다.", keywords:["회계 기준","재무제표","관리회계","예산"]},
+    skill:{label:"필요 기술", text:"엑셀·데이터 정리, 보고서 작성, 숫자 검증, 재무 분석 기술을 검토합니다.", answer:"정기 보고서 작성과 데이터 정리 경험은 재무 리포팅 기술과 연결됩니다.", keywords:["엑셀","보고서 작성","숫자 검증","재무 분석"]}
+  }
+};
+
+function getJobCriteria(c) { return roleCriteriaMap[c.role] || roleCriteriaMap["인사/경영지원"]; }
+function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
+function getValueKeyword(c) {
+  if (c.role === "디지털/IT") return "스마트";
+  if (c.role === "재무/회계") return "전문성";
+  if (c.role === "영업관리") return "든든함";
+  if (c.role === "상품기획") return "선진";
+  if (c.role === "마케팅") return "스마트";
+  return "배려";
+}
+
+function getProfile(c) {
+  const suffix = c.id.split('-').pop();
+  const keyword = getValueKeyword(c);
+  const core = c.tags[0];
+  const sub = c.tags[1];
+  const criteria = getJobCriteria(c);
+  const roleCompetencies = criteria.competencies.join(', ');
+  const industrySentence = c.fit.industry >= 80
+    ? "보험을 고객의 생활 안정과 리스크 관리 관점으로 이해하고 있어 산업 이해도가 비교적 높게 확인됩니다."
+    : "보험·금융 산업에 대한 관심은 있으나, 상품 구조와 리스크 관리 관점의 구체성은 추가 확인이 필요합니다.";
+
+  return {
+    phone: '010-****-' + suffix.slice(-4),
+    email: 'applicant' + suffix + '@mail.com',
+    birth: c.type === '신입' ? '2001.04.18' : '1995.09.12',
+    appliedAt: '2026.05.22 14:36',
+    keyword: keyword,
+    summaryLines: [
+      criteria.team + "의 핵심 역량인 " + roleCompetencies + " 중 " + core + " 경험이 지원서 전반에서 확인됩니다.",
+      "ABL 핵심가치 '" + keyword + "'를 단순히 언급하는 데 그치지 않고 고객/조직 기여 맥락으로 연결했습니다.",
+      industrySentence
+    ],
+    itemSummaries: [
+      {
+        key: 'summary-motivation',
+        title: '지원동기 요약',
+        badge: keyword,
+        text: "ABL생명의 핵심가치 중 '" + keyword + "'를 선택하고, 보험을 고객의 불확실성을 줄이는 약속으로 해석했습니다. 기업명 언급보다 고객의 더 나은 삶에 기여하고 싶다는 맥락이 드러나는 답변입니다.",
+        evidence: "지원동기 문항에서 '보험은 고객이 예상하지 못한 상황에서도 생활을 이어가도록 돕는 약속'이라고 설명한 문단을 근거로 요약했습니다.\nABL의 '더 나은 삶'이라는 표현을 고객이 중요한 순간에 흔들리지 않도록 기준을 제공하는 일로 해석했습니다.\n고객과 조직에 신뢰를 주는 구성원이 되고 싶다는 마무리 문장이 지원동기와 연결됩니다.",
+        highlight: ['summary-motivation','org-vision','industry-risk']
+      },
+      {
+        key: 'summary-competency',
+        title: '직무역량 요약',
+        badge: c.role,
+        text: criteria.team + " 기준의 핵심 역량은 " + roleCompetencies + "입니다. 지원자는 " + core + " 경험을 통해 이 중 일부 역량을 실제 과업 수행 방식과 연결해 설명하고 있습니다.",
+        evidence: "직무역량 문항에서 " + criteria.content.text + "\n'" + core + "' 경험을 목표 세분화, 자료 정리, 실행계획으로 연결한 부분이 확인됩니다.\n진행 상황을 표로 정리하고 담당자별 이슈를 구분해 공유했다는 문장이 직무 수행 방식과 연결됩니다.",
+        highlight: ['summary-competency','job-content','job-skill']
+      },
+      {
+        key: 'summary-challenge',
+        title: '도전경험 요약',
+        badge: '성과경험',
+        text: "낯선 과제를 조사·분석·정리·발표 단계로 나누고, 주기적으로 진행 상황을 점검해 결과물을 완성한 경험을 제시했습니다. 실행력과 완수 경험은 확인되나 성과 규모는 추가 확인이 필요합니다.",
+        evidence: "도전경험 문항에서 목표를 조사·분석·정리·발표 단계로 나누고 매주 진행 상황을 점검한 문장을 근거로 삼았습니다.\n자료를 많이 모으기보다 주제와 직접 연결되는 기준을 세워 선별했다는 문장이 문제 해결 방식을 보여줍니다.\n최종 결과물에서 문제 정의와 해결 방향이 연결되었다는 평가를 받은 부분이 성취 결과로 확인됩니다.",
+        highlight: ['summary-challenge','specificity','org-talent','job-attitude']
+      }
+    ],
+    answers: {
+      motivation: '저는 ABL생명의 핵심가치 중 <span class="hl" data-hl="summary-motivation org-talent">' + keyword + '</span>이 제가 일하고 싶은 방식과 가장 맞닿아 있다고 생각합니다. <span class="hl" data-hl="summary-motivation org-vision industry-risk">보험은 단순한 금융상품이 아니라 고객이 예상하지 못한 상황에서도 생활을 이어갈 수 있도록 돕는 약속이라고 생각합니다.</span> 그래서 보험사에서의 일은 상품을 설명하는 것을 넘어, 고객이 불안한 상황에서도 신뢰할 수 있는 선택지를 제공하는 과정이라고 이해하고 있습니다. 특히 ABL생명이 말하는 \u2018더 나은 삶\u2019은 거창한 변화보다 고객이 중요한 순간에 흔들리지 않도록 곁에서 기준을 제공하는 일이라고 이해했습니다. 대학 생활과 프로젝트 경험 속에서 저는 <span class="hl" data-hl="org-culture grammar industry-customer">상대방이 필요로 하는 정보를 먼저 정리하고, 복잡한 내용을 이해하기 쉽게 전달하는 역할</span>을 자주 맡았습니다. 여러 이해관계자의 의견이 다른 상황에서도 기준을 세워 논의를 정리하고, 필요한 정보를 놓치지 않도록 문서화했습니다. 이러한 경험을 바탕으로 ABL생명에서도 고객과 조직에 신뢰를 주는 구성원으로 성장하고 싶습니다.',
+      competency: '<span class="hl" data-hl="summary-competency job-content job-knowledge accuracy">' + criteria.content.answer + '</span> 저는 <span class="hl" data-hl="summary-competency job-skill career-history career-task specificity">' + core + '</span> 경험을 통해 목표를 세분화하고, 필요한 자료를 정리해 실행계획으로 연결하는 연습을 해왔습니다. 프로젝트 초반에는 정보가 흩어져 있어 방향을 잡기 어려웠지만, 우선 해결해야 할 문제를 정의하고 자료를 기준별로 분류했습니다. 이후 팀원들이 같은 기준으로 판단할 수 있도록 진행 상황을 표로 정리했고, 담당자별로 확인해야 할 이슈를 구분해 공유했습니다. <span class="hl" data-hl="job-knowledge">' + criteria.knowledge.answer + '</span> 또한 <span class="hl" data-hl="job-skill">' + criteria.skill.answer + '</span> 이 과정에서 단순히 자료를 많이 모으는 것보다 어떤 기준으로 판단할 것인지 정하는 일이 중요하다는 것을 배웠습니다. 특히 <span class="hl" data-hl="summary-competency job-attitude org-culture career-transfer grammar">' + sub + ' 과정에서 팀원별 역할을 조율하고 일정에 맞춰 결과물을 완성한 경험</span>은 ' + criteria.attitude.answer + ' 실제 직무에서도 협업 기반으로 문제를 해결하는 데 도움이 될 것이라고 생각합니다.',
+      challenge: '최근 3년 이내 가장 도전적이었던 경험은 제한된 기간 안에 새로운 주제의 프로젝트를 완성해야 했던 일입니다. 처음에는 관련 지식과 사례가 부족해 방향을 잡기 어려웠지만, <span class="hl" data-hl="summary-challenge specificity org-talent job-attitude career-transfer">목표를 조사·분석·정리·발표 단계로 나누고 매주 진행 상황을 점검했습니다.</span> 자료조사 단계에서는 단순히 사례를 많이 모으기보다, 우리 주제와 직접 연결되는 기준을 세워 자료를 선별했습니다. 중간 점검 과정에서는 팀원별로 맡은 부분의 논리가 서로 어긋나지 않는지 확인했고, 필요한 부분은 다시 정리했습니다. 일정이 지연될 때는 남은 작업을 우선순위에 따라 나누고, 발표에 반드시 필요한 내용과 보완 자료로 둘 내용을 구분했습니다. 그 결과 <span class="hl" data-hl="summary-challenge specificity job-skill grammar">팀 내 논의가 명확해졌고, 최종 결과물에서도 문제 정의와 해결 방향이 잘 연결되었다는 평가</span>를 받을 수 있었습니다. 이 경험을 통해 낯선 과제라도 기준을 세우고 꾸준히 실행하면 성과로 연결할 수 있다는 자신감을 얻었습니다.'
+    }
+  };
+}
+
+function getScreening(c) {
+  const criteria = getJobCriteria(c);
+  const primary = {
+    accuracy: { label:'답변 정확도', score:Math.min(96, c.score + 1), short:'문항 요구사항과 답변 내용의 대응 정도를 검토합니다.',
+      evidence:'세 문항 모두 지원동기, 직무역량, 도전경험이라는 요구사항에 맞춰 답변이 구성되어 있습니다. 다만 일부 내용은 ABL생명 고유 맥락보다 일반적인 직무 설명이 더 강하게 드러나므로, 문항 대응은 높게 보되 기업 특화성은 면접에서 추가 확인하는 것이 적절합니다.',
+      keywords:['문항 대응','지원동기','직무역량','도전경험'], highlight:['accuracy'] },
+    grammar: { label:'문법 정확도', score:c.score >= 80 ? 94 : 86, short:'문장 안정성, 가독성, 논리 흐름을 검토합니다.',
+      evidence:'문장 구조가 비교적 안정적이고 문항별 답변의 흐름이 끊기지 않습니다. 의미 전달을 방해하는 비문은 적지만, 일부 문장은 추상적인 표현이 반복되어 핵심 성과가 약하게 보일 수 있습니다.',
+      keywords:['문장 안정성','가독성','논리 흐름'], highlight:['grammar'] },
+    specificity: { label:'내용 구체성', score:c.score >= 85 ? 86 : c.score >= 75 ? 76 : 66, short:'상황, 본인 역할, 실행 과정, 결과가 연결되는지 검토합니다.',
+      evidence:'경험의 배경과 본인의 역할은 확인됩니다. 다만 정량 성과나 결과의 크기가 충분히 제시되지 않은 부분이 있어 추가 확인이 필요합니다.',
+      keywords:['본인 역할','성과 근거','실행 과정','결과 연결'], highlight:['specificity'] }
+  };
+
+  const fit = {
+    org: { label:'조직 적합도', score:c.fit.org, short:'ABL의 비전, 인재상, 조직문화 기준과 지원서 맥락의 연결성을 종합 검토합니다.',
+      subs:[
+        { key:'org-vision', label:'비전 부합도', score:Math.min(96, c.fit.org + 2), evidence:"ABL생명의 비전 'With You for A Better Life / 당신과 함께 더 나은 삶을 위해'와 연결되는지를 검토했습니다. 지원자가 보험을 고객의 불확실성을 줄이고 생활 안정에 기여하는 약속으로 설명한 점이 비전과 연결됩니다.", keywords:['With You for A Better Life','더 나은 삶','고객 가치','생활 안정'], highlight:['org-vision'] },
+        { key:'org-talent', label:'인재상 부합도', score:c.fit.org, evidence:"ABL생명의 인재상은 '전문성과 실행력을 갖춘 열정적인 인재'입니다. 지원서에서 " + c.tags[0] + " 경험과 목표를 단계화해 완수한 경험이 확인되어 실행력은 비교적 긍정적으로 평가했습니다. 다만 전문성은 경험의 성과 지표와 직무 지식이 얼마나 구체적으로 제시되었는지까지 함께 검토했습니다.", keywords:['전문성','실행력','열정','성과 경험'], highlight:['org-talent'] },
+        { key:'org-culture', label:'조직문화 적합도', score:Math.max(60, c.fit.org - 3), evidence:"ABL생명의 조직문화는 '상호신뢰를 바탕으로 한 몰입과 혁신의 조직문화'입니다. 지원자가 협업 과정에서 상대방이 필요로 하는 정보를 정리하고 역할을 조율한 경험은 상호신뢰와 몰입 측면에서 긍정적입니다.", keywords:['상호신뢰','몰입','혁신','협업'], highlight:['org-culture'] }
+      ] },
+    job: { label:'직무 적합도', score:c.fit.job, short:'채용공고/직무기술서 기준의 수행 내용, 수행 태도, 필요 지식, 필요 기술과 지원자 경험의 연관성을 검토합니다.',
+      subs:[
+        { key:'job-content', label:'직무 수행 내용', score:Math.min(95, c.fit.job + 1), evidence:criteria.content.text + " 지원서에서는 " + c.tags[0] + " 경험을 통해 해당 과업과의 연결성이 일부 확인됩니다. 직무기술서상 주요 수행 과업과 지원자 경험이 어떻게 이어지는지 중심으로 평가했습니다.", keywords:criteria.content.keywords, highlight:['job-content'] },
+        { key:'job-attitude', label:'직무 수행 태도', score:Math.min(96, c.fit.job + 3), evidence:criteria.attitude.text + " 지원서에서 " + c.tags[1] + " 경험과 목표를 단계화해 완수한 경험이 확인됩니다.", keywords:criteria.attitude.keywords, highlight:['job-attitude'] },
+        { key:'job-knowledge', label:'필요 지식', score:Math.max(60, c.fit.job - 6), evidence:criteria.knowledge.text + " 답변에는 관련 개념을 이해하려는 시도가 보이지만, 전문 지식의 깊이나 방법론 적용 경험은 면접에서 추가 확인할 필요가 있습니다.", keywords:criteria.knowledge.keywords, highlight:['job-knowledge'] },
+        { key:'job-skill', label:'필요 기술', score:Math.max(58, c.fit.job - 4), evidence:criteria.skill.text + " 지원자의 " + c.tags[0] + " 경험은 필요한 기술 중 일부와 연결됩니다.", keywords:criteria.skill.keywords, highlight:['job-skill'] }
+      ] },
+    industry: { label:'산업 적합도', score:c.fit.industry, short:'보험·금융권 이해와 고객 보호 관점을 검토합니다.',
+      subs:[
+        { key:'industry-finance', label:'보험·금융 이해', score:c.fit.industry, evidence:c.fit.industry >= 80 ? "보험을 단순 상품 판매가 아니라 고객의 위험을 관리하는 구조로 설명했습니다." : "보험·금융 산업에 대한 관심은 확인되지만, 산업 구조에 대한 설명은 비교적 일반적입니다.", keywords:['보험업','금융권','산업 이해'], highlight:['industry-finance'] },
+        { key:'industry-risk', label:'고객 보호/리스크 관점', score:Math.max(55, c.fit.industry - 2), evidence:"고객이 예상하지 못한 상황에서도 생활을 이어갈 수 있도록 돕는다는 표현에서 보험의 리스크 관리 기능을 일부 이해하고 있음이 확인됩니다.", keywords:['고객 보호','리스크 관리','생활 안정'], highlight:['industry-risk'] },
+        { key:'industry-customer', label:'고객 관점', score:Math.min(92, c.fit.industry + 3), evidence:"지원동기에서 고객에게 신뢰와 안정감을 제공하고 싶다는 방향성이 확인됩니다.", keywords:['고객 신뢰','안정감','장기 관계'], highlight:['industry-customer'] }
+      ] }
+  };
+
+  const career = {
+    history: { label:'경력사항 요약', score:c.type === '경력' ? Math.max(65, c.fit.job - 3) : 0,
+      short:'지원자의 경력기간, 주요 업무, 경험 축을 종합적으로 요약합니다.',
+      evidence:c.exp + " 동안 " + c.tags[0] + ", " + c.tags[1] + " 관련 경험을 중심으로 경력을 설명하고 있습니다.",
+      keywords:[c.exp,c.tags[0],c.tags[1],'주요 경력'], highlight:['career-history'] },
+    task: { label:'수행업무 구체성', score:c.type === '경력' ? Math.max(62, c.fit.job - 5) : 0,
+      short:'담당 업무가 단순 참여인지, 주도적 수행인지 구분해 검토합니다.',
+      evidence:"프로젝트 또는 업무 수행 경험은 확인되지만, 본인이 직접 책임진 범위와 산출물의 수준은 추가 확인이 필요합니다.",
+      keywords:['담당 역할','주도성','산출물'], highlight:['career-task'] },
+    transfer: { label:'직무 연결성', score:c.type === '경력' ? Math.max(60, c.fit.job - 7) : 0,
+      short:'기존 경력사항과 수행업무가 현재 지원 직무와 연결되는지 검토합니다.',
+      evidence:"기존 경력에서 확인되는 " + c.tags[0] + ", " + c.tags[1] + " 경험이 현재 지원한 " + c.role + " 직무의 주요 과업과 얼마나 연결되는지 검토했습니다.",
+      keywords:[c.role,'경력-직무 연결','수행업무 연관성'], highlight:['career-transfer'] }
+  };
+
+  return { primary, fit, career };
+}
+
+function radarPoints(scores) {
+  const cx = 95, cy = 87, r = 65;
+  const angles = [-90, 30, 150];
+  const out = [];
+  for (let i = 0; i < scores.length; i++) {
+    const rad = angles[i] * Math.PI / 180;
+    const d = r * scores[i] / 100;
+    out.push((cx + Math.cos(rad) * d) + ',' + (cy + Math.sin(rad) * d));
+  }
+  return out.join(' ');
+}
+
+function renderResumePane(c, profile) {
+  const statusClass = statusClassMap[c.status] || 'status-good';
+  const typeClass = c.type === '신입' ? 'new' : 'career';
+  let resumeHtml = '';
+  resumeQuestions.forEach(item => {
+    resumeHtml += `<section class="resume-section"><div class="resume-question">${item.title}<br>${item.question}</div><div class="resume-answer">${profile.answers[item.key]}</div></section>`;
+  });
+
+  document.getElementById('resumePane').innerHTML = `
+    <article class="panel-card">
+      <div class="panel-head"><div><h3>지원자 기본정보</h3><p>블라인드 서류 검토 기준 적용</p></div><span class="status-pill ${statusClass}">${c.status}</span></div>
+      <div class="profile-grid">
+        <div class="info-box"><div class="info-label">지원번호</div><div class="info-value">${c.id}</div></div>
+        <div class="info-box"><div class="info-label">지원 유형</div><div class="info-value"><span class="type-pill ${typeClass}">${c.type}</span></div></div>
+        <div class="info-box"><div class="info-label">전형 상태</div><div class="info-value"><span class="phase-pill ${getPhaseClass(c.phase)}">${c.phase}</span></div></div>
+        <div class="info-box"><div class="info-label">지원 직무</div><div class="info-value">${c.role}</div></div>
+        <div class="info-box"><div class="info-label">경력</div><div class="info-value">${c.exp}</div></div>
+        <div class="info-box"><div class="info-label">연락처</div><div class="info-value">${profile.phone}</div></div>
+        <div class="info-box"><div class="info-label">이메일</div><div class="info-value">${profile.email}</div></div>
+        <div class="info-box"><div class="info-label">접수일시</div><div class="info-value">${profile.appliedAt}</div></div>
+      </div>
+    </article>
+    <article class="panel-card">
+      <div class="panel-head"><div><h3>지원서 원문</h3><p>자기소개서 문항 3개</p></div></div>
+      <div class="resume-body">${resumeHtml}</div>
+    </article>
+  `;
+}
+
+function renderReviewPane(c, profile) {
+  let summaryHtml = '';
+  profile.summaryLines.forEach((line, i) => {
+    summaryHtml += `<div class="summary-item"><div class="summary-num">${i+1}</div><p>${line}</p></div>`;
+  });
+
+  let itemSummaryHtml = '';
+  profile.itemSummaries.forEach(item => {
+    itemSummaryHtml += `
+      <div class="summary-summary-block">
+        <button class="summary-card" type="button" data-summary-key="${item.key}">
+          <div class="summary-card-head"><strong>${item.title}</strong><span>${item.badge}</span></div>
+          <p>${item.text}</p>
+        </button>
+        <div class="summary-evidence" id="summaryEvidence-${item.key}"></div>
+      </div>
+    `;
+  });
+
+  const isDelivered = c.phase === '현업 전달 완료';
+  const handoffText = isDelivered ? '현업 전달 완료' : '현업에게 전달';
+  const handoffDisabled = isDelivered ? ' disabled' : '';
+  const handoffNote = isDelivered ? '이미 현업 전달 완료되어 검토 내용 수정이 제한됩니다.' : '전달 시 1차 서류심사 합격 처리 후 현업 검토 단계로 이동합니다.';
+  const previewSub = isDelivered ? '전달 완료된 내용입니다. 수정할 수 없습니다.' : '종합 의견과 추가 확인사항을 확인한 뒤 수정할 수 있습니다.';
+
+  document.getElementById('reviewPane').innerHTML = `
+    <section class="ai-head-card">
+      <div class="ai-score-line">
+        <div><h3>AI 검토 결과</h3><p>서류전형 검토 점수</p></div>
+        <div class="ai-score"><strong id="modalScoreValue">${c.score}</strong><span>점</span></div>
+      </div>
+      <div class="review-tabs">
+        <button class="review-tab active" id="summaryTab" type="button">요약</button>
+        <button class="review-tab" id="screeningTab" type="button">스크리닝</button>
+      </div>
+    </section>
+
+    <section class="review-panel active" id="summaryPanel">
+      <article class="panel-card">
+        <div class="panel-head"><div><h3>지원서 전체 요약</h3><p>핵심 정보와 역량 요약</p></div></div>
+        <div class="summary-list">${summaryHtml}</div>
+      </article>
+      <article class="panel-card">
+        <div class="panel-head"><div><h3>문항별 요약</h3><p>항목을 누르면 요약 근거가 표시됩니다</p></div></div>
+        <div class="resume-body">${itemSummaryHtml}</div>
+      </article>
+    </section>
+
+    <section class="review-panel" id="screeningPanel">
+      <article class="panel-card">
+        <div class="panel-head"><div><h3>스크리닝</h3><p>1차 기초 검토 / 2차 적합도 검토</p></div></div>
+        <div class="resume-body">
+          <div class="stage-tabs">
+            <button class="stage-tab active" id="stageOneTab" type="button">1차 기초 검토</button>
+            <button class="stage-tab" id="stageTwoTab" type="button">2차 적합도 검토</button>
+          </div>
+          <div class="stage-panel active" id="stageOnePanel"></div>
+          <div class="stage-panel" id="stageTwoPanel"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="handoff-section">
+      <div class="handoff-preview-panel" id="handoffPreviewPanel">
+        <div class="handoff-preview-head"><div><strong>현업 전달 내용 미리보기</strong><br><span>${previewSub}</span></div><button class="small-action-btn" id="handoffPreviewEditBtn" type="button"${handoffDisabled}>수정</button></div>
+        <textarea class="handoff-preview-text" id="handoffPreviewText" disabled></textarea>
+        <div class="handoff-preview-actions"><button class="small-action-btn" id="handoffPreviewCloseBtn" type="button">닫기</button><button class="small-action-btn" id="handoffPreviewSaveBtn" type="button"${handoffDisabled}>내용 저장</button></div>
+      </div>
+      <div class="handoff-button-row">
+        <button class="preview-btn" id="handoffPreviewBtn" type="button"><i class="ti ti-eye"></i>전달 내용 미리보기</button>
+        <button class="pass-btn" id="handoffBtn" type="button"${handoffDisabled}><i class="ti ti-send"></i>${handoffText}</button>
+      </div>
+      <div class="handoff-note">${handoffNote}</div>
+    </section>
+  `;
+
+  document.getElementById('summaryTab').addEventListener('click', () => switchReviewTab('summary'));
+  document.getElementById('screeningTab').addEventListener('click', () => switchReviewTab('screening'));
+  document.getElementById('stageOneTab').addEventListener('click', () => switchScreeningStage('one'));
+  document.getElementById('stageTwoTab').addEventListener('click', () => switchScreeningStage('two'));
+  document.getElementById('handoffBtn').addEventListener('click', handoffToBusiness);
+  document.getElementById('handoffPreviewBtn').addEventListener('click', toggleHandoffPreview);
+  document.getElementById('handoffPreviewEditBtn').addEventListener('click', () => setHandoffPreviewEditing(true));
+  document.getElementById('handoffPreviewSaveBtn').addEventListener('click', saveHandoffPreview);
+  document.getElementById('handoffPreviewCloseBtn').addEventListener('click', () => {
+    document.getElementById('handoffPreviewPanel').classList.remove('show');
+    setHandoffPreviewEditing(false);
+  });
+  document.querySelectorAll('.summary-card[data-summary-key]').forEach(btn => {
+    btn.addEventListener('click', () => showSummaryEvidence(btn.getAttribute('data-summary-key')));
+  });
+
+  renderScreening(c);
+}
+
+function renderScreening(c) {
+  activeScreening = getScreening(c);
+  const scores = [activeScreening.primary.accuracy.score, activeScreening.primary.grammar.score, activeScreening.primary.specificity.score];
+  const points = radarPoints(scores);
+
+  let primaryBlocks = '';
+  ['accuracy','grammar','specificity'].forEach(key => {
+    const item = activeScreening.primary[key];
+    primaryBlocks += `
+      <div class="metric-block">
+        <button class="metric-card" data-key="${key}" type="button"><div class="metric-top"><strong>${item.label}</strong><span id="primaryScore-${key}">${item.score}</span></div><p>${item.short}</p></button>
+        <div class="evidence-box inline-evidence primary-evidence-slot" id="primaryEvidence-${key}" style="display:none"></div>
+      </div>
+    `;
+  });
+
+  document.getElementById('stageOnePanel').innerHTML = `
+    <section style="margin-top:14px">
+      <div class="section-label">1차 기초 검토</div>
+      <div class="radar-card">
+        <svg class="radar-svg" viewBox="0 0 200 170" role="img" aria-label="레이더 차트">
+          <polygon points="95,17 156,122 34,122" fill="none" stroke="#d1d5db" stroke-width="1.5"></polygon>
+          <polygon points="95,40 136,111 54,111" fill="none" stroke="#e5e7eb" stroke-width="1"></polygon>
+          <polygon points="95,63 116,99 74,99" fill="none" stroke="#e5e7eb" stroke-width="1"></polygon>
+          <line x1="95" y1="87" x2="95" y2="17" stroke="#e5e7eb"></line>
+          <line x1="95" y1="87" x2="156" y2="122" stroke="#e5e7eb"></line>
+          <line x1="95" y1="87" x2="34" y2="122" stroke="#e5e7eb"></line>
+          <polygon id="radarPolygon" points="${points}" fill="rgba(0,103,172,.22)" stroke="#0067AC" stroke-width="2.5"></polygon>
+          <text x="95" y="10" text-anchor="middle" font-size="10" font-weight="700" fill="#5A6478">답변 정확도</text>
+          <text x="180" y="135" text-anchor="end" font-size="10" font-weight="700" fill="#5A6478">문법 정확도</text>
+          <text x="20" y="135" text-anchor="start" font-size="10" font-weight="700" fill="#5A6478">내용 구체성</text>
+        </svg>
+        <div class="metric-list">${primaryBlocks}</div>
+      </div>
+    </section>
+  `;
+
+  document.querySelectorAll('.metric-card').forEach(btn => {
+    btn.addEventListener('click', () => showPrimaryEvidence(btn.getAttribute('data-key')));
+  });
+
+  let fitButtons = '';
+  ['org','job','industry'].forEach(key => {
+    const item = activeScreening.fit[key];
+    fitButtons += `<button class="fit-card" data-key="${key}" type="button"><div class="fit-top"><strong>${item.label}</strong><span id="fitCardScore-${key}">${item.score}</span></div><p>${item.short}</p></button>`;
+  });
+
+  let careerHtml = '';
+  if (c.type === '경력') {
+    let careerBlocks = '';
+    ['history','task','transfer'].forEach(key => {
+      const item = activeScreening.career[key];
+      careerBlocks += `
+        <div class="career-block">
+          <button class="career-card" data-key="${key}" type="button"><div class="career-top"><strong>${item.label}</strong><span id="careerScore-${key}">${item.score}</span></div><p>${item.short}</p></button>
+          <div class="evidence-box inline-evidence career-evidence-slot" id="careerEvidence-${key}" style="display:none"></div>
+        </div>
+      `;
+    });
+    careerHtml = `<section class="career-deep show"><div class="section-label">경력직 추가 검토</div>${careerBlocks}</section>`;
+  }
+
+  document.getElementById('stageTwoPanel').innerHTML = `
+    <section style="margin-top:14px">
+      <div class="section-label">2차 적합도 검토</div>
+      <div class="fit-grid-modal">${fitButtons}</div>
+    </section>
+    <div class="evidence-box" id="fitEvidence" style="display:none;margin-top:10px"></div>
+    ${careerHtml}
+  `;
+
+  document.querySelectorAll('.fit-card').forEach(btn => {
+    btn.addEventListener('click', () => showFitEvidence(btn.getAttribute('data-key')));
+  });
+  document.querySelectorAll('.career-card').forEach(btn => {
+    btn.addEventListener('click', () => showCareerEvidence(btn.getAttribute('data-key')));
+  });
+  updateScoreDisplays();
+}
+
+// Highlight helpers
+function clearResumeHighlights() {
+  document.querySelectorAll('#resumePane .hl').forEach(el => el.classList.remove('active', 'pulse'));
+  document.querySelectorAll('#resumePane .evidence-note').forEach(el => el.remove());
+}
+function activateResumeHighlights(tags, memo) {
+  clearResumeHighlights();
+  if (!tags || !tags.length) return;
+  const selector = tags.map(t => `#resumePane .hl[data-hl~="${t}"]`).join(',');
+  const matches = selector ? document.querySelectorAll(selector) : [];
+  matches.forEach(el => el.classList.add('active', 'pulse'));
+  if (matches.length) {
+    const first = matches[0];
+    const answer = first.closest('.resume-answer') || first.parentElement;
+    if (answer) {
+      const note = document.createElement('div');
+      note.className = 'evidence-note';
+      note.innerHTML = '<strong>AI 평가 근거 메모</strong>' + evidenceHtml(memo || '해당 문장을 근거로 평가했습니다.');
+      answer.appendChild(note);
+    }
+    first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+function escapeHtml(v) { return String(v || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function evidenceLines(v) {
+  const raw = String(v || '').trim();
+  if (!raw) return [];
+  if (raw.indexOf('\n') >= 0) return raw.split(/\n+/).map(l => l.replace(/^[-•\d.\s]+/, '').trim()).filter(Boolean);
+  const sentences = raw.match(/[^.!?。]+[.!?。]?/g) || [raw];
+  let lines = sentences.map(s => s.trim()).filter(Boolean);
+  if (lines.length <= 1 && raw.length > 95) lines = raw.split(/,|·| 그리고 | 또한 | 다만 /).map(p => p.trim()).filter(Boolean);
+  return lines;
+}
+function evidenceHtml(v) {
+  const lines = evidenceLines(v);
+  if (!lines.length) return '<p style="color:var(--text-2);font-size:11px">근거 내용이 없습니다.</p>';
+  return '<ul class="evidence-list">' + lines.map(l => '<li>' + escapeHtml(l) + '</li>').join('') + '</ul>';
+}
+function evidenceTextareaValue(v) { return evidenceLines(v).map((l, i) => (i+1) + '. ' + l).join('\n'); }
+function evidencePreview(v) { const lines = evidenceLines(v); return lines.slice(0, 2).join(' '); }
+function keywordHtml(item) { return item.keywords.map(k => '<span class="keyword">' + escapeHtml(k) + '</span>').join(''); }
+function editableEvidenceHtml(item) {
+  return `
+    <div class="edit-header"><h4>${item.label} 평가 근거</h4><button class="edit-toggle" type="button">수정</button></div>
+    <div class="editable-row">
+      <div><div class="edit-label">점수</div><input class="score-edit" type="number" min="0" max="100" value="${item.score}" disabled></div>
+      <div><div class="edit-label">근거 내용</div><textarea class="evidence-edit" disabled>${escapeHtml(evidenceTextareaValue(item.evidence))}</textarea></div>
+    </div>
+    <div class="keyword-row">${keywordHtml(item)}</div>
+    <button class="context-link" type="button"><i class="ti ti-arrow-narrow-right" style="font-size:13px"></i>근거 문장 보기</button>
+    <p class="evidence-guide">수정 버튼을 누르면 HR 담당자가 점수와 근거를 조정할 수 있습니다. 점수를 바꾸면 세부 항목 → 종합 항목 → 최종 AI 서류 점수에 자동 반영됩니다.</p>
+  `;
+}
+
+// Score calc
+function clampScore(v) { let n = parseInt(v, 10); if (isNaN(n)) n = 0; return Math.max(0, Math.min(100, n)); }
+function averageScores(list) { if (!list.length) return 0; return Math.round(list.reduce((s, v) => s + Number(v||0), 0) / list.length); }
+function fitGroupFromSubScores(key) { const g = activeScreening.fit[key]; g.score = averageScores(g.subs.map(s => s.score)); return g.score; }
+function careerAverage() { if (!activeCandidate || activeCandidate.type !== '경력') return null; return averageScores(Object.keys(activeScreening.career).map(k => activeScreening.career[k].score)); }
+function calculateFinalScore() {
+  const primaryAvg = averageScores(Object.keys(activeScreening.primary).map(k => activeScreening.primary[k].score));
+  const o = fitGroupFromSubScores('org'); const j = fitGroupFromSubScores('job'); const i = fitGroupFromSubScores('industry');
+  if (activeCandidate.type === '경력') { const cAvg = careerAverage(); return Math.round(primaryAvg * 0.28 + o * 0.20 + j * 0.27 + i * 0.15 + cAvg * 0.10); }
+  return Math.round(primaryAvg * 0.30 + o * 0.24 + j * 0.30 + i * 0.16);
+}
+function updateScoreDisplays() {
+  if (!activeCandidate || !activeScreening) return;
+  ['accuracy','grammar','specificity'].forEach(key => { const el = document.getElementById('primaryScore-' + key); if (el) el.textContent = activeScreening.primary[key].score; });
+  ['org','job','industry'].forEach(key => {
+    const total = fitGroupFromSubScores(key);
+    const card = document.getElementById('fitCardScore-' + key);
+    const overall = document.getElementById('fitOverall-' + key);
+    if (card) card.textContent = total;
+    if (overall) overall.innerHTML = '종합 ' + total + '<small>점</small>';
+    activeScreening.fit[key].subs.forEach(sub => { const subEl = document.getElementById('subScore-' + sub.key); if (subEl) subEl.innerHTML = sub.score + '<small>점</small>'; });
+  });
+  Object.keys(activeScreening.career).forEach(key => { const el = document.getElementById('careerScore-' + key); if (el) el.textContent = activeScreening.career[key].score; });
+  const radar = document.getElementById('radarPolygon');
+  if (radar) radar.setAttribute('points', radarPoints(['accuracy','grammar','specificity'].map(k => activeScreening.primary[k].score)));
+  activeCandidate.fit.org = activeScreening.fit.org.score;
+  activeCandidate.fit.job = activeScreening.fit.job.score;
+  activeCandidate.fit.industry = activeScreening.fit.industry.score;
+  activeCandidate.score = calculateFinalScore();
+  const modalScore = document.getElementById('modalScoreValue');
+  if (modalScore) {
+    modalScore.textContent = activeCandidate.score;
+    modalScore.classList.remove('score-updated');
+    void modalScore.offsetWidth;
+    modalScore.classList.add('score-updated');
+  }
+}
+
+function attachEvidenceEditHandlers(item, boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  const editBtn = box.querySelector('.edit-toggle');
+  const scoreInput = box.querySelector('.score-edit');
+  const textArea = box.querySelector('.evidence-edit');
+  const contextBtn = box.querySelector('.context-link');
+  let isEditing = false;
+  function setEditing(next) {
+    isEditing = next;
+    scoreInput.disabled = !next; textArea.disabled = !next;
+    scoreInput.classList.toggle('is-editing', next); textArea.classList.toggle('is-editing', next);
+    editBtn.textContent = next ? '저장' : '수정';
+    if (next) scoreInput.focus();
+  }
+  editBtn.addEventListener('click', () => {
+    if (isEditing) {
+      item.score = clampScore(scoreInput.value); item.evidence = textArea.value;
+      scoreInput.value = item.score; setEditing(false);
+      updateScoreDisplays(); showToast('수정한 점수와 근거가 반영되었습니다.');
+    } else setEditing(true);
+  });
+  scoreInput.addEventListener('input', () => { if (scoreInput.disabled) return; item.score = clampScore(scoreInput.value); updateScoreDisplays(); });
+  textArea.addEventListener('input', () => { if (textArea.disabled) return; item.evidence = textArea.value; });
+  contextBtn.addEventListener('click', () => activateResumeHighlights(item.highlight || [], item.evidence));
+}
+
+function showSummaryEvidence(key) {
+  if (!activeProfile) return;
+  const item = activeProfile.itemSummaries.find(s => s.key === key);
+  if (!item) return;
+  clearResumeHighlights();
+  document.querySelectorAll('.summary-card[data-summary-key]').forEach(card => card.classList.toggle('active', card.getAttribute('data-summary-key') === key));
+  document.querySelectorAll('.summary-evidence').forEach(box => { box.classList.remove('show'); box.innerHTML = ''; });
+  const box = document.getElementById('summaryEvidence-' + key);
+  if (box) {
+    box.innerHTML = '<strong>원문 기반 요약 근거</strong>' + evidenceHtml(item.evidence) + '<button class="context-link" type="button"><i class="ti ti-arrow-narrow-right" style="font-size:13px"></i>근거 문장 보기</button>';
+    box.classList.add('show');
+    box.querySelector('.context-link').addEventListener('click', (e) => { e.stopPropagation(); activateResumeHighlights(item.highlight || [], item.evidence); });
+  }
+}
+
+function showPrimaryEvidence(key) {
+  clearResumeHighlights();
+  const item = activeScreening.primary[key];
+  document.querySelectorAll('.metric-card').forEach(card => card.classList.toggle('active', card.getAttribute('data-key') === key));
+  document.querySelectorAll('.primary-evidence-slot').forEach(s => { s.style.display = 'none'; s.innerHTML = ''; });
+  const target = document.getElementById('primaryEvidence-' + key);
+  if (target) { target.style.display = 'block'; target.innerHTML = editableEvidenceHtml(item); attachEvidenceEditHandlers(item, 'primaryEvidence-' + key); }
+}
+
+function showFitEvidence(key) {
+  clearResumeHighlights();
+  const group = activeScreening.fit[key];
+  document.querySelectorAll('.fit-card').forEach(card => card.classList.toggle('active', card.getAttribute('data-key') === key));
+  let html = `<h4>${group.label} 세부 평가</h4><div class="overall-score" id="fitOverall-${key}">종합 ${group.score}<small>점</small></div><div class="subscore-list">`;
+  group.subs.forEach(sub => {
+    html += `
+      <div class="subscore-block">
+        <button class="subscore-card" data-sub="${sub.key}" type="button"><div class="subscore-head"><strong>${sub.label}</strong><span class="overall-score" id="subScore-${sub.key}">${sub.score}<small>점</small></span></div><p>${escapeHtml(evidencePreview(sub.evidence))}</p></button>
+        <div class="evidence-box inline-evidence subfit-evidence-slot" id="subFitEvidence-${sub.key}" style="display:none"></div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  const fitBox = document.getElementById('fitEvidence');
+  fitBox.style.display = 'block'; fitBox.innerHTML = html;
+  document.querySelectorAll('.subscore-card').forEach(btn => btn.addEventListener('click', () => showSubFitEvidence(key, btn.getAttribute('data-sub'))));
+  updateScoreDisplays();
+}
+
+function showSubFitEvidence(groupKey, subKey) {
+  clearResumeHighlights();
+  const group = activeScreening.fit[groupKey];
+  const item = group.subs.find(s => s.key === subKey);
+  document.querySelectorAll('.subscore-card').forEach(card => card.classList.toggle('active', card.getAttribute('data-sub') === subKey));
+  document.querySelectorAll('.subfit-evidence-slot').forEach(s => { s.style.display = 'none'; s.innerHTML = ''; });
+  const target = document.getElementById('subFitEvidence-' + subKey);
+  if (target) { target.style.display = 'block'; target.innerHTML = editableEvidenceHtml(item); attachEvidenceEditHandlers(item, 'subFitEvidence-' + subKey); }
+}
+
+function showCareerEvidence(key) {
+  clearResumeHighlights();
+  const item = activeScreening.career[key];
+  document.querySelectorAll('.career-card').forEach(card => card.classList.toggle('active', card.getAttribute('data-key') === key));
+  document.querySelectorAll('.career-evidence-slot').forEach(s => { s.style.display = 'none'; s.innerHTML = ''; });
+  const target = document.getElementById('careerEvidence-' + key);
+  if (target) { target.style.display = 'block'; target.innerHTML = editableEvidenceHtml(item); attachEvidenceEditHandlers(item, 'careerEvidence-' + key); }
+}
+
+function switchReviewTab(name) {
+  clearResumeHighlights();
+  document.getElementById('summaryTab').classList.toggle('active', name === 'summary');
+  document.getElementById('screeningTab').classList.toggle('active', name === 'screening');
+  document.getElementById('summaryPanel').classList.toggle('active', name === 'summary');
+  document.getElementById('screeningPanel').classList.toggle('active', name === 'screening');
+}
+function switchScreeningStage(stage) {
+  clearResumeHighlights();
+  document.getElementById('stageOneTab').classList.toggle('active', stage === 'one');
+  document.getElementById('stageTwoTab').classList.toggle('active', stage === 'two');
+  document.getElementById('stageOnePanel').classList.toggle('active', stage === 'one');
+  document.getElementById('stageTwoPanel').classList.toggle('active', stage === 'two');
+}
+
+function buildHandoffPreviewText() {
+  if (!activeCandidate) return '';
+  const profile = activeProfile || getProfile(activeCandidate);
+  const screening = activeScreening || getScreening(activeCandidate);
+  const o = screening.fit.org.score, j = screening.fit.job.score, i = screening.fit.industry.score;
+  const primaryAvg = averageScores(Object.keys(screening.primary).map(k => screening.primary[k].score));
+  const strengths = [];
+  if (profile.summaryLines && profile.summaryLines.length) { strengths.push(profile.summaryLines[0]); strengths.push(profile.summaryLines[1]); }
+  strengths.push('직무 적합도 ' + j + '점: ' + screening.fit.job.short);
+  const checks = [];
+  if (screening.primary.specificity.score < 82) checks.push('지원서에 제시된 성과의 규모와 본인 기여도를 면접에서 추가 확인');
+  if (i < 80) checks.push('보험·금융 산업 이해도와 ABL생명 상품/고객 관점에 대한 구체성 확인');
+  if (j < 82) checks.push(activeCandidate.role + ' 직무 수행 내용과 실제 경험의 연결성 확인');
+  if (activeCandidate.type === '경력') checks.push('이전 경력에서 직접 담당한 업무 범위, 산출물, 성과 재현 가능성 확인');
+  if (!checks.length) checks.push('지원서상 강점으로 제시된 경험의 구체적 역할과 성과 지표 확인');
+  return '[현업 전달 요약]\n지원자: ' + activeCandidate.name + ' / ' + activeCandidate.role + ' / ' + activeCandidate.type + ' / ' + activeCandidate.exp + '\nAI 서류 점수: ' + activeCandidate.score + '점\n전형 상태: 1차 서류심사 합격 예정\n\n[종합 의견]\n' + activeCandidate.summary + '\n\n[핵심 강점]\n- ' + strengths.join('\n- ') + '\n\n[주요 적합도]\n- 1차 기초 검토: ' + primaryAvg + '점\n- 조직 적합도: ' + o + '점\n- 직무 적합도: ' + j + '점\n- 산업 이해도: ' + i + '점\n\n[추후 확인 필요 사항]\n- ' + checks.join('\n- ') + '\n\n[현업 검토 요청]\n지원자의 경험이 실제 부서 업무 상황에서 재현 가능한지, 면접 단계에서 위 확인사항을 중심으로 검토 요청드립니다.';
+}
+function ensureHandoffPreviewText() {
+  const text = document.getElementById('handoffPreviewText');
+  if (!text || !activeCandidate) return;
+  if (activeCandidate.handoffMemo) text.value = activeCandidate.handoffMemo;
+  else text.value = buildHandoffPreviewText();
+}
+function toggleHandoffPreview() {
+  const panel = document.getElementById('handoffPreviewPanel');
+  const willShow = !panel.classList.contains('show');
+  panel.classList.toggle('show', willShow);
+  if (willShow) { ensureHandoffPreviewText(); setHandoffPreviewEditing(false); panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+function setHandoffPreviewEditing(next) {
+  const text = document.getElementById('handoffPreviewText');
+  const editBtn = document.getElementById('handoffPreviewEditBtn');
+  if (activeCandidate && activeCandidate.phase === '현업 전달 완료') {
+    text.disabled = true; text.classList.remove('is-editing');
+    editBtn.textContent = '수정 불가'; editBtn.disabled = true;
+    return;
+  }
+  text.disabled = !next; text.classList.toggle('is-editing', next);
+  editBtn.textContent = next ? '편집 중' : '수정';
+  if (next) text.focus();
+}
+function saveHandoffPreview() {
+  const text = document.getElementById('handoffPreviewText');
+  if (!activeCandidate) return;
+  if (activeCandidate.phase === '현업 전달 완료') { showToast('현업 전달 완료 후에는 내용을 수정할 수 없습니다.'); return; }
+  activeCandidate.handoffMemo = text.value;
+  setHandoffPreviewEditing(false);
+  showToast('현업 전달 내용이 저장되었습니다.');
+}
+function handoffToBusiness() {
+  if (!activeCandidate) return;
+  if (activeCandidate.phase === '현업 전달 완료') { showToast('이미 현업 전달 완료된 지원자입니다.'); return; }
+  ensureHandoffPreviewText();
+  document.getElementById('handoffConfirmBody').textContent = activeCandidate.name + ' 지원자를 1차 서류심사 합격 처리하고 현업 검토 단계로 전달합니다.';
+  document.getElementById('handoffConfirm').classList.add('open');
+}
+function closeHandoffConfirm(event) { if (event && event.target.id !== 'handoffConfirm') return; document.getElementById('handoffConfirm').classList.remove('open'); }
+function confirmHandoffToBusiness() {
+  if (!activeCandidate) return;
+  if (activeCandidate.phase !== '현업 전달 완료') {
+    const text = document.getElementById('handoffPreviewText');
+    if (text) activeCandidate.handoffMemo = text.value || buildHandoffPreviewText();
+    activeCandidate.phase = '현업 전달 완료';
+    try { sessionStorage.setItem('handoff_' + activeCandidate.id, '1'); } catch (e) {}
+  }
+  document.getElementById('handoffConfirm').classList.remove('open');
+  showToast(activeCandidate.name + ' 지원자가 현업 검토 단계로 전달되었습니다.');
+  setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
+
+fetch('data/applicants.json')
+  .then(r => r.json())
+  .then(data => {
+    allCandidates = data.candidates;
+    initialDeliveredIds = data.initial_delivered_ids || [];
+    allCandidates.forEach(c => {
+      c.phase = initialDeliveredIds.indexOf(c.id) !== -1 ? '현업 전달 완료' : '서류 검토 대기';
+      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '현업 전달 완료';
+    });
+    let targetId = getQueryParam('id');
+    if (!targetId) targetId = allCandidates[0].id;
+    const candidate = allCandidates.find(c => c.id === targetId) || allCandidates[0];
+    activeCandidate = candidate;
+    activeProfile = getProfile(candidate);
+    document.getElementById('candAvatar').textContent = candidate.name.charAt(0);
+    document.getElementById('candName').textContent = candidate.name + ' 상세 검토';
+    document.getElementById('candMeta').textContent = candidate.id + ' · ' + candidate.role + ' · ' + candidate.type + ' · ' + candidate.exp;
+    document.getElementById('breadcrumbName').textContent = candidate.name;
+    document.title = candidate.name + ' · 자소서 분석 · RECRUIT AI';
+    renderResumePane(candidate, activeProfile);
+    renderReviewPane(candidate, activeProfile);
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    document.getElementById('candName').textContent = '데이터를 불러올 수 없습니다';
+    document.getElementById('candMeta').textContent = 'data/applicants.json 파일을 확인해주세요';
+  });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const confirmEl = document.getElementById('handoffConfirm');
+    if (confirmEl.classList.contains('open')) confirmEl.classList.remove('open');
+  }
+});
+</script>
+
+</body>
+</html>
