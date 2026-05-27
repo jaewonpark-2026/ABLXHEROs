@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 일정 조율 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --ok: #16a34a; --ok-bg: #eaf8ef;
+  --warn: #f97316; --warn-bg: #fff3e8;
+  --err: #dc2626; --err-bg: #fff1f2;
+  --info: #0067AC; --info-bg: #E6F1FB;
+  --purple: #6D28D9; --purple-bg: #ede9fe;
+  --r: 8px; --rl: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); font-size: 14px; line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== Layout (사용자 디자인 시스템) ===== */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+
+/* Notif (재사용) */
+.notif-bell { position: relative; cursor: pointer; color: var(--text-2); padding: 8px; border-radius: 8px; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; }
+.notif-bell:hover { background: var(--bg-page); }
+.notif-bell i { font-size: 18px; }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #DC2626; border-radius: 50%; border: 2px solid white; }
+.notif-drop { position: absolute; top: 100%; right: 0; width: 320px; background: white; border: 1px solid var(--border); box-shadow: 0 8px 28px rgba(15,35,65,0.15); border-radius: 12px; z-index: 999; display: none; margin-top: 8px; overflow: hidden; }
+.notif-drop.show { display: block; }
+.notif-drop-hd { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, white, #fbfdff); }
+.notif-drop-hd .clear { color: var(--main-1); cursor: pointer; font-weight: 700; font-size: 11px; }
+.notif-item { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12px; cursor: pointer; display: flex; gap: 10px; transition: background 0.15s; text-decoration: none; color: inherit; }
+.notif-item:hover { background: var(--bg-page); }
+.notif-item:last-child { border-bottom: none; }
+.notif-item .ic { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-item .ic i { font-size: 14px; }
+.notif-item .ic.info { background: var(--info-bg); color: var(--info); }
+.notif-item .ic.warn { background: var(--warn-bg); color: var(--warn); }
+.notif-item .title { font-weight: 700; color: var(--text-1); }
+.notif-item .desc { color: var(--text-2); margin-top: 2px; }
+
+/* Content */
+.content { padding: 28px 32px 40px; }
+.page-header { margin-bottom: 22px; }
+.page-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.02em; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 13px; }
+
+/* Subnav */
+.subnav { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.subnav-item { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; text-decoration: none; }
+.subnav-item:hover { border-color: var(--main-1); color: var(--main-1); }
+.subnav-item.active { background: var(--grad-blue); color: white; border-color: transparent; }
+.subnav-item .count { background: rgba(255,255,255,0.25); color: inherit; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.subnav-item:not(.active) .count { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #DC2626; }
+
+/* Dashboard summary */
+.dash-mini { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 18px; display: flex; gap: 24px; position: relative; overflow: hidden; }
+.dash-mini::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.dash-mini-lbl { font-size: 11px; color: var(--text-3); font-weight: 700; letter-spacing: 0.02em; margin-bottom: 8px; }
+.flex { display: flex; }
+.flex.ic { align-items: center; }
+.flex.jb { justify-content: space-between; }
+.g4 { gap: 4px; }
+.g8 { gap: 8px; }
+.g12 { gap: 12px; }
+.g16 { gap: 16px; }
+.fs-20 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.fw6 { font-weight: 700; }
+.fw7 { font-weight: 700; }
+.text-blue { color: var(--main-1); }
+.text-orange { color: var(--warn); }
+.tx-muted { color: var(--text-3); }
+.tx-sm { font-size: 11px; }
+.mb12 { margin-bottom: 12px; }
+.mb16 { margin-bottom: 16px; }
+.mt12 { margin-top: 12px; }
+.mla { margin-left: auto; }
+.hidden { display: none !important; }
+.w100 { width: 100%; }
+.sep { width: 1px; height: 20px; background: var(--border); }
+
+.dash-alert { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 8px; background: var(--err-bg); color: var(--err); font-size: 12px; font-weight: 700; margin-bottom: 6px; cursor: pointer; transition: opacity 0.15s; }
+.dash-alert:hover { opacity: 0.85; }
+.dash-alert.w { background: var(--warn-bg); color: var(--warn); }
+.dash-alert svg { flex-shrink: 0; }
+
+/* Round tabs */
+.round-tabs { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 5px; display: flex; gap: 4px; margin-bottom: 16px; }
+.rt { flex: 1; padding: 11px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; color: var(--text-2); cursor: pointer; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; }
+.rt:hover { background: var(--bg-page); }
+.rt.active { background: var(--grad-blue); color: white; }
+.badge { padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.bdg-o { background: var(--warn-bg); color: var(--warn); }
+.bdg-b { background: var(--info-bg); color: var(--info); }
+.bdg-r { background: var(--err-bg); color: var(--err); }
+.rt.active .badge { background: rgba(255,255,255,0.25); color: white; }
+
+/* Filter bar */
+.filter-bar { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; display: flex; gap: 8px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.search-box { position: relative; flex: 1; min-width: 200px; max-width: 280px; }
+.search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 16px; }
+.f-inp { width: 100%; height: 36px; padding: 0 14px 0 38px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); }
+.f-inp:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+.f-sel { height: 36px; padding: 0 32px 0 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.f-sel:focus { border-color: var(--main-1); }
+
+/* Buttons */
+.btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+.btn-sm { height: 32px; padding: 0 12px; font-size: 12px; }
+.btn-o { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.btn-o:hover { border-color: var(--main-1); color: var(--main-1); }
+.btn-p { background: var(--grad-blue); color: white; border: none; }
+.btn-p:hover { opacity: 0.9; }
+.btn-r { background: var(--err); color: white; border: none; }
+.btn-r:hover { opacity: 0.9; }
+.btn-g { background: var(--ok); color: white; border: none; }
+.btn-g:hover { opacity: 0.9; }
+.btn svg { flex-shrink: 0; }
+.btn i { font-size: 14px; }
+
+/* Kanban */
+.status-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.sk-col { background: white; border: 1px solid var(--border); border-radius: 12px; min-height: 200px; }
+.sk-hd { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; background: linear-gradient(180deg, white, #fbfdff); border-radius: 12px 12px 0 0; }
+.dot6 { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sk-body { padding: 12px; min-height: 100px; }
+.cc { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer; transition: all 0.15s; position: relative; }
+.cc:hover { border-color: var(--main-1); box-shadow: 0 4px 12px rgba(0,103,172,0.08); transform: translateY(-1px); }
+.cc input[type=checkbox] { position: absolute; top: 12px; right: 12px; cursor: pointer; accent-color: var(--main-1); }
+.cc-name { font-size: 14px; font-weight: 700; color: var(--text-1); margin-right: 24px; }
+.cc-meta { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+.cc-tag { display: inline-flex; padding: 3px 8px; margin-top: 6px; border-radius: 999px; background: var(--bg-page); color: var(--text-2); font-size: 10px; font-weight: 700; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.pl-gray { background: var(--bg-page); color: var(--text-2); }
+.pl-blue { background: var(--info-bg); color: var(--info); }
+.pl-orange { background: var(--warn-bg); color: var(--warn); }
+.pl-green { background: var(--ok-bg); color: var(--ok); }
+.pl-yellow { background: #FEF3C7; color: #92400E; }
+.pl-red { background: var(--err-bg); color: var(--err); }
+.pl-purple { background: var(--purple-bg); color: var(--purple); }
+
+/* Avatar */
+.av { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; background: var(--bg-page); color: var(--text-2); border: 1px solid var(--border); }
+.av-sm { width: 22px; height: 22px; font-size: 11px; }
+
+/* Chip (면접관 선택용) */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-2); transition: all 0.15s; }
+.chip:hover { border-color: var(--main-1); }
+.chip-off { background: white; }
+.chip-on { background: var(--info-bg); color: var(--main-1); border-color: var(--main-1); }
+
+/* Stitle (modal section title) */
+.stitle { font-size: 13px; font-weight: 700; color: var(--text-1); margin-bottom: 10px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
+.stitle::before { content: ''; width: 4px; height: 14px; border-radius: 2px; background: var(--grad-blue); }
+
+/* Info grid */
+.info-grid { display: grid; grid-template-columns: 110px 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ig-row { display: contents; }
+.ig-lbl { padding: 9px 12px; font-size: 11px; color: var(--text-3); font-weight: 700; background: var(--bg-page); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+.ig-val { padding: 9px 12px; font-size: 13px; color: var(--text-1); border-bottom: 1px solid var(--border); }
+.ig-row:last-child .ig-lbl, .ig-row:last-child .ig-val { border-bottom: none; }
+
+/* Form */
+.fg { margin-bottom: 14px; }
+.fl { display: block; font-size: 12px; color: var(--text-2); font-weight: 700; margin-bottom: 6px; }
+.fi { width: 100%; height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); font-family: inherit; }
+.fi:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+.fs { height: 36px; padding: 0 32px 0 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-1); background: white; font-size: 13px; font-weight: 700; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; font-family: inherit; }
+.fta { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; color: var(--text-1); font-family: inherit; line-height: 1.6; resize: vertical; }
+.fta:focus { border-color: var(--main-1); box-shadow: 0 0 0 3px rgba(0,103,172,0.08); }
+
+/* Step bar */
+.step-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 0 8px; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; }
+.sc { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--bg-page); color: var(--text-3); border: 2px solid var(--border); }
+.sl { font-size: 11px; color: var(--text-3); font-weight: 700; white-space: nowrap; }
+.step-active .sc { background: var(--grad-blue); color: white; border-color: transparent; }
+.step-active .sl { color: var(--main-1); }
+.step-done .sc { background: var(--ok); color: white; border-color: transparent; }
+.step-done .sl { color: var(--ok); }
+.sline { flex: 1; height: 2px; background: var(--border); margin: 0 8px; margin-bottom: 22px; }
+.sline.done { background: var(--ok); }
+
+/* Modal */
+.mbd { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(15,35,65,0.46); }
+.mbd.show { display: flex; }
+.modal { background: white; border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.24); overflow: hidden; max-height: 90vh; display: flex; flex-direction: column; width: 100%; max-width: 90vw; }
+.m-hd { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; background: linear-gradient(180deg, white, #fbfdff); }
+.m-title { font-size: 15px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; }
+.m-close { margin-left: auto; width: 28px; height: 28px; border-radius: 6px; color: var(--text-3); font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.m-close:hover { background: var(--bg-page); color: var(--text-1); }
+.m-body { padding: 20px; overflow-y: auto; flex: 1; }
+.m-ft { padding: 14px 20px; border-top: 1px solid var(--border); background: #fbfdff; display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+
+/* Mini calendar (modal 내) */
+.mc-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.mc-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.mc-nav-btn { padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px; background: white; font-size: 12px; cursor: pointer; color: var(--text-2); font-weight: 700; }
+.mc-nav-btn:hover { background: var(--bg-page); color: var(--main-1); border-color: var(--main-1); }
+.mc-dow { text-align: center; font-size: 10px; padding: 4px; color: var(--text-3); font-weight: 700; }
+.mc-day { text-align: center; font-size: 12px; padding: 7px 0; border-radius: 6px; cursor: pointer; color: var(--text-1); font-weight: 700; transition: all 0.15s; }
+.mc-day:hover { background: var(--bg-page); }
+.mc-day.other { color: var(--text-3); opacity: 0.4; cursor: default; }
+.mc-day.in { background: var(--info-bg); color: var(--main-1); }
+.mc-day.start, .mc-day.end { background: var(--grad-blue); color: white; }
+
+/* WTM (가용 시간대 표) */
+.wtm-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.wtm-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+.wtm-table th, .wtm-table td { padding: 5px 4px; text-align: center; font-size: 10px; border: 1px solid var(--border); }
+.wtm-table th { background: var(--bg-page); color: var(--text-2); font-weight: 700; }
+.wtm-table .wtm-time { background: var(--bg-page); color: var(--text-3); font-weight: 700; }
+.wtm-slot { width: 36px; height: 26px; cursor: pointer; background: white; transition: background 0.1s; }
+.wtm-slot.on { background: var(--info-bg); border-color: var(--main-1) !important; }
+.wtm-slot.cand-ok { box-shadow: inset 0 0 0 2px var(--ok); }
+.wtm-slot.cand-ok.on { background: var(--ok-bg); }
+.wtm-slot.busy { background: #f3f4f6; cursor: not-allowed; color: var(--text-3); }
+
+/* Recoord list */
+.recoord-item { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.15s; }
+.recoord-item:hover { border-color: var(--main-1); box-shadow: 0 4px 12px rgba(0,103,172,0.08); }
+.recoord-hd { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.recoord-name { font-size: 14px; font-weight: 700; color: var(--text-1); }
+.recoord-reason { font-size: 12px; color: var(--text-2); line-height: 1.65; padding: 10px 12px; background: var(--bg-page); border-radius: 8px; }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; color: white; background: rgba(15,35,65,0.94); font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.2s; z-index: 3000; box-shadow: 0 18px 30px rgba(0,0,0,0.18); display: flex; align-items: center; gap: 10px; min-width: 240px; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast-ic { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.toast-ic.ok { background: var(--ok); }
+.toast-ic.warn { background: var(--warn); }
+.toast-ic.err { background: var(--err); }
+.toast-ic.info { background: var(--main-1); }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 24px 28px 32px; }
+  .topbar { padding: 14px 24px; }
+  .status-cols { grid-template-columns: 1fr; }
+  .dash-mini { flex-direction: column; gap: 16px; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 20px 16px 32px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .modal { max-width: 96vw; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <div class="notif-bell" onclick="toggleNotif(event)">
+          <i class="ti ti-bell"></i>
+          <div class="notif-dot"></div>
+          <div class="notif-drop" id="notifDropdown" onclick="event.stopPropagation()">
+            <div class="notif-drop-hd"><span>새로운 알림</span><span class="clear" onclick="markAllRead()">모두 읽음</span></div>
+            <div id="notifList"></div>
+          </div>
+        </div>
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <span class="page-eyebrow">면접 일정 관리</span>
+        <h1 class="page-title">면접 일정 조율</h1>
+        <p class="page-subtitle">지원자와 면접관의 가용 시간을 자동 매칭하여 면접 일정을 효율적으로 확정합니다.</p>
+      </div>
+
+      <nav class="subnav">
+        <a class="subnav-item" href="index.html"><i class="ti ti-calendar"></i> 통합 캘린더</a>
+        <a class="subnav-item active" href="coordinate.html"><i class="ti ti-clock"></i> 면접 일정 조율 <span class="count" id="navPendingCount">10</span></a>
+        <a class="subnav-item" href="templates.html"><i class="ti ti-file-description"></i> 메일 템플릿 관리</a>
+      </nav>
+
+      <div id="dashboard-summary" class="dash-mini"></div>
+
+      <div class="round-tabs">
+        <div class="rt active" id="rt-r1" onclick="switchRound('r1', this)">
+          1차 면접 (경력직) <span class="badge bdg-o" id="badge-r1">7</span>
+        </div>
+        <div class="rt" id="rt-r2" onclick="switchRound('r2', this)">
+          2차 면접 (경력직) <span class="badge bdg-b" id="badge-r2">5</span>
+        </div>
+        <div class="rt" id="rt-recoord" onclick="switchRound('recoord', this)">
+          재조율 요청 <span class="badge bdg-r" id="badge-recoord">3</span>
+        </div>
+      </div>
+
+      <!-- 1차 -->
+      <div id="round-r1">
+        <div class="filter-bar">
+          <div class="search-box">
+            <i class="ti ti-search"></i>
+            <input class="f-inp" id="search-r1" placeholder="이름 검색..." oninput="filterCandidates('r1')">
+          </div>
+          <select class="f-sel" id="filter-status-r1" onchange="filterCandidates('r1')">
+            <option value="">전체 상태</option>
+            <option value="before">조율 전</option>
+            <option value="pending">조율 중</option>
+            <option value="done">조율 완료</option>
+          </select>
+          <select class="f-sel" id="filter-dept-r1" onchange="filterCandidates('r1')">
+            <option value="">전체 직군</option>
+            <option value="보험계리">보험계리</option>
+            <option value="IT개발">IT개발</option>
+            <option value="투자운용">투자운용</option>
+            <option value="리스크관리">리스크관리</option>
+          </select>
+          <span class="tx-muted tx-sm" id="r1-selected-info"></span>
+          <div class="mla">
+            <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r1')">
+              <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 발송
+            </button>
+          </div>
+        </div>
+        <div class="status-cols" id="kanban-r1"></div>
+      </div>
+
+      <!-- 2차 -->
+      <div id="round-r2" class="hidden">
+        <div class="filter-bar">
+          <div class="search-box">
+            <i class="ti ti-search"></i>
+            <input class="f-inp" id="search-r2" placeholder="이름 검색..." oninput="filterCandidates('r2')">
+          </div>
+          <select class="f-sel" id="filter-status-r2" onchange="filterCandidates('r2')">
+            <option value="">전체 상태</option>
+            <option value="before">조율 전</option>
+            <option value="pending">조율 중</option>
+            <option value="done">조율 완료</option>
+          </select>
+          <select class="f-sel" id="filter-dept-r2" onchange="filterCandidates('r2')">
+            <option value="">전체 직군</option>
+            <option value="보험계리">보험계리</option>
+            <option value="IT개발">IT개발</option>
+            <option value="투자운용">투자운용</option>
+            <option value="리스크관리">리스크관리</option>
+          </select>
+          <span class="tx-muted tx-sm" id="r2-selected-info"></span>
+          <div class="mla">
+            <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r2')">
+              <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 발송
+            </button>
+          </div>
+        </div>
+        <div class="status-cols" id="kanban-r2"></div>
+      </div>
+
+      <!-- 재조율 -->
+      <div id="round-recoord" class="hidden">
+        <div class="stitle">재조율 요청 접수 건</div>
+        <div id="recoord-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- MODAL: 지원자 조율 (step flow) -->
+<div class="mbd" id="modal-coord">
+  <div class="modal" style="width:820px;">
+    <div class="m-hd">
+      <div>
+        <div class="m-title" id="coord-title">면접 일정 조율</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px;" id="coord-sub"></div>
+      </div>
+      <button class="m-close" onclick="closeModal('modal-coord')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body" id="coord-body"></div>
+    <div class="m-ft" id="coord-footer"></div>
+  </div>
+</div>
+
+<!-- MODAL: 메일 예약 -->
+<div class="mbd" id="modal-reserve" style="z-index: 2500;">
+  <div class="modal" style="width:420px;">
+    <div class="m-hd">
+      <i class="ti ti-clock" style="color:var(--main-1);font-size:18px"></i>
+      <div class="m-title">메일 예약 발송 시간 설정</div>
+      <button class="m-close" onclick="closeModal('modal-reserve')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body">
+      <div class="fg">
+        <label class="fl">예약 발송 일시 지정</label>
+        <input type="datetime-local" class="fi" id="reserve-datetime">
+      </div>
+      <div class="tx-sm tx-muted">달력 아이콘을 클릭하여 지정된 날짜와 시간에 맞춰 메일이 자동 발송되도록 설정합니다.</div>
+    </div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeModal('modal-reserve')">취소</button>
+      <button class="btn btn-p" onclick="confirmReserveTime()">예약 확인 (적용)</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 메일 회신 -->
+<div class="mbd" id="modal-reply">
+  <div class="modal" style="width:660px;">
+    <div class="m-hd">
+      <div class="m-title">메일 회신 작성</div>
+      <button class="m-close" onclick="closeModal('modal-reply')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body">
+      <div class="fg"><label class="fl">수신자</label><input class="fi" id="reply-to" readonly style="background:var(--bg-page);"></div>
+      <div class="fg"><label class="fl">제목</label><input class="fi" id="reply-subj" value="RE: 면접 일정 관련 문의"></div>
+      <div class="fg"><label class="fl">내용</label><textarea class="fta" id="reply-body" style="height:160px;"></textarea></div>
+    </div>
+    <div class="m-ft" id="reply-footer"></div>
+  </div>
+</div>
+
+<!-- MODAL: 확정 메일 발송 -->
+<div class="mbd" id="modal-confirm">
+  <div class="modal" style="width:760px;">
+    <div class="m-hd">
+      <i class="ti ti-check" style="color:var(--ok);font-size:18px"></i>
+      <div class="m-title">면접 확정 메일 발송</div>
+      <button class="m-close" onclick="closeModal('modal-confirm')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body" id="confirm-body"></div>
+    <div class="m-ft" id="confirm-footer"></div>
+  </div>
+</div>
+
+<!-- MODAL: 시간 선택 (다른 시간) -->
+<div class="mbd" id="modal-alt-time">
+  <div class="modal" style="width:740px;">
+    <div class="m-hd">
+      <div class="m-title">다른 면접 시간 선택</div>
+      <button class="m-close" onclick="closeModal('modal-alt-time')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body" id="alt-time-body"></div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeModal('modal-alt-time')">취소</button>
+      <button class="btn btn-p" onclick="selectAltTime()">이 시간으로 조율 완료</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-ic" id="toast-ic"></div>
+  <div>
+    <div style="font-weight:700;font-size:13px;" id="toast-title"></div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;" id="toast-msg"></div>
+  </div>
+</div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== Notification =====
+function toggleNotif(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('notifDropdown').classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const drop = document.getElementById('notifDropdown');
+  if (drop && drop.classList.contains('show') && !e.target.closest('.notif-bell')) drop.classList.remove('show');
+});
+function markAllRead() {
+  showToast('info', '모든 알림을 읽음 처리했습니다', '');
+  document.getElementById('notifDropdown').classList.remove('show');
+}
+
+// ===== Data (JSON에서 로드) =====
+var CANDIDATES = { r1: [], r2: [] };
+var INTERVIEWERS = [];
+var TEMPLATES = [];
+var NOTIFICATIONS = [];
+var now = new Date();
+var systemToday = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+
+// 재조율 더미 데이터 (팀원 코드 그대로)
+var RECOORD = [
+  { id: 're1', candId: 'c5', candName: '최현우', round: 'r1', from: '박성준 상무', reason: '6월 9일 외부 미팅으로 면접 시간 변경 요청드립니다. 가능한 시간 다시 조정 부탁드립니다.', when: '10분 전' },
+  { id: 're2', candId: 'c4', candName: '김수연', round: 'r1', from: '지원자 본인', reason: '회사 일정상 6월 10일 면접 진행이 어렵게 되었습니다. 다른 시간으로 재조율 부탁드립니다.', when: '1시간 전' },
+  { id: 're3', candId: 'c10', candName: '이선아', round: 'r2', from: '이혜진 팀장', reason: '6월 17일 컨퍼런스 일정과 겹쳐 면접 참여가 어렵습니다.', when: '3시간 전' }
+];
+
+// ===== Notification render =====
+function renderNotifications() {
+  const list = document.getElementById('notifList');
+  if (!NOTIFICATIONS.length) {
+    list.innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--text-3);font-size:12px">새로운 알림이 없습니다.</div>';
+    return;
+  }
+  let html = '';
+  NOTIFICATIONS.forEach(n => {
+    const iconClass = n.type === 'warn' ? 'warn' : 'info';
+    const icon = n.type === 'warn' ? 'ti-alert-circle' : 'ti-check';
+    html += `
+      <a class="notif-item" href="#" onclick="event.preventDefault(); switchRound('${n.round || 'r1'}', document.getElementById('rt-${n.round || 'r1'}')); document.getElementById('notifDropdown').classList.remove('show');">
+        <div class="ic ${iconClass}"><i class="ti ${icon}"></i></div>
+        <div><div class="title">${n.title}</div><div class="desc">${n.desc}</div></div>
+      </a>
+    `;
+  });
+  list.innerHTML = html;
+}
+
+// ===== Status meta (팀원 코드) =====
+var statusLabels = { before: '조율 전', pending: '조율 중', 'confirm-wait': '조율 중', done: '조율 완료' };
+var statusColors = { before: 'var(--text-3)', pending: 'var(--warn)', 'confirm-wait': 'var(--warn)', done: 'var(--ok)' };
+var statusPillCls = { before: 'pl-gray', pending: 'pl-orange', 'confirm-wait': 'pl-orange', done: 'pl-green' };
+
+// ===== Kanban (팀원 코드 그대로) =====
+function renderKanban(round) {
+  var list = CANDIDATES[round] || [];
+  var groups = { before: [], coordinating: [], done: [] };
+  list.forEach(function(c) {
+    if (c.status === 'pending' || c.status === 'confirm-wait') groups.coordinating.push(c);
+    else if (groups[c.status]) groups[c.status].push(c);
+  });
+
+  var deptFilter = document.getElementById('filter-dept-' + round);
+  var statusFilter = document.getElementById('filter-status-' + round);
+  var searchFilter = document.getElementById('search-' + round);
+  var df = deptFilter ? deptFilter.value : '';
+  var sf = statusFilter ? statusFilter.value : '';
+  var sv = (searchFilter ? searchFilter.value : '').toLowerCase().trim();
+
+  var html = '';
+  var columns = [
+    { key: 'before', label: '조율 전', color: 'var(--text-3)' },
+    { key: 'coordinating', label: '조율 중', color: 'var(--warn)' },
+    { key: 'done', label: '조율 완료', color: 'var(--ok)' }
+  ];
+
+  columns.forEach(function(colInfo) {
+    var items = groups[colInfo.key].filter(function(c) {
+      if (df && c.dept !== df) return false;
+      if (sf && sf !== 'pending' && c.status !== sf) return false;
+      if (sv && c.name.toLowerCase().indexOf(sv) === -1) return false;
+      return true;
+    });
+    var col = colInfo.color;
+    var cnt = items.length;
+    html += '<div class="sk-col"><div class="sk-hd"><div class="dot6" style="background:' + col + '"></div><span style="color:' + col + '">' + colInfo.label + '</span><span class="badge" style="margin-left:auto;background:' + col + '22;color:' + col + '">' + cnt + '</span></div><div class="sk-body">';
+    if (cnt === 0) html += '<div style="text-align:center;color:var(--text-3);font-size:12px;padding:20px 0;">해당 없음</div>';
+
+    items.forEach(function(c) {
+      var isChecked = selectedCands[c.id] ? 'checked' : '';
+      html += '<div class="cc" onclick="openCandidateCoord(\'' + c.id + '\',\'' + round + '\')"><input type="checkbox" ' + isChecked + ' onclick="event.stopPropagation();toggleCandSel(\'' + c.id + '\',\'' + round + '\',this)" data-cid="' + c.id + '"><div class="cc-name">' + c.name + '</div><div class="cc-meta">' + c.dept + ' · 경력 ' + c.career + '</div>';
+      if (c.status === 'pending') {
+        html += '<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">';
+        html += '<div class="pill ' + statusPillCls[c.status] + '"><span class="dot6" style="background:' + col + '"></span>' + (c.candResp ? '면접관 응답 대기' : '지원자 응답 대기') + '</div>';
+        if (c.isRecoorded) html += '<div class="pill pl-red">재조율</div>';
+        html += '</div>';
+        if (c.deadline) html += '<div class="cc-meta" style="margin-top:4px;">마감 ' + c.deadline + '</div>';
+        if (c.reminded) html += '<div class="pill pl-purple" style="margin-top:4px;">리마인드 발송됨</div>';
+      } else if (c.status === 'confirm-wait') {
+        html += '<div class="pill pl-yellow" style="margin-top:6px;"><span class="dot6" style="background:#92400E"></span>AI 추천 완료 · 조율 대기</div>';
+      } else if (c.status === 'done') {
+        html += '<div class="pill pl-green" style="margin-top:6px;"><span class="dot6" style="background:var(--ok)"></span>조율 완료</div>';
+        if (c.confirmedTime) html += '<div class="cc-meta" style="margin-top:4px;">' + c.confirmedTime + '</div>';
+        if (c.place) html += '<div class="cc-meta">장소: ' + c.place + '</div>';
+      } else {
+        html += '<div class="cc-tag">' + round.replace('r', '') + '차 면접 대기</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+  document.getElementById('kanban-' + round).innerHTML = html;
+}
+
+function filterCandidates(round) { renderKanban(round); }
+
+var selectedCands = {};
+function toggleCandSel(id, round, cb) {
+  if (cb.checked) selectedCands[id] = round;
+  else delete selectedCands[id];
+  updateSelInfo(round);
+}
+function updateSelInfo(round) {
+  var count = Object.keys(selectedCands).filter(id => selectedCands[id] === round).length;
+  var el = document.getElementById(round + '-selected-info');
+  if (el) el.textContent = count > 0 ? count + '명 선택됨' : '';
+}
+
+function doOpenBulkCoord(round) {
+  var ids = Object.keys(selectedCands).filter(id => selectedCands[id] === round);
+  if (!ids.length) { showToast('warn', '선택된 지원자가 없습니다', '체크박스로 대상자를 먼저 선택해 주세요.'); return; }
+  var firstCand = CANDIDATES[round].find(c => c.id === ids[0]);
+  if (!firstCand) return;
+  firstCand.round = round.replace('r', '');
+  coordState = {
+    cid: ids[0], round: round, cand: firstCand, step: 1,
+    settings: { duration: '60', place: '본사 7층 면접실 A', deadline: '', period: '' },
+    selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids
+  };
+  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmInitialized = false;
+  miniCalMonth = { y: systemToday.y, m: systemToday.m };
+  openModal('modal-coord');
+  renderCoordModal();
+}
+
+// ===== Dashboard summary =====
+function renderDashboardSummary(round) {
+  if (round === 'recoord') {
+    document.getElementById('dashboard-summary').innerHTML = '<div style="flex:1"><div class="dash-mini-lbl">재조율 요청 현황</div><div class="flex g16"><div><span class="fs-20 text-orange">' + RECOORD.length + '</span>건 처리 대기</div></div></div>';
+    return;
+  }
+  var bCount = 0, pCount = 0, dCount = 0;
+  var targetCands = CANDIDATES[round] || [];
+  targetCands.forEach(c => {
+    if (c.status === 'before') bCount++;
+    else if (c.status === 'pending' || c.status === 'confirm-wait') pCount++;
+    else if (c.status === 'done') dCount++;
+  });
+
+  var html = '<div style="flex:1;"><div class="dash-mini-lbl">현재 조율 현황 요약 (' + round.replace('r', '') + '차 면접)</div><div class="flex g16"><div><span class="fs-20">' + bCount + '</span>건 조율 전</div><div><span class="fs-20 text-orange">' + pCount + '</span>건 조율 중</div><div><span class="fs-20 text-blue">' + dCount + '</span>건 조율 완료</div></div></div>';
+  html += '<div style="flex:1.2; border-left:1px solid var(--border); padding-left:24px;"><div class="dash-mini-lbl">인사담당자 긴급 확인 필요</div>';
+
+  if (round === 'r1') {
+    html += '<div class="dash-alert" onclick="openRecoord(\'c5\')"><i class="ti ti-alert-circle"></i> 박성준 상무 (최현우 지원자) 재조율 접수 1건</div>';
+    html += '<div class="dash-alert w" onclick="openCandidateCoord(\'c4\',\'r1\')"><i class="ti ti-alert-circle"></i> 윤성호 지원자 조율 폼 응답 마감 임박</div>';
+  } else if (round === 'r2') {
+    html += '<div class="dash-alert w" onclick="openCandidateCoord(\'c10\',\'r2\')"><i class="ti ti-alert-circle"></i> 이선아 지원자 2차 조율 폼 미응답 장기 대기</div>';
+  } else {
+    html += '<div style="font-size:12px;color:var(--text-3);">긴급 알림 없음</div>';
+  }
+  html += '</div>';
+  document.getElementById('dashboard-summary').innerHTML = html;
+}
+
+// ===== Round switch =====
+function switchRound(name, el) {
+  document.querySelectorAll('.rt').forEach(x => x.classList.remove('active'));
+  if (el) el.classList.add('active');
+  ['r1', 'r2', 'recoord'].forEach(r => {
+    document.getElementById('round-' + r).classList.toggle('hidden', r !== name);
+  });
+  if (name === 'r1' || name === 'r2') {
+    renderKanban(name);
+    renderDashboardSummary(name);
+  } else {
+    renderRecoord();
+    renderDashboardSummary('recoord');
+  }
+}
+
+// ===== Recoord list =====
+function renderRecoord() {
+  var html = '';
+  RECOORD.forEach(function(r) {
+    html += '<div class="recoord-item">';
+    html += '<div class="recoord-hd"><div class="recoord-name">' + r.candName + '</div><span class="pill pl-blue">' + r.round.replace('r', '') + '차</span><span class="pill pl-red">재조율 요청</span><div class="mla tx-muted tx-sm">' + r.when + '</div></div>';
+    html += '<div style="font-size:12px;color:var(--text-2);margin-bottom:6px;font-weight:700;">요청자: ' + r.from + '</div>';
+    html += '<div class="recoord-reason">' + r.reason + '</div>';
+    html += '<div class="flex g8" style="margin-top:12px;justify-content:flex-end;">';
+    html += '<button class="btn btn-o btn-sm" onclick="openReplyModal(\'' + r.from + '@abllife.co.kr\', \'' + r.candName + '\')"><i class="ti ti-mail"></i>메일 회신</button>';
+    html += '<button class="btn btn-p btn-sm" onclick="openRecoord(\'' + r.candId + '\')"><i class="ti ti-refresh"></i>재조율 시작</button>';
+    html += '</div>';
+    html += '</div>';
+  });
+  if (!html) html = '<div style="text-align:center;padding:40px;color:var(--text-3);font-size:13px;">재조율 요청이 없습니다.</div>';
+  document.getElementById('recoord-list').innerHTML = html;
+}
+
+// ===== Reply modal (메일 회신) =====
+function openReplyModal(email, candName) {
+  document.getElementById('reply-to').value = email || 'from@abllife.co.kr';
+  document.getElementById('reply-subj').value = 'RE: ' + (candName || '면접') + ' 일정 관련 회신';
+  document.getElementById('reply-body').value = '안녕하세요,\n\n메일 잘 받았습니다.\n\n다시 일정 조율을 진행하여 새로운 면접 시간 후보를 보내드리겠습니다.\n조금만 더 기다려 주시면 감사하겠습니다.\n\n감사합니다.\nABL생명 인사팀 드림';
+  document.getElementById('reply-footer').innerHTML = '<button class="btn btn-o" onclick="closeModal(\'modal-reply\')">취소</button><div class="mla flex g8"><button class="btn btn-o" onclick="openReserveModal(\'reply\')"><i class="ti ti-clock"></i>예약 발송</button><button class="btn btn-p" onclick="doSendReply()"><i class="ti ti-send"></i>지금 발송</button></div>';
+  openModal('modal-reply');
+}
+
+function doSendReply() {
+  showToast('ok', '회신 메일 발송 완료', document.getElementById('reply-to').value + ' 에게 메일이 발송되었습니다.');
+  closeModal('modal-reply');
+}
+
+function openRecoord(cid) {
+  var found = null, round = null;
+  if (CANDIDATES.r1.find(c => c.id === cid)) { found = CANDIDATES.r1.find(c => c.id === cid); round = 'r1'; }
+  else if (CANDIDATES.r2.find(c => c.id === cid)) { found = CANDIDATES.r2.find(c => c.id === cid); round = 'r2'; }
+  if (!found) { showToast('warn', '지원자를 찾을 수 없습니다', ''); return; }
+  found.status = 'before';
+  found.isRecoorded = true;
+  openCandidateCoord(cid, round, true);
+}
+
+// ===== Init =====
+fetch('data/candidates.json')
+  .then(r => r.json())
+  .then(data => {
+    CANDIDATES = data.candidates;
+    INTERVIEWERS = data.interviewers;
+    TEMPLATES = data.templates;
+    NOTIFICATIONS = data.notifications || [];
+    renderNotifications();
+    updateBadges();
+    renderKanban('r1');
+    renderDashboardSummary('r1');
+
+    // URL ?round=r2&id=c4 처리
+    var params = new URLSearchParams(window.location.search);
+    var targetRound = params.get('round');
+    var targetId = params.get('id');
+    if (targetRound && ['r1', 'r2', 'recoord'].includes(targetRound)) {
+      switchRound(targetRound, document.getElementById('rt-' + targetRound));
+    }
+    if (targetId && targetRound) {
+      setTimeout(() => openCandidateCoord(targetId, targetRound), 200);
+    }
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    showToast('err', '데이터 로드 실패', 'data/candidates.json 파일을 확인해주세요');
+  });
+
+function updateBadges() {
+  var r1pend = CANDIDATES.r1.filter(c => c.status === 'pending' || c.status === 'confirm-wait' || c.status === 'before').length;
+  var r2pend = CANDIDATES.r2.filter(c => c.status === 'pending' || c.status === 'confirm-wait' || c.status === 'before').length;
+  document.getElementById('badge-r1').textContent = r1pend;
+  document.getElementById('badge-r2').textContent = r2pend;
+  document.getElementById('badge-recoord').textContent = RECOORD.length;
+  document.getElementById('navPendingCount').textContent = r1pend + r2pend;
+}
+
+
+// ===== Coordination modal state =====
+var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, selectedInts: [], selAltTime: null, isRecoord: false, reserveTime: null, isBulk: false, bulkIds: [] };
+
+function openCandidateCoord(cid, round, isRecoord) {
+  var cand = null;
+  (CANDIDATES[round] || []).forEach(c => { if (c.id === cid) cand = c; });
+  if (!cand) return;
+  cand.round = round.replace('r', '');
+  coordState = {
+    cid: cid, round: round, cand: cand, step: 1,
+    settings: { duration: cand.duration || '60', place: cand.place || '본사 7층 면접실 A', deadline: cand.deadline || '', period: cand.period || '' },
+    selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: []
+  };
+  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmInitialized = false;
+  if (cand.period) {
+    var pts = cand.period.split('~');
+    selPeriodStart = pts[0].trim().replace(/\./g, '-');
+    selPeriodEnd = pts[1] ? pts[1].trim().replace(/\./g, '-') : null;
+  }
+  miniCalMonth = { y: systemToday.y, m: systemToday.m };
+  openModal('modal-coord');
+  coordState.step = 1;
+  renderCoordModal();
+}
+
+function renderCoordModal() {
+  var cand = coordState.cand;
+  var status = cand.status;
+  document.getElementById('coord-title').textContent = (coordState.isBulk ? '다수 지원자 일괄 ' : cand.name + ' · ') + cand.round + '차 면접 조율' + (coordState.isRecoord ? ' (재조율)' : '');
+  document.getElementById('coord-sub').textContent = coordState.isBulk ? '공통 면접 설정 적용 대상자' : (cand.dept + ' · 경력 ' + cand.career);
+
+  var steps, activeStep;
+  if (status === 'before' || coordState.isRecoord) {
+    steps = ['지원자 확인', '면접관 선택', '면접 옵션 설정', '메일 발송'];
+    activeStep = coordState.step;
+  } else if (status === 'pending') {
+    steps = ['조율 폼 발송됨', '응답 대기', '리마인드 발송']; activeStep = 2;
+  } else if (status === 'confirm-wait') {
+    steps = ['응답 수집 완료', 'AI 추천', '확정 메일 발송']; activeStep = 2;
+  } else {
+    steps = ['조율 완료', '발송 완료']; activeStep = 2;
+  }
+
+  var sbHtml = '<div class="step-bar">';
+  steps.forEach(function(s, i) {
+    var n = i + 1;
+    var cls = n < activeStep ? 'step-done' : (n === activeStep ? 'step-active' : 'step-todo');
+    if (i > 0) sbHtml += '<div class="sline ' + (n <= activeStep ? 'done' : '') + '"></div>';
+    sbHtml += '<div class="step ' + cls + '"><div class="sc">' + n + '</div><span class="sl">' + s + '</span></div>';
+  });
+  sbHtml += '</div>';
+
+  var bodyHtml = sbHtml;
+  if (status === 'before' || coordState.isRecoord) bodyHtml += renderBeforeBody();
+  else if (status === 'pending') bodyHtml += renderPendingBody();
+  else if (status === 'confirm-wait') bodyHtml += renderConfirmWaitBody();
+  else bodyHtml += renderDoneBody();
+
+  document.getElementById('coord-body').innerHTML = bodyHtml;
+  renderCoordFooter();
+  if ((status === 'before' || coordState.isRecoord) && coordState.step === 3) renderDatePicker('date-picker-container');
+  if ((status === 'before' || coordState.isRecoord) && coordState.step === 3) renderWTM('wtm-container', false);
+  if (status === 'confirm-wait') renderWTM('wtm-confirm-container', true);
+}
+
+function handleDurationChange(val) {
+  if (val === 'custom') {
+    document.getElementById('s-duration-custom').classList.remove('hidden');
+    coordState.settings.duration = document.getElementById('s-duration-custom').value;
+  } else {
+    document.getElementById('s-duration-custom').classList.add('hidden');
+    coordState.settings.duration = val;
+  }
+}
+
+function renderBeforeBody() {
+  var cand = coordState.cand;
+  var step = coordState.step;
+  var html = '';
+
+  if (step === 1) {
+    html += '<div class="stitle">지원자 정보</div>';
+    if (coordState.isBulk) {
+      html += '<div class="info-grid mb12"><div class="ig-row"><div class="ig-lbl">일괄 조율 대상</div><div class="ig-val fw6 text-blue">' + coordState.bulkIds.length + '명 선택됨 (' + coordState.bulkIds.map(id => CANDIDATES[coordState.round].find(c => c.id === id).name).join(', ') + ')</div></div><div class="ig-row"><div class="ig-lbl">진행 전형</div><div class="ig-val">' + cand.round + '차 면접 일괄 조율</div></div></div>';
+      html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:10px;"><i class="ti ti-info-circle"></i> 선택된 모든 지원자에게 동일한 면접관 및 옵션 설정이 적용되어 개별 발송됩니다.</div>';
+    } else {
+      html += '<div class="info-grid mb12"><div class="ig-row"><div class="ig-lbl">이름</div><div class="ig-val fw6">' + cand.name + ' <span class="pill pl-blue">' + cand.round + '차 면접 대상</span></div></div><div class="ig-row"><div class="ig-lbl">직군</div><div class="ig-val">' + cand.dept + '</div></div><div class="ig-row"><div class="ig-lbl">경력</div><div class="ig-val">' + cand.career + '</div></div><div class="ig-row"><div class="ig-lbl">이메일</div><div class="ig-val">' + cand.email + '</div></div></div>';
+    }
+  }
+
+  if (step === 2) {
+    html += '<div class="stitle">면접관 선택</div>';
+    html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">체크된 여러 면접관에게 템플릿 양식에 따라 개별 맞춤 메일이 자동 발송됩니다.</div>';
+    html += '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px;">';
+    INTERVIEWERS.forEach(function(iv) {
+      var on = coordState.selectedInts.indexOf(iv.name) >= 0;
+      html += '<div class="chip ' + (on ? 'chip-on' : 'chip-off') + '" onclick="toggleInt(\'' + iv.name + '\')"><div class="av av-sm" style="' + (on ? 'background:var(--grad-blue);color:#fff;border-color:transparent;' : '') + '">' + iv.init + '</div>' + iv.name + ' <span style="font-size:10px;opacity:.7;">(' + iv.dept + ')</span></div>';
+    });
+    html += '</div>';
+  }
+
+  if (step === 3) {
+    html += '<div class="stitle">면접 옵션 설정</div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:12px;" class="mb12">';
+    html += '<div class="fg"><label class="fl">소요 시간</label><div class="flex g4"><select class="fs w100" id="s-duration" onchange="handleDurationChange(this.value)"><option value="30" ' + (coordState.settings.duration === '30' ? 'selected' : '') + '>30분</option><option value="60" ' + (coordState.settings.duration === '60' || (!coordState.settings.duration && coordState.settings.duration !== 'custom') ? 'selected' : '') + '>1시간</option><option value="90" ' + (coordState.settings.duration === '90' ? 'selected' : '') + '>1시간 30분</option><option value="custom">직접 조정</option></select><input type="text" class="fi hidden" id="s-duration-custom" placeholder="예: 45" onchange="coordState.settings.duration=this.value"></div></div>';
+    html += '<div class="fg"><label class="fl">면접 장소</label><select class="fs w100" id="s-place" onchange="coordState.settings.place=this.value"><option ' + (coordState.settings.place === '본사 7층 면접실 A' ? 'selected' : '') + '>본사 7층 면접실 A</option><option ' + (coordState.settings.place === '본사 7층 면접실 B' ? 'selected' : '') + '>본사 7층 면접실 B</option><option ' + (coordState.settings.place === '본사 12층 임원실' ? 'selected' : '') + '>본사 12층 임원실</option><option>화상면접 (Zoom)</option></select></div>';
+    html += '<div class="fg"><label class="fl">응답 마감일시</label><div style="display:flex;gap:4px;"><input type="date" class="fi" id="s-deadline-date" value="2026-06-10" style="flex:1;" onchange="updateDeadline()"><input type="time" class="fi" id="s-deadline-time" value="18:00" style="width:120px;" onchange="updateDeadline()"></div></div>';
+    html += '</div>';
+    html += '<div class="stitle">면접 가능 기간 선택</div>';
+    html += '<div id="date-picker-container"></div>';
+    html += '<div class="stitle mt12">가용 시간대 설정 (면접관 캘린더 연동)</div>';
+    html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">면접관의 캘린더 비어있는 슬롯이 모두 선택된 상태입니다. 폼에서 제외할 시간대를 클릭해 해제하세요.</div>';
+    html += '<div id="wtm-container"></div>';
+  }
+
+  if (step === 4) html += renderMailSection('before');
+  return html;
+}
+
+function renderPendingBody() {
+  var cand = coordState.cand;
+  var html = '';
+  html += '<div class="stitle">조율 진행 현황</div>';
+  html += '<div class="info-grid mb12"><div class="ig-row"><div class="ig-lbl">지원자</div><div class="ig-val">' + (cand.candResp ? '<span style="color:var(--ok);font-weight:700">✓ 회신완료</span>' : '<span style="color:var(--warn);font-weight:700">대기 중</span>') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">' + (cand.intResp ? '<span style="color:var(--ok);font-weight:700">✓ 회신완료</span>' : '<span style="color:var(--warn);font-weight:700">대기 중</span>') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">응답 마감</div><div class="ig-val">' + (cand.deadline || '-') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">면접 기간</div><div class="ig-val">' + (cand.period || '-') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">장소</div><div class="ig-val">' + (cand.place || '-') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">발송일</div><div class="ig-val">' + (cand.sentAt || '2026.06.04') + '</div></div></div>';
+  if (cand.reminded) html += '<div class="pill pl-purple" style="margin-bottom:10px;">리마인드 발송 완료</div>';
+  return html;
+}
+
+function renderConfirmWaitBody() {
+  var cand = coordState.cand;
+  var html = '';
+  html += '<div class="stitle">AI 추천 시간 (조율 가능 시간 분석)</div>';
+  html += '<div style="background:linear-gradient(135deg, var(--info-bg), #F0F7FF);border:1px solid var(--main-1);border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+  html += '<div style="font-size:11px;color:var(--main-1);font-weight:700;margin-bottom:4px;letter-spacing:0.02em;">AI 1순위 추천</div>';
+  html += '<div style="font-size:16px;font-weight:700;color:var(--text-1);margin-bottom:4px;letter-spacing:-0.02em;">' + cand.aiTime + '</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);">' + cand.aiReason + '</div>';
+  html += '</div>';
+  html += '<div class="stitle">상호 가용 시간표 (응답 수집 결과)</div>';
+  html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:8px;">면접관 가용 시간(파란색) + 지원자 가능 시간(녹색 테두리)이 겹치는 슬롯이 매칭 가능합니다.</div>';
+  html += '<div id="wtm-confirm-container"></div>';
+  return html;
+}
+
+function renderDoneBody() {
+  var cand = coordState.cand;
+  var html = '';
+  html += '<div style="text-align:center;padding:20px 0;">';
+  html += '<div style="width:56px;height:56px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px;"><i class="ti ti-check" style="font-size:28px"></i></div>';
+  html += '<div style="font-size:16px;font-weight:700;color:var(--ok);margin-bottom:4px;">면접 조율 완료</div>';
+  html += '<div style="font-size:12px;color:var(--text-3);">확정 메일이 모든 대상자에게 발송되었습니다.</div>';
+  html += '</div>';
+  html += '<div class="info-grid"><div class="ig-row"><div class="ig-lbl">확정 일시</div><div class="ig-val fw6">' + cand.confirmedTime + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">' + (cand.interviewers || []).join(', ') + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">장소</div><div class="ig-val">' + cand.place + '</div></div>';
+  html += '<div class="ig-row"><div class="ig-lbl">소요 시간</div><div class="ig-val">' + cand.duration + '분</div></div></div>';
+  return html;
+}
+
+
+// ===== Mail section (step 4) =====
+function handleTargetChange(val) {
+  var box = document.getElementById('mail-target-box');
+  if (!box) return;
+  if (val === 'cand') {
+    box.querySelector('#tmpl-int').classList.add('hidden');
+    box.querySelector('#tmpl-cand').classList.remove('hidden');
+  } else if (val === 'int') {
+    box.querySelector('#tmpl-cand').classList.add('hidden');
+    box.querySelector('#tmpl-int').classList.remove('hidden');
+  } else {
+    box.querySelector('#tmpl-cand').classList.remove('hidden');
+    box.querySelector('#tmpl-int').classList.remove('hidden');
+  }
+}
+
+function renderMailSection(status) {
+  var cand = coordState.cand;
+  var html = '<div class="stitle">메일 발송 설정</div>';
+  html += '<div class="fg"><label class="fl">발송 대상</label>';
+  html += '<select class="fs w100" id="mail-target" onchange="handleTargetChange(this.value)">';
+  html += '<option value="both" selected>지원자 + 면접관 모두</option>';
+  html += '<option value="cand">지원자 본인만</option>';
+  html += '<option value="int">면접관만</option>';
+  html += '</select></div>';
+
+  var candTmpls = TEMPLATES.filter(t => t.type === 'cand' && t.stage === '조율요청');
+  var intTmpls = TEMPLATES.filter(t => t.type === 'int' && t.stage === '조율요청');
+  // round 매칭
+  var candTmplDefault = candTmpls.find(t => t.round === cand.round + '차') || candTmpls[0];
+
+  html += '<div id="mail-target-box">';
+
+  // 지원자용
+  html += '<div id="tmpl-cand" class="fg" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 메일 템플릿</div>';
+  html += '<select class="fs w100 mb12" id="tmpl-cand-sel">';
+  candTmpls.forEach(t => {
+    html += '<option value="' + t.id + '" ' + (t.id === candTmplDefault.id ? 'selected' : '') + '>' + t.name + '</option>';
+  });
+  html += '</select>';
+  html += '<button class="btn btn-o btn-sm" onclick="previewMail(\'cand\', document.getElementById(\'tmpl-cand-sel\').value)"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '</div>';
+
+  // 면접관용
+  html += '<div id="tmpl-int" class="fg" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">면접관 메일 템플릿</div>';
+  html += '<select class="fs w100 mb12" id="tmpl-int-sel">';
+  intTmpls.forEach(t => { html += '<option value="' + t.id + '">' + t.name + '</option>'; });
+  html += '</select>';
+  html += '<button class="btn btn-o btn-sm" onclick="previewMail(\'int\', document.getElementById(\'tmpl-int-sel\').value)"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '</div>';
+
+  html += '</div>';
+
+  if (coordState.reserveTime) {
+    html += '<div class="pill pl-purple" style="margin-top:6px;"><i class="ti ti-clock"></i> 예약 발송: ' + coordState.reserveTime + '</div>';
+  }
+  return html;
+}
+
+function previewMail(type, tmplId) {
+  var tmpl = TEMPLATES.find(t => t.id === tmplId);
+  if (!tmpl) return;
+  var cand = coordState.cand;
+  var firstInt = coordState.selectedInts[0] || '면접관';
+  var period = coordState.settings.period || (selPeriodStart && selPeriodEnd ? selPeriodStart.replace(/-/g, '.') + '~' + selPeriodEnd.replace(/-/g, '.') : '미설정');
+  var deadline = coordState.settings.deadline || '2026.06.10 18:00';
+  var filledSubj = fillTemplate(tmpl.subj, cand, firstInt, '', period, deadline);
+  var filledBody = fillTemplate(tmpl.body, cand, firstInt, '', period, deadline);
+  alert('[제목]\n' + filledSubj + '\n\n[본문]\n' + filledBody);
+}
+
+function fillTemplate(text, cand, intName, confirmedTime, period, deadline) {
+  if (!text) return '';
+  return text
+    .replace(/{{지원자명}}/g, cand.name || '')
+    .replace(/{{직군}}/g, cand.dept || '')
+    .replace(/{{경력}}/g, cand.career || '')
+    .replace(/{{전형단계}}/g, cand.round + '차')
+    .replace(/{{면접기간}}/g, period || coordState.settings.period || '')
+    .replace(/{{마감일}}/g, deadline || coordState.settings.deadline || '')
+    .replace(/{{소요시간}}/g, coordState.settings.duration + '분')
+    .replace(/{{면접장소}}/g, coordState.settings.place || '')
+    .replace(/{{확정일시}}/g, confirmedTime || cand.aiTime || cand.confirmedTime || '')
+    .replace(/{{폼_링크}}/g, 'https://abllife-hr.com/form/' + (cand.id || 'xxx'))
+    .replace(/{{면접관명}}/g, intName || '');
+}
+
+function toggleInt(name) {
+  var idx = coordState.selectedInts.indexOf(name);
+  if (idx >= 0) coordState.selectedInts.splice(idx, 1);
+  else coordState.selectedInts.push(name);
+  renderCoordModal();
+}
+
+function updateDeadline() {
+  var d = document.getElementById('s-deadline-date').value;
+  var t = document.getElementById('s-deadline-time').value;
+  if (d && t) coordState.settings.deadline = d.replace(/-/g, '.') + ' ' + t;
+}
+
+// ===== Mini calendar (date range picker) =====
+var selPeriodStart = null, selPeriodEnd = null;
+var miniCalMonth = { y: systemToday.y, m: systemToday.m };
+
+function shiftMiniCal(dir) {
+  miniCalMonth.m += dir;
+  if (miniCalMonth.m > 12) { miniCalMonth.m = 1; miniCalMonth.y++; }
+  if (miniCalMonth.m < 1) { miniCalMonth.m = 12; miniCalMonth.y--; }
+  renderDatePicker('date-picker-container');
+}
+
+function renderDatePicker(containerId) {
+  var ct = document.getElementById(containerId);
+  if (!ct) return;
+  ct.innerHTML = '<div class="mc-hd"><button class="mc-nav-btn" onclick="shiftMiniCal(-1)"><i class="ti ti-chevron-left"></i></button><span style="font-weight:700;font-size:13px;color:var(--text-1)">' + miniCalMonth.y + '년 ' + miniCalMonth.m + '월</span><button class="mc-nav-btn" onclick="shiftMiniCal(1)"><i class="ti ti-chevron-right"></i></button></div>';
+  ct.innerHTML += '<div id="mc-grid-' + containerId + '"></div>';
+  ct.innerHTML += '<div style="font-size:11px;color:var(--text-3);margin-top:8px;">시작일과 종료일을 클릭하여 면접 가능 기간을 설정합니다. <span style="color:var(--main-1);font-weight:700;" id="period-display"></span></div>';
+  renderMiniCal('mc-grid-' + containerId, miniCalMonth.y, miniCalMonth.m);
+  updatePeriodDisplay();
+}
+
+function updatePeriodDisplay() {
+  var disp = document.getElementById('period-display');
+  if (!disp) return;
+  if (selPeriodStart && selPeriodEnd) disp.textContent = '(' + selPeriodStart + ' ~ ' + selPeriodEnd + ')';
+  else if (selPeriodStart) disp.textContent = '(시작: ' + selPeriodStart + ', 종료일 선택 대기)';
+  else disp.textContent = '';
+}
+
+function renderMiniCal(gridId, year, month) {
+  var ct = document.getElementById(gridId);
+  if (!ct) return;
+  var firstDay = new Date(year, month - 1, 1).getDay();
+  var lastDate = new Date(year, month, 0).getDate();
+  var prevLastDate = new Date(year, month - 1, 0).getDate();
+  var html = '<div class="mc-grid">';
+  ['일', '월', '화', '수', '목', '금', '토'].forEach(d => html += '<div class="mc-dow">' + d + '</div>');
+
+  var cells = [];
+  for (var i = 0; i < firstDay; i++) cells.push({ type: 'prev', day: prevLastDate - firstDay + 1 + i });
+  for (var d = 1; d <= lastDate; d++) cells.push({ type: 'cur', day: d });
+
+  cells.forEach(c => {
+    if (c.type === 'prev') {
+      html += '<div class="mc-day other">' + c.day + '</div>';
+    } else {
+      var dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(c.day).padStart(2, '0');
+      var cls = 'mc-day';
+      if (dateStr === selPeriodStart) cls += ' start';
+      else if (dateStr === selPeriodEnd) cls += ' end';
+      else if (selPeriodStart && selPeriodEnd && dateStr > selPeriodStart && dateStr < selPeriodEnd) cls += ' in';
+      html += '<div class="' + cls + '" onclick="pickDate(\'' + dateStr + '\')">' + c.day + '</div>';
+    }
+  });
+  html += '</div>';
+  ct.innerHTML = html;
+}
+
+function pickDate(dateStr) {
+  if (!selPeriodStart || (selPeriodStart && selPeriodEnd)) {
+    selPeriodStart = dateStr;
+    selPeriodEnd = null;
+  } else if (dateStr < selPeriodStart) {
+    selPeriodStart = dateStr;
+  } else {
+    selPeriodEnd = dateStr;
+    coordState.settings.period = selPeriodStart.replace(/-/g, '.') + '~' + selPeriodEnd.replace(/-/g, '.');
+    updateWTMFromPeriod();
+    renderWTM('wtm-container', false);
+  }
+  renderMiniCal('mc-grid-date-picker-container', miniCalMonth.y, miniCalMonth.m);
+  updatePeriodDisplay();
+}
+
+// ===== WTM (When To Meet 가용 시간표) =====
+var WTM_TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'];
+var wtmSelected = {};
+var wtmCandAvail = {
+  '2026-06-09': ['10:00', '10:30', '11:00', '14:00', '14:30'],
+  '2026-06-10': ['09:30', '10:00', '10:30', '11:00', '15:00', '15:30'],
+  '2026-06-11': ['11:00', '11:30', '14:00', '14:30'],
+  '2026-06-12': ['09:30', '10:00', '15:30', '16:00'],
+  '2026-06-13': ['10:00', '14:00']
+};
+var wtmIntAvail = {
+  '2026-06-09': ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00'],
+  '2026-06-10': ['09:30', '10:00', '10:30', '11:00', '15:00', '15:30', '16:00'],
+  '2026-06-11': ['09:00', '11:00', '11:30', '14:00', '14:30', '15:00'],
+  '2026-06-12': ['09:30', '10:00', '14:00', '15:30', '16:00'],
+  '2026-06-13': ['10:00', '14:00', '14:30']
+};
+var wtmDays = [];
+var wtmInitialized = false;
+
+function getPeriodDays() {
+  if (!selPeriodStart || !selPeriodEnd) return [];
+  var days = [];
+  var d = new Date(selPeriodStart);
+  var e = new Date(selPeriodEnd);
+  while (d <= e) {
+    days.push(d.toISOString().slice(0, 10));
+    d.setDate(d.getDate() + 1);
+  }
+  return days;
+}
+
+function updateWTMFromPeriod() {
+  wtmDays = getPeriodDays();
+  if (!wtmInitialized) {
+    // 면접관 가용 시간으로 초기화
+    wtmDays.forEach(day => {
+      (wtmIntAvail[day] || []).forEach(t => { wtmSelected[day + '|' + t] = true; });
+    });
+    wtmInitialized = true;
+  }
+}
+
+function renderWTM(containerId, showCandResp) {
+  var ct = document.getElementById(containerId);
+  if (!ct) return;
+  if (!wtmDays.length) updateWTMFromPeriod();
+  if (!wtmDays.length) {
+    ct.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-3);font-size:12px;background:var(--bg-page);border-radius:8px;">먼저 면접 가능 기간을 선택해 주세요.</div>';
+    return;
+  }
+  var html = '<div class="wtm-wrap"><table class="wtm-table"><thead><tr><th class="wtm-time">시간</th>';
+  wtmDays.forEach(day => {
+    var d = new Date(day);
+    var dows = ['일', '월', '화', '수', '목', '금', '토'];
+    html += '<th>' + (d.getMonth() + 1) + '/' + d.getDate() + '<br><span style="font-weight:400;color:var(--text-3)">(' + dows[d.getDay()] + ')</span></th>';
+  });
+  html += '</tr></thead><tbody>';
+  WTM_TIMES.forEach(t => {
+    html += '<tr><td class="wtm-time">' + t + '</td>';
+    wtmDays.forEach(day => {
+      var key = day + '|' + t;
+      var on = wtmSelected[key];
+      var candOk = showCandResp && (wtmCandAvail[day] || []).includes(t);
+      var intOk = (wtmIntAvail[day] || []).includes(t);
+      var cls = 'wtm-slot';
+      if (on) cls += ' on';
+      if (candOk) cls += ' cand-ok';
+      if (!intOk && !candOk) cls += ' busy';
+      html += '<td class="' + cls + '" onclick="toggleWTM(\'' + key + '\')"></td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  ct.innerHTML = html;
+}
+
+function toggleWTM(key) {
+  wtmSelected[key] = !wtmSelected[key];
+  renderWTM('wtm-container', false);
+}
+
+// ===== Coord footer =====
+function renderCoordFooter() {
+  var cand = coordState.cand;
+  var status = cand.status;
+  var html = '';
+
+  if (status === 'before' || coordState.isRecoord) {
+    var s = coordState.step;
+    if (s > 1) html += '<button class="btn btn-o" onclick="coordStep(-1)"><i class="ti ti-chevron-left"></i>이전</button>';
+    html += '<div class="mla flex g8">';
+    if (s < 4) {
+      var canNext = true;
+      if (s === 2 && !coordState.selectedInts.length) canNext = false;
+      html += '<button class="btn btn-p" ' + (canNext ? '' : 'disabled style="opacity:0.5;cursor:not-allowed"') + ' onclick="' + (canNext ? 'coordStep(1)' : '') + '">다음 <i class="ti ti-chevron-right"></i></button>';
+    } else {
+      html += '<button class="btn btn-o" onclick="openReserveModal(\'send\')"><i class="ti ti-clock"></i>예약 발송</button>';
+      html += '<button class="btn btn-p" onclick="doSendForm()"><i class="ti ti-send"></i>지금 발송</button>';
+    }
+    html += '</div>';
+  } else if (status === 'pending') {
+    html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
+    html += '<div class="mla flex g8">';
+    if (!cand.reminded) html += '<button class="btn btn-o" onclick="doSendReminder()"><i class="ti ti-bell"></i>리마인드 발송</button>';
+    html += '<button class="btn btn-r" onclick="if(confirm(\'정말 재조율 하시겠습니까?\')) { coordState.isRecoord=true; coordState.cand.status=\'before\'; coordState.step=1; renderCoordModal(); }"><i class="ti ti-refresh"></i>재조율</button>';
+    html += '</div>';
+  } else if (status === 'confirm-wait') {
+    html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
+    html += '<div class="mla flex g8">';
+    html += '<button class="btn btn-o" onclick="openAltTimeModal()"><i class="ti ti-edit"></i>다른 시간 선택</button>';
+    html += '<button class="btn btn-p" onclick="openConfirmModal()"><i class="ti ti-check"></i>AI 추천시간으로 확정 메일</button>';
+    html += '</div>';
+  } else {
+    html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
+  }
+
+  document.getElementById('coord-footer').innerHTML = html;
+}
+
+function coordStep(dir) {
+  coordState.step += dir;
+  if (coordState.step < 1) coordState.step = 1;
+  if (coordState.step > 4) coordState.step = 4;
+  renderCoordModal();
+}
+
+
+// ===== Form 발송 (조율 요청 메일) =====
+function doSendForm() {
+  var cand = coordState.cand;
+  var period = coordState.settings.period || (selPeriodStart && selPeriodEnd ? selPeriodStart.replace(/-/g, '.') + '~' + selPeriodEnd.replace(/-/g, '.') : '');
+  var deadline = coordState.settings.deadline || '2026.06.10 18:00';
+
+  if (coordState.isBulk) {
+    // 일괄
+    coordState.bulkIds.forEach(id => {
+      var c = CANDIDATES[coordState.round].find(x => x.id === id);
+      if (c) {
+        c.status = 'pending';
+        c.interviewers = coordState.selectedInts.slice();
+        c.duration = coordState.settings.duration;
+        c.place = coordState.settings.place;
+        c.deadline = deadline;
+        c.period = period;
+        c.intResp = false;
+        c.candResp = false;
+        c.sentAt = new Date().toLocaleDateString('ko');
+      }
+    });
+    selectedCands = {};
+    showToast('ok', '일괄 메일 발송 완료', coordState.bulkIds.length + '명 지원자에게 조율 요청 메일이 발송되었습니다.');
+  } else {
+    cand.status = 'pending';
+    cand.interviewers = coordState.selectedInts.slice();
+    cand.duration = coordState.settings.duration;
+    cand.place = coordState.settings.place;
+    cand.deadline = deadline;
+    cand.period = period;
+    cand.intResp = false;
+    cand.candResp = false;
+    cand.sentAt = new Date().toLocaleDateString('ko');
+    showToast('ok', '조율 요청 메일 발송 완료', cand.name + ' 지원자와 면접관에게 메일이 발송되었습니다.');
+  }
+  closeModal('modal-coord');
+  renderKanban(coordState.round);
+  renderDashboardSummary(coordState.round);
+  updateBadges();
+}
+
+function doSendReminder() {
+  var cand = coordState.cand;
+  cand.reminded = true;
+  showToast('ok', '리마인드 메일 발송 완료', cand.name + ' 지원자에게 리마인드 메일이 발송되었습니다.');
+  closeModal('modal-coord');
+  renderKanban(coordState.round);
+}
+
+// ===== Confirm modal (확정 메일 발송) =====
+function openConfirmModal() {
+  openModal('modal-confirm');
+  renderConfirmModalBody();
+}
+
+function renderConfirmModalBody() {
+  var cand = coordState.cand;
+  var time = coordState.selAltTime || cand.aiTime;
+  var html = '';
+  html += '<div style="background:var(--ok-bg);border:1px solid var(--ok);border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+  html += '<div style="font-size:11px;color:var(--ok);font-weight:700;margin-bottom:4px;letter-spacing:0.02em;">확정될 면접 일정</div>';
+  html += '<div style="font-size:16px;font-weight:700;color:var(--text-1);letter-spacing:-0.02em;">' + time + '</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);margin-top:4px;">' + cand.place + ' · ' + cand.duration + '분 · ' + (cand.interviewers || []).join(', ') + '</div>';
+  html += '</div>';
+
+  html += '<div class="stitle">발송 대상 및 템플릿</div>';
+  html += '<div class="fg"><label class="fl">발송 대상</label>';
+  html += '<select class="fs w100" id="conf-target" onchange="handleTargetChangeConf(this.value)">';
+  html += '<option value="both" selected>지원자 + 면접관 모두</option>';
+  html += '<option value="cand">지원자 본인만</option>';
+  html += '<option value="int">면접관만</option>';
+  html += '</select></div>';
+
+  var candConfTmpl = TEMPLATES.find(t => t.id === 't5');
+  var intConfTmpl = TEMPLATES.find(t => t.id === 't6');
+
+  html += '<div id="conf-tmpl-cand" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 확정 메일</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);">' + (candConfTmpl ? candConfTmpl.name : '면접 확정 안내') + '</div>';
+  html += '</div>';
+  html += '<div id="conf-tmpl-int" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">면접관 확정 메일</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);">' + (intConfTmpl ? intConfTmpl.name : '면접 확정 안내 (면접관)') + '</div>';
+  html += '</div>';
+
+  document.getElementById('confirm-body').innerHTML = html;
+  updateConfirmFooter();
+}
+
+function handleTargetChangeConf(val) {
+  if (val === 'cand') {
+    document.getElementById('conf-tmpl-cand').style.display = 'block';
+    document.getElementById('conf-tmpl-int').style.display = 'none';
+  } else if (val === 'int') {
+    document.getElementById('conf-tmpl-cand').style.display = 'none';
+    document.getElementById('conf-tmpl-int').style.display = 'block';
+  } else {
+    document.getElementById('conf-tmpl-cand').style.display = 'block';
+    document.getElementById('conf-tmpl-int').style.display = 'block';
+  }
+}
+
+function updateConfirmFooter() {
+  var html = '<button class="btn btn-o" onclick="closeModal(\'modal-confirm\')">취소</button>';
+  html += '<div class="mla flex g8">';
+  html += '<button class="btn btn-o" onclick="openReserveModal(\'confirm\')"><i class="ti ti-clock"></i>예약 발송</button>';
+  html += '<button class="btn btn-g" onclick="doConfirmSend()"><i class="ti ti-send"></i>지금 확정 메일 발송</button>';
+  html += '</div>';
+  document.getElementById('confirm-footer').innerHTML = html;
+}
+
+function doConfirmSend() {
+  var cand = coordState.cand;
+  var time = coordState.selAltTime || cand.aiTime;
+  cand.status = 'done';
+  cand.confirmedTime = time.replace(/년 /g, '.').replace(/월 /g, '.').replace(/일 /g, ' ').replace(/오전 /g, '').replace(/오후 /g, '');
+  showToast('ok', '확정 메일 발송 완료', cand.name + ' 지원자 및 면접관에게 확정 메일이 발송되었습니다.');
+  closeModal('modal-confirm');
+  closeModal('modal-coord');
+  renderKanban(coordState.round);
+  renderDashboardSummary(coordState.round);
+  updateBadges();
+}
+
+// ===== Alt time modal (다른 시간 선택) =====
+function openAltTimeModal() {
+  var cand = coordState.cand;
+  var matchTimes = [];
+  Object.keys(wtmCandAvail).forEach(day => {
+    (wtmCandAvail[day] || []).forEach(t => {
+      if ((wtmIntAvail[day] || []).includes(t)) matchTimes.push({ day: day, time: t });
+    });
+  });
+
+  var html = '<div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">아래 슬롯은 <strong style="color:var(--ok)">지원자</strong>와 <strong style="color:var(--main-1)">면접관</strong> 모두 가용한 시간대입니다.</div>';
+  html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">';
+  matchTimes.forEach((m, idx) => {
+    var d = new Date(m.day);
+    var dows = ['일', '월', '화', '수', '목', '금', '토'];
+    var label = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + dows[d.getDay()] + ') ' + m.time;
+    html += '<div class="alt-slot" onclick="document.querySelectorAll(\'.alt-slot\').forEach(x=>x.classList.remove(\'on\'));this.classList.add(\'on\');window._selAlt=\'' + label + '\'" style="padding:10px 14px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;text-align:center;font-weight:700;transition:0.15s">' + label + '</div>';
+  });
+  html += '</div>';
+  html += '<style>.alt-slot:hover{border-color:var(--main-1);color:var(--main-1)}.alt-slot.on{background:var(--grad-blue);color:white;border-color:transparent}</style>';
+
+  if (!matchTimes.length) html = '<div style="text-align:center;padding:30px;color:var(--text-3);">매칭 가능한 시간이 없습니다.</div>';
+  document.getElementById('alt-time-body').innerHTML = html;
+  openModal('modal-alt-time');
+}
+
+function selectAltTime() {
+  if (!window._selAlt) { showToast('warn', '시간을 선택해 주세요', ''); return; }
+  coordState.selAltTime = '2026년 ' + window._selAlt.replace('월 ', '월 ').replace('일 ', '일 ');
+  closeModal('modal-alt-time');
+  showToast('info', '다른 시간이 선택되었습니다', '확정 메일 발송 시 이 시간으로 안내됩니다.');
+  // 확정 모달 자동 오픈
+  openConfirmModal();
+  window._selAlt = null;
+}
+
+// ===== Reserve modal (예약 발송) =====
+var currentReserveAction = null;
+function openReserveModal(actionType) {
+  currentReserveAction = actionType;
+  // 기본값: 내일 09:00
+  var tmrw = new Date();
+  tmrw.setDate(tmrw.getDate() + 1);
+  var dStr = tmrw.toISOString().slice(0, 10) + 'T09:00';
+  document.getElementById('reserve-datetime').value = dStr;
+  openModal('modal-reserve');
+}
+
+function confirmReserveTime() {
+  var dt = document.getElementById('reserve-datetime').value;
+  if (!dt) { showToast('warn', '예약 일시를 선택해 주세요', ''); return; }
+  var formatted = dt.replace('T', ' ');
+  coordState.reserveTime = formatted;
+  closeModal('modal-reserve');
+  showToast('info', '예약 발송 시간 설정 완료', formatted + ' 에 자동 발송됩니다.');
+  if (currentReserveAction === 'send') {
+    // step 4 메일 섹션 다시 렌더
+    renderCoordModal();
+  } else if (currentReserveAction === 'confirm') {
+    renderConfirmModalBody();
+  }
+  currentReserveAction = null;
+}
+
+// ===== Modal open/close =====
+function openModal(id) { document.getElementById(id).classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  // 모든 모달이 닫혔는지 체크
+  if (!document.querySelectorAll('.mbd.show').length) document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    var opened = document.querySelectorAll('.mbd.show');
+    if (opened.length) opened[opened.length - 1].classList.remove('show');
+    if (!document.querySelectorAll('.mbd.show').length) document.body.style.overflow = '';
+  }
+});
+
+// ===== Toast =====
+var toastT;
+function showToast(type, title, msg) {
+  var t = document.getElementById('toast');
+  var ic = document.getElementById('toast-ic');
+  ic.className = 'toast-ic ' + type;
+  var iconMap = { ok: 'ti-check', warn: 'ti-alert-triangle', err: 'ti-x', info: 'ti-info-circle' };
+  ic.innerHTML = '<i class="ti ' + (iconMap[type] || 'ti-info-circle') + '" style="color:white;font-size:14px"></i>';
+  document.getElementById('toast-title').textContent = title || '';
+  document.getElementById('toast-msg').textContent = msg || '';
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+
+</body>
+</html>
