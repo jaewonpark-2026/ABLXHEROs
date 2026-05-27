@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 일정 · 통합 캘린더 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --ev-r1-bg: #E6F1FB; --ev-r1-tx: #0067AC;
+  --ev-r2-bg: #DCFCE7; --ev-r2-tx: #15803D;
+  --ev-new-bg: #EDE9FE; --ev-new-tx: #6D28D9;
+  --ev-pending-bg: #FFEDD5; --ev-pending-tx: #C2410C;
+  --ev-work-bg: #FEE2E2; --ev-work-tx: #DC2626;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+
+/* Layout (기존 디자인 그대로) */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
+/* Main + Topbar */
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+.mobile-menu-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn i { font-size: 18px; }
+
+/* Notification bell */
+.notif-bell { position: relative; cursor: pointer; color: var(--text-2); padding: 8px; border-radius: 8px; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; }
+.notif-bell:hover { background: var(--bg-page); }
+.notif-bell i { font-size: 18px; }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #DC2626; border-radius: 50%; border: 2px solid white; }
+.notif-drop { position: absolute; top: 100%; right: 0; width: 320px; background: white; border: 1px solid var(--border); box-shadow: 0 8px 28px rgba(15,35,65,0.15); border-radius: 12px; z-index: 999; display: none; margin-top: 8px; overflow: hidden; }
+.notif-drop.show { display: block; }
+.notif-drop-hd { padding: 12px 16px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 13px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, white, #fbfdff); }
+.notif-drop-hd .clear { color: var(--main-1); cursor: pointer; font-weight: 700; font-size: 11px; }
+.notif-drop-hd .clear:hover { text-decoration: underline; }
+.notif-item { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 12px; cursor: pointer; display: flex; gap: 10px; transition: background 0.15s; }
+.notif-item:hover { background: var(--bg-page); }
+.notif-item:last-child { border-bottom: none; }
+.notif-item .ic { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-item .ic i { font-size: 14px; }
+.notif-item .ic.info { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.notif-item .ic.warn { background: #FFEDD5; color: #C2410C; }
+.notif-item .title { font-weight: 700; color: var(--text-1); }
+.notif-item .desc { color: var(--text-2); margin-top: 2px; }
+
+/* Content */
+.content { padding: 28px 32px 40px; }
+.page-header { margin-bottom: 22px; }
+.page-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.02em; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 13px; }
+
+/* Sub-nav (페이지 간 전환) */
+.subnav { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.subnav-item { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; text-decoration: none; }
+.subnav-item:hover { border-color: var(--main-1); color: var(--main-1); }
+.subnav-item.active { background: var(--grad-blue); color: white; border-color: transparent; }
+.subnav-item .count { background: rgba(255,255,255,0.25); color: inherit; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.subnav-item:not(.active) .count { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #DC2626; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.stat-lbl { font-size: 11px; color: var(--text-3); font-weight: 700; letter-spacing: 0.02em; }
+.stat-val { font-size: 28px; font-weight: 700; margin-top: 4px; line-height: 1.1; color: var(--main-1); letter-spacing: -0.02em; }
+.stat-val.purple { color: #6D28D9; }
+.stat-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+/* Layout: calendar + side */
+.cal-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.card { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.card-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; background: linear-gradient(180deg, white, #fbfdff); }
+.card-hd-title { display: flex; align-items: center; gap: 8px; color: var(--text-1); font-weight: 700; font-size: 14px; letter-spacing: -0.02em; }
+.card-hd-title::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
+.card-hd-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cal-nav-btn { padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; cursor: pointer; font-size: 12px; color: var(--text-2); font-weight: 700; font-family: inherit; display: inline-flex; align-items: center; gap: 4px; }
+.cal-nav-btn:hover { background: var(--bg-page); border-color: var(--main-1); color: var(--main-1); }
+.cal-nav-btn i { font-size: 14px; }
+.f-sel { height: 32px; padding: 0 28px 0 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-2); background: white; font-size: 12px; font-weight: 700; outline: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; font-family: inherit; }
+.f-sel:focus { border-color: var(--main-1); }
+.card-bd { padding: 16px 18px; }
+
+/* Legend */
+.legend { display: flex; gap: 14px; flex-wrap: wrap; padding: 8px 12px; background: var(--bg-page); border-radius: 8px; margin-bottom: 14px; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-2); font-weight: 700; }
+.leg-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+/* Calendar grid */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; }
+.cal-dow { padding: 9px 4px; text-align: center; font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: 0.3px; background: var(--bg-page); }
+.cal-cell { background: white; min-height: 92px; padding: 6px; cursor: default; }
+.cal-cell.other { background: #FAFBFD; }
+.cal-cell.today { background: linear-gradient(180deg, #F0F7FF, #E6F1FB); }
+.cal-day-num { font-size: 12px; font-weight: 700; color: var(--text-2); margin-bottom: 4px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+.cal-cell.today .cal-day-num { background: var(--grad-blue); color: white; }
+.cal-cell.sun .cal-day-num { color: #DC2626; }
+.cal-cell.sat .cal-day-num { color: #2563EB; }
+.cal-cell.other .cal-day-num { color: var(--text-3); opacity: 0.5; }
+.cal-ev { font-size: 10px; padding: 3px 6px; border-radius: 4px; margin-bottom: 2px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; transition: opacity 0.15s; }
+.cal-ev:hover { opacity: 0.85; }
+.ev-r1 { background: var(--ev-r1-bg); color: var(--ev-r1-tx); }
+.ev-r2 { background: var(--ev-r2-bg); color: var(--ev-r2-tx); }
+.ev-new { background: var(--ev-new-bg); color: var(--ev-new-tx); }
+.ev-pending { background: var(--ev-pending-bg); color: var(--ev-pending-tx); }
+.ev-work { background: var(--ev-work-bg); color: var(--ev-work-tx); }
+.cal-ev-more { font-size: 9px; color: var(--text-3); margin-top: 2px; cursor: pointer; padding-left: 4px; font-weight: 700; }
+
+/* Today panel */
+.side-panel { display: flex; flex-direction: column; gap: 16px; }
+.today-panel { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; overflow: hidden; }
+.today-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue); }
+.tp-title { display: flex; align-items: center; gap: 8px; color: var(--text-1); font-weight: 700; font-size: 14px; margin-bottom: 14px; letter-spacing: -0.02em; }
+.tp-title i { color: var(--main-1); font-size: 16px; }
+.tp-item { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.tp-item:last-child { border-bottom: none; padding-bottom: 0; }
+.tp-time { font-size: 13px; font-weight: 700; min-width: 50px; }
+.tp-name { font-size: 12px; color: var(--text-1); font-weight: 700; }
+.tp-empty { text-align: center; padding: 24px 0; color: var(--text-3); font-size: 12px; }
+
+.recruit-name { font-size: 14px; font-weight: 700; color: var(--main-1); margin-bottom: 4px; letter-spacing: -0.02em; }
+.recruit-stage { font-size: 11px; color: var(--text-2); margin-bottom: 12px; }
+.recruit-stage strong { color: var(--text-1); }
+.info-grid { display: grid; grid-template-columns: 80px 1fr; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.ig-row { display: contents; }
+.ig-lbl { padding: 7px 10px; font-size: 10px; color: var(--text-3); font-weight: 700; background: var(--bg-page); border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+.ig-val { padding: 7px 10px; font-size: 11px; color: var(--text-1); border-bottom: 1px solid var(--border); font-weight: 700; }
+.ig-row:last-child .ig-lbl, .ig-row:last-child .ig-val { border-bottom: none; }
+
+/* Modal */
+.modal-backdrop { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(15,35,65,0.46); }
+.modal-backdrop.open { display: flex; }
+.modal-card { width: min(440px, 100%); border-radius: 12px; background: white; border: 1px solid var(--border); box-shadow: 0 24px 60px rgba(0,0,0,0.24); overflow: hidden; }
+.modal-head { padding: 18px 22px 14px; }
+.modal-title { color: var(--text-1); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
+.pill { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.pl-blue { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
+.modal-body { padding: 0 22px 16px; font-size: 13px; line-height: 1.7; color: var(--text-1); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 22px 18px; border-top: 1px solid var(--border); background: #fbfdff; }
+.btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; }
+.btn i { font-size: 14px; }
+.btn-o { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.btn-o:hover { border-color: var(--main-1); color: var(--main-1); }
+.btn-p { background: var(--grad-blue); color: white; border: none; }
+.btn-p:hover { opacity: 0.9; }
+
+/* Toast */
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; color: white; background: rgba(15,35,65,0.94); font-size: 13px; font-weight: 700; opacity: 0; pointer-events: none; transition: 0.2s; z-index: 100; box-shadow: 0 18px 30px rgba(0,0,0,0.18); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .cal-layout { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .content { padding: 24px 28px 32px; }
+  .topbar { padding: 14px 24px; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout.mobile-open .brand-name, .layout.mobile-open .brand-sub, .layout.mobile-open .nav-section-title, .layout.mobile-open .nav-item span.label { display: block; }
+  .layout.mobile-open .nav-item { justify-content: flex-start; padding: 11px 14px; }
+  .layout.mobile-open .brand { padding: 26px 24px 24px; text-align: left; }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 20px 16px 32px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+  .topbar-left .divider { display: none; }
+  .stats-row { grid-template-columns: 1fr; }
+  .cal-cell { min-height: 70px; }
+  .cal-ev { font-size: 9px; padding: 2px 4px; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <div class="notif-bell" onclick="toggleNotif(event)" id="notifBell">
+          <i class="ti ti-bell"></i>
+          <div class="notif-dot"></div>
+          <div class="notif-drop" id="notifDropdown" onclick="event.stopPropagation()">
+            <div class="notif-drop-hd"><span>새로운 알림</span><span class="clear" onclick="markAllRead()">모두 읽음</span></div>
+            <div id="notifList"></div>
+          </div>
+        </div>
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <span class="page-eyebrow">면접 일정 관리</span>
+        <h1 class="page-title">통합 면접 캘린더</h1>
+        <p class="page-subtitle">진행 중인 모든 면접 일정을 한눈에 확인하고 조율 현황을 모니터링합니다.</p>
+      </div>
+
+      <nav class="subnav">
+        <a class="subnav-item active" href="index.html"><i class="ti ti-calendar"></i> 통합 캘린더</a>
+        <a class="subnav-item" href="coordinate.html"><i class="ti ti-clock"></i> 면접 일정 조율 <span class="count" id="navPendingCount">10</span></a>
+        <a class="subnav-item" href="templates.html"><i class="ti ti-file-description"></i> 메일 템플릿 관리</a>
+      </nav>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="cal-layout">
+        <div class="card">
+          <div class="card-hd">
+            <div class="card-hd-title" id="calTitle">통합 면접 캘린더</div>
+            <div class="card-hd-actions">
+              <button class="cal-nav-btn" onclick="changeMonth(-1)"><i class="ti ti-chevron-left"></i>이전</button>
+              <button class="cal-nav-btn" onclick="changeMonth(1)">다음<i class="ti ti-chevron-right"></i></button>
+              <div class="divider" style="height:18px"></div>
+              <select class="f-sel" id="calTypeFilter" onchange="applyCalFilter()">
+                <option value="all">전체 보기</option>
+                <option value="r1">1차 면접</option>
+                <option value="r2">2차 면접</option>
+                <option value="new">신입 공채</option>
+                <option value="work">사내 일정</option>
+              </select>
+              <select class="f-sel" id="calDeptFilter" onchange="applyCalFilter()">
+                <option value="">전체 직군</option>
+                <option value="보험계리">보험계리</option>
+                <option value="IT개발">IT개발</option>
+                <option value="투자운용">투자운용</option>
+                <option value="리스크관리">리스크관리</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-bd">
+            <div class="legend">
+              <div class="leg-item"><div class="leg-dot" style="background:var(--ev-r1-bg)"></div>1차 면접 (경력)</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--ev-r2-bg)"></div>2차 면접 (경력)</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--ev-new-bg)"></div>신입 공채</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--ev-pending-bg)"></div>응답 대기</div>
+              <div class="leg-item"><div class="leg-dot" style="background:var(--ev-work-bg)"></div>사내 일정</div>
+            </div>
+            <div id="calRender"></div>
+          </div>
+        </div>
+
+        <div class="side-panel">
+          <div class="today-panel">
+            <div class="tp-title"><i class="ti ti-clock-hour-4"></i>오늘의 면접 일정</div>
+            <div id="todayRender"></div>
+          </div>
+          <div class="today-panel">
+            <div class="tp-title"><i class="ti ti-briefcase"></i>진행 중인 주요 채용</div>
+            <div class="recruit-name">2026년 상반기 신입 공개채용</div>
+            <div class="recruit-stage">현재 전형: <strong>1차 실무진 면접 (진행 중)</strong></div>
+            <div class="info-grid">
+              <div class="ig-row"><div class="ig-lbl">모집 부문</div><div class="ig-val">IT개발, 보험계리, 영업관리 등</div></div>
+              <div class="ig-row"><div class="ig-lbl">서류 접수</div><div class="ig-val">04.15 ~ 04.30</div></div>
+              <div class="ig-row"><div class="ig-lbl">1차 면접</div><div class="ig-val">06.02 ~ 06.04 (집중 배치)</div></div>
+              <div class="ig-row"><div class="ig-lbl">임원 면접</div><div class="ig-val">06.18 ~ 06.20 (예정)</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalCalInfo" onclick="closeModal(event)">
+  <section class="modal-card" onclick="event.stopPropagation()" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div class="modal-title" id="modalCalTitle">일정 상세</div>
+      <span class="pill pl-blue" id="modalCalPill">일정</span>
+    </div>
+    <div class="modal-body" id="modalCalBody"></div>
+    <div class="modal-actions" id="modalCalActions">
+      <button class="btn btn-o" onclick="closeModal()">닫기</button>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast">완료되었습니다.</div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== Notification dropdown =====
+function toggleNotif(e) {
+  if (e) e.stopPropagation();
+  const d = document.getElementById('notifDropdown');
+  d.classList.toggle('show');
+}
+document.addEventListener('click', function(e) {
+  const drop = document.getElementById('notifDropdown');
+  if (drop && drop.classList.contains('show') && !e.target.closest('.notif-bell')) {
+    drop.classList.remove('show');
+  }
+});
+function markAllRead() {
+  showToast('모든 알림을 읽음 처리했습니다.');
+  document.getElementById('notifDropdown').classList.remove('show');
+}
+
+// ===== Data =====
+let CANDIDATES = { r1: [], r2: [] };
+let CAL_EVENTS_STATIC = [];
+let NOTIFICATIONS = [];
+
+// 현재 날짜 기준
+const now = new Date();
+const systemToday = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+let calYear = systemToday.y, calMonth = systemToday.m, calFilter = 'all', calDeptFilter = '';
+
+// ===== Notification render =====
+function renderNotifications() {
+  const list = document.getElementById('notifList');
+  if (!NOTIFICATIONS.length) {
+    list.innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--text-3);font-size:12px">새로운 알림이 없습니다.</div>';
+    return;
+  }
+  let html = '';
+  NOTIFICATIONS.forEach(n => {
+    const iconClass = n.type === 'warn' ? 'warn' : 'info';
+    const icon = n.type === 'warn' ? 'ti-alert-circle' : 'ti-check';
+    const link = n.target === 'schedule' ? `coordinate.html?round=${n.round || 'r1'}` : '#';
+    html += `
+      <a class="notif-item" href="${link}" style="text-decoration:none;color:inherit;display:flex;gap:10px">
+        <div class="ic ${iconClass}"><i class="ti ${icon}"></i></div>
+        <div>
+          <div class="title">${n.title}</div>
+          <div class="desc">${n.desc}</div>
+        </div>
+      </a>
+    `;
+  });
+  list.innerHTML = html;
+}
+
+// ===== Date parsing =====
+function parseCustomDate(str) {
+  if (!str) return null;
+  const dMatch = str.match(/(\d{4})[\.년]\s*(\d{1,2})[\.월]\s*(\d{1,2})/);
+  const tMatch = str.match(/(\d{2}:\d{2})/);
+  if (dMatch) return { y: parseInt(dMatch[1]), m: parseInt(dMatch[2]), d: parseInt(dMatch[3]), time: tMatch ? tMatch[1] : '' };
+  return null;
+}
+
+function getMergedEvents() {
+  let merged = CAL_EVENTS_STATIC.slice();
+  ['r1', 'r2'].forEach(round => {
+    CANDIDATES[round].forEach(c => {
+      if (c.status === 'done' && c.confirmedTime) {
+        const d = parseCustomDate(c.confirmedTime);
+        if (d) merged.push({ y: d.y, m: d.m, d: d.d, type: round, label: c.name + ' ' + (round === 'r1' ? '1' : '2') + '차 ' + d.time, dept: c.dept, candId: c.id });
+      } else if ((c.status === 'pending' || c.status === 'confirm-wait') && c.deadline) {
+        const d = parseCustomDate(c.deadline);
+        if (d) merged.push({ y: d.y, m: d.m, d: d.d, type: 'pending', label: '응답대기-' + c.name, dept: c.dept, candId: c.id });
+      }
+    });
+  });
+  return merged;
+}
+
+// ===== Calendar =====
+function changeMonth(dir) {
+  calMonth += dir;
+  if (calMonth > 12) { calMonth = 1; calYear++; }
+  if (calMonth < 1) { calMonth = 12; calYear--; }
+  renderCalendar();
+}
+
+function applyCalFilter() {
+  calFilter = document.getElementById('calTypeFilter').value;
+  calDeptFilter = document.getElementById('calDeptFilter').value;
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  document.getElementById('calTitle').textContent = calYear + '년 ' + months[calMonth - 1] + ' 통합 면접 캘린더';
+
+  const firstDay = new Date(calYear, calMonth - 1, 1).getDay();
+  const lastDate = new Date(calYear, calMonth, 0).getDate();
+  const prevLastDate = new Date(calYear, calMonth - 1, 0).getDate();
+  const evData = getMergedEvents();
+
+  const dows = ['일', '월', '화', '수', '목', '금', '토'];
+  let html = '<div class="cal-grid">';
+  dows.forEach(d => html += '<div class="cal-dow">' + d + '</div>');
+
+  const evTypeMap = { 'r1': 'ev-r1', 'r2': 'ev-r2', 'new': 'ev-new', 'pending': 'ev-pending', 'work': 'ev-work' };
+  function getEventsForDay(y, m, d) {
+    return evData.filter(e => {
+      if (e.y !== y || e.m !== m || e.d !== d) return false;
+      if (calFilter !== 'all' && e.type !== calFilter) return false;
+      if (calDeptFilter && e.dept && e.dept !== calDeptFilter) return false;
+      return true;
+    });
+  }
+
+  const cells = [];
+  for (let i = 0; i < firstDay; i++) cells.push({ type: 'prev', day: prevLastDate - firstDay + 1 + i });
+  for (let d = 1; d <= lastDate; d++) cells.push({ type: 'cur', day: d });
+  const remaining = (7 - ((firstDay + lastDate) % 7)) % 7;
+  for (let i = 0; i < remaining; i++) cells.push({ type: 'next', day: i + 1 });
+
+  cells.forEach((c, idx) => {
+    const dow = idx % 7;
+    let cls = 'cal-cell';
+    let y = calYear, m = calMonth;
+    if (c.type === 'prev') { cls += ' other'; m = calMonth - 1; if (m < 1) { m = 12; y--; } }
+    else if (c.type === 'next') { cls += ' other'; m = calMonth + 1; if (m > 12) { m = 1; y++; } }
+    else {
+      const isToday = (calYear === systemToday.y && calMonth === systemToday.m && c.day === systemToday.d);
+      if (isToday) cls += ' today';
+      if (dow === 0) cls += ' sun';
+      if (dow === 6) cls += ' sat';
+    }
+    html += '<div class="' + cls + '">';
+    html += '<div class="cal-day-num">' + c.day + '</div>';
+    if (c.type === 'cur') {
+      const evs = getEventsForDay(y, m, c.day);
+      evs.slice(0, 3).forEach(e => {
+        const ec = evTypeMap[e.type] || 'ev-work';
+        let labelStr = e.label;
+        if (e.dept) labelStr += ' (' + e.dept + ')';
+        const cIdParam = e.candId ? "'" + e.candId + "'" : 'null';
+        html += '<div class="cal-ev ' + ec + '" title="' + labelStr + '" onclick="showCalEventInfo(\'' + labelStr.replace(/'/g, "\\'") + '\',\'' + e.type + '\',' + cIdParam + ')">' + labelStr + '</div>';
+      });
+      if (evs.length > 3) html += '<div class="cal-ev-more">+' + (evs.length - 3) + '건 더보기</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  document.getElementById('calRender').innerHTML = html;
+
+  renderTodayPanel(evData);
+  updateCalendarStats(evData);
+}
+
+function renderTodayPanel(evData) {
+  const todays = evData.filter(e => e.y === systemToday.y && e.m === systemToday.m && e.d === systemToday.d);
+  todays.sort((a, b) => {
+    let ta = a.label.match(/(\d{2}:\d{2})/); ta = ta ? ta[1] : '99:99';
+    let tb = b.label.match(/(\d{2}:\d{2})/); tb = tb ? tb[1] : '99:99';
+    return ta.localeCompare(tb);
+  });
+
+  if (!todays.length) {
+    document.getElementById('todayRender').innerHTML = '<div class="tp-empty">오늘 예정된 일정이 없습니다.</div>';
+    return;
+  }
+
+  let html = '';
+  todays.forEach(e => {
+    let tm = e.label.match(/(\d{2}:\d{2})/); tm = tm ? tm[1] : '종일';
+    let nm = e.label.replace(tm, '').trim();
+    if (e.dept) nm += ' (' + e.dept + ')';
+    const col = e.type === 'r1' ? 'var(--main-1)' : (e.type === 'r2' ? '#15803D' : (e.type === 'work' ? '#DC2626' : 'var(--text-2)'));
+    html += '<div class="tp-item"><div class="tp-time" style="color:' + col + '">' + tm + '</div><div><div class="tp-name">' + nm + '</div></div></div>';
+  });
+  document.getElementById('todayRender').innerHTML = html;
+}
+
+function updateCalendarStats(evData) {
+  const curMonthEvs = evData.filter(e => e.y === calYear && e.m === calMonth);
+  const tot = curMonthEvs.filter(e => e.type !== 'work').length;
+  const r1Count = curMonthEvs.filter(e => e.type === 'r1').length;
+  const r2Count = curMonthEvs.filter(e => e.type === 'r2').length;
+  const newCount = curMonthEvs.filter(e => e.type === 'new').length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-lbl">이달 전체 면접</div><div class="stat-val">${tot}</div><div class="stat-sub">${calMonth}월 기준</div></div>
+    <div class="stat-card"><div class="stat-lbl">1차 면접 (경력)</div><div class="stat-val">${r1Count}</div><div class="stat-sub">${calMonth}월 기준</div></div>
+    <div class="stat-card"><div class="stat-lbl">2차 면접 (경력)</div><div class="stat-val">${r2Count}</div><div class="stat-sub">${calMonth}월 기준</div></div>
+    <div class="stat-card"><div class="stat-lbl">신입 공채 면접</div><div class="stat-val purple">${newCount}</div><div class="stat-sub">${calMonth}월 기준</div></div>
+  `;
+}
+
+// ===== Modal =====
+function showCalEventInfo(label, type, candId) {
+  const typeNames = { 'r1': '1차 면접', 'r2': '2차 면접', 'new': '신입 공채', 'pending': '조율 대기 중', 'work': '사내 일정' };
+  document.getElementById('modalCalTitle').textContent = label;
+  document.getElementById('modalCalPill').textContent = typeNames[type] || '일정';
+
+  let bodyHtml = '';
+  let actionsHtml = '<button class="btn btn-o" onclick="closeModal()">닫기</button>';
+
+  if (type === 'new') {
+    bodyHtml = `
+      <div class="info-grid" style="margin-top:0">
+        <div class="ig-row"><div class="ig-lbl">모집 직무</div><div class="ig-val">IT개발, 영업관리, 보험계리 등</div></div>
+        <div class="ig-row"><div class="ig-lbl">면접 방식</div><div class="ig-val">다대다 면접 (조별 4인)</div></div>
+        <div class="ig-row"><div class="ig-lbl">참여 면접관</div><div class="ig-val">박성준 상무, 김도형 부장, 이혜진 팀장 외 4명</div></div>
+        <div class="ig-row"><div class="ig-lbl">진행 장소</div><div class="ig-val">본사 7층 대회의실, 면접실 A/B</div></div>
+      </div>
+    `;
+  } else if (candId) {
+    const cand = CANDIDATES.r1.find(c => c.id === candId) || CANDIDATES.r2.find(c => c.id === candId);
+    if (cand) {
+      const round = CANDIDATES.r1.find(c => c.id === candId) ? 'r1' : 'r2';
+      if (cand.status === 'pending' || cand.status === 'confirm-wait') {
+        bodyHtml = `
+          <div class="info-grid" style="margin-top:0">
+            <div class="ig-row"><div class="ig-lbl">지원자</div><div class="ig-val">${cand.candResp ? '<span style="color:#16a34a">✓ 회신완료</span>' : '대기 중'}</div></div>
+            <div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">${cand.intResp ? '<span style="color:#16a34a">✓ 회신완료</span>' : '대기 중'}</div></div>
+            <div class="ig-row"><div class="ig-lbl">직군</div><div class="ig-val">${cand.dept}</div></div>
+            <div class="ig-row"><div class="ig-lbl">면접 장소</div><div class="ig-val">${cand.place || '-'}</div></div>
+          </div>
+        `;
+        actionsHtml = `<button class="btn btn-o" onclick="closeModal()">닫기</button><button class="btn btn-p" onclick="window.location.href='coordinate.html?round=${round}&id=${candId}'"><i class="ti ti-arrow-right"></i>해당 조율 화면으로</button>`;
+      } else if (cand.status === 'done') {
+        bodyHtml = `
+          <div style="padding:14px;background:#eaf8ef;border-radius:8px;color:#16a34a;font-weight:700;font-size:13px;margin-bottom:12px"><i class="ti ti-check" style="font-size:14px;vertical-align:middle"></i> 조율이 완료된 면접입니다.</div>
+          <div class="info-grid">
+            <div class="ig-row"><div class="ig-lbl">확정 시간</div><div class="ig-val">${cand.confirmedTime}</div></div>
+            <div class="ig-row"><div class="ig-lbl">직군</div><div class="ig-val">${cand.dept}</div></div>
+            <div class="ig-row"><div class="ig-lbl">면접 장소</div><div class="ig-val">${cand.place || '-'}</div></div>
+            <div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">${(cand.interviewers || []).join(', ')}</div></div>
+          </div>
+        `;
+        actionsHtml = `<button class="btn btn-o" onclick="closeModal()">닫기</button><button class="btn btn-p" onclick="window.location.href='coordinate.html?round=${round}&id=${candId}'"><i class="ti ti-arrow-right"></i>상세 정보 확인</button>`;
+      }
+    }
+  }
+
+  document.getElementById('modalCalBody').innerHTML = bodyHtml;
+  document.getElementById('modalCalActions').innerHTML = actionsHtml;
+  document.getElementById('modalCalInfo').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target.id !== 'modalCalInfo') return;
+  document.getElementById('modalCalInfo').classList.remove('open');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// 조율 대기 카운트
+function updateNavCount() {
+  const pending = [...CANDIDATES.r1, ...CANDIDATES.r2].filter(c => c.status === 'pending' || c.status === 'confirm-wait' || c.status === 'before').length;
+  document.getElementById('navPendingCount').textContent = pending;
+}
+
+// ===== Init =====
+fetch('data/candidates.json')
+  .then(r => r.json())
+  .then(data => {
+    CANDIDATES = data.candidates;
+    CAL_EVENTS_STATIC = data.cal_events_static;
+    NOTIFICATIONS = data.notifications || [];
+    renderNotifications();
+    renderCalendar();
+    updateNavCount();
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    showToast('데이터를 불러올 수 없습니다.');
+  });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+
+</body>
+</html>
