@@ -919,7 +919,7 @@ function renderCoordModal() {
     steps = ['지원자 확인', '면접관 선택', '면접 옵션 설정', '메일 발송'];
     activeStep = coordState.step;
   } else if (status === 'pending') {
-    steps = ['조율 폼 발송됨', '응답 대기', '리마인드 발송']; activeStep = 2;
+    steps = ['조율 폼 발송됨', '응답 대기', '리마인드 발송']; activeStep = cand.reminded ? 3 : 2;
   } else if (status === 'confirm-wait') {
     steps = ['응답 수집 완료', 'AI 추천', '확정 메일 발송']; activeStep = 2;
   } else {
