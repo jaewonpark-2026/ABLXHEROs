@@ -108,7 +108,7 @@ a { color: inherit; text-decoration: none; }
 .home-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.04em; }
 .home-title { font-size: 27px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.4px; }
 .home-sub { color: var(--text-2); font-size: 14px; max-width: 720px; }
-.home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.home-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .home-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 24px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s; }
 .home-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
 .home-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(15,35,65,0.1); border-color: #CFE2F2; }
@@ -121,6 +121,23 @@ a { color: inherit; text-decoration: none; }
 .home-card-meta { font-size: 11px; color: var(--text-3); font-weight: 700; padding-top: 12px; border-top: 1px solid var(--border); }
 .home-card.soon { opacity: 0.92; }
 .home-card.soon .home-card-meta { color: var(--warn); }
+
+/* 히어로 카드 (개별 합격자 채용 리포트 — 1행 전체 폭 강조) */
+.home-card.hero { grid-column: 1 / -1; padding: 30px 34px; display: flex; align-items: center; gap: 28px; background: linear-gradient(120deg, #ffffff 0%, #F2F8FD 100%); border-color: #CFE2F2; }
+.home-card.hero::before { height: 4px; transform: scaleX(1); opacity: 0.85; }
+.home-card.hero:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(15,35,65,0.12); }
+.home-card.hero .hero-icon { width: 64px; height: 64px; border-radius: 16px; background: var(--grad-blue); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 20px rgba(0,103,172,0.28); }
+.home-card.hero .hero-icon svg { width: 30px; height: 30px; }
+.home-card.hero .hero-body { flex: 1; min-width: 0; }
+.home-card.hero .home-card-tag { background: var(--grad-blue); color: #fff; }
+.home-card.hero .home-card-title { font-size: 22px; margin-bottom: 8px; }
+.home-card.hero .home-card-desc { font-size: 13.5px; margin-bottom: 0; min-height: 0; max-width: 620px; }
+.home-card.hero .hero-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; padding-left: 24px; border-left: 1px solid var(--border); align-self: stretch; justify-content: center; }
+.home-card.hero .hero-stat { text-align: right; }
+.home-card.hero .hero-stat .num { font-size: 26px; font-weight: 700; color: var(--main-1); line-height: 1; }
+.home-card.hero .hero-stat .lbl { font-size: 11px; color: var(--text-3); font-weight: 700; margin-top: 4px; }
+.home-card.hero .hero-go { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--main-1); }
+.home-card.hero .hero-go i { font-size: 16px; }
 
 /* 임시 placeholder (개발 예정 / 다음 단계 채울 자리) */
 .placeholder { background: white; border: 1px dashed var(--border); border-radius: 14px; padding: 56px 32px; text-align: center; max-width: 640px; }
@@ -176,6 +193,8 @@ a { color: inherit; text-decoration: none; }
   .topbar { padding: 12px 16px; }
   .content { padding: 20px 16px 32px; }
   .home-grid { grid-template-columns: 1fr; }
+  .home-card.hero { flex-direction: column; align-items: flex-start; gap: 18px; padding: 24px; }
+  .home-card.hero .hero-meta { flex-direction: row; align-items: center; width: 100%; padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 16px; justify-content: space-between; }
 }
 </style>
 </head>
@@ -239,6 +258,26 @@ a { color: inherit; text-decoration: none; }
 
         <div class="home-grid">
 
+          <div class="home-card hero" onclick="navigate('reports-list')">
+            <div class="hero-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <div class="hero-body">
+              <div class="home-card-tag">2026 공채 핵심 데이터</div>
+              <h3 class="home-card-title">개별 합격자 채용 리포트</h3>
+              <p class="home-card-desc">합격자별 평가·동기부여·온보딩 가이드를 담은 개인 인사이트 리포트입니다. 이번 공채 시즌 합격자 한 명 한 명의 채용 데이터를 종합해 보여줍니다.</p>
+            </div>
+            <div class="hero-meta">
+              <div class="hero-stat">
+                <div class="num">14건</div>
+                <div class="lbl">합격자 리포트</div>
+              </div>
+              <span class="hero-go">리포트 보기 <i class="ti ti-arrow-right"></i></span>
+            </div>
+          </div>
+
           <div class="home-card" onclick="navigate('company-detail')">
             <div class="home-card-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -249,18 +288,6 @@ a { color: inherit; text-decoration: none; }
             <h3 class="home-card-title">전사 채용 데이터</h3>
             <p class="home-card-desc">반기별 채용 프로세스의 리드타임·전환율·병목 지점을 분석합니다.</p>
             <div class="home-card-meta">최근 업데이트 · 2026.05.21</div>
-          </div>
-
-          <div class="home-card" onclick="navigate('reports-list')">
-            <div class="home-card-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>
-              </svg>
-            </div>
-            <div class="home-card-tag">개별 합격자</div>
-            <h3 class="home-card-title">채용 리포트</h3>
-            <p class="home-card-desc">합격자별 평가·동기부여·온보딩 가이드를 담은 개인 인사이트 리포트입니다.</p>
-            <div class="home-card-meta">합격자 14명 · 리포트 14건</div>
           </div>
 
           <div class="home-card soon" onclick="navigate('negotiation')">
