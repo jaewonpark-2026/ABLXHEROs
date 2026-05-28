@@ -219,32 +219,9 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
       </div>
 
       <div class="section-title">처리해야 할 업무</div>
-      <div style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 8px; margin-bottom: 32px; position: relative; overflow: hidden;">
+      <div id="todoList" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 8px; margin-bottom: 32px; position: relative; overflow: hidden;">
         <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue);"></div>
-        <a href="modules/jd-writer/detail.html?id=req-001" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.15s;" onmouseover="this.style.background='#F5F9FD'" onmouseout="this.style.background='transparent'">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #FFF4D6, #FCE9B0); display: flex; align-items: center; justify-content: center; color: #9A6D00; flex-shrink: 0;">
-              <i class="ti ti-clipboard-text" style="font-size: 18px;"></i>
-            </div>
-            <div>
-              <div style="font-size: 14px; font-weight: 700; margin-bottom: 3px;">신규 충원요청서 도착 (마케팅팀)</div>
-              <div style="font-size: 12px; color: var(--text-3);">마케팅팀 김부장 · 디지털 마케팅 매니저 (경력 · 과장급) · 2026-05-22 제출</div>
-            </div>
-          </div>
-          <div style="font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px;">JD 작성 시작 <i class="ti ti-arrow-right"></i></div>
-        </a>
-        <a href="modules/jd-writer/index.html" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.15s;" onmouseover="this.style.background='#F5F9FD'" onmouseout="this.style.background='transparent'">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); display: flex; align-items: center; justify-content: center; color: var(--main-1); flex-shrink: 0;">
-              <i class="ti ti-file-search" style="font-size: 18px;"></i>
-            </div>
-            <div>
-              <div style="font-size: 14px; font-weight: 700; margin-bottom: 3px;">서류 평가 대기 (12명)</div>
-              <div style="font-size: 12px; color: var(--text-3);">진행 중 공고 3건의 1차 서류 검토 대기 중</div>
-            </div>
-          </div>
-          <div style="font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px;">검토 시작 <i class="ti ti-arrow-right"></i></div>
-        </a>
+        <!-- JS로 동적 렌더링 -->
       </div>
 
       <div class="section-title">채용 업무 모듈</div>
@@ -303,6 +280,79 @@ if (hour < 12) greeting = '좋은 아침이에요';
 else if (hour < 18) greeting = '좋은 오후예요';
 else greeting = '좋은 저녁이에요';
 document.getElementById('greeting').textContent = greeting;
+
+// ===== 처리해야 할 업무 (localStorage 워크플로우 상태 반영) =====
+function renderTodos() {
+  const todoList = document.getElementById('todoList');
+  let items = '';
+
+  // req-001 상태 읽기
+  let reqState = {};
+  try { reqState = JSON.parse(localStorage.getItem('reqState-req-001') || '{}'); } catch(e) {}
+  const hasFeedback = !!localStorage.getItem('pendingFeedback-req-001');
+  const step = reqState.current_step || 1;
+  const status = reqState.status || '';
+
+  // 1) 현업이 JD 수정 요청을 보낸 경우 → 최우선 표시
+  if (hasFeedback) {
+    items += todoItem({
+      href: 'modules/jd-writer/detail.html?id=req-001',
+      iconBg: 'linear-gradient(135deg, #FFE0E0, #FFCdcd)', iconColor: '#C0392B', icon: 'ti-message-report',
+      title: 'JD 수정 요청 도착 (마케팅팀)',
+      desc: '마케팅팀 김부장 · 디지털 마케팅 매니저 · 현업 검토 의견 전달됨',
+      cta: 'AI로 수정 반영'
+    });
+  }
+  // 2) 충원요청서 도착 (아직 JD 작성·검토요청 전, 즉 step 1이고 의견도 없을 때만)
+  else if (step <= 1) {
+    items += todoItem({
+      href: 'modules/jd-writer/detail.html?id=req-001',
+      iconBg: 'linear-gradient(135deg, #FFF4D6, #FCE9B0)', iconColor: '#9A6D00', icon: 'ti-clipboard-text',
+      title: '신규 충원요청서 도착 (마케팅팀)',
+      desc: '마케팅팀 김부장 · 디지털 마케팅 매니저 (경력) · 2026-05-22 제출',
+      cta: 'JD 작성 시작'
+    });
+  }
+  // 3) 공고 등재 대기 (현업이 등재 요청했거나 수정 반영 완료)
+  if (step === 4 && status.includes('등재') && !status.includes('완료')) {
+    items += todoItem({
+      href: 'modules/jd-writer/detail.html?id=req-001',
+      iconBg: 'linear-gradient(135deg, #E0F5F7, #C5EBEF)', iconColor: '#00838F', icon: 'ti-rocket',
+      title: '채용공고 등재 대기 (마케팅팀)',
+      desc: '디지털 마케팅 매니저 · 현업 검토 완료 · 공고 등재 대기 중',
+      cta: '공고 등재하기'
+    });
+  }
+
+  // 항상 표시: 서류 평가 대기 (고정 시연용)
+  items += todoItem({
+    href: 'modules/resume-analysis/index.html',
+    iconBg: 'linear-gradient(135deg, #E6F1FB, #D5E8F5)', iconColor: 'var(--main-1)', icon: 'ti-file-search',
+    title: '서류 평가 대기 (12명)',
+    desc: '진행 중 공고 3건의 1차 서류 검토 대기 중',
+    cta: '검토 시작'
+  });
+
+  todoList.innerHTML = '<div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue);"></div>' + items;
+}
+
+function todoItem(o) {
+  return `
+    <a href="${o.href}" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.15s;" onmouseover="this.style.background='#F5F9FD'" onmouseout="this.style.background='transparent'">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 36px; height: 36px; border-radius: 8px; background: ${o.iconBg}; display: flex; align-items: center; justify-content: center; color: ${o.iconColor}; flex-shrink: 0;">
+          <i class="ti ${o.icon}" style="font-size: 18px;"></i>
+        </div>
+        <div>
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 3px;">${o.title}</div>
+          <div style="font-size: 12px; color: var(--text-3);">${o.desc}</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap;">${o.cta} <i class="ti ti-arrow-right"></i></div>
+    </a>`;
+}
+
+renderTodos();
 
 function logout() {
   sessionStorage.clear();
