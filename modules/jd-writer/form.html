@@ -213,7 +213,7 @@ textarea.confirmed-locked { background: var(--bg-page); color: var(--text-1); bo
         <div id="formContainer"></div>
 
         <div class="actions-bar">
-          <button type="button" class="btn btn-ghost" onclick="location.href='index.html'"><i class="ti ti-x"></i> 취소</button>
+          <button type="button" class="btn btn-ghost" onclick="goIndex()"><i class="ti ti-x"></i> 취소</button>
           <div style="display:flex; gap:10px;">
             <button type="button" class="btn btn-secondary" onclick="alert('임시 저장되었습니다. (시연용)')"><i class="ti ti-device-floppy"></i> 임시 저장</button>
             <button type="submit" class="btn btn-primary"><i class="ti ti-send"></i> 작성 완료 · 인사팀 전달</button>
@@ -225,8 +225,10 @@ textarea.confirmed-locked { background: var(--bg-page); color: var(--text-1); bo
 </div>
 
 <script>
-const empId = sessionStorage.getItem('empId');
-const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
+// 시연(demo.html iframe)용: URL ?as=manager/hr 로 역할 강제 지정 가능
+const _asParam = new URLSearchParams(window.location.search).get('as');
+const empId = _asParam === 'manager' ? '20567' : _asParam === 'hr' ? '10234' : sessionStorage.getItem('empId');
+const role = _asParam === 'manager' ? 'manager' : _asParam === 'hr' ? 'hr' : (sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr'));
 if (!empId) window.location.href = '../../index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
 
@@ -594,13 +596,15 @@ function renderForm(schema) {
 document.getElementById('reqForm').addEventListener('submit', e => {
   e.preventDefault();
   alert('충원요청서가 인사팀에 전달되었습니다.\n\n인사팀이 AI로 JD 초안을 생성한 후 검토를 요청드릴 예정입니다. (시연용)');
-  setTimeout(() => location.href = 'index.html', 100);
+  setTimeout(() => goIndex(), 100);
 });
 
 renderNav();
 fetch('data/form-schema.json').then(r => r.json()).then(renderForm);
 
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+function goIndex() { location.href = _asParam ? 'index.html?as=' + _asParam : 'index.html'; }
 
 function resetDemo() {
   if (!confirm('시연 데이터를 초기화하시겠습니까?\n\n진행 상태, 수정 의견 등이 모두 초기 상태로 돌아갑니다.\n(로그인은 유지됩니다)')) return;

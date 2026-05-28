@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시연 모드 · 충원요청 → JD → 검토 → 등재 | RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-3: #00AEC6;
+  --bg-page: #EEF3F8; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --manager: #6D28D9; --hr: #0067AC;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* 상단 바 */
+.demo-top { background: white; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.demo-brand { font-size: 16px; font-weight: 800; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+.demo-brand-sub { font-size: 11px; color: var(--text-3); font-weight: 700; margin-left: -10px; }
+
+/* 단계 흐름 가이드 */
+.flow { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; }
+.flow-step { display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--text-3); background: var(--bg-page); transition: all 0.25s; white-space: nowrap; }
+.flow-step .num { width: 18px; height: 18px; border-radius: 50%; background: #CBD5E1; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.flow-step.active { color: white; }
+.flow-step.active.s-manager { background: var(--manager); }
+.flow-step.active.s-hr { background: var(--hr); }
+.flow-step.active .num { background: rgba(255,255,255,0.35); }
+.flow-step.done { color: #16a34a; background: #E8F5E9; }
+.flow-step.done .num { background: #16a34a; }
+.flow-arrow { color: #CBD5E1; font-size: 14px; }
+
+.demo-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.demo-btn { padding: 8px 14px; border-radius: 7px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-2); display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.demo-btn:hover { border-color: var(--main-1); color: var(--main-1); }
+.demo-btn.primary { background: var(--grad-blue); color: white; border: none; }
+.demo-btn.reset { color: #dc2626; border-color: #f0c4c4; }
+.demo-btn.reset:hover { background: #fef2f2; }
+
+/* 좌우 패널 */
+.panels { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; min-height: 0; }
+.panel-col { background: white; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 16px rgba(15,35,65,0.06); border: 2px solid transparent; transition: border-color 0.3s, box-shadow 0.3s; }
+.panel-col.spotlight { box-shadow: 0 8px 28px rgba(0,103,172,0.18); }
+.panel-col.spotlight.col-manager { border-color: var(--manager); }
+.panel-col.spotlight.col-hr { border-color: var(--hr); }
+
+.panel-head { padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0; color: white; }
+.col-manager .panel-head { background: linear-gradient(135deg, #6D28D9, #8B5CF6); }
+.col-hr .panel-head { background: var(--grad-blue); }
+.panel-head-left { display: flex; align-items: center; gap: 10px; }
+.panel-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.panel-role { font-size: 13px; font-weight: 800; }
+.panel-who { font-size: 11px; opacity: 0.85; }
+.panel-nav { display: flex; gap: 4px; }
+.pnav-btn { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; border: none; background: rgba(255,255,255,0.18); color: white; transition: all 0.15s; }
+.pnav-btn:hover { background: rgba(255,255,255,0.32); }
+.pnav-btn.refresh { background: rgba(255,255,255,0.9); color: var(--text-1); }
+
+.panel-frame { flex: 1; border: none; width: 100%; background: var(--bg-page); }
+
+/* 스포트라이트 안내 배지 */
+.spot-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 50; pointer-events: none; opacity: 0; }
+
+/* 하단 시나리오 안내 */
+.demo-hint { background: white; border-top: 1px solid var(--border); padding: 8px 20px; font-size: 12px; color: var(--text-2); display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.demo-hint i { color: var(--main-1); font-size: 15px; }
+.demo-hint b { color: var(--text-1); }
+.demo-hint .step-tag { background: var(--grad-blue); color: white; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+
+@media (max-width: 900px) {
+  .flow { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="demo-top">
+  <div>
+    <span class="demo-brand">RECRUIT AI</span>
+    <span class="demo-brand-sub">시연 모드</span>
+  </div>
+
+  <div class="flow" id="flowGuide">
+    <div class="flow-step s-manager" data-step="1"><span class="num">1</span> 충원요청 작성</div>
+    <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
+    <div class="flow-step s-hr" data-step="2"><span class="num">2</span> AI JD 생성</div>
+    <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
+    <div class="flow-step s-manager" data-step="3"><span class="num">3</span> 현업 검토</div>
+    <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
+    <div class="flow-step s-hr" data-step="4"><span class="num">4</span> AI 수정 / 등재</div>
+    <div class="flow-arrow"><i class="ti ti-chevron-right"></i></div>
+    <div class="flow-step s-hr" data-step="5"><span class="num">5</span> 공고 등재 완료</div>
+  </div>
+
+  <div class="demo-actions">
+    <button class="demo-btn" onclick="syncBoth()" title="양쪽 화면을 최신 상태로 새로고침"><i class="ti ti-refresh"></i> 양쪽 새로고침</button>
+    <button class="demo-btn reset" onclick="resetDemo()"><i class="ti ti-rotate"></i> 시연 초기화</button>
+    <a class="demo-btn" href="../../dashboard-hr.html" title="일반 모드로"><i class="ti ti-x"></i></a>
+  </div>
+</div>
+
+<div class="panels">
+  <!-- 현업 (왼쪽) -->
+  <div class="panel-col col-manager" id="col-manager">
+    <div class="panel-head">
+      <div class="panel-head-left">
+        <div class="panel-avatar"><i class="ti ti-user"></i></div>
+        <div>
+          <div class="panel-role">현업 리더</div>
+          <div class="panel-who">마케팅팀 김부장 · 사번 20567</div>
+        </div>
+      </div>
+      <div class="panel-nav">
+        <button class="pnav-btn" onclick="navManager('index')">요청 목록</button>
+        <button class="pnav-btn" onclick="navManager('form')">새 요청서</button>
+        <button class="pnav-btn refresh" onclick="reload('manager')"><i class="ti ti-refresh"></i></button>
+      </div>
+    </div>
+    <iframe class="panel-frame" id="frame-manager" src="index.html?as=manager"></iframe>
+  </div>
+
+  <!-- HR (오른쪽) -->
+  <div class="panel-col col-hr" id="col-hr">
+    <div class="panel-head">
+      <div class="panel-head-left">
+        <div class="panel-avatar"><i class="ti ti-briefcase"></i></div>
+        <div>
+          <div class="panel-role">인사팀 (HR)</div>
+          <div class="panel-who">최병현 책임 · 사번 10234</div>
+        </div>
+      </div>
+      <div class="panel-nav">
+        <button class="pnav-btn" onclick="navHR('index')">요청 목록</button>
+        <button class="pnav-btn" onclick="navHR('detail')">JD 상세</button>
+        <button class="pnav-btn refresh" onclick="reload('hr')"><i class="ti ti-refresh"></i></button>
+      </div>
+    </div>
+    <iframe class="panel-frame" id="frame-hr" src="detail.html?id=req-001&as=hr"></iframe>
+  </div>
+</div>
+
+<div class="demo-hint">
+  <span class="step-tag" id="hintTag">STEP 1</span>
+  <i class="ti ti-bulb"></i>
+  <span id="hintText"><b>현업 리더</b>가 왼쪽에서 충원요청서를 작성합니다. "새 요청서" 버튼으로 시작하거나, 이미 등록된 요청서를 확인하세요.</span>
+</div>
+
+<script>
+const fM = document.getElementById('frame-manager');
+const fH = document.getElementById('frame-hr');
+
+function navManager(page) {
+  if (page === 'index') fM.src = 'index.html?as=manager';
+  else if (page === 'form') fM.src = 'form.html?as=manager';
+}
+function navHR(page) {
+  if (page === 'index') fH.src = 'index.html?as=hr';
+  else if (page === 'detail') fH.src = 'detail.html?id=req-001&as=hr';
+}
+function reload(which) {
+  if (which === 'manager') fM.contentWindow.location.reload();
+  else fH.contentWindow.location.reload();
+}
+function syncBoth() {
+  fM.contentWindow.location.reload();
+  fH.contentWindow.location.reload();
+  setTimeout(updateFlow, 400);
+}
+
+// 현재 진행 단계 판단 (localStorage 기반)
+function getStep() {
+  let st = {};
+  try { st = JSON.parse(localStorage.getItem('reqState-req-001') || '{}'); } catch(e) {}
+  const hasFeedback = !!localStorage.getItem('pendingFeedback-req-001');
+  const step = st.current_step || 1;
+  const status = st.status || '';
+
+  if (status.includes('등재 완료')) return 5;
+  if (hasFeedback) return 4;            // 현업이 의견 보냄 → HR이 AI 수정
+  if (step >= 4) return 5;              // 등재 대기/완료
+  if (step === 3) return 3;             // 현업 검토 중
+  if (step === 2) return 2;             // JD 생성됨
+  return 1;                            // 충원요청 단계
+}
+
+const hintData = {
+  1: { tag: 'STEP 1', who: 'manager', html: '<b>현업 리더</b>가 왼쪽에서 충원요청서를 작성합니다. "새 요청서" 또는 요청 목록에서 디지털 마케팅 매니저 건을 확인하세요.' },
+  2: { tag: 'STEP 2', who: 'hr', html: '<b>인사팀</b>이 오른쪽에서 충원요청서를 받아 <b>AI로 JD 초안을 생성</b>합니다. 생성 후 "현업에게 검토 요청"을 보냅니다.' },
+  3: { tag: 'STEP 3', who: 'manager', html: '<b>현업 리더</b>가 왼쪽에서 인사팀이 작성한 JD를 검토합니다. <b>수정 의견</b>을 남기거나 <b>수정 없이 등재</b>를 선택합니다.' },
+  4: { tag: 'STEP 4', who: 'hr', html: '<b>인사팀</b>이 오른쪽에서 현업 의견을 받아 <b>AI로 재작성</b>합니다. 전/후 비교 후 반영할 항목을 선택하세요.' },
+  5: { tag: 'STEP 5', who: 'hr', html: '<b>인사팀</b>이 최종 <b>채용공고를 등재</b >합니다. 충원요청부터 공고까지의 흐름이 완료됩니다! 🎉' }
+};
+
+function updateFlow() {
+  const cur = getStep();
+  // 흐름 가이드 업데이트
+  document.querySelectorAll('.flow-step').forEach(el => {
+    const s = +el.dataset.step;
+    el.classList.remove('active', 'done');
+    if (s < cur) el.classList.add('done');
+    else if (s === cur) el.classList.add('active');
+  });
+  // 하단 힌트
+  const h = hintData[cur];
+  document.getElementById('hintTag').textContent = h.tag;
+  document.getElementById('hintText').innerHTML = h.html;
+  // 스포트라이트 (활성 쪽 강조)
+  document.getElementById('col-manager').classList.toggle('spotlight', h.who === 'manager');
+  document.getElementById('col-hr').classList.toggle('spotlight', h.who === 'hr');
+}
+
+// 시연 초기화
+function resetDemo() {
+  if (!confirm('시연 데이터를 초기화하시겠습니까?\n\n진행 상태가 모두 처음으로 돌아갑니다.')) return;
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+  keys.forEach(k => {
+    if (k.startsWith('reqState-') || k.startsWith('pendingFeedback-') || k === 'req-001-jd-sent') {
+      localStorage.removeItem(k);
+    }
+  });
+  fM.src = 'index.html?as=manager';
+  fH.src = 'detail.html?id=req-001&as=hr';
+  setTimeout(updateFlow, 500);
+}
+
+// iframe 로드 시마다 흐름 갱신
+fM.addEventListener('load', () => setTimeout(updateFlow, 200));
+fH.addEventListener('load', () => setTimeout(updateFlow, 200));
+// 주기적으로 흐름 체크 (iframe 내부 동작 반영)
+setInterval(updateFlow, 1500);
+updateFlow();
+</script>
+
+</body>
+</html>

@@ -340,7 +340,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
     </div>
 
     <div class="content">
-      <a href="index.html" class="back-link"><i class="ti ti-arrow-left"></i> 목록으로</a>
+      <a href="index.html" class="back-link" id="backLink"><i class="ti ti-arrow-left"></i> 목록으로</a>
       <div id="mainContent">
         <div style="text-align:center; padding: 60px; color: var(--text-3);">로딩 중...</div>
       </div>
@@ -349,10 +349,13 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 </div>
 
 <script>
-const empId = sessionStorage.getItem('empId');
-const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
+// 시연(demo.html iframe)용: URL ?as=manager/hr 로 역할 강제 지정 가능
+const _asParam = new URLSearchParams(window.location.search).get('as');
+const empId = _asParam === 'manager' ? '20567' : _asParam === 'hr' ? '10234' : sessionStorage.getItem('empId');
+const role = _asParam === 'manager' ? 'manager' : _asParam === 'hr' ? 'hr' : (sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr'));
 if (!empId) window.location.href = '../../index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
+if (_asParam) { const bl = document.getElementById('backLink'); if (bl) bl.href = 'index.html?as=' + _asParam; }
 
 const STEPS = [
   { name: '요청서 작성', actor: '현업' },

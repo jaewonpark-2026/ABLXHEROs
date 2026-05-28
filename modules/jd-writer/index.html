@@ -183,8 +183,10 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 </div>
 
 <script>
-const empId = sessionStorage.getItem('empId');
-const role = sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr');
+// 시연(demo.html iframe)용: URL ?as=manager/hr 로 역할 강제 지정 가능
+const _asParam = new URLSearchParams(window.location.search).get('as');
+const empId = _asParam === 'manager' ? '20567' : _asParam === 'hr' ? '10234' : sessionStorage.getItem('empId');
+const role = _asParam === 'manager' ? 'manager' : _asParam === 'hr' ? 'hr' : (sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr'));
 if (!empId) window.location.href = '../../index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
 
@@ -240,6 +242,7 @@ function renderRoleBanner() {
     document.getElementById('pageSubtitle').textContent = '충원이 필요한 포지션의 인재 요건을 작성해주세요.';
     document.getElementById('listTitle').textContent = '내 요청 현황';
     document.getElementById('newBtnText').textContent = '새 충원요청서 작성';
+    if (_asParam) { const nb = document.getElementById('newBtn'); if (nb) nb.href = 'form.html?as=' + _asParam; }
   } else {
     banner.innerHTML = `
       <i class="ti ti-bulb"></i>
@@ -279,8 +282,9 @@ function renderList(reqs) {
     list.innerHTML = `<div class="empty-state"><i class="ti ti-file-off"></i><p>아직 등록된 충원요청서가 없습니다.</p></div>`;
     return;
   }
+  const asSuffix = _asParam ? '&as=' + _asParam : '';
   list.innerHTML = reqs.map(r => `
-    <a href="detail.html?id=${r.id}" class="request-card">
+    <a href="detail.html?id=${r.id}${asSuffix}" class="request-card">
       <div class="request-top">
         <div>
           <div class="request-title">${r.position}</div>
