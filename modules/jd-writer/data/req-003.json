@@ -1,22 +1,57 @@
 {
   "id": "req-003",
   "request": {
-    "dept": "샘플 부서",
-    "position": "샘플 직무",
-    "level": "과장",
-    "type": "경력",
-    "headcount": 1,
-    "creator": "샘플 작성자",
-    "created_at": "2026-05-20",
-    "main_duties": "이 요청서는 시연용 더미입니다.",
-    "required_qual": "샘플 요건",
-    "preferred_qual": "",
-    "key_skills": [],
-    "core_values": ["전문성"]
+    "office": "마케팅본부",
+    "dept": "마케팅팀",
+    "position": "퍼포먼스 마케터",
+    "level": "사원",
+    "type": "신입",
+    "headcount": 2,
+    "desired_date": "2026-09-01",
+    "employment_type": "정규직",
+    "creator": "마케팅팀 김부장",
+    "created_at": "2026-05-15",
+
+    "reason_category": "신규 사업",
+    "reason_detail": "디지털 마케팅 캠페인 확대에 따른 실무 인력 충원.",
+
+    "main_duties": "퍼포먼스 광고 캠페인 운영(검색·디스플레이·소셜). 광고 성과 분석 및 리포팅.",
+
+    "qual_technical": "구글 애즈, 메타 광고 관리자 활용 가능",
+    "qual_education": "학사 이상",
+    "qual_experience": "신입 (인턴·대외활동 우대)",
+    "qual_language": "",
+    "qual_certification": "",
+    "qual_competencies": "숫자 친화도, 분석력, 학습 의지",
+
+    "core_values": ["스마트", "전문성"],
+    "key_skills": ["퍼포먼스 마케팅", "광고 운영"],
+    "preferred_qual": "디지털 마케팅 인턴 경험.",
+    "etc": ""
   },
-  "current_step": 2,
-  "status": "JD 작성 중",
+  "current_step": 4,
+  "status": "공고 등재 완료",
   "jd_draft": null,
-  "review_history": [],
-  "manager_comments": []
+  "review_history": [
+    {
+      "actor": "마케팅팀 김부장",
+      "actor_role": "manager",
+      "timestamp": "2026-05-15 10:00",
+      "action": "충원요청서 제출",
+      "detail": "퍼포먼스 마케터 신입 2명 충원 요청."
+    },
+    {
+      "actor": "김지용 매니저",
+      "actor_role": "hr",
+      "timestamp": "2026-05-18 16:00",
+      "action": "공고 등재 완료",
+      "detail": "사람인·잡코리아 등 채용 사이트 등재 완료."
+    }
+  ],
+  "manager_comments": [],
+  "approval_status": {
+    "requester": { "by": "마케팅팀 김부장", "at": "2026-05-15 10:00", "approved": true },
+    "hr_consent": { "by": "김지용 매니저", "at": "2026-05-15 14:20", "approved": true },
+    "approved": { "by": "마케팅본부장", "at": "2026-05-16 09:30", "approved": true }
+  }
 }
