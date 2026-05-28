@@ -510,6 +510,8 @@ function renderRequestPanel(req, approvalStatus) {
 function renderJDPanel(data) {
   const jd = data.jd_draft;
   const isHR = role === 'hr';
+  // 현업이 이미 수정 의견을 보냈는지 여부
+  const alreadySent = !!localStorage.getItem('pendingFeedback-' + data.id);
 
   if (!jd) {
     return `
@@ -566,7 +568,7 @@ function renderJDPanel(data) {
         </div>
       ` : ''}
 
-      ${!isHR && data.current_step === 3 ? `
+      ${!isHR && data.current_step === 3 && !alreadySent ? `
         <div style="background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border: 1px solid var(--main-1); border-radius: 12px; padding: 20px 24px; margin-top: 20px;">
           <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--main-1); display: flex; align-items: center; gap: 8px;">
             <i class="ti ti-help-circle" style="font-size: 18px;"></i> 인사팀이 작성한 JD를 검토해주세요
@@ -619,6 +621,18 @@ function renderJDPanel(data) {
               <i class="ti ti-send"></i> 인사팀에 등재 요청 전송
             </button>
           </div>
+        </div>
+      ` : ''}
+
+      ${!isHR && data.current_step === 3 && alreadySent ? `
+        <div class="action-section" style="background:linear-gradient(135deg,#E8F5E9,#D6EFD8); border:1px solid #4CAF50; text-align:center;">
+          <div style="width:52px; height:52px; border-radius:50%; background:#4CAF50; color:white; display:flex; align-items:center; justify-content:center; margin:0 auto 12px;">
+            <i class="ti ti-check" style="font-size:28px;"></i>
+          </div>
+          <div style="font-size:15px; font-weight:700; color:#2E7D32; margin-bottom:6px;">인사팀에 수정 의견이 전달되었습니다</div>
+          <p style="font-size:13px; color:var(--text-2); line-height:1.7;">
+            인사팀이 의견을 반영해 JD를 수정한 후 다시 검토 요청을 드릴 예정입니다.<br>수정이 완료되면 알림으로 안내해 드리겠습니다.
+          </p>
         </div>
       ` : ''}
 
@@ -699,7 +713,7 @@ function render(data) {
 function renderHRFeedbackArea(data) {
   const area = document.getElementById('hrFeedbackArea');
   if (!area) return;
-  const fbRaw = sessionStorage.getItem('pendingFeedback-' + data.id);
+  const fbRaw = localStorage.getItem('pendingFeedback-' + data.id);
 
   // 현업 의견이 아직 없으면: 검토 대기 안내
   if (!fbRaw) {
@@ -769,7 +783,7 @@ function startAIGenerate() {
 }
 
 function requestReview() {
-  sessionStorage.setItem('req-001-jd-sent', 'true');
+  localStorage.setItem('req-001-jd-sent', 'true');
   alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
@@ -777,12 +791,12 @@ function requestReview() {
   render(currentData);
 }
 
-// 목록(index.html)에 진행 상태를 반영하기 위해 sessionStorage에 저장
+// 목록(index.html)에 진행 상태를 반영하기 위해 localStorage에 저장 (로그인 전환에도 유지)
 function saveReqState(id, patch) {
   try {
-    const prev = sessionStorage.getItem('reqState-' + id);
+    const prev = localStorage.getItem('reqState-' + id);
     const merged = prev ? { ...JSON.parse(prev), ...patch } : patch;
-    sessionStorage.setItem('reqState-' + id, JSON.stringify(merged));
+    localStorage.setItem('reqState-' + id, JSON.stringify(merged));
   } catch (e) { console.warn('saveReqState 오류', e); }
 }
 
@@ -874,8 +888,6 @@ JD 검토 후 아래와 같이 수정 의견 전달드립니다:
 
 ${points.join('\n\n')}
 
-빠른 시간 내 반영해주시면 감사하겠습니다.
-
 마케팅팀 김부장 드림`;
 }
 
@@ -891,10 +903,10 @@ function sendRefinedComment() {
     action: "수정 의견 전송",
     detail: refined.split('\n')[0] + " (AI 정제됨)"
   });
-  currentData.status = "현업 수정 의견 도착";
+  currentData.status = "수정 요청 전달";
   // 목록 상태 반영 + HR이 재작성할 수 있도록 수정의견 저장
-  saveReqState(currentData.id, { current_step: 3, status: '현업 수정 의견 도착', status_color: 'amber' });
-  sessionStorage.setItem('pendingFeedback-' + currentData.id, JSON.stringify({
+  saveReqState(currentData.id, { current_step: 3, status: '수정 요청 전달', status_color: 'amber' });
+  localStorage.setItem('pendingFeedback-' + currentData.id, JSON.stringify({
     raw: rawComment,
     refined: refined,
     at: new Date().toISOString().slice(0, 16).replace('T', ' ')
@@ -1040,7 +1052,7 @@ function buildRewriteProposals(comment, jd) {
 }
 
 function startAIRewrite() {
-  const fbRaw = sessionStorage.getItem('pendingFeedback-' + currentData.id);
+  const fbRaw = localStorage.getItem('pendingFeedback-' + currentData.id);
   if (!fbRaw) { alert('반영할 현업 의견이 없습니다.'); return; }
   let fb; try { fb = JSON.parse(fbRaw); } catch(e){ return; }
   const comment = fb.raw || fb.refined || '';
@@ -1154,7 +1166,7 @@ function finalizeRewrite() {
   });
 
   // 현업 의견 처리 완료 → step 2(검토요청 전)로 되돌려 HR이 재검토 요청 가능하게
-  sessionStorage.removeItem('pendingFeedback-' + currentData.id);
+  localStorage.removeItem('pendingFeedback-' + currentData.id);
   currentData.current_step = 2;
   currentData.status = 'JD 수정 완료 · 재검토 요청 대기';
   saveReqState(currentData.id, { current_step: 2, status: 'JD 수정 완료', status_color: 'blue' });
@@ -1211,7 +1223,7 @@ async function loadData() {
     // - HR이 들어가면: 초기 상태 (JD 없음) → "AI 생성" 버튼 클릭 시 풀데이터 로드
     // - 현업이 들어가면: 무조건 JD 있는 상태로 표시 (HR이 이미 보냈다는 가정)
     const isManager = role === 'manager';
-    const jdSent = sessionStorage.getItem('req-001-jd-sent') === 'true';
+    const jdSent = localStorage.getItem('req-001-jd-sent') === 'true';
 
     if (id === 'req-001' && (isManager || jdSent) && !data.jd_draft) {
       const fullR = await fetch('data/req-001-full.json');

@@ -159,6 +159,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
         <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> HR 담당자</span>
         <span id="userId">사번 -</span>
         <button class="logout-btn" onclick="logout()">로그아웃</button>
+        <button class="logout-btn" onclick="resetDemo()" style="color:#dc2626; border-color:#dc2626;" title="시연 데이터를 초기화합니다">시연 초기화</button>
       </div>
     </div>
 
@@ -322,9 +323,9 @@ renderRoleBanner();
 
 fetch('data/requests.json').then(r => r.json()).then(data => {
   let reqs = data.requests;
-  // detail.html에서 진행한 상태 변경을 sessionStorage에서 불러와 덮어쓰기
+  // detail.html에서 진행한 상태 변경을 localStorage에서 불러와 덮어쓰기 (로그인 전환에도 유지)
   reqs = reqs.map(r => {
-    const override = sessionStorage.getItem('reqState-' + r.id);
+    const override = localStorage.getItem('reqState-' + r.id);
     if (override) {
       try {
         const o = JSON.parse(override);
@@ -338,6 +339,20 @@ fetch('data/requests.json').then(r => r.json()).then(data => {
 });
 
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+function resetDemo() {
+  if (!confirm('시연 데이터를 초기화하시겠습니까?\n\n진행 상태, 수정 의견 등이 모두 초기 상태로 돌아갑니다.\n(로그인은 유지됩니다)')) return;
+  // 워크플로우 관련 localStorage 키만 삭제
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+  keys.forEach(k => {
+    if (k.startsWith('reqState-') || k.startsWith('pendingFeedback-') || k === 'req-001-jd-sent') {
+      localStorage.removeItem(k);
+    }
+  });
+  alert('초기화 완료! 시연을 처음부터 다시 진행할 수 있습니다.');
+  location.reload();
+}
 </script>
 
 </body>
