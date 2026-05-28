@@ -205,6 +205,77 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .action-toggle:hover { background: #F5F9FD; }
 .action-toggle.active { background: var(--grad-blue); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(0, 103, 172, 0.2); }
 .action-toggle i { font-size: 16px; }
+
+/* ===== 최종 공고 미리보기 버튼 ===== */
+.btn-preview-posting { background: linear-gradient(135deg, #F56A6A, #E84545); color: white; border: none; padding: 6px 14px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 3px 10px rgba(232, 69, 69, 0.25); transition: all 0.15s; }
+.btn-preview-posting:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-preview-posting i { font-size: 14px; }
+
+/* ===== 공고 미리보기 모달 ===== */
+.posting-backdrop { position: fixed; inset: 0; background: rgba(15, 35, 65, 0.55); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 32px 20px; overflow-y: auto; }
+.posting-backdrop.show { display: flex; }
+.posting-modal { background: white; border-radius: 14px; width: 100%; max-width: 920px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3); overflow: hidden; margin: auto; animation: postingPop 0.25s ease; }
+@keyframes postingPop { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.posting-modal-bar { background: var(--text-1); color: white; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 5; }
+.posting-modal-bar-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+.posting-modal-bar-title i { font-size: 16px; }
+.posting-modal-bar-title span { font-weight: 400; color: rgba(255,255,255,0.6); font-size: 11px; }
+.posting-modal-bar-actions { display: flex; align-items: center; gap: 8px; }
+.posting-bar-btn { background: rgba(255,255,255,0.15); border: none; color: white; padding: 6px 12px; border-radius: 6px; font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.posting-bar-btn:hover { background: rgba(255,255,255,0.25); }
+.posting-bar-close { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.posting-bar-close:hover { background: rgba(255,255,255,0.15); color: white; }
+.posting-scroll { max-height: calc(100vh - 130px); overflow-y: auto; padding: 36px 44px 48px; }
+
+/* 공고 본문 (ABL 톤) */
+.pt-title { font-size: 22px; font-weight: 700; color: #222; letter-spacing: -0.4px; padding-bottom: 16px; border-bottom: 2px solid #eee; margin-bottom: 24px; }
+.pt-title .abl-red { color: #E84545; }
+
+/* 히어로 배너 */
+.pt-hero { border-radius: 14px; overflow: hidden; background: linear-gradient(120deg, #F08080 0%, #E84545 55%, #D63838 100%); padding: 44px 40px; position: relative; margin-bottom: 36px; min-height: 230px; }
+.pt-hero::after { content: ''; position: absolute; top: -30px; right: 60px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+.pt-hero::before { content: ''; position: absolute; bottom: -40px; right: 180px; width: 90px; height: 90px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+.pt-hero-eyebrow { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 400; margin-bottom: 18px; letter-spacing: 0.3px; position: relative; z-index: 2; }
+.pt-hero-title { font-size: 30px; font-weight: 700; color: white; line-height: 1.32; letter-spacing: -0.5px; position: relative; z-index: 2; text-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.pt-hero-sub { font-size: 13px; color: rgba(255,255,255,0.9); font-weight: 700; margin-top: 18px; position: relative; z-index: 2; }
+.pt-hero-logo { position: absolute; top: 36px; right: 40px; font-size: 32px; font-weight: 800; color: white; font-style: italic; letter-spacing: -1px; z-index: 2; }
+.pt-hero-emoji { position: absolute; right: 44px; bottom: 36px; font-size: 60px; z-index: 1; opacity: 0.92; }
+
+/* 섹션 제목 */
+.pt-section-title { font-size: 20px; font-weight: 700; color: #E84545; margin: 36px 0 16px; letter-spacing: -0.3px; }
+.pt-section-title:first-child { margin-top: 0; }
+
+/* 모집 테이블 */
+.pt-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.pt-table th { background: #F56A6A; color: white; font-weight: 700; padding: 12px 8px; text-align: center; border: 1px solid #fff; font-size: 12px; }
+.pt-table td { border: 1px solid #e5e5e5; padding: 14px 12px; vertical-align: top; color: #333; line-height: 1.7; }
+.pt-table td.center { text-align: center; vertical-align: middle; white-space: nowrap; }
+.pt-table .qual-head { font-weight: 700; color: #222; margin: 0 0 4px; }
+.pt-table .qual-head:not(:first-child) { margin-top: 12px; }
+.pt-table ul { list-style: none; padding: 0; margin: 0; }
+.pt-table li { padding-left: 12px; position: relative; margin-bottom: 5px; }
+.pt-table li::before { content: '-'; position: absolute; left: 0; color: #888; }
+
+/* 전형절차 */
+.pt-process { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin: 20px 0 8px; }
+.pt-process-step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pt-process-circle { width: 92px; height: 92px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F89999, #E84545); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(232,69,69,0.3); }
+.pt-process-num { font-size: 11px; opacity: 0.7; font-weight: 700; }
+.pt-process-label { font-size: 12px; font-weight: 700; margin-top: 2px; }
+.pt-process-arrow { color: #F0A0A0; font-size: 20px; }
+
+/* 리스트 섹션 */
+.pt-list { list-style: none; padding: 0; margin: 0; }
+.pt-list li { position: relative; padding-left: 16px; margin-bottom: 8px; font-size: 13px; color: #444; line-height: 1.7; }
+.pt-list li::before { content: '•'; position: absolute; left: 2px; color: #E84545; font-weight: 700; }
+.pt-list .hl-red { color: #E84545; font-weight: 700; }
+.pt-list .hl-link { color: #2563EB; text-decoration: underline; }
+
+/* 유의사항 핑크박스 */
+.pt-notice-box { background: #FDEEEE; border-radius: 12px; padding: 28px 32px; margin-top: 32px; }
+.pt-notice-box .pt-section-title { margin-top: 0; }
+
+.pt-info-block { margin-bottom: 28px; }
 </style>
 </head>
 <body>
@@ -428,6 +499,7 @@ function renderJDPanel(data) {
           <span class="jd-version">v${jd.version} · ${jd.last_updated}</span>
         </div>
         <div style="display:flex; gap:6px;">
+          <button class="btn-preview-posting" onclick="openPostingPreview()"><i class="ti ti-eye"></i> 최종 공고 미리보기</button>
           ${isHR ? '<button class="btn" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>' : ''}
         </div>
       </div>
@@ -875,7 +947,161 @@ async function loadData() {
 loadData();
 
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== 최종 채용공고 미리보기 =====
+function openPostingPreview() {
+  const data = currentData;
+  const jd = data && data.jd_draft;
+  const req = data && data.request;
+  if (!jd) { alert('먼저 JD 초안을 생성해주세요.'); return; }
+
+  // 요구자격 6개 → 필수사항 리스트로 (req 우선, 없으면 jd.required)
+  const reqQuals = [];
+  if (req) {
+    const qmap = [
+      ['qual_technical', ''], ['qual_education', ''], ['qual_experience', ''],
+      ['qual_language', ''], ['qual_certification', ''], ['qual_competencies', '']
+    ];
+    qmap.forEach(([k]) => {
+      if (req[k] && req[k].trim()) {
+        req[k].split('\n').forEach(line => {
+          const t = line.replace(/^[·\-•*\s]+/, '').trim();
+          if (t) reqQuals.push(t);
+        });
+      }
+    });
+  }
+  const requiredList = reqQuals.length ? reqQuals : (jd.required || []);
+  const preferredList = jd.preferred || [];
+  const dutiesList = jd.main_duties || [];
+
+  // 채용 형태 / 근무 형태
+  const recruitType = req ? req.type : '경력';
+  const empType = jd.employment_type || (req && req.employment_type) || '정규직';
+  const office = req ? (req.office || req.dept) : '마케팅본부';
+  const dept = req ? req.dept : '마케팅팀';
+  const position = jd.title || (req && req.position) || '디지털 마케팅 매니저';
+
+  // 히어로 타이틀 (회사명 + 팀 + 채용)
+  const heroTitle = `에이비엘생명보험<br>${dept} ${recruitType}직 채용`;
+
+  const html = `
+    <div class="pt-title"><span class="abl-red">[ABL생명]</span> ${dept} ${recruitType}직(${position}) 채용</div>
+
+    <!-- 히어로 배너 -->
+    <div class="pt-hero">
+      <div class="pt-hero-logo">ABL</div>
+      <div class="pt-hero-eyebrow">Find team members to grow together</div>
+      <div class="pt-hero-title">${heroTitle}</div>
+      <div class="pt-hero-sub">다음과 같이 유능하고 역량있는 인재를 채용합니다.</div>
+      <div class="pt-hero-emoji">🔍</div>
+    </div>
+
+    <!-- 모집부문 및 자격요건 -->
+    <div class="pt-section-title">모집부문 및 자격요건</div>
+    <table class="pt-table">
+      <thead>
+        <tr>
+          <th style="width:11%">모집부서</th>
+          <th style="width:7%">채용형태</th>
+          <th style="width:7%">근무형태</th>
+          <th style="width:33%">주요업무</th>
+          <th style="width:35%">자격요건 및 우대사항</th>
+          <th style="width:7%">근무지</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="center">${dept}</td>
+          <td class="center">${recruitType}</td>
+          <td class="center">${empType}</td>
+          <td>
+            <div class="qual-head">[${position} 담당]</div>
+            <ul>${dutiesList.map(d => `<li>${d}</li>`).join('')}</ul>
+          </td>
+          <td>
+            <div class="qual-head">[필수사항]</div>
+            <ul>${requiredList.map(r => `<li>${r}</li>`).join('')}</ul>
+            <div class="qual-head">[우대사항]</div>
+            <ul>${preferredList.map(p => `<li>${p}</li>`).join('')}</ul>
+          </td>
+          <td class="center">서울<br>본사</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 전형절차 -->
+    <div class="pt-section-title">전형절차</div>
+    <div class="pt-process">
+      ${[
+        ['01', '서류전형'], ['02', '온라인 역량검사'], ['03', '1차면접'], ['04', '2차면접'], ['05', '최종합격']
+      ].map((s, i) => `
+        <div class="pt-process-step">
+          <div class="pt-process-circle"><span class="pt-process-num">${s[0]}</span><span class="pt-process-label">${s[1]}</span></div>
+        </div>
+        ${i < 4 ? '<div class="pt-process-arrow"><i class="ti ti-chevron-right"></i></div>' : ''}
+      `).join('')}
+    </div>
+
+    <!-- 제출서류 -->
+    <div class="pt-section-title">제출서류</div>
+    <ul class="pt-list">
+      <li>국문 입사지원서 (온라인 작성)</li>
+      <li>기타 서류는 면접전형 합격자에 한하여 추후 안내 드립니다.</li>
+      <li>[채용절차의 공정화에 관한 법률 제11조 제6항]에 따라, 최종합격자를 제외한 지원자는 채용서류를 반환 받을 수 있습니다.</li>
+    </ul>
+
+    <!-- 접수기간 및 방법 -->
+    <div class="pt-section-title">접수기간 및 방법</div>
+    <ul class="pt-list">
+      <li>지원서 접수기간 : <span class="hl-red">2026년 7월 10일(금) 23:59 마감</span></li>
+      <li>마감일은 접수가 급증할 것으로 예상되오니 미리 접수하시기 바랍니다.</li>
+      <li>접수방법 : <span class="hl-link">에이비엘생명보험㈜ 채용 홈페이지</span>에서 온라인 지원</li>
+      <li>발표방법 : 에이비엘생명 채용담당자가 개별 연락 예정</li>
+    </ul>
+
+    <!-- 유의사항 -->
+    <div class="pt-notice-box">
+      <div class="pt-section-title">유의사항</div>
+      <ul class="pt-list">
+        <li>지원서 접수는 인터넷에 한하며, 이메일 등 기타 방법에 의한 지원서 접수는 불가능합니다.</li>
+        <li>지원서 접수 일정 등 전형일정은 사정에 따라 변경될 수 있으며, 이 경우 메일 및 문자 등으로 알려드립니다.</li>
+        <li>문의 사항은 에이비엘생명 채용담당자 <span class="hl-link">Byeonghyun.choi@abllife.co.kr</span>로 연락 바랍니다.</li>
+        <li>제출된 서류에 허위사실이 있는 경우 입사가 취소될 수 있습니다.</li>
+        <li>에이비엘생명은 채용관련 법규 및 관련 규정을 준수하여 채용비리 근절에 앞장서고 있습니다.</li>
+      </ul>
+    </div>
+  `;
+
+  document.getElementById('postingScroll').innerHTML = html;
+  document.getElementById('postingBackdrop').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePostingPreview(e) {
+  if (e && e.target.id !== 'postingBackdrop') return;
+  document.getElementById('postingBackdrop').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePostingPreview();
+});
 </script>
+
+<!-- 최종 채용공고 미리보기 모달 -->
+<div class="posting-backdrop" id="postingBackdrop" onclick="closePostingPreview(event)">
+  <div class="posting-modal" onclick="event.stopPropagation()">
+    <div class="posting-modal-bar">
+      <div class="posting-modal-bar-title"><i class="ti ti-browser"></i> 채용공고 미리보기 <span>· ABL생명 채용 홈페이지 등재 형태</span></div>
+      <div class="posting-modal-bar-actions">
+        <button class="posting-bar-btn" onclick="alert('PDF로 저장되었습니다. (시연용)')"><i class="ti ti-download"></i> PDF 저장</button>
+        <button class="posting-bar-close" onclick="closePostingPreview()"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
+    <div class="posting-scroll" id="postingScroll"></div>
+  </div>
+</div>
 
 </body>
 </html>
