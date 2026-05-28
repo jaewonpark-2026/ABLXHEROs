@@ -359,6 +359,109 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 900px) { .iv-grid { grid-template-columns: 1fr; } .iv-tabs { max-width: 100%; } }
 
+/* ===== 종합 리포트 화면 (다크, SCREEN 3) ===== */
+.rp-screen { position: fixed; inset: 0; z-index: 1500; background: var(--dk-1); color: var(--dk-text-1); display: flex; flex-direction: column; }
+.rp-topbar { background: #0A1524; border-bottom: 1px solid var(--dk-border); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.rp-top-left { display: flex; align-items: center; gap: 16px; }
+.rp-stage-label { font-size: 11px; font-weight: 700; background: rgba(36,130,197,0.15); border: 1px solid rgba(36,130,197,0.4); color: #6BB6E8; padding: 5px 12px; border-radius: 999px; letter-spacing: 0.04em; }
+.rp-nav { display: flex; align-items: center; gap: 8px; }
+.rp-nav-btn { width: 30px; height: 30px; border-radius: 50%; background: var(--dk-card); border: 1px solid var(--dk-border); color: var(--dk-text-2); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.rp-nav-btn:hover { background: #243A57; color: white; }
+.rp-active-name { font-size: 17px; font-weight: 700; color: white; min-width: 90px; text-align: center; }
+.rp-close { color: var(--dk-text-2); cursor: pointer; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; }
+.rp-close i { font-size: 20px; }
+.rp-close:hover { color: white; }
+
+.rp-body { flex: 1; overflow-y: auto; padding: 22px; max-width: 1100px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 18px; }
+.rp-panel { background: var(--dk-2); border: 1px solid var(--dk-border); border-radius: 16px; }
+.rp-mini-title { font-size: 10px; font-weight: 700; color: var(--dk-text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.rp-mini-title.blue { color: #6BB6E8; }
+.rp-qnav-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.rp-qnav-tab { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 9px; font-size: 12px; font-weight: 700; border: 1px solid var(--dk-border); background: var(--dk-card); color: var(--dk-text-2); cursor: pointer; transition: all 0.15s; }
+.rp-qnav-tab.self { background: var(--main-2); color: white; border-color: transparent; }
+.rp-qnav-tab:hover:not(.self) { background: #243A57; }
+.rp-qnav-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+.rp-grade-row { display: grid; grid-template-columns: 1fr 2fr; gap: 18px; }
+.rp-grade-card { padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.rp-card-eyebrow { font-size: 11px; font-weight: 700; color: var(--dk-text-3); text-transform: uppercase; letter-spacing: 0.05em; }
+.rp-card-eyebrow.blue { color: #6BB6E8; padding-bottom: 8px; border-bottom: 1px solid var(--dk-border); display: block; }
+.rp-grade-badge { width: 92px; height: 92px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; margin: 16px 0; border: 2px solid; }
+.rp-grade-badge.A { background: rgba(34,197,94,0.1); color: #4ADE80; border-color: #22C55E; }
+.rp-grade-badge.B { background: rgba(36,130,197,0.12); color: #6BB6E8; border-color: var(--main-2); }
+.rp-grade-badge.C { background: rgba(250,204,21,0.1); color: #FACC15; border-color: #EAB308; }
+.rp-overall { font-size: 22px; font-weight: 700; color: var(--dk-text-1); }
+.rp-cross-card { padding: 20px; display: flex; flex-direction: column; }
+.rp-cross-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 14px 0; }
+.rp-cross-cell { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 12px; text-align: center; }
+.rp-cc-lbl { font-size: 10px; color: var(--dk-text-3); font-weight: 700; text-transform: uppercase; }
+.rp-cc-val { font-size: 16px; font-weight: 700; color: var(--dk-text-1); margin-top: 3px; }
+.rp-summary-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; font-size: 12px; color: var(--dk-text-2); line-height: 1.6; }
+
+.rp-slider-row { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.rp-slider-row:last-child { margin-bottom: 0; }
+.rp-slider-hd { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--dk-text-1); margin-bottom: 8px; }
+.rp-slider-val { font-family: monospace; font-weight: 700; }
+.rp-slider-val.v-indigo { color: #818CF8; }
+.rp-slider-val.v-green { color: #4ADE80; }
+.rp-slider-val.v-amber { color: #FACC15; }
+.rp-range { width: 100%; height: 6px; border-radius: 999px; background: var(--dk-card); appearance: none; cursor: pointer; outline: none; }
+.rp-range::-webkit-slider-thumb { appearance: none; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid #0A1524; }
+.range-indigo::-webkit-slider-thumb { background: #818CF8; }
+.range-green::-webkit-slider-thumb { background: #4ADE80; }
+.range-amber::-webkit-slider-thumb { background: #FACC15; }
+.rp-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid #0A1524; }
+.range-indigo::-moz-range-thumb { background: #818CF8; }
+.range-green::-moz-range-thumb { background: #4ADE80; }
+.range-amber::-moz-range-thumb { background: #FACC15; }
+
+.rp-sec-title { font-size: 12px; font-weight: 700; color: var(--dk-text-2); text-transform: uppercase; letter-spacing: 0.04em; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--dk-border); display: flex; align-items: center; gap: 7px; }
+.rp-sec-title.amber { color: #FACC15; border: none; padding: 0; }
+.rp-comment-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; }
+.rp-comment-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.rp-comment-lbl { font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+.rp-comment-lbl.blue { color: #6BB6E8; }
+.rp-comment-lbl.purple { color: #C4B5FD; }
+.rp-comment-btn { padding: 5px 11px; border-radius: 7px; font-size: 11px; font-weight: 700; color: white; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.rp-comment-btn.blue { background: var(--main-2); }
+.rp-comment-btn.purple { background: var(--purple); }
+.rp-comment-static { font-size: 12px; color: var(--dk-text-2); line-height: 1.6; white-space: pre-wrap; min-height: 36px; }
+.rp-comment-input { width: 100%; background: var(--dk-card); border: 1px solid var(--dk-border); color: var(--dk-text-1); border-radius: 8px; padding: 10px; font-size: 12px; font-family: inherit; outline: none; resize: vertical; margin-top: 8px; }
+.rp-comment-input:focus { border-color: var(--main-2); }
+
+.rp-lifecycle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rp-lc-cell { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+.rp-lc-lbl { font-size: 11px; color: var(--dk-text-3); font-weight: 700; margin-bottom: 10px; }
+.rp-lc-full { grid-column: 1/-1; }
+.rp-lc-btn { width: 100%; padding: 10px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid; transition: all 0.15s; }
+.rp-lc-btn.green { background: rgba(34,197,94,0.12); color: #4ADE80; border-color: rgba(34,197,94,0.4); }
+.rp-lc-btn.green:hover { background: #22C55E; color: white; }
+.rp-lc-btn.red { background: rgba(220,38,38,0.12); color: #FCA5A5; border-color: rgba(220,38,38,0.4); }
+.rp-lc-btn.red:hover { background: #DC2626; color: white; }
+.rp-lc-btn.sky { background: var(--main-2); color: white; border-color: transparent; }
+.rp-lc-btn.sky:hover { opacity: 0.9; }
+.rp-lc-btn.gray { background: var(--dk-card); color: var(--dk-text-1); border-color: var(--dk-border); }
+.rp-lc-info { grid-column: 1/-1; text-align: center; padding: 8px; font-size: 12px; color: var(--dk-text-3); }
+.rp-lc-confirm { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; }
+.rp-lc-confirm-txt { font-size: 12px; color: #4ADE80; font-weight: 700; }
+
+.rp-feedback-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.rp-fb-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--dk-card); color: var(--dk-text-2); border: 1px solid var(--dk-border); }
+.rp-fb-badge.sent { background: rgba(34,197,94,0.12); color: #4ADE80; border-color: rgba(34,197,94,0.4); }
+.rp-letter { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 18px; font-size: 12px; color: var(--dk-text-2); line-height: 1.7; white-space: pre-wrap; max-height: 300px; overflow-y: auto; font-family: 'Courier New', monospace; }
+
+.rp-action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: stretch; }
+.rp-decide-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; }
+.rp-decide-btns { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.rp-decide { padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; background: var(--dk-card); border: 1px solid var(--dk-border); color: var(--dk-text-2); cursor: pointer; transition: all 0.15s; }
+.rp-decide.pass:hover, .rp-decide.pass.on { color: #4ADE80; border-color: #22C55E; background: rgba(34,197,94,0.1); }
+.rp-decide.hold:hover, .rp-decide.hold.on { color: #FACC15; border-color: #EAB308; background: rgba(250,204,21,0.1); }
+.rp-decide.fail:hover, .rp-decide.fail.on { color: #FCA5A5; border-color: #DC2626; background: rgba(220,38,38,0.1); }
+.rp-decide.on { border-width: 2px; }
+.rp-coop-log { max-height: 80px; overflow-y: auto; font-size: 11px; color: var(--dk-text-2); display: flex; flex-direction: column; gap: 3px; }
+.rp-coop-log .author { color: #6BB6E8; font-weight: 700; margin-right: 4px; }
+@media (max-width: 860px) { .rp-grade-row, .rp-action-grid, .rp-lifecycle-grid { grid-template-columns: 1fr; } }
+
 /* ===== 다크 패널 (면접 진행/리포트) — 4·5단계에서 본격 사용 ===== */
 .dk-wrap { background: var(--dk-1); color: var(--dk-text-1); border-radius: 14px; }
 
@@ -644,9 +747,125 @@ a { color: inherit; text-decoration: none; }
       </div>
     </section>
 
-    <!-- SCREEN 3: 종합 리포트 (5단계에서 구현 - 전체화면 다크) -->
-    <section id="view-report" class="hidden">
-      <div class="stage-placeholder" style="margin:40px;">[5단계 예정] 종합 채용 리포트</div>
+    <!-- SCREEN 3: 종합 리포트 (전체화면 다크) -->
+    <section id="view-report" class="hidden rp-screen">
+      <div class="rp-topbar">
+        <div class="rp-top-left">
+          <span class="rp-stage-label" id="report-stage-label">BEI 채용 인터뷰 리포트</span>
+          <div class="rp-nav">
+            <button class="rp-nav-btn" onclick="navigateReport(-1)"><i class="ti ti-chevron-left"></i></button>
+            <h2 class="rp-active-name" id="report-active-name">지원자</h2>
+            <button class="rp-nav-btn" onclick="navigateReport(1)"><i class="ti ti-chevron-right"></i></button>
+          </div>
+        </div>
+        <button class="rp-close" onclick="closeReportView()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="rp-body">
+        <!-- 세션 연속 채점 내비게이터 -->
+        <div id="report-quick-nav" class="rp-panel hidden" style="padding:14px 16px;">
+          <h4 class="rp-mini-title">이번 세션 대상자 연속 채점</h4>
+          <div id="report-quick-nav-tabs" class="rp-qnav-tabs"></div>
+        </div>
+
+        <!-- 등급 요약 -->
+        <div class="rp-grade-row">
+          <div class="rp-panel rp-grade-card">
+            <span class="rp-card-eyebrow">AI 종합 매치 등급</span>
+            <div class="rp-grade-badge" id="report-grade-badge">A</div>
+            <div class="rp-overall" id="report-overall-score">0점</div>
+          </div>
+          <div class="rp-panel rp-cross-card">
+            <div class="rp-card-eyebrow blue">3단계 데이터 교차검증</div>
+            <div class="rp-cross-grid">
+              <div class="rp-cross-cell"><div class="rp-cc-lbl">서류 평가</div><div class="rp-cc-val" id="report-val-resume">90점</div></div>
+              <div class="rp-cross-cell"><div class="rp-cc-lbl">역량 검사</div><div class="rp-cc-val" id="report-val-cognitive">88점</div></div>
+              <div class="rp-cross-cell"><div class="rp-cc-lbl">면접 적합성</div><div class="rp-cc-val" id="report-val-interview">0점</div></div>
+            </div>
+            <div class="rp-summary-box"><p id="report-ai-summary"></p></div>
+          </div>
+        </div>
+
+        <!-- 점수 슬라이더 -->
+        <div class="rp-panel" style="padding:20px;">
+          <div class="rp-slider-row">
+            <div class="rp-slider-hd"><span>① 면접 질문-답변 적합도</span><span class="rp-slider-val v-indigo" id="slider-val-lbl-qaa">0점</span></div>
+            <input type="range" id="slider-val-qaa" min="0" max="100" value="80" oninput="updateReportSliders()" class="rp-range range-indigo">
+          </div>
+          <div class="rp-slider-row">
+            <div class="rp-slider-hd"><span>② 직무 적합도 (산업이해도/fit)</span><span class="rp-slider-val v-green" id="slider-val-lbl-job">0점</span></div>
+            <input type="range" id="slider-val-job" min="0" max="100" value="80" oninput="updateReportSliders()" class="rp-range range-green">
+          </div>
+          <div class="rp-slider-row">
+            <div class="rp-slider-hd"><span>③ 조직 적합도 (인재상/조직문화)</span><span class="rp-slider-val v-amber" id="slider-val-lbl-culture">0점</span></div>
+            <input type="range" id="slider-val-culture" min="0" max="100" value="80" oninput="updateReportSliders()" class="rp-range range-amber">
+          </div>
+        </div>
+
+        <!-- 코멘트 -->
+        <div class="rp-panel" style="padding:20px;">
+          <h3 class="rp-sec-title">단계별 최종 평가 코멘트 관리</h3>
+          <div class="rp-comment-box" id="report-hr-comment-area">
+            <div class="rp-comment-hd">
+              <span class="rp-comment-lbl blue"><i class="ti ti-user-cog"></i> 1차 실무진 최종 코멘트</span>
+              <button class="rp-comment-btn blue" id="btn-edit-hr-comment" onclick="toggleHrCommentEdit()"><i class="ti ti-pencil" id="btn-edit-hr-icon"></i> <span id="btn-edit-hr-text">작성</span></button>
+            </div>
+            <div class="rp-comment-static" id="report-hr-comment-static"></div>
+            <textarea id="report-hr-comment-input" class="rp-comment-input hidden" rows="3" placeholder="1차 실무진 코멘트를 입력하세요..."></textarea>
+          </div>
+          <div class="rp-comment-box hidden" id="report-exec-comment-area" style="margin-top:12px;">
+            <div class="rp-comment-hd">
+              <span class="rp-comment-lbl purple"><i class="ti ti-user-star"></i> 2차 임원진 최종 코멘트</span>
+              <button class="rp-comment-btn purple" id="btn-edit-exec-comment" onclick="toggleExecCommentEdit()"><i class="ti ti-pencil" id="btn-edit-exec-icon"></i> <span id="btn-edit-exec-text">작성</span></button>
+            </div>
+            <div class="rp-comment-static" id="report-exec-comment-static"></div>
+            <textarea id="report-exec-comment-input" class="rp-comment-input hidden" rows="3" placeholder="2차 임원진 코멘트를 입력하세요..."></textarea>
+          </div>
+        </div>
+
+        <!-- ATS & TRM -->
+        <div class="rp-panel" style="padding:20px;" id="ats-trm-lifecycle-panel">
+          <h3 class="rp-sec-title"><i class="ti ti-git-branch" style="color:#7DD3FC;"></i> ATS & TRM 후보자 채용 상태 관리</h3>
+          <div class="rp-lifecycle-grid" id="lifecycle-action-container"></div>
+        </div>
+
+        <!-- 개인 피드백 레터 -->
+        <div class="rp-panel hidden" style="padding:20px;" id="employer-branding-feedback-panel">
+          <div class="rp-feedback-hd">
+            <h3 class="rp-sec-title amber" style="margin:0;"><i class="ti ti-medal"></i> AI 지원자 맞춤 성장 피드백 레터</h3>
+            <span id="feedback-sent-badge" class="rp-fb-badge">발송 대기</span>
+          </div>
+          <div class="rp-letter" id="report-personalized-letter"></div>
+          <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+            <button id="btn-send-individual-feedback" class="btn btn-g" onclick="sendIndividualCandidateFeedback()"><i class="ti ti-send"></i> 개별 피드백 전송</button>
+          </div>
+        </div>
+
+        <!-- 최종 액션 -->
+        <div class="rp-panel" style="padding:20px;" id="report-action-panel">
+          <div class="rp-action-grid">
+            <div class="rp-decide-box">
+              <label class="rp-mini-title" style="text-align:center;display:block;">선택 결정 (합격 / 보류 / 불합격)</label>
+              <div class="rp-decide-btns">
+                <button id="btn-decide-pass" class="rp-decide pass" onclick="setFinalDecision('pass')">합격</button>
+                <button id="btn-decide-hold" class="rp-decide hold" onclick="setFinalDecision('hold')">보류</button>
+                <button id="btn-decide-fail" class="rp-decide fail" onclick="setFinalDecision('fail')">불합격</button>
+              </div>
+            </div>
+            <div class="rp-decide-box">
+              <h4 class="rp-mini-title blue"><i class="ti ti-users"></i> 공동 메모 내역</h4>
+              <div id="report-coop-memos-log" class="rp-coop-log"></div>
+            </div>
+            <div style="display:flex;align-items:center;">
+              <button id="btn-report-main-action" class="btn btn-p" style="width:100%;height:54px;font-size:14px;" onclick="saveAndPublishReport()"><i class="ti ti-cloud-upload"></i> 최종 결과 반영 및 제출</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rp-panel hidden" style="padding:20px;text-align:center;" id="report-view-only-panel">
+          <button class="btn btn-o btn-lg" onclick="closeReportView()" style="margin:0 auto;"><i class="ti ti-circle-check" style="color:#4ADE80;"></i> 확인 (목록으로 돌아가기)</button>
+        </div>
+      </div>
     </section>
   </div>
 </div>
@@ -844,7 +1063,7 @@ function showView(viewId) {
   });
   if (viewId === 'all-candidates') renderAllCandidatesTable();
   if (viewId === 'dashboard') renderDashboardCandidates();
-  // interview / report 렌더는 4~5단계에서 연결
+  if (viewId === 'report') renderReportDetails();
 }
 
 /* ===== 전체 지원자 테이블 ===== */
@@ -1190,8 +1409,19 @@ function openDetailsReport() {
   if (!currentDrawerCandidateId) return;
   const c = candidates.find(item => item.id === currentDrawerCandidateId);
   if (c && c.status === '완료') {
-    showToast('채용 리포트 화면은 곧 연결됩니다. (5단계 예정)', 'info');
+    closeDetailsDrawer();
+    isHrEditing = false; isExecEditing = false;
+    activeReportCandidateId = currentDrawerCandidateId;
+    reportSource = 'dashboard';
+    showView('report');
   }
+}
+
+function openReportFromAll(id) {
+  isHrEditing = false; isExecEditing = false;
+  activeReportCandidateId = id;
+  reportSource = 'all';
+  showView('report');
 }
 
 /* ===== 그룹 셋업 / 세션 시작 ===== */
@@ -1488,10 +1718,10 @@ function triggerInterviewFinish() {
 
 function exitToReport() {
   document.getElementById('modal-routing').classList.remove('show');
+  isHrEditing = false; isExecEditing = false;
   activeReportCandidateId = activeInterviewSession.candidates[0] || 1;
   reportSource = 'dashboard';
-  showToast('채용 리포트 화면은 곧 연결됩니다. (5단계 예정)', 'info');
-  showView('dashboard');
+  showView('report');
 }
 
 function exitToDashboardOnly() {
@@ -1499,7 +1729,260 @@ function exitToDashboardOnly() {
   showView('dashboard');
 }
 
+/* ===== 종합 리포트 ===== */
+function renderReportDetails() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (!c) return;
 
+  document.getElementById('report-stage-label').textContent = c.stage === 1 ? '1차 면접 리포트 (HR 실무)' : '2차 면접 리포트 (임원 전형)';
+  document.getElementById('report-active-name').textContent = c.name;
+
+  document.getElementById('slider-val-qaa').value = c.evalScores.qaa;
+  document.getElementById('slider-val-job').value = c.evalScores.job;
+  document.getElementById('slider-val-culture').value = c.evalScores.culture;
+  updateReportSliders();
+
+  const log = document.getElementById('report-coop-memos-log');
+  log.innerHTML = '';
+  if (c.hrMemos && c.hrMemos.length) c.hrMemos.forEach(m => log.innerHTML += '<div><span class="author">[' + m.author + ']</span>' + m.text + '</div>');
+  else log.innerHTML = '<div style="color:var(--dk-text-3);font-style:italic;">내역 없음</div>';
+
+  document.getElementById('report-hr-comment-static').textContent = c.hrComment1st || '작성된 코멘트가 없습니다.';
+  document.getElementById('report-hr-comment-input').value = c.hrComment1st || '';
+  document.getElementById('report-exec-comment-static').textContent = c.finalComment || '작성된 코멘트가 없습니다.';
+  document.getElementById('report-exec-comment-input').value = c.finalComment || '';
+
+  document.getElementById('report-exec-comment-area').classList.toggle('hidden', c.stage === 1);
+
+  updateCommentButtonLabel('hr', c.hrComment1st);
+  updateCommentButtonLabel('exec', c.finalComment);
+
+  renderATS_TRMLifecycleActions(c);
+  renderAIExtendedFeedbackPanel(c);
+
+  const qNav = document.getElementById('report-quick-nav');
+  const qNavTabs = document.getElementById('report-quick-nav-tabs');
+  if (activeInterviewSession.candidates && activeInterviewSession.candidates.length > 0) {
+    qNav.classList.remove('hidden');
+    qNavTabs.innerHTML = '';
+    activeInterviewSession.candidates.forEach(id => {
+      const tc = candidates.find(item => item.id === id);
+      if (!tc) return;
+      const isSelf = tc.id === activeReportCandidateId;
+      let dot = '#FACC15';
+      if (tc.passFail === 'pass') dot = '#4ADE80';
+      else if (tc.passFail === 'fail') dot = '#FCA5A5';
+      qNavTabs.innerHTML += '<button class="rp-qnav-tab' + (isSelf ? ' self' : '') + '" onclick="activeReportCandidateId=' + tc.id + ';renderReportDetails();"><span class="rp-qnav-dot" style="background:' + dot + '"></span>' + tc.name + ' (' + tc.role.split(' ')[0] + ')</button>';
+    });
+  } else {
+    qNav.classList.add('hidden');
+  }
+
+  if (reportSource === 'all') {
+    document.getElementById('report-action-panel').classList.add('hidden');
+    document.getElementById('report-view-only-panel').classList.remove('hidden');
+  } else {
+    document.getElementById('report-action-panel').classList.remove('hidden');
+    document.getElementById('report-view-only-panel').classList.add('hidden');
+    setFinalDecision(c.passFail);
+  }
+}
+
+function renderATS_TRMLifecycleActions(c) {
+  const container = document.getElementById('lifecycle-action-container');
+  if (c.finalResult === '최종 합격') {
+    container.innerHTML = '<div class="rp-lc-confirm"><span class="rp-lc-confirm-txt"><i class="ti ti-circle-check"></i> 현재 최종 합격으로 확정 승인된 지원자입니다.</span><button class="rp-lc-btn red" style="width:auto;padding:8px 14px;" onclick="changeCandidateFinalResult(' + c.id + ',\'불합격\')"><i class="ti ti-ban"></i> 합격 취소 · 불합격 전환</button></div>';
+  } else if (c.finalResult === '불합격') {
+    const trmTxt = c.trmStatus ? 'TRM 등록 해제하기' : 'TRM 후보자로 등록';
+    const trmCls = c.trmStatus ? 'gray' : 'sky';
+    container.innerHTML =
+      '<div class="rp-lc-cell"><div class="rp-lc-lbl">인사 데이터베이스(ATS) 전형 관리</div><button class="rp-lc-btn green" onclick="changeCandidateFinalResult(' + c.id + ',\'최종 합격\')"><i class="ti ti-rotate"></i> 불합격 취소 · 최종 합격 변경</button></div>'
+      + '<div class="rp-lc-cell"><div class="rp-lc-lbl">TRM 장기 인재 풀(Talent Pool)</div><button class="rp-lc-btn ' + trmCls + '" onclick="toggleCandidateTRM(' + c.id + ')"><i class="ti ti-user-plus"></i> ' + trmTxt + '</button></div>';
+  } else {
+    container.innerHTML = '<div class="rp-lc-info">현재 채용 전형 진행 중인 대상자입니다. 평가 결과를 확정하면 라이프사이클 제어가 활성화됩니다.</div>';
+  }
+}
+
+function renderAIExtendedFeedbackPanel(c) {
+  const panel = document.getElementById('employer-branding-feedback-panel');
+  if (c.finalResult !== '불합격') { panel.classList.add('hidden'); return; }
+  panel.classList.remove('hidden');
+  const badge = document.getElementById('feedback-sent-badge');
+  const btn = document.getElementById('btn-send-individual-feedback');
+  if (c.feedbackSent) {
+    badge.textContent = '발송 완료'; badge.className = 'rp-fb-badge sent';
+    btn.setAttribute('disabled', 'true'); btn.style.opacity = '0.5';
+  } else {
+    badge.textContent = '발송 대기'; badge.className = 'rp-fb-badge';
+    btn.removeAttribute('disabled'); btn.style.opacity = '';
+  }
+  document.getElementById('report-personalized-letter').textContent = generatePersonalizedFeedback(c);
+}
+
+function generatePersonalizedFeedback(c) {
+  const scores = [
+    { name: '면접 질문-답변 적합도', val: c.evalScores.qaa },
+    { name: '직무 전문 역량 적합도', val: c.evalScores.job },
+    { name: 'ABL 조직 문화 적합도', val: c.evalScores.culture }
+  ];
+  scores.sort((a, b) => b.val - a.val);
+  const top = scores[0], low = scores[2];
+  return '[ABL Recruit 면접 피드백 리포트 · ' + c.name + ' 지원자님께]\n\n'
+    + '안녕하세요, ' + c.name + ' 지원자님.\n'
+    + '이번 ABL Recruit ' + c.dept + ' · ' + c.role + ' 부문 채용 전형에 소중한 시간과 열정을 쏟아 주셔서 감사드립니다.\n\n'
+    + '아쉽게도 이번 기회에 함께하지는 못하게 되었지만, 면접에서 보여주신 역량과 경험은 면접관들에게 깊은 인상을 남겼습니다. 감사의 마음을 담아 정밀 지표 기반의 맞춤 성장 피드백을 공유드립니다.\n\n'
+    + '----------------- 핵심 역량 종합 분석 -----------------\n'
+    + '■ 가장 돋보인 강점 영역은 [' + top.name + ']입니다. (' + top.val + '점)\n'
+    + '  성과 구조의 명확성과 논증 일관성에서 높은 평가를 받으셨습니다.\n\n'
+    + '■ 보강 시 도약할 기회 영역은 [' + low.name + ']입니다. (' + low.val + '점)\n'
+    + '  해당 영역에서 본인만의 수치화된 근거와 협업 프레임을 보강하신다면 더 큰 영향력을 발휘하실 수 있습니다.\n\n'
+    + '■ 면접관 종합 소견:\n'
+    + '  "' + (c.hrComment1st || '탁월한 도메인 분석과 논리적 전달 능력을 갖추고 있습니다.') + '"\n\n'
+    + '저희 ABL Recruit는 지원자님을 장기 인재 풀(TRM)에 소중히 보관하고, 향후 적합한 기회가 생기면 우선적으로 연락드리겠습니다.\n\n'
+    + 'ABL과 맺어주신 인연에 감사드리며, 앞날을 진심으로 응원합니다.\n\n'
+    + '- ABL Recruit 채용 위원회 & AI Assistant 일동';
+}
+
+function sendIndividualCandidateFeedback() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (c) {
+    c.feedbackSent = true;
+    showToast(c.name + ' 지원자님께 AI 개인 맞춤 성장 피드백 서한이 발송되었습니다.', 'success');
+    renderReportDetails();
+    renderAllCandidatesTable();
+  }
+}
+
+function changeCandidateFinalResult(id, newResult) {
+  const c = candidates.find(item => item.id === id);
+  if (c) {
+    c.finalResult = newResult;
+    c.passFail = newResult === '최종 합격' ? 'pass' : 'fail';
+    showToast('[' + c.name + '] 지원자의 최종 결과가 \'' + newResult + '\'(으)로 반영되었습니다.', 'info');
+    updateSidebarCounts();
+    renderReportDetails();
+    renderAllCandidatesTable();
+  }
+}
+
+function toggleCandidateTRM(id) {
+  const c = candidates.find(item => item.id === id);
+  if (c) {
+    c.trmStatus = !c.trmStatus;
+    showToast('[' + c.name + '] 지원자가 TRM 인재 풀에서 ' + (c.trmStatus ? '신규 등록되었습니다.' : '해제되었습니다.'), 'info');
+    updateSidebarCounts();
+    renderReportDetails();
+    renderAllCandidatesTable();
+  }
+}
+
+function updateCommentButtonLabel(type, textVal) {
+  const btnText = document.getElementById('btn-edit-' + type + '-text');
+  const btnIcon = document.getElementById('btn-edit-' + type + '-icon');
+  const isEditing = type === 'hr' ? isHrEditing : isExecEditing;
+  if (isEditing) { btnText.textContent = '저장'; btnIcon.className = 'ti ti-device-floppy'; }
+  else if (!textVal || textVal.trim() === '') { btnText.textContent = '작성'; btnIcon.className = 'ti ti-pencil'; }
+  else { btnText.textContent = '수정'; btnIcon.className = 'ti ti-edit'; }
+}
+
+function toggleHrCommentEdit() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  const staticBox = document.getElementById('report-hr-comment-static');
+  const inputBox = document.getElementById('report-hr-comment-input');
+  if (!isHrEditing) {
+    staticBox.classList.add('hidden'); inputBox.classList.remove('hidden');
+    isHrEditing = true; updateCommentButtonLabel('hr', c.hrComment1st);
+  } else {
+    c.hrComment1st = inputBox.value.trim();
+    staticBox.textContent = c.hrComment1st || '작성된 코멘트가 없습니다.';
+    inputBox.classList.add('hidden'); staticBox.classList.remove('hidden');
+    isHrEditing = false; updateCommentButtonLabel('hr', c.hrComment1st);
+    showToast('1차 실무진 평가 코멘트가 저장되었습니다.', 'success');
+  }
+}
+
+function toggleExecCommentEdit() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  const staticBox = document.getElementById('report-exec-comment-static');
+  const inputBox = document.getElementById('report-exec-comment-input');
+  if (!isExecEditing) {
+    staticBox.classList.add('hidden'); inputBox.classList.remove('hidden');
+    isExecEditing = true; updateCommentButtonLabel('exec', c.finalComment);
+  } else {
+    c.finalComment = inputBox.value.trim();
+    staticBox.textContent = c.finalComment || '작성된 코멘트가 없습니다.';
+    inputBox.classList.add('hidden'); staticBox.classList.remove('hidden');
+    isExecEditing = false; updateCommentButtonLabel('exec', c.finalComment);
+    showToast('2차 임원진 평가 코멘트가 저장되었습니다.', 'success');
+  }
+}
+
+function updateReportSliders() {
+  const qaa = parseInt(document.getElementById('slider-val-qaa').value);
+  const job = parseInt(document.getElementById('slider-val-job').value);
+  const culture = parseInt(document.getElementById('slider-val-culture').value);
+  document.getElementById('slider-val-lbl-qaa').textContent = qaa + '점';
+  document.getElementById('slider-val-lbl-job').textContent = job + '점';
+  document.getElementById('slider-val-lbl-culture').textContent = culture + '점';
+  const overall = Math.round(qaa * 0.3 + job * 0.4 + culture * 0.3);
+  document.getElementById('report-overall-score').textContent = overall + '점';
+  document.getElementById('report-val-interview').textContent = overall + '점';
+  const badge = document.getElementById('report-grade-badge');
+  if (overall >= 90) { badge.textContent = 'A'; badge.className = 'rp-grade-badge A'; }
+  else if (overall >= 80) { badge.textContent = 'B'; badge.className = 'rp-grade-badge B'; }
+  else { badge.textContent = 'C'; badge.className = 'rp-grade-badge C'; }
+  document.getElementById('report-ai-summary').textContent = '종합 검증 일치 스코어가 ' + overall + '점으로 실시간 연동되었습니다. 서류·역량검사 결과와 면접 적합성을 교차 검증한 결과입니다.';
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (c) { c.evalScores.qaa = qaa; c.evalScores.job = job; c.evalScores.culture = culture; c.overallScore = overall; }
+}
+
+function setFinalDecision(status) {
+  ['pass', 'hold', 'fail'].forEach(s => document.getElementById('btn-decide-' + s).classList.remove('on'));
+  if (status) { const b = document.getElementById('btn-decide-' + status); if (b) b.classList.add('on'); }
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (c) c.passFail = status;
+}
+
+function saveAndPublishReport() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (!c) return;
+  if (!c.passFail) c.passFail = 'hold';
+  if (isHrEditing) toggleHrCommentEdit();
+  if (isExecEditing) toggleExecCommentEdit();
+  if (c.passFail === 'hold') {
+    showToast(c.name + ' 지원자의 리포트가 \'임시저장(채점 전/보류)\' 상태로 저장되었습니다.', 'info');
+  } else if (c.stage === 1 && c.passFail === 'pass') {
+    c.stage = 2; c.status = '대기'; c.passFail = null; c.sttData = {}; c.customQuestions = []; c.geminiHistory = [];
+    showToast(c.name + ' 지원자가 1차 합격하여 2차 임원진 전형 대기열로 이동되었습니다.', 'success');
+  } else if (c.stage === 2 && c.passFail === 'pass') {
+    c.finalResult = '최종 합격';
+    showToast(c.name + ' 지원자가 최종 합격하셨습니다.', 'success');
+  } else if (c.passFail === 'fail') {
+    c.finalResult = '불합격';
+    showToast(c.name + ' 지원자가 불합격 처리되었습니다.', 'error');
+  }
+  updateSidebarCounts();
+  setTimeout(() => { switchMainView(currentMainView); }, 400);
+}
+
+function closeReportView() {
+  if (reportSource === 'all') switchMainView('all');
+  else showView('dashboard');
+}
+
+function navigateReport(direction) {
+  let list = reportSource === 'all'
+    ? [...candidates]
+    : candidates.filter(item => item.stage === currentStageFilter && item.status === '완료' && item.finalResult === null);
+  if (list.length <= 1) return;
+  let idx = list.findIndex(item => item.id === activeReportCandidateId);
+  idx += direction;
+  if (idx < 0) idx = list.length - 1;
+  if (idx >= list.length) idx = 0;
+  activeReportCandidateId = list[idx].id;
+  isHrEditing = false; isExecEditing = false;
+  renderReportDetails();
+}
 
 function sendBulkFeedback() {
   const failedList = candidates.filter(c => c.finalResult === '불합격' && !c.feedbackSent);
