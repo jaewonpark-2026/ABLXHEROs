@@ -316,8 +316,6 @@ tbody tr:last-child td { border-bottom: 0; }
               <option value="scoreAsc">AI 점수 낮은 순</option>
               <option value="nameAsc">이름순</option>
             </select>
-
-            <label class="toggle"><input id="reviewOnly" type="checkbox">추가 검토 필요만 보기</label>
           </div>
         </div>
 
@@ -330,9 +328,9 @@ tbody tr:last-child td { border-bottom: 0; }
                 <th>지원 직무</th>
                 <th>경력</th>
                 <th>AI 서류 점수</th>
-                <th>검토 상태</th>
+                <th>AI 평가 등급</th>
                 <th>전형 상태</th>
-                <th>주요 근거</th>
+                <th>핵심 키워드</th>
                 <th>상세</th>
               </tr>
             </thead>
@@ -364,15 +362,14 @@ function logout() { sessionStorage.clear(); window.location.href = '../../index.
 // ===== Data & state =====
 let candidates = [];
 let stageCounts = { review: 94, done: 24 };
-const state = { type: '전체', phase: '전체', role: '전체', sort: 'scoreDesc', reviewOnly: false, search: '' };
+const state = { type: '전체', phase: '전체', role: '전체', sort: 'scoreDesc', search: '' };
 const statusClassMap = {
   '우수': 'status-excellent',
   '적합': 'status-good',
-  '추가 검토': 'status-review',
-  '검토 필요': 'status-risk'
+  '미흡': 'status-review',
+  '부적합': 'status-risk'
 };
 
-function isReviewStatus(s) { return s === '추가 검토' || s === '검토 필요'; }
 function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
 
 function getFilteredCandidates() {
@@ -381,10 +378,9 @@ function getFilteredCandidates() {
     const matchType = state.type === '전체' || c.type === state.type;
     const matchRole = state.role === '전체' || c.role === state.role;
     const matchPhase = state.phase === '전체' || c.phase === state.phase;
-    const matchReview = !state.reviewOnly || isReviewStatus(c.status);
     const searchable = [c.name, c.type, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
     const matchSearch = !keyword || searchable.indexOf(keyword) !== -1;
-    return matchType && matchRole && matchPhase && matchReview && matchSearch;
+    return matchType && matchRole && matchPhase && matchSearch;
   });
   result.sort((a, b) => {
     if (state.sort === 'scoreDesc') return b.score - a.score;
@@ -471,7 +467,6 @@ document.querySelectorAll('.chip[data-phase]').forEach(chip => {
 });
 document.getElementById('roleFilter').addEventListener('change', e => { state.role = e.target.value; renderTable(); });
 document.getElementById('sortFilter').addEventListener('change', e => { state.sort = e.target.value; renderTable(); });
-document.getElementById('reviewOnly').addEventListener('change', e => { state.reviewOnly = e.target.checked; renderTable(); });
 document.getElementById('searchInput').addEventListener('input', e => { state.search = e.target.value; renderTable(); });
 </script>
 
