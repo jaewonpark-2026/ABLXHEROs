@@ -1729,6 +1729,14 @@ a { color: inherit; text-decoration: none; }
   .neg-scope .status-dot { animation: neg-pulse-dot 2s infinite; }
   /* 처우협의 모달 */
   #system-modal { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; }
+  /* corp 색상 안전장치 (Tailwind corp 유틸이 늦게 적용되어도 버튼이 항상 보이도록) */
+  .neg-scope .bg-corp-DEFAULT, #system-modal .bg-corp-DEFAULT { background-color: #0067AC !important; }
+  .neg-scope .text-corp-DEFAULT, #system-modal .text-corp-DEFAULT { color: #0067AC !important; }
+  .neg-scope .hover\:bg-corp-dark:hover { background-color: #123F6D !important; }
+  .neg-scope .border-corp-DEFAULT { border-color: #0067AC !important; }
+  .neg-scope .text-corp-light { color: #2482C5 !important; }
+  /* bg-corp-DEFAULT/10 (10% 투명) 안전장치 */
+  .neg-scope .bg-corp-DEFAULT\/10, #system-modal .bg-corp-DEFAULT\/10 { background-color: rgba(0,103,172,0.1) !important; }
 
   /* ===== 인재풀 관리 (TRM) ===== */
   /* ============ POOL (인재풀 관리) ============ */
