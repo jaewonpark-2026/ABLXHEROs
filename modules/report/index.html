@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>채용 리포트 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --ok: #16a34a; --ok-bg: #eaf8ef;
+  --warn: #f97316; --warn-bg: #fff3e8;
+  --err: #dc2626; --err-bg: #fff1f2;
+  --info: #0067AC; --info-bg: #E6F1FB;
+  --purple: #6D28D9; --purple-bg: #ede9fe;
+  --r: 8px; --rl: 12px;
+  /* 다크 패널 (우리 네이비 톤) — 리포트 상세 등에서 사용 */
+  --dk-1: #0E1B2E;
+  --dk-2: #15263D;
+  --dk-card: #1B2E47;
+  --dk-border: #2A3F5C;
+  --dk-text-1: #EAF1F8;
+  --dk-text-2: #9FB2C8;
+  --dk-text-3: #6E83A0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); font-size: 14px; line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+.hidden { display: none !important; }
+
+/* ===== Layout (디자인 시스템) ===== */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; overflow-y: auto; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label, .layout.collapsed .status-monitor { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+
+/* 사이드바 상태 모니터 */
+.status-monitor { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 12px; }
+.sm-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; color: rgba(255,255,255,0.8); }
+.sm-row .v { font-weight: 700; color: white; }
+.sm-divide { border-top: 1px solid rgba(255,255,255,0.12); margin: 6px 0; padding-top: 6px; }
+
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+
+/* Content */
+.content { padding: 28px 32px 40px; }
+
+/* ===== VIEW ROUTING ===== */
+.view { display: none; }
+.view.active { display: block; }
+
+/* 뒤로가기 링크 */
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--text-2); margin-bottom: 18px; cursor: pointer; transition: color 0.15s; }
+.back-link:hover { color: var(--main-1); }
+.back-link i { font-size: 15px; }
+
+/* 패널 헤더 (상세 화면 공통) */
+.panel-header { margin-bottom: 22px; }
+.crumb { font-size: 11px; font-weight: 700; color: var(--main-1); letter-spacing: 0.04em; margin-bottom: 8px; text-transform: uppercase; }
+.panel-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+.panel-header p { color: var(--text-2); font-size: 13px; max-width: 760px; }
+
+/* ===== HOME (DATA 진입 화면) ===== */
+.home-header { margin-bottom: 26px; }
+.home-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.04em; }
+.home-title { font-size: 27px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.4px; }
+.home-sub { color: var(--text-2); font-size: 14px; max-width: 720px; }
+.home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.home-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 24px; cursor: pointer; position: relative; overflow: hidden; transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s; }
+.home-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--grad-blue); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.home-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(15,35,65,0.1); border-color: #CFE2F2; }
+.home-card:hover::before { transform: scaleX(1); }
+.home-card-icon { width: 46px; height: 46px; border-radius: 12px; background: var(--grad-card-icon); color: var(--main-1); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+.home-card-icon svg { width: 22px; height: 22px; }
+.home-card-tag { display: inline-block; font-size: 10px; font-weight: 700; color: var(--main-1); background: var(--info-bg); padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; letter-spacing: 0.03em; }
+.home-card-title { font-size: 17px; font-weight: 700; margin-bottom: 7px; letter-spacing: -0.2px; }
+.home-card-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.55; margin-bottom: 14px; min-height: 38px; }
+.home-card-meta { font-size: 11px; color: var(--text-3); font-weight: 700; padding-top: 12px; border-top: 1px solid var(--border); }
+.home-card.soon { opacity: 0.92; }
+.home-card.soon .home-card-meta { color: var(--warn); }
+
+/* 임시 placeholder (개발 예정 / 다음 단계 채울 자리) */
+.placeholder { background: white; border: 1px dashed var(--border); border-radius: 14px; padding: 56px 32px; text-align: center; max-width: 640px; }
+.placeholder-icon { width: 60px; height: 60px; border-radius: 16px; background: var(--grad-card-icon); color: var(--main-1); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+.placeholder h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.placeholder p { font-size: 13px; color: var(--text-2); max-width: 460px; margin: 0 auto 18px; line-height: 1.6; }
+.features { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.feature-pill { font-size: 11.5px; font-weight: 700; color: var(--main-1); background: var(--info-bg); padding: 6px 13px; border-radius: 999px; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.pl-blue { background: var(--info-bg); color: var(--main-1); }
+.pl-green { background: var(--ok-bg); color: var(--ok); }
+.pl-orange { background: var(--warn-bg); color: var(--warn); }
+.pl-red { background: var(--err-bg); color: var(--err); }
+.pl-purple { background: var(--purple-bg); color: var(--purple); }
+.pl-gray { background: #EEF1F5; color: var(--text-2); }
+
+/* Buttons */
+.btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+.btn i { font-size: 14px; }
+.btn-o { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.btn-o:hover { border-color: var(--main-1); color: var(--main-1); }
+.btn-p { background: var(--grad-blue); color: white; border: none; }
+.btn-p:hover { opacity: 0.9; }
+
+/* Toast */
+.toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { display: flex; align-items: flex-start; gap: 10px; min-width: 280px; max-width: 360px; padding: 12px 16px; border-radius: 10px; background: white; box-shadow: 0 12px 32px rgba(15,35,65,0.16); border: 1px solid var(--border); border-left: 4px solid var(--main-1); transform: translateX(20px); opacity: 0; transition: all 0.25s; }
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.success { border-left-color: var(--ok); }
+.toast.error { border-left-color: var(--err); }
+.toast.info { border-left-color: var(--main-1); }
+.toast-ic { width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; }
+.toast.success .toast-ic { background: var(--ok-bg); color: var(--ok); }
+.toast.error .toast-ic { background: var(--err-bg); color: var(--err); }
+.toast.info .toast-ic { background: var(--info-bg); color: var(--main-1); }
+.toast-msg { font-size: 12px; font-weight: 700; color: var(--text-1); }
+
+/* ===== 반응형 ===== */
+@media (max-width: 1024px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label, .status-monitor { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+}
+@media (max-width: 720px) {
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .layout { grid-template-columns: 1fr; }
+  .mobile-menu-btn { display: flex; }
+  .topbar { padding: 12px 16px; }
+  .content { padding: 20px 16px 32px; }
+  .home-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+
+      <div class="status-monitor">
+        <div class="nav-section-title" style="padding:0 0 8px; opacity:0.6;">DATA MONITOR</div>
+        <div class="sm-row"><span>분석 반기</span><span class="v">2026 상반기</span></div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>합격자 리포트</span><span class="v" style="color:#86EFAC">14건</span></div>
+          <div class="sm-row"><span>인재풀</span><span class="v" style="color:#7DD3FC">12명</span></div>
+        </div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>평균 리드타임</span><span class="v" style="color:#FFE08A">80일</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ VIEW: HOME (DATA 진입 화면) ============ -->
+      <section class="view active" id="view-home">
+        <div class="home-header">
+          <div class="home-eyebrow">채용 데이터</div>
+          <h1 class="home-title">2026 상반기 채용 리포트</h1>
+          <p class="home-sub">채용 운영 데이터를 4가지 시점으로 정리한 종합 리포트입니다. 분석하려는 영역을 선택해 주세요.</p>
+        </div>
+
+        <div class="home-grid">
+
+          <div class="home-card" onclick="navigate('company-detail')">
+            <div class="home-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/>
+              </svg>
+            </div>
+            <div class="home-card-tag">전사 데이터</div>
+            <h3 class="home-card-title">전사 채용 데이터</h3>
+            <p class="home-card-desc">반기별 채용 프로세스의 리드타임·전환율·병목 지점을 분석합니다.</p>
+            <div class="home-card-meta">최근 업데이트 · 2026.05.21</div>
+          </div>
+
+          <div class="home-card" onclick="navigate('reports-list')">
+            <div class="home-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <div class="home-card-tag">개별 합격자</div>
+            <h3 class="home-card-title">채용 리포트</h3>
+            <p class="home-card-desc">합격자별 평가·동기부여·온보딩 가이드를 담은 개인 인사이트 리포트입니다.</p>
+            <div class="home-card-meta">합격자 14명 · 리포트 14건</div>
+          </div>
+
+          <div class="home-card soon" onclick="navigate('negotiation')">
+            <div class="home-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div class="home-card-tag">경력직</div>
+            <h3 class="home-card-title">처우 협의</h3>
+            <p class="home-card-desc">경력직 처우 협의 시 활용할 시장·내부 보상 데이터를 제공합니다.</p>
+            <div class="home-card-meta">개발 예정</div>
+          </div>
+
+          <div class="home-card" onclick="navigate('pool')">
+            <div class="home-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <div class="home-card-tag">인재풀</div>
+            <h3 class="home-card-title">인재풀 관리</h3>
+            <p class="home-card-desc">이전 채용에서 만난 우수 인재의 평가·연락처를 재활용합니다.</p>
+            <div class="home-card-meta">총 12명 · 우선 컨택 9명</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 전사 채용 데이터 (리드타임 분석) — 2단계에서 채움 ============ -->
+      <section class="view" id="view-company-detail">
+        <div class="back-link" onclick="navigate('home')"><i class="ti ti-arrow-left"></i> 채용 데이터 홈으로</div>
+        <div class="panel-header">
+          <div class="crumb">채용 데이터 · 전사 채용 데이터</div>
+          <h1>반기별 리드타임 분석</h1>
+          <p>반기별 채용 프로세스의 리드타임·전환율·병목 지점을 분석합니다.</p>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-icon"><i class="ti ti-chart-bar" style="font-size:28px"></i></div>
+          <h3>리드타임 분석 화면 (작업 예정 · 2단계)</h3>
+          <p>퍼널 전환율, 단계별 병목 진단, 리드타임 차트가 이 자리에 들어옵니다.</p>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 채용 리포트 (합격자 리스트) — 3단계에서 채움 ============ -->
+      <section class="view" id="view-reports-list">
+        <div class="back-link" onclick="navigate('home')"><i class="ti ti-arrow-left"></i> 채용 데이터 홈으로</div>
+        <div class="panel-header">
+          <div class="crumb">채용 데이터 · 채용 리포트</div>
+          <h1>합격자 채용 리포트</h1>
+          <p>합격자별 평가·동기부여·온보딩 가이드를 담은 개인 인사이트 리포트입니다.</p>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-icon"><i class="ti ti-file-text" style="font-size:28px"></i></div>
+          <h3>합격자 리포트 화면 (작업 예정 · 3단계)</h3>
+          <p>합격자 리스트와 개인별 상세 리포트(경력/신입)가 이 자리에 들어옵니다.</p>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 처우 협의 (개발 예정 — 팀원 코드 도착 후 채움) ============ -->
+      <section class="view" id="view-negotiation">
+        <div class="back-link" onclick="navigate('home')"><i class="ti ti-arrow-left"></i> 채용 데이터 홈으로</div>
+        <div class="panel-header">
+          <div class="crumb">채용 데이터 · 경력직 처우협의</div>
+          <h1>경력직 처우 협의 데이터</h1>
+          <p>유사 직무·연차·시장 데이터를 기반으로 처우 협의 시 활용할 데이터를 제공합니다.</p>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h3>경력직 처우 협의 대시보드 (개발 예정)</h3>
+          <p>내부 유사 직무 보유자의 보상 분포, 시장 임금 벤치마크, 후보자 기대 처우를 한 화면에서 비교할 수 있는 대시보드를 준비 중입니다.</p>
+          <div class="features">
+            <span class="feature-pill">직무·연차별 내부 분포</span>
+            <span class="feature-pill">시장 임금 벤치마크</span>
+            <span class="feature-pill">기대 처우 vs 제안 처우</span>
+            <span class="feature-pill">총보상 시뮬레이션</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 인재풀 관리 (TRM) — 4단계에서 채움 ============ -->
+      <section class="view" id="view-pool">
+        <div class="back-link" onclick="navigate('home')"><i class="ti ti-arrow-left"></i> 채용 데이터 홈으로</div>
+        <div class="panel-header">
+          <div class="crumb">채용 데이터 · 인재풀 관리</div>
+          <h1>인재풀 관리</h1>
+          <p>이전 채용 프로세스에서 만난 우수 인재의 평가·연락처·탈락 사유를 보존하여, ABL생명의 후속 채용·TO 발생 시점에 빠르게 재활용하기 위한 데이터베이스입니다.</p>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-icon"><i class="ti ti-users" style="font-size:28px"></i></div>
+          <h3>인재풀 관리 화면 (작업 예정 · 4단계)</h3>
+          <p>인재풀 후보 테이블, 필터·정렬, 후보 상세 패널, 일괄 액션이 이 자리에 들어옵니다.</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-container"></div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== 뷰 라우터 =====
+let currentView = 'home';
+let leadtimeInitialized = false;
+
+function navigate(viewId) {
+  document.querySelectorAll('.view').forEach(function(v) {
+    v.classList.toggle('active', v.id === 'view-' + viewId);
+  });
+  currentView = viewId;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 리드타임 분석 화면은 첫 진입 시에만 차트 초기화 (2단계에서 Leadtime 모듈 연결)
+  if (viewId === 'company-detail' && !leadtimeInitialized) {
+    setTimeout(function() {
+      if (typeof Leadtime !== 'undefined') { Leadtime.init(); leadtimeInitialized = true; }
+    }, 80);
+  }
+}
+
+// ===== Toast =====
+function showToast(message, type) {
+  type = type || 'success';
+  var container = document.getElementById('toast-container');
+  var icons = { success: 'ti-check', error: 'ti-x', info: 'ti-info-circle' };
+  var toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.innerHTML = '<div class="toast-ic"><i class="ti ' + (icons[type] || 'ti-info-circle') + '"></i></div><div class="toast-msg">' + message + '</div>';
+  container.appendChild(toast);
+  setTimeout(function() { toast.classList.add('show'); }, 10);
+  setTimeout(function() { toast.classList.remove('show'); setTimeout(function() { toast.remove(); }, 300); }, 2600);
+}
+
+// ESC로 모바일 사이드바 닫기
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') document.querySelector('.layout').classList.remove('mobile-open');
+});
+</script>
+
+</body>
+</html>
