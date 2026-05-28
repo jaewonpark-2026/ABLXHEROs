@@ -84,6 +84,8 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .form-section { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 16px; }
 .section-heading { font-size: 15px; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
 .section-heading i { color: var(--main-1); font-size: 20px; }
+.section-hint { font-size: 12px; color: var(--text-2); background: var(--bg-page); border-radius: 8px; padding: 9px 12px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+.section-hint i { color: var(--main-2); font-size: 14px; }
 
 .field { margin-bottom: 16px; }
 .field:last-child { margin-bottom: 0; }
@@ -127,6 +129,22 @@ input:focus, select:focus, textarea:focus {
 
 .ai-hint-box { background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border-left: 3px solid var(--main-1); padding: 12px 14px; border-radius: 0 8px 8px 0; font-size: 12px; color: var(--text-2); margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
 .ai-hint-box i { color: var(--main-1); font-size: 14px; margin-top: 2px; }
+
+/* AI 키워드 확장 */
+.ai-expand-wrap { display: flex; flex-direction: column; gap: 8px; }
+.ai-expand-row { display: flex; gap: 8px; align-items: stretch; }
+.ai-keyword-input { flex: 1; padding: 10px 14px !important; font-size: 13px !important; border: 1.5px dashed var(--main-2) !important; border-radius: 8px; background: linear-gradient(135deg, #FAFCFE, #F5F9FD) !important; }
+.ai-keyword-input:focus { border-style: solid !important; }
+.ai-expand-btn { flex-shrink: 0; background: var(--grad-blue); color: white; border: none; border-radius: 8px; padding: 0 16px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; transition: all 0.15s; }
+.ai-expand-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.ai-expand-btn:disabled { opacity: 0.6; cursor: wait; transform: none; }
+.ai-expand-btn i { font-size: 14px; }
+.ai-expand-btn.loading i { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.ai-expand-hint { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 5px; }
+.ai-expand-hint i { color: var(--main-2); font-size: 13px; }
+.ai-expanded-flash { animation: flashBg 1s ease; }
+@keyframes flashBg { 0% { background: #E6F1FB; } 100% { background: white; } }
 
 .actions-bar { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
 .btn { font-family: inherit; padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; }
@@ -258,6 +276,19 @@ function renderField(field) {
 
   if (field.type === 'textarea') {
     const aiBox = field.ai_hint ? `<div class="ai-hint-box"><i class="ti ti-sparkles"></i><span>${field.ai_hint}</span></div>` : '';
+    // AI 키워드 확장 기능
+    if (field.ai_expand) {
+      return `<div class="field" data-field-id="${field.id}">${label}
+        <div class="ai-expand-wrap">
+          <div class="ai-expand-row">
+            <input type="text" class="ai-keyword-input" id="kw-${field.id}" placeholder="키워드만 입력하세요 (예: GA4, SQL, A/B테스트)" onkeydown="if(event.key==='Enter'){event.preventDefault();aiExpand('${field.id}');}">
+            <button type="button" class="ai-expand-btn" onclick="aiExpand('${field.id}')"><i class="ti ti-sparkles"></i> AI 문장 확장</button>
+          </div>
+          <textarea id="f-${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''} oninput="formData['${field.id}']=this.value"></textarea>
+          <div class="ai-expand-hint"><i class="ti ti-bulb"></i> 키워드를 입력하고 'AI 문장 확장'을 누르면 정식 자격요건 문장으로 자동 변환됩니다.</div>
+        </div>
+      </div>`;
+    }
     return `<div class="field" data-field-id="${field.id}">${label}<textarea id="f-${field.id}" placeholder="${field.placeholder || ''}" ${field.required ? 'required' : ''} oninput="formData['${field.id}']=this.value"></textarea>${aiBox}</div>`;
   }
 
@@ -315,6 +346,98 @@ function removeTag(fieldId, value, el) {
   el.remove();
 }
 
+// ===== AI 키워드 → 문장 확장 =====
+// 시연용: 키워드 패턴 매칭 + 자연스러운 자격요건 문장 생성
+const aiExpandTemplates = {
+  // 기술
+  'ga4': 'Google Analytics 4(GA4)를 활용한 사용자 행동 분석 및 캠페인 성과 측정 역량',
+  'sql': 'SQL을 활용한 데이터 추출 및 정합성 확인 가능',
+  'a/b': 'A/B 테스트 설계 및 결과 해석을 통한 전환율 최적화 경험',
+  'ab테스트': 'A/B 테스트 설계 및 결과 해석을 통한 전환율 최적화 경험',
+  'python': 'Python을 활용한 데이터 분석 및 자동화 처리 가능',
+  'excel': 'Excel 고급 함수 및 피벗 테이블을 활용한 데이터 분석 역량',
+  'ppt': 'PowerPoint를 활용한 보고서 및 제안 자료 작성 능력',
+  '엑셀': 'Excel 고급 함수 및 피벗 테이블을 활용한 데이터 분석 역량',
+  'crm': 'CRM 시스템 운영 및 고객 데이터 기반 마케팅 경험',
+  // 학력
+  '학사': '학사 학위 이상 소지자',
+  '석사': '석사 학위 이상 소지자 우대',
+  '경영': '경영·경제·통계 관련 전공자 우대',
+  '통계': '통계·수학·데이터사이언스 관련 전공자 우대',
+  '마케팅전공': '마케팅·광고홍보 관련 전공자 우대',
+  // 경력
+  '3년': '관련 직무 3년 이상의 실무 경력',
+  '5년': '관련 직무 5년 이상의 실무 경력',
+  '신입': '신입 또는 관련 인턴·대외활동 경험 보유자',
+  // 어학
+  '영어': '영어 비즈니스 커뮤니케이션 가능 (문서 작성 및 회의 참여)',
+  '토익': 'TOEIC 800점 이상 또는 그에 준하는 영어 활용 능력',
+  '중국어': '중국어 비즈니스 커뮤니케이션 가능자 우대',
+  // 자격증
+  '정보처리': '정보처리기사 자격증 소지자 우대',
+  '컴활': '컴퓨터활용능력 1급 소지자 우대',
+  // 역량
+  '커뮤니케이션': '유관부서와의 원활한 협업을 위한 커뮤니케이션 역량',
+  '협업': '다양한 이해관계자와의 협업 및 조율 능력',
+  '분석': '데이터 기반의 논리적 분석 및 문제해결 역량',
+  '리더십': '프로젝트를 주도적으로 이끄는 리더십 및 추진력',
+  '책임감': '담당 업무에 대한 강한 책임감과 오너십'
+};
+
+function aiExpandSentence(keywords) {
+  // 콤마/공백으로 키워드 분리
+  const parts = keywords.split(/[,，·\s]+/).map(k => k.trim().toLowerCase()).filter(Boolean);
+  const sentences = [];
+  const usedRaw = [];
+  parts.forEach(p => {
+    // 템플릿 매칭 (부분 일치)
+    let matched = null;
+    for (const key in aiExpandTemplates) {
+      if (p.includes(key) || key.includes(p)) { matched = aiExpandTemplates[key]; break; }
+    }
+    if (matched) sentences.push(matched);
+    else usedRaw.push(p);
+  });
+  // 매칭 안된 키워드는 일반 문장으로
+  if (usedRaw.length) {
+    sentences.push(usedRaw.join(', ') + ' 관련 역량 및 경험 보유자');
+  }
+  return sentences.map(s => '· ' + s).join('\n');
+}
+
+function aiExpand(fieldId) {
+  const kwInput = document.getElementById('kw-' + fieldId);
+  const textarea = document.getElementById('f-' + fieldId);
+  const btn = kwInput.parentElement.querySelector('.ai-expand-btn');
+  const keywords = kwInput.value.trim();
+  if (!keywords) {
+    kwInput.focus();
+    kwInput.style.borderColor = '#C72D2D';
+    setTimeout(() => kwInput.style.borderColor = '', 1500);
+    return;
+  }
+  // 로딩 연출
+  const originalHtml = btn.innerHTML;
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> 확장 중...';
+
+  setTimeout(() => {
+    const expanded = aiExpandSentence(keywords);
+    // 기존 내용에 추가 (이어쓰기)
+    const existing = textarea.value.trim();
+    textarea.value = existing ? existing + '\n' + expanded : expanded;
+    formData[fieldId] = textarea.value;
+    kwInput.value = '';
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.innerHTML = originalHtml;
+    // 플래시 효과
+    textarea.classList.add('ai-expanded-flash');
+    setTimeout(() => textarea.classList.remove('ai-expanded-flash'), 1000);
+  }, 900);
+}
+
 function applyConditionalFields() {
   formSchema.sections.forEach(sec => {
     sec.fields.forEach(f => {
@@ -336,11 +459,16 @@ function renderForm(schema) {
   let html = '';
   schema.sections.forEach(sec => {
     html += `<div class="form-section"><div class="section-heading"><i class="ti ${sec.icon}"></i> ${sec.title}</div>`;
+    if (sec.section_hint) {
+      html += `<div class="section-hint"><i class="ti ti-info-circle"></i> ${sec.section_hint}</div>`;
+    }
 
     if (sec.id === 'basic') {
+      // 8개 필드를 2개씩 4행으로
       html += `<div class="field-row">${renderField(sec.fields[0])}${renderField(sec.fields[1])}</div>`;
       html += `<div class="field-row">${renderField(sec.fields[2])}${renderField(sec.fields[3])}</div>`;
       html += `<div class="field-row">${renderField(sec.fields[4])}${renderField(sec.fields[5])}</div>`;
+      html += `<div class="field-row">${renderField(sec.fields[6])}${renderField(sec.fields[7])}</div>`;
     } else {
       sec.fields.forEach(f => { html += renderField(f); });
     }

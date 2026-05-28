@@ -112,6 +112,23 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .req-tag { background: var(--bg-page); color: var(--text-2); padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; }
 .req-tag.value-tag { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); }
 
+/* 요구자격 6개 리스트 */
+.qual-list { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.qual-item { background: var(--bg-page); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--main-2); }
+.qual-item-label { font-size: 11px; font-weight: 700; color: var(--main-1); margin-bottom: 3px; }
+.qual-item-ko { font-size: 10px; color: var(--text-3); font-weight: 400; margin-left: 4px; }
+.qual-item-value { font-size: 12px; color: var(--text-1); line-height: 1.55; }
+
+/* 승인 절차 */
+.approval-flow { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.approval-stage { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; background: var(--bg-page); }
+.approval-stage.done { background: linear-gradient(135deg, #EAF8EF, #E0F4E8); }
+.approval-icon { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; }
+.approval-stage.done .approval-icon { background: #16a34a; color: white; }
+.approval-stage.pending .approval-icon { background: #E8EDF3; color: var(--text-3); }
+.approval-label { font-size: 12px; font-weight: 700; color: var(--text-1); }
+.approval-meta { font-size: 10px; color: var(--text-3); margin-top: 1px; }
+
 .action-section { background: linear-gradient(135deg, #F5F9FD, #ECF4FB); border-radius: 12px; padding: 16px; margin-top: 16px; }
 .action-title { font-size: 12px; font-weight: 700; color: var(--main-1); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 
@@ -288,33 +305,100 @@ function renderStepper(currentStep) {
   return `<div class="stepper">${html}</div>`;
 }
 
-function renderRequestPanel(req) {
+function renderRequestPanel(req, approvalStatus) {
+  // 요구자격 6개 항목 정의 (빈 항목은 자동 숨김)
+  const qualItems = [
+    { key: 'qual_technical', label: 'Technical Knowledge', ko: '기술 지식' },
+    { key: 'qual_education', label: 'Educational Background', ko: '학력' },
+    { key: 'qual_experience', label: 'Job Experience', ko: '경력' },
+    { key: 'qual_language', label: 'Language Skill', ko: '어학' },
+    { key: 'qual_certification', label: 'Certification', ko: '자격증' },
+    { key: 'qual_competencies', label: 'Competencies', ko: '역량' }
+  ];
+  const qualRows = qualItems
+    .filter(q => req[q.key] && req[q.key].trim())
+    .map(q => `
+      <div class="qual-item">
+        <div class="qual-item-label">${q.label} <span class="qual-item-ko">${q.ko}</span></div>
+        <div class="qual-item-value">${req[q.key]}</div>
+      </div>`).join('');
+
+  // 충원 사유
+  const reasonBlock = (req.reason_category || req.reason_detail) ? `
+    <div class="req-block">
+      <div class="req-label">충원 사유 (Reason)</div>
+      ${req.reason_category ? `<div class="req-value"><span class="req-tag value-tag" style="margin-bottom:6px;display:inline-block;">${req.reason_category}</span></div>` : ''}
+      ${req.reason_detail ? `<div class="req-value" style="margin-top:4px;">${req.reason_detail}</div>` : ''}
+    </div>` : '';
+
+  // 승인 상태 (있을 때만)
+  let approvalBlock = '';
+  if (approvalStatus) {
+    const stages = [
+      { key: 'requester', label: '요청 부서장', en: 'Requested by Head of Dept.' },
+      { key: 'hr_consent', label: '인사팀 검토', en: 'HR Consent' },
+      { key: 'approved', label: '본부장 승인', en: 'Approved by Head of Office' }
+    ];
+    const stageRows = stages.map(s => {
+      const st = approvalStatus[s.key] || {};
+      const done = st.approved;
+      return `
+        <div class="approval-stage ${done ? 'done' : 'pending'}">
+          <div class="approval-icon">${done ? '<i class="ti ti-check"></i>' : '<i class="ti ti-clock"></i>'}</div>
+          <div class="approval-info">
+            <div class="approval-label">${s.label}</div>
+            <div class="approval-meta">${done ? (st.by + ' · ' + (st.at ? st.at.slice(0,10) : '')) : '대기 중'}</div>
+          </div>
+        </div>`;
+    }).join('');
+    approvalBlock = `
+      <div class="req-block" style="margin-top:18px; padding-top:16px; border-top:1px dashed var(--border);">
+        <div class="req-label">승인 절차 (Approval)</div>
+        <div class="approval-flow">${stageRows}</div>
+      </div>`;
+  }
+
   return `
     <div class="panel">
-      <div class="panel-title"><i class="ti ti-clipboard-text"></i> 충원요청서</div>
+      <div class="panel-title"><i class="ti ti-clipboard-text"></i> 직원충원요청서 <span style="font-size:11px; font-weight:400; color:var(--text-3); margin-left:auto;">Personnel Request Form</span></div>
+
       <div class="req-block">
-        <div class="req-label">요청 부서 · 직무</div>
-        <div class="req-value"><strong>${req.dept}</strong> · ${req.position}</div>
+        <div class="req-label">본부 · 팀 (Office · Dept.)</div>
+        <div class="req-value"><strong>${req.office || '-'}</strong> · ${req.dept || '-'}</div>
+      </div>
+      <div class="req-block">
+        <div class="req-label">채용 직무 (Job Position)</div>
+        <div class="req-value"><strong>${req.position}</strong></div>
       </div>
       <div class="req-block">
         <div class="req-label">기본 정보</div>
-        <div class="req-value">${req.type} · ${req.level}급 · ${req.headcount}명 모집</div>
+        <div class="req-value">${req.type} · ${req.level}급 · ${req.headcount}명 모집${req.employment_type ? ' · <strong>' + req.employment_type + '</strong>' : ''}</div>
       </div>
+      ${req.desired_date ? `<div class="req-block"><div class="req-label">입사 요청일 (Required Date)</div><div class="req-value">${req.desired_date}</div></div>` : ''}
+
+      ${reasonBlock}
+
       <div class="req-block">
-        <div class="req-label">담당 업무</div>
+        <div class="req-label">주요업무 (Job Description)</div>
         <div class="req-value">${req.main_duties}</div>
       </div>
-      <div class="req-block">
-        <div class="req-label">필수 자격요건</div>
-        <div class="req-value">${req.required_qual}</div>
-      </div>
-      ${req.preferred_qual ? `<div class="req-block"><div class="req-label">우대 사항</div><div class="req-value">${req.preferred_qual}</div></div>` : ''}
-      ${req.key_skills && req.key_skills.length ? `<div class="req-block"><div class="req-label">핵심 역량</div><div class="req-tags">${req.key_skills.map(s => `<span class="req-tag">${s}</span>`).join('')}</div></div>` : ''}
-      ${req.core_values && req.core_values.length ? `<div class="req-block"><div class="req-label">우선 핵심가치</div><div class="req-tags">${req.core_values.map(v => `<span class="req-tag value-tag">${v}</span>`).join('')}</div></div>` : ''}
+
+      ${qualRows ? `<div class="req-block">
+        <div class="req-label">요구자격 (Required Qualifications)</div>
+        <div class="qual-list">${qualRows}</div>
+      </div>` : ''}
+
+      ${req.core_values && req.core_values.length ? `<div class="req-block"><div class="req-label">ABL 우선 핵심가치</div><div class="req-tags">${req.core_values.map(v => `<span class="req-tag value-tag">${v}</span>`).join('')}</div></div>` : ''}
+      ${req.key_skills && req.key_skills.length ? `<div class="req-block"><div class="req-label">핵심 우대 역량</div><div class="req-tags">${req.key_skills.map(s => `<span class="req-tag">${s}</span>`).join('')}</div></div>` : ''}
+      ${req.preferred_qual ? `<div class="req-block"><div class="req-label">기타 우대사항</div><div class="req-value">${req.preferred_qual}</div></div>` : ''}
+      ${req.etc ? `<div class="req-block"><div class="req-label">기타 요구사항</div><div class="req-value">${req.etc}</div></div>` : ''}
+
       <div class="req-block">
         <div class="req-label">작성자</div>
         <div class="req-value" style="font-size:12px; color: var(--text-2);">${req.creator} · ${req.created_at}</div>
       </div>
+
+      ${approvalBlock}
     </div>
   `;
 }
@@ -478,7 +562,7 @@ function render(data) {
       <div class="page-title-area">
         <h1>${data.request.position}</h1>
         <div class="page-meta">
-          <span>${data.request.dept}</span><span>·</span>
+          <span>${data.request.office ? data.request.office + ' · ' : ''}${data.request.dept}</span><span>·</span>
           <span>${data.request.type} · ${data.request.level}</span><span>·</span>
           <span>${data.request.headcount}명</span><span>·</span>
           <span>${data.request.created_at} 등록</span>
@@ -488,7 +572,7 @@ function render(data) {
     </div>
     ${renderStepper(data.current_step)}
     <div class="split-layout">
-      ${renderRequestPanel(data.request)}
+      ${renderRequestPanel(data.request, data.approval_status)}
       <div id="jdPanel">${renderJDPanel(data)}</div>
     </div>
   `;
