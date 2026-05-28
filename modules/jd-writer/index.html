@@ -321,7 +321,18 @@ renderNav();
 renderRoleBanner();
 
 fetch('data/requests.json').then(r => r.json()).then(data => {
-  const reqs = data.requests;
+  let reqs = data.requests;
+  // detail.html에서 진행한 상태 변경을 sessionStorage에서 불러와 덮어쓰기
+  reqs = reqs.map(r => {
+    const override = sessionStorage.getItem('reqState-' + r.id);
+    if (override) {
+      try {
+        const o = JSON.parse(override);
+        return { ...r, ...o };
+      } catch (e) { return r; }
+    }
+    return r;
+  });
   renderStats(reqs);
   renderList(reqs);
 });

@@ -593,7 +593,7 @@ function renderJDPanel(data) {
       ${isHR && data.current_step === 4 ? `
         <div class="action-section">
           <div class="action-title"><i class="ti ti-rocket"></i> 최종 단계</div>
-          <button class="btn btn-primary" onclick="alert('채용공고가 등재되었습니다. (시연용)')"><i class="ti ti-send"></i> 채용공고 등재하기</button>
+          <button class="btn btn-primary" onclick="publishPosting()"><i class="ti ti-send"></i> 채용공고 등재하기</button>
         </div>
       ` : ''}
 
@@ -698,7 +698,17 @@ function requestReview() {
   alert('현업 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n현업이 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
+  saveReqState(currentData.id, { current_step: 3, status: 'JD 작성·검토 요청', status_color: 'blue' });
   render(currentData);
+}
+
+// 목록(index.html)에 진행 상태를 반영하기 위해 sessionStorage에 저장
+function saveReqState(id, patch) {
+  try {
+    const prev = sessionStorage.getItem('reqState-' + id);
+    const merged = prev ? { ...JSON.parse(prev), ...patch } : patch;
+    sessionStorage.setItem('reqState-' + id, JSON.stringify(merged));
+  } catch (e) { console.warn('saveReqState 오류', e); }
 }
 
 function selectAction(action) {
@@ -889,6 +899,7 @@ function approveJD() {
   if (confirm('이 JD로 공고 등재를 요청하시겠습니까?\n\n인사팀에 전달되어 채용공고로 등재됩니다.')) {
     currentData.current_step = 4;
     currentData.status = '공고 등재 대기';
+    saveReqState(currentData.id, { current_step: 4, status: '공고 등재 대기', status_color: 'teal' });
     currentData.review_history.push({
       actor: "마케팅팀 김부장",
       actor_role: "manager",
@@ -898,6 +909,22 @@ function approveJD() {
     });
     render(currentData);
     setTimeout(() => alert('공고 등재 요청이 인사팀에 전달되었습니다. (시연용)'), 100);
+  }
+}
+
+function publishPosting() {
+  if (confirm('채용공고를 등재하시겠습니까?\n\n등재 후 지원자 접수가 시작됩니다.')) {
+    currentData.status = '공고 등재 완료';
+    saveReqState(currentData.id, { current_step: 4, status: '공고 등재 완료', status_color: 'green' });
+    currentData.review_history.push({
+      actor: "최병현 책임",
+      actor_role: "hr",
+      timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      action: "채용공고 등재 완료",
+      detail: "ABL생명 채용 홈페이지에 공고 등재 완료. 지원자 접수 시작."
+    });
+    render(currentData);
+    setTimeout(() => alert('채용공고가 등재되었습니다. (시연용)'), 100);
   }
 }
 
