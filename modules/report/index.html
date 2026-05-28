@@ -177,6 +177,528 @@ a { color: inherit; text-decoration: none; }
 .toast.info .toast-ic { background: var(--info-bg); color: var(--main-1); }
 .toast-msg { font-size: 12px; font-weight: 700; color: var(--text-1); }
 
+
+  /* ===== 리드타임 분석 (전사 채용 데이터) ===== */
+  /* ============ LEADTIME ANALYSIS MODULE ============ */
+  .lt-root {
+    --lt-card: #FFFFFF;
+    --lt-border: #ECEAF4;
+    --lt-bg: #FAFAFE;
+    --lt-text-1: #1A2233;
+    --lt-text-2: #44506A;
+    --lt-text-3: #5A6478;
+    --lt-text-4: #8A93A6;
+    --lt-brand: #0067AC;
+    --lt-brand-dark: #123F6D;
+    --lt-brand-soft: #E6F1FB;
+    --lt-pink: #00AEC6;
+    --lt-red: #E5446D;
+    --lt-amber: #B97A20;
+    --lt-amber-bg: #FEF3E1;
+    --lt-green: #2DAE7B;
+    --lt-green-bg: #E3F5EC;
+    --lt-red-bg: #FDECF1;
+    --lt-dark: #0E1A3D;
+    color: var(--lt-text-2);
+    font-size: 14px;
+  }
+
+  /* Toggle row */
+  .lt-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .lt-toggle {
+    display: inline-flex;
+    background: #E6EBF5;
+    border: 1px solid var(--lt-border);
+    padding: 4px;
+    border-radius: 12px;
+    gap: 4px;
+  }
+  .lt-toggle-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--lt-text-3);
+    border-radius: 9px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.18s ease;
+  }
+  .lt-toggle-btn.active {
+    background: var(--lt-card);
+    color: var(--lt-text-1);
+    box-shadow: 0 1px 2px rgba(20,19,43,0.06);
+  }
+  .lt-toggle-btn i { margin-right: 6px; }
+  .lt-target-text {
+    font-size: 12.5px;
+    color: var(--lt-text-3);
+    background: var(--lt-bg);
+    border: 1px solid var(--lt-border);
+    padding: 7px 14px;
+    border-radius: 8px;
+  }
+  .lt-target-text b { color: var(--lt-text-1); font-weight: 700; }
+
+  /* Panels */
+  .lt-panel {
+    background: var(--lt-card);
+    border: 1px solid var(--lt-border);
+    border-radius: 18px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+  }
+  .lt-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .lt-panel-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--lt-text-1);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .lt-panel-title i { color: var(--lt-brand); margin-right: 6px; }
+  .lt-panel-sub {
+    font-size: 12px;
+    color: var(--lt-text-4);
+    margin: 4px 0 0;
+  }
+  .lt-panel-foot {
+    font-size: 11px;
+    color: var(--lt-text-4);
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  /* Funnel */
+  .lt-funnel-container {
+    background: var(--lt-bg);
+    border: 1px solid #E6EBF5;
+    border-radius: 14px;
+    padding: 20px 16px;
+    overflow-x: auto;
+  }
+  .lt-funnel-grid {
+    display: grid;
+    gap: 8px;
+    min-width: 900px;
+  }
+  .lt-funnel-card {
+    background: var(--lt-card);
+    border: 1px solid var(--lt-border);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .lt-funnel-card:hover {
+    border-color: #7DCFF5;
+    box-shadow: 0 4px 12px rgba(0,103,172,0.06);
+  }
+  .lt-funnel-card.selected {
+    border-color: var(--lt-brand);
+    box-shadow: 0 0 0 4px rgba(0,103,172,0.12), 0 4px 14px rgba(0,103,172,0.10);
+    transform: scale(1.02);
+  }
+  .lt-funnel-card .stage {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--lt-text-3);
+    margin: 0 0 4px;
+    line-height: 1.3;
+  }
+  .lt-funnel-card .period {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--lt-brand);
+    margin: 0;
+  }
+  .lt-funnel-card .ratio-box {
+    background: var(--lt-bg);
+    border-radius: 8px;
+    padding: 8px 4px;
+    margin: 8px 0;
+  }
+  .lt-funnel-card .ratio-box p {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--lt-text-1);
+    margin: 0;
+  }
+  .lt-funnel-card .count {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--lt-text-3);
+    margin: 0 0 4px;
+  }
+  .lt-funnel-card .passrate {
+    font-size: 9.5px;
+    color: var(--lt-text-4);
+    background: #E6EBF5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: 700;
+  }
+
+  /* Grid layout */
+  .lt-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+  }
+  .lt-col-main { display: flex; flex-direction: column; gap: 20px; }
+
+  /* Mini widgets */
+  .lt-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .lt-widget-cap {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--lt-text-4);
+    margin: 8px 0 0;
+    letter-spacing: 0.01em;
+  }
+  .lt-widget-cap b { color: var(--lt-brand-dark); font-weight: 800; }
+  .lt-donut-center { position: relative; }
+  .lt-donut-center .lt-donut-val {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .lt-donut-center .lt-donut-val b { font-size: 22px; font-weight: 800; color: var(--lt-text-1); line-height: 1; }
+  .lt-donut-center .lt-donut-val span { font-size: 9.5px; font-weight: 700; color: var(--lt-text-4); margin-top: 3px; }
+  .lt-widget {
+    background: var(--lt-card);
+    border: 1px solid var(--lt-border);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+  .lt-widget-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .lt-widget-head h3 {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--lt-text-3);
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .lt-widget-title {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--lt-text-3);
+    margin: 0 0 12px;
+    letter-spacing: 0.02em;
+  }
+  .lt-pill {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .lt-pill.blue { background: var(--lt-brand-soft); color: var(--lt-brand-dark); }
+  .lt-pill.gray { background: #E6EBF5; color: var(--lt-text-3); }
+  .lt-pill.purple { background: var(--lt-brand-soft); color: var(--lt-brand-dark); }
+  .lt-pill.red { background: var(--lt-strength-bg, #FDECF1); color: var(--lt-strength, #E5446D); }
+
+  /* 지원자 여정 타임라인 */
+  .lt-journey { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 2px; }
+  .lt-journey-step { flex: 1 1 0; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
+  .lt-jr-head {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 800; color: var(--lt-text-1);
+    padding-bottom: 8px; border-bottom: 2px solid var(--lt-brand-soft);
+  }
+  .lt-jr-head .idx {
+    width: 18px; height: 18px; flex: none; border-radius: 50%;
+    background: var(--lt-brand); color: #fff; font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lt-jr-touch { font-size: 10.5px; font-weight: 600; color: var(--lt-text-3); line-height: 1.5; }
+  .lt-jr-wait {
+    margin-top: auto; border-radius: 10px; padding: 9px 10px;
+    background: var(--lt-strength-bg, #FDECF1); border: 1px solid #F6CBD8;
+  }
+  .lt-jr-wait.ok { background: #E3F5EC; border-color: #BFE6D2; }
+  .lt-jr-wait .w-top { display: flex; align-items: baseline; gap: 4px; }
+  .lt-jr-wait .w-top b { font-size: 17px; font-weight: 800; color: var(--lt-strength, #E5446D); line-height: 1; }
+  .lt-jr-wait.ok .w-top b { color: var(--lt-direction, #2DAE7B); }
+  .lt-jr-wait .w-top span { font-size: 10px; font-weight: 700; color: var(--lt-text-3); }
+  .lt-jr-wait .w-note { font-size: 9.5px; font-weight: 600; color: var(--lt-text-4); margin-top: 4px; line-height: 1.4; }
+  .lt-jr-wait .w-target {
+    margin-top: 7px; padding-top: 6px; border-top: 1px dashed #D8E6DB;
+    font-size: 9.5px; font-weight: 700; color: var(--lt-direction, #2DAE7B);
+  }
+  .lt-jr-wait .w-target b { font-size: 11px; font-weight: 800; }
+
+  /* 유입 추이 분석 */
+  .lt-inflow-chart { height: 230px; margin-bottom: 16px; }
+  .lt-inflow-tablewrap { overflow-x: auto; }
+  .lt-inflow-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .lt-inflow-table th, .lt-inflow-table td { padding: 9px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--lt-border); }
+  .lt-inflow-table th { font-size: 10.5px; font-weight: 800; color: var(--lt-text-3); background: var(--lt-brand-soft); }
+  .lt-inflow-table th:first-child, .lt-inflow-table td:first-child { text-align: left; }
+  .lt-inflow-table td:first-child { font-weight: 700; color: var(--lt-text-1); }
+  .lt-inflow-table .ch-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .lt-inflow-table tr:last-child td { border-bottom: none; }
+  .lt-inflow-table .latest { font-weight: 800; color: var(--lt-text-1); }
+  .lt-mom { font-size: 10.5px; font-weight: 800; }
+  .lt-mom.up { color: var(--lt-direction, #2DAE7B); }
+  .lt-mom.down { color: var(--lt-strength, #E5446D); }
+
+  .lt-chart-sm { height: 100px; }
+  .lt-donut-wrap { display: flex; align-items: center; justify-content: center; }
+  .lt-donut-inner { width: 96px; height: 96px; }
+  .lt-chart-md { height: 130px; }
+  .lt-chart-lg { height: 180px; }
+
+  /* Mid grid */
+  .lt-mid-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 16px;
+  }
+  .lt-col-mid-left { display: flex; flex-direction: column; gap: 16px; }
+
+  .lt-stage-stats { display: flex; flex-direction: column; justify-content: space-between; }
+  .lt-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--lt-border);
+    margin-top: 14px;
+    text-align: center;
+  }
+  .lt-kpi-row p { margin: 0; }
+  .lt-kpi-row .k { font-size: 10.5px; color: var(--lt-text-4); }
+  .lt-kpi-row .v { font-size: 16px; font-weight: 800; color: var(--lt-text-1); margin-top: 2px; }
+  .lt-kpi-row .v.accent { color: var(--lt-brand); }
+  .lt-kpi-row .v.muted { color: var(--lt-text-4); }
+
+  /* Pass rate */
+  .lt-rate-row { margin-bottom: 12px; }
+  .lt-rate-row:last-child { margin-bottom: 0; }
+  .lt-rate-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--lt-text-3);
+    margin-bottom: 5px;
+  }
+  .lt-rate-label b { color: var(--lt-text-1); font-weight: 800; }
+  .lt-rate-sub { font-style: normal; font-size: 9.5px; font-weight: 600; color: var(--lt-text-4); margin-left: 4px; }
+  .lt-rate-row { margin-bottom: 12px; }
+  .lt-rate-track { background: #E6EBF5; height: 6px; border-radius: 999px; overflow: hidden; }
+  .lt-rate-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--lt-brand), var(--lt-pink));
+    border-radius: 999px;
+  }
+
+  /* Insight panel (right) */
+  .lt-col-aside { display: flex; flex-direction: column; }
+  .lt-insight {
+    position: sticky;
+    top: 88px;
+    background: linear-gradient(180deg, #0E1A3D 0%, #070E22 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: 0 12px 32px rgba(18,63,109,0.22);
+  }
+  .lt-insight-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+  }
+  .lt-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .lt-badge.red   { background: rgba(229, 68, 109, 0.15); color: #FF8AA8; border: 1px solid rgba(229,68,109,0.3); }
+  .lt-badge.amber { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245,158,11,0.3); }
+  .lt-badge.green { background: rgba(45, 174, 123, 0.15); color: #34D399; border: 1px solid rgba(45,174,123,0.3); }
+  .lt-live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+  .lt-live .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--lt-red);
+    animation: lt-pulse 1.5s infinite;
+  }
+  @keyframes lt-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .lt-insight-body {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .lt-stage-meta { margin-bottom: 18px; }
+  .lt-phase {
+    font-size: 11px;
+    font-weight: 800;
+    color: #7DCFF5;
+    letter-spacing: 0.08em;
+  }
+  .lt-stage-meta h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin: 4px 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .lt-stage-meta p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.55);
+    margin: 0;
+  }
+  .lt-quote {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    margin-bottom: 18px;
+  }
+  .lt-quote i {
+    color: #7DCFF5;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .lt-quote-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .lt-quote p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.65;
+    font-style: italic;
+    margin: 0;
+  }
+  .lt-metric { margin-bottom: 18px; }
+  .lt-metric-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .lt-ratio { font-weight: 800; }
+  .lt-ratio.red   { color: #FF8AA8; }
+  .lt-ratio.amber { color: #FBBF24; }
+  .lt-ratio.green { color: #34D399; }
+  .lt-bar-track {
+    background: rgba(255,255,255,0.08);
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .lt-bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+  .lt-bar-fill.red   { background: var(--lt-red); }
+  .lt-bar-fill.amber { background: #F59E0B; }
+  .lt-bar-fill.green { background: var(--lt-green); }
+
+  .lt-causes p.lt-causes-title {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    margin: 0 0 10px;
+  }
+  .lt-causes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .lt-causes li {
+    display: flex;
+    gap: 10px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.6;
+  }
+  .lt-causes li i {
+    color: #FBBF24;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .lt-solution {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+  }
+  .lt-solution-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #7DCFF5;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .lt-solution-head i { animation: lt-pulse 2s infinite; }
+  .lt-solution p {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  @media (max-width: 1100px) {
+    .lt-grid { grid-template-columns: 1fr; }
+    .lt-mini-grid { grid-template-columns: 1fr; }
+    .lt-mid-grid { grid-template-columns: 1fr; }
+    .lt-insight { position: static; }
+  }
+
 /* ===== 반응형 ===== */
 @media (max-width: 1024px) {
   .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
@@ -317,19 +839,15 @@ a { color: inherit; text-decoration: none; }
         </div>
       </section>
 
-      <!-- ============ VIEW: 전사 채용 데이터 (리드타임 분석) — 2단계에서 채움 ============ -->
+      <!-- ============ VIEW: 전사 채용 데이터 (리드타임 분석) ============ -->
       <section class="view" id="view-company-detail">
         <div class="back-link" onclick="navigate('home')"><i class="ti ti-arrow-left"></i> 채용 데이터 홈으로</div>
         <div class="panel-header">
-          <div class="crumb">채용 데이터 · 전사 채용 데이터</div>
-          <h1>반기별 리드타임 분석</h1>
-          <p>반기별 채용 프로세스의 리드타임·전환율·병목 지점을 분석합니다.</p>
+          <div class="crumb">채용 데이터 · 전사 채용 데이터 · 2025년 하반기</div>
+          <h1>채용 리드타임 진단 & 프로세스 분석</h1>
+          <p>서류 심사부터 수동 일정 조율, 처우 검토까지 전 단계의 전환율 및 누적 대기시간을 분석합니다.</p>
         </div>
-        <div class="placeholder">
-          <div class="placeholder-icon"><i class="ti ti-chart-bar" style="font-size:28px"></i></div>
-          <h3>리드타임 분석 화면 (작업 예정 · 2단계)</h3>
-          <p>퍼널 전환율, 단계별 병목 진단, 리드타임 차트가 이 자리에 들어옵니다.</p>
-        </div>
+        <div id="leadtime-mount"></div>
       </section>
 
       <!-- ============ VIEW: 채용 리포트 (합격자 리스트) — 3단계에서 채움 ============ -->
@@ -440,6 +958,726 @@ function showToast(message, type) {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') document.querySelector('.layout').classList.remove('mobile-open');
 });
+</script>
+
+<script>
+const Leadtime = (function() {
+
+  // 데이터셋: 25H2 기준 (현재 화면이 보여주는 반기). 토글로 경력/신입 전환.
+  const dataset = {
+    experienced: {
+      targetName: "경력직 채용 프로세스",
+      kpis: { total: "1,593", progress: "634", passed: "6", failed: "896", avgDuration: "합격까지 평균 62일 소요" },
+      funnel: [
+        { stage: "1차 서류 (인사)",    period: "8일 소요",  ratio: "100%",   count: "1,593명", passrate: "24.5% →", key: "document_hr" },
+        { stage: "2차 서류 (현업)",    period: "6일 소요",  ratio: "24.5%",  count: "390명",   passrate: "41.0% →", key: "document_dept" },
+        { stage: "역량검사",           period: "3일 소요",  ratio: "10.0%",  count: "160명",   passrate: "38.1% →", key: "assessment" },
+        { stage: "1차 면접 (실무)",    period: "12일 소요", ratio: "3.8%",   count: "61명",    passrate: "26.2% →", key: "interview1" },
+        { stage: "2차 면접 (임원)",    period: "10일 소요", ratio: "1.0%",   count: "16명",    passrate: "50.0% →", key: "interview2" },
+        { stage: "처우 협의 및 검토",   period: "18일 소요", ratio: "0.50%",  count: "8명",     passrate: "75.0% →", key: "offer" },
+        { stage: "최종합격",           period: "5일 소요",  ratio: "0.38%",  count: "6명",     passrate: "—",       key: "final" }
+      ],
+      diagnostics: {
+        document_hr: {
+          num: "PHASE 01", name: "1차 서류심사 (인사팀)", desc: "자기소개서 수기 정독 및 초기 기본 적합성 검증",
+          painpoint: '"서류 심사 또한 저희가 일일이 다 하나씩 자소서를 읽어서 평가 기준에 부합하는지 순서를 세우고 진행을 하고 있고요."',
+          ratio: "85%", ratioVal: 85,
+          causes: [
+            "지원서 및 자소서 전체 문항을 인사담당자가 육안으로 수기 평가하여 초기 분류 지연 발생",
+            "기본 결격 사유 및 중복 지원자 전수 수기 체크에 공수가 가중됨"
+          ],
+          solution: "AI 서류 스크리닝 보조 솔루션으로 지원 자격 충족 여부 및 키워드 연관성 점수를 실시간 자동 분류하여 검토 부담을 경감합니다."
+        },
+        document_dept: {
+          num: "PHASE 02", name: "2차 서류심사 (현업)", desc: "현업 부서 실무 검토 및 합격 결과 회신 대기",
+          painpoint: '"인사팀에서 서류 심사를 한 후에 합격 여부를 확인한 후 2차로 담당 현업에 해당 서류를 전달합니다."',
+          ratio: "75%", ratioVal: 75,
+          causes: [
+            "인사팀 합격자 명단을 이메일·엑셀 등 비정형 수단으로 현업 부서장에 전달하여 발생하는 병목",
+            "현업 담당자들의 부서 내 고유 업무 우선순위로 이력서 검토·회신 기한 장기화"
+          ],
+          solution: "채용 시스템 내 현업 평가 보조 대시보드 연동 및 검토 기한 타이머 제도를 탑재합니다."
+        },
+        assessment: {
+          num: "PHASE 03", name: "역량검사 안내", desc: "온라인 검증 발송 및 지원자 미응시 추적",
+          painpoint: '"서류 합격 안내 후 역량 검사를 진행하고 다시 한번 합격 여부를 판단합니다."',
+          ratio: "40%", ratioVal: 40,
+          causes: [
+            "합격 통보 후 역량검사 응시를 위한 이메일·알림톡 수동 링크 발송",
+            "미응시자에 대한 주기적인 유선·메일 리마인드 작업 수기 진행"
+          ],
+          solution: "합격 상태 변경 시 역량검사 링크 자동 발송 및 미응시자 리마인드 톡 스케줄링을 도입합니다."
+        },
+        interview1: {
+          num: "PHASE 04", name: "1차 면접 (실무진)", desc: "다자간 일정 조율 및 면접관 스케줄 대기",
+          painpoint: '"면접관과 면접자 일정 조율 같은 부분도 다 수기로 하나씩 메일을 확인받아서 진행하고 있습니다."',
+          ratio: "95%", ratioVal: 95,
+          causes: [
+            "면접관들의 부서 캘린더를 수기로 일일이 대조하고 후보자와 통화하여 가용 시간 매칭",
+            "일정 취소·변경 발생 시 처음부터 다시 조율하는 무한 왕복 병목"
+          ],
+          solution: "AI 면접 일정 조율 링크를 제공해 면접관 공유 캘린더와 실시간 바인딩 후 빈 슬롯을 자동 확보합니다."
+        },
+        interview2: {
+          num: "PHASE 05", name: "2차 면접 (임원진)", desc: "의사결정권자 스케줄 블록 및 최종 대기 가중",
+          painpoint: '"단계별로 이제 면접관과 면접자 일정을 별도로 다 수기로 조정해야 되는 상황들이 있습니다."',
+          ratio: "90%", ratioVal: 90,
+          causes: [
+            "임원의 갑작스러운 출장·회의로 인한 고정 스케줄 변경 대응 공백",
+            "2차 임원 면접 준비 및 안내 자료의 메일 수기 발송 지연"
+          ],
+          solution: "임원 고정 슬롯 자동 선점 로직 탑재 및 면접 운영 효율화 봇 도입 시 리소스 낭비를 최대 60% 절감합니다."
+        },
+        offer: {
+          num: "PHASE 06", name: "처우 협의 및 검토", desc: "경력직 핵심 처우 수준 협상 및 연봉 조정 정체",
+          painpoint: '"경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에 그 처우 협의 과정이 추가되면서 길게는 두 달 반에서 세 달까지도 소요되는 경우가 있습니다."',
+          ratio: "98%", ratioVal: 98,
+          causes: [
+            "전 직장 원천징수 등 소득 증빙 서류의 이메일 수동 제출 요청 및 확인 대기 장기화",
+            "내부 연봉 가이드라인 밴드와 후보자 요구 격차에 대한 부서 간 의사결정 수작업 조율 지연"
+          ],
+          solution: "정성·정량 처우 정보 시뮬레이터 및 전자 오퍼 수락 인프라 적용 시 협상 리드타임을 약 15일 이상 단축합니다."
+        },
+        final: {
+          num: "PHASE 07", name: "최종합격", desc: "최종 기안 결재 및 인사 시스템 수동 이관",
+          painpoint: '"이 부분이 완료된 이후에 최종 합격으로 이루어집니다."',
+          ratio: "30%", ratioVal: 30,
+          causes: [
+            "합격 처우 품의서의 내부 오프라인·수동 결재 대기",
+            "최종 입사 예정 안내 및 온보딩 사전 준비 가이딩 업무 지연"
+          ],
+          solution: "통합 HRM 시스템과의 데이터 다이렉트 이관 연동을 통해 인사팀 최종 기안 프로세스를 즉각 종결합니다."
+        }
+      },
+      charts: {
+        leadtime: [8, 6, 3, 12, 10, 18, 5],
+        stageStats: [1593, 390, 160, 61, 16, 8, 6]
+      },
+      pain: {
+        effort: {
+          labels: ['1차 서류(자소서 정독)','면접 일정 수기조율','처우 협의·검증','2차 서류(현업 회신)','역량검사 안내·리마인드'],
+          data: [186, 142, 96, 74, 38],
+          cap: '이번 반기 누적 수기 공수 <b>536시간</b> · 서류 정독이 35%'
+        },
+        offer: {
+          labels: ['~7일','8~15','16~30','31~50','51일+'],
+          data: [4, 11, 13, 7, 5],
+          cap: '처우 협의 중앙값 <b>19일</b> · 최장 62일(롱테일)'
+        },
+        recoord: { val: 71, ratio: [71, 29], sub: '재조율 발생', cap: '면접 건당 평균 메일 <b>5.4회</b> 왕복' },
+        dropoff: {
+          labels: ['역량검사 미응시','면접 노쇼','처우 협의 중 이탈','오퍼 거절'],
+          data: [22, 9, 7, 5],
+          cap: '리드타임 장기화 구간에서 이탈 <b>43명</b>'
+        }
+      },
+      journey: [
+        { stage: '서류 검토', touch: '지원 접수 → 서류 결과 발표', wait: 22, target: '7~10일', note: '자소서 수기 정독 · 현업 적합성 검토', bad: true },
+        { stage: '역량검사',  touch: '검사 안내 → 응시 완료',     wait: 4,  target: '2~3일',  note: '링크 수동 발송 · 미응시 리마인드', bad: true },
+        { stage: '직무 면접', touch: '면접 안내 → 결과 발표',     wait: 16, target: '5~7일',  note: '평가자 일정 수기 조율', bad: true },
+        { stage: '임원 면접', touch: '면접 안내 → 결과 발표',     wait: 14, target: '5~7일',  note: '임원 일정 수기 조율', bad: true },
+        { stage: '처우 협의', touch: '처우 안내 → 협의 완료',     wait: 28, target: '5~7일',  note: '경력/역량 기반 맞춤 처우 산정', bad: true },
+        { stage: '최종 발표', touch: '최종 합격 통보',           wait: 6,  target: '3일',    note: '평가 취합 · 내부 결재 완료', bad: false }
+      ],
+      passRates: [
+        { source: "헤드헌터",      applicants: 168,  passed: 30, rate: 17.9 },
+        { source: "원티드",        applicants: 412,  passed: 41, rate: 10.0 },
+        { source: "자사 채용홈",   applicants: 297,  passed: 24, rate: 8.1 },
+        { source: "잡코리아",      applicants: 521,  passed: 26, rate: 5.0 },
+        { source: "사람인",        applicants: 195,  passed: 7,  rate: 3.6 }
+      ],
+      inflow: {
+        months: ['1월','2월','3월','4월','5월','6월'],
+        channels: [
+          { name: '잡코리아',    color: '#273A92', data: [380, 420, 510, 460, 390, 430] },
+          { name: '원티드',      color: '#2563CC', data: [210, 260, 300, 340, 380, 412] },
+          { name: '사람인',      color: '#00AEEF', data: [240, 220, 200, 210, 195, 180] },
+          { name: '자사 채용홈', color: '#7B61FF', data: [120, 140, 130, 160, 150, 170] },
+          { name: '헤드헌터',    color: '#2DAE7B', data: [60, 70, 65, 80, 90, 110] }
+        ]
+      }
+    },
+    fresh: {
+      targetName: "신입 공채 프로세스 (처우 협의 불필요)",
+      kpis: { total: "3,420", progress: "120", passed: "42", failed: "3,258", avgDuration: "합격까지 평균 62일 소요" },
+      funnel: [
+        { stage: "1차 서류 (인사)", period: "14일 소요", ratio: "100%",  count: "3,420명", passrate: "10.5% →", key: "document_hr" },
+        { stage: "2차 서류 (현업)", period: "12일 소요", ratio: "10.5%", count: "360명",   passrate: "50.0% →", key: "document_dept" },
+        { stage: "역량검사",        period: "6일 소요",  ratio: "5.3%",  count: "180명",   passrate: "44.4% →", key: "assessment" },
+        { stage: "1차 면접 (실무)", period: "14일 소요", ratio: "2.3%",  count: "80명",    passrate: "52.5% →", key: "interview1" },
+        { stage: "2차 면접 (임원)", period: "10일 소요", ratio: "1.2%",  count: "42명",    passrate: "100% →",  key: "interview2" },
+        { stage: "최종합격",        period: "6일 소요",  ratio: "1.2%",  count: "42명",    passrate: "—",       key: "final" }
+      ],
+      diagnostics: {
+        document_hr: {
+          num: "PHASE 01", name: "1차 서류 (신입)", desc: "대량 유입 자소서 일괄 스크리닝",
+          painpoint: '"인사팀에서 서류 심사하여 합격한 자에 한하여 2차로 해당 현업에 서류를 일괄 전달합니다."',
+          ratio: "70%", ratioVal: 70,
+          causes: ["공채 오픈에 따라 일시에 수천 건의 자기소개서가 대량 접수되어 처리량 폭증"],
+          solution: "자소서 핵심 키워드 매칭 스크리닝을 통해 인사담당자의 기초 서류 필터링을 보조합니다."
+        },
+        document_dept: {
+          num: "PHASE 02", name: "2차 서류 (신입)", desc: "현업 부서 서류 일괄 검토",
+          painpoint: '"담당 현업에서 해당 서류를 평가하고 합격 여부를 다시 한번 체크합니다."',
+          ratio: "65%", ratioVal: 65,
+          causes: ["일괄 배분된 대량 이력서의 현업 평가자 동시 다발 평가 프로세스 정체"],
+          solution: "현업 평가용 협업 툴 및 채용 점수 즉시 업로드 알림을 권장합니다."
+        },
+        assessment: {
+          num: "PHASE 03", name: "역량검사 (신입)", desc: "필기시험 및 온라인 평가 통합",
+          painpoint: '"신입 전형은 예외 없는 일괄적 일정 관리를 준수합니다."',
+          ratio: "20%", ratioVal: 20,
+          causes: ["정형화된 공채 타임라인에 맞춘 전 지원자 동시 온라인 테스트 전송 및 일괄 업로드 관리"],
+          solution: "응시 모니터링 관리 자동화 및 점수 자동 파싱 시스템을 적용합니다."
+        },
+        interview1: {
+          num: "PHASE 04", name: "1차 면접 (실무)", desc: "다대다 면접장 배정 및 평가표 수동 기입",
+          painpoint: '"신입 채용은 일정 조율이 진행되지 않고 일괄 통보로 진행합니다."',
+          ratio: "30%", ratioVal: 30,
+          causes: ["수기 일정 조율은 없으나 대규모 현직자 면접관 차출 및 물리 면접 공간 배정 조율 공수"],
+          solution: "평가표 점수 자동 집계 패널 적용 및 면접장 로테이션 자동화를 추천합니다."
+        },
+        interview2: {
+          num: "PHASE 05", name: "2차 면접 (임원)", desc: "최종 집단 임원 면접 스케줄링 관리",
+          painpoint: '"신입 공채는 수기 조정 실무 부담이 최소화된 전형입니다."',
+          ratio: "15%", ratioVal: 15,
+          causes: ["사전에 할당된 지정 면접 시간에 맞춰 순차 입장시키므로 스케줄 정체는 최소화됨"],
+          solution: "임원 실시간 합격 등급 합의용 평가 가이드 자동화를 제안합니다."
+        },
+        final: {
+          num: "PHASE 06", name: "최종합격", desc: "공채 신입 최종 합격 레터 일괄 자동 발송",
+          painpoint: '"신입은 임원 면접 완료 이후 바로 최종 합격으로 이어집니다."',
+          ratio: "35%", ratioVal: 35,
+          causes: ["동시 합격자 대량 정보 기안 품의 및 입사 전 온보딩 교육 안내 수기 메일 전송"],
+          solution: "일괄 합격 메신저 알림 연동 및 프리온보딩 포털 연동을 권장합니다."
+        }
+      },
+      charts: {
+        leadtime: [14, 12, 6, 14, 10, 6],
+        stageStats: [3420, 360, 180, 80, 42, 42]
+      },
+      pain: {
+        effort: {
+          labels: ['1차 서류(대량 정독)','2차 서류(현업 회신)','역량검사 일괄 관리','면접장 배정·운영'],
+          data: [320, 88, 64, 30],
+          cap: '이번 반기 누적 수기 공수 <b>502시간</b> · 대량 정독이 64%'
+        },
+        offer: {
+          title: '주차별 자소서 유입(공채)',
+          pill: '대량 유입',
+          labels: ['1주','2주','3주','4주(마감)'],
+          data: [420, 760, 980, 1260],
+          cap: '마감주 <b>1,260건</b> 집중 · 인사 1인당 일 84건'
+        },
+        recoord: { title: '역량검사 미응시율', pill: '추적 부담', val: 34, ratio: [34, 66], sub: '미응시', cap: '리마인드 수동 발송 <b>540건</b>' },
+        dropoff: {
+          labels: ['역량검사 미응시','면접 노쇼','최종 미입사'],
+          data: [122, 41, 6],
+          cap: '대량 유입 대비 추적 누락 <b>169명</b>'
+        }
+      },
+      journey: [
+        { stage: '서류 검토', touch: '지원 접수 → 서류 결과 발표', wait: 26, target: '10~14일', note: '대량 자소서 일괄 정독', bad: true },
+        { stage: '역량검사',  touch: '검사 안내 → 응시 완료',     wait: 6,  target: '3일',     note: '일괄 발송 · 응시 추적', bad: true },
+        { stage: '직무 면접', touch: '면접 안내 → 결과 발표',     wait: 14, target: '5~7일',   note: '면접장 배정 · 일괄 통보', bad: true },
+        { stage: '임원 면접', touch: '면접 안내 → 결과 발표',     wait: 10, target: '5일',     note: '집단 면접 운영', bad: false },
+        { stage: '최종 발표', touch: '최종 합격 통보',           wait: 6,  target: '3일',     note: '합격 레터 일괄 발송', bad: false }
+      ],
+      passRates: [
+        { source: "캠퍼스 리크루팅", applicants: 480,  passed: 14, rate: 2.9 },
+        { source: "자사 채용홈",     applicants: 1240, passed: 18, rate: 1.5 },
+        { source: "잡코리아",        applicants: 1100, passed: 7,  rate: 0.6 },
+        { source: "사람인",          applicants: 600,  passed: 3,  rate: 0.5 }
+      ],
+      inflow: {
+        months: ['1월','2월','3월','4월','5월','6월'],
+        channels: [
+          { name: '자사 채용홈',     color: '#273A92', data: [120, 180, 420, 980, 1260, 340] },
+          { name: '잡코리아',        color: '#2563CC', data: [90, 140, 360, 720, 1100, 280] },
+          { name: '사람인',          color: '#00AEEF', data: [60, 90, 210, 430, 600, 150] },
+          { name: '캠퍼스 리크루팅', color: '#2DAE7B', data: [20, 40, 160, 380, 480, 90] }
+        ]
+      }
+    }
+  };
+
+  let currentType = 'experienced';
+  let currentSelectedStage = 'offer';
+  let charts = {};
+
+  // ===== 마운트 시 HTML 주입 =====
+  function buildHTML() {
+    return `
+<div class="lt-root">
+  <!-- 경력/신입 토글 -->
+  <div class="lt-toggle-row">
+    <div class="lt-toggle">
+      <button id="lt-btn-experienced" class="lt-toggle-btn active" onclick="Leadtime.toggleType('experienced')">
+        <i class="ti ti-user-check"></i> 경력직 채용
+      </button>
+      <button id="lt-btn-fresh" class="lt-toggle-btn" onclick="Leadtime.toggleType('fresh')">
+        <i class="ti ti-school"></i> 신입 공채
+      </button>
+    </div>
+    <div class="lt-target-text">분석 대상: <b id="lt-target-text">경력직 채용 프로세스</b></div>
+  </div>
+
+  <!-- Funnel History -->
+  <section class="lt-panel">
+    <div class="lt-panel-head">
+      <div>
+        <h2 class="lt-panel-title"><i class="ti ti-filter"></i> 채용 프로세스 단계별 분석</h2>
+        <p class="lt-panel-sub">서류 심사부터 수동 일정 조율, 경력 처우 검토·협의 등 전 단계의 전환율 및 누적 대기시간</p>
+      </div>
+    </div>
+    <div class="lt-funnel-container">
+      <div class="lt-funnel-grid" id="lt-funnel-flow"></div>
+    </div>
+    <div class="lt-panel-foot">
+      <i class="ti ti-info-circle"></i> 각 노드 카드를 클릭하면 우측의 실시간 세부 진단 분석기가 연동되어 전환됩니다.
+    </div>
+  </section>
+
+  <!-- 지원자 체감 여정 타임라인 -->
+  <section class="lt-panel">
+    <div class="lt-panel-head">
+      <div>
+        <h2 class="lt-panel-title"><i class="ti ti-route"></i> 지원자 관점 리드타임</h2>
+        <p class="lt-panel-sub">접점 사이의 <b>대기 리드타임</b>이 곧 병목 — 대부분 수기 작업에서 발생하며, AI 도입 후 단축 목표를 함께 표시합니다.</p>
+      </div>
+      <span class="lt-pill purple" id="lt-journey-total">총 90일 대기</span>
+    </div>
+    <div class="lt-journey" id="lt-journey-flow"></div>
+  </section>
+
+  <!-- 지원자 유입 추이 분석 -->
+  <section class="lt-panel">
+    <div class="lt-panel-head">
+      <div>
+        <h2 class="lt-panel-title"><i class="ti ti-chart-line"></i> 지원자 유입 추이 분석</h2>
+        <p class="lt-panel-sub">채용 경로별 월간 지원자 유입과 전월 대비 증감 — 어떤 채널을 강화할지 판단합니다.</p>
+      </div>
+      <span class="lt-pill blue" id="lt-inflow-total">최근월 1,302명</span>
+    </div>
+    <div class="lt-inflow-chart"><canvas id="lt-chart-inflow"></canvas></div>
+    <div class="lt-inflow-tablewrap"><table class="lt-inflow-table" id="lt-inflow-table"></table></div>
+  </section>
+
+  <!-- Dashboard Grid -->
+  <div class="lt-grid">
+
+    <!-- 왼쪽: BI 위젯 -->
+    <div class="lt-col-main">
+
+      <!-- 페인포인트 위젯 2x2 -->
+      <div class="lt-mini-grid">
+        <div class="lt-widget">
+          <div class="lt-widget-head"><h3 id="lt-w1-title">인사팀 단계별 수기 공수</h3><span class="lt-pill red" id="lt-w1-pill">수작업</span></div>
+          <div class="lt-chart-sm"><canvas id="lt-chart-effort"></canvas></div>
+          <p class="lt-widget-cap" id="lt-w1-cap"></p>
+        </div>
+        <div class="lt-widget">
+          <div class="lt-widget-head"><h3 id="lt-w2-title">처우 협의 소요일 분포</h3><span class="lt-pill gray" id="lt-w2-pill">경력직</span></div>
+          <div class="lt-chart-sm"><canvas id="lt-chart-offer"></canvas></div>
+          <p class="lt-widget-cap" id="lt-w2-cap"></p>
+        </div>
+        <div class="lt-widget">
+          <div class="lt-widget-head"><h3 id="lt-w3-title">면접 일정 재조율률</h3><span class="lt-pill red" id="lt-w3-pill">수기 조율</span></div>
+          <div class="lt-chart-sm lt-donut-wrap lt-donut-center">
+            <div class="lt-donut-inner"><canvas id="lt-chart-recoord"></canvas></div>
+            <div class="lt-donut-val"><b id="lt-w3-val">71%</b><span id="lt-w3-sub">재조율 발생</span></div>
+          </div>
+          <p class="lt-widget-cap" id="lt-w3-cap"></p>
+        </div>
+        <div class="lt-widget">
+          <div class="lt-widget-head"><h3 id="lt-w4-title">단계별 후보자 이탈</h3><span class="lt-pill gray" id="lt-w4-pill">반기 누적</span></div>
+          <div class="lt-chart-sm"><canvas id="lt-chart-dropoff"></canvas></div>
+          <p class="lt-widget-cap" id="lt-w4-cap"></p>
+        </div>
+      </div>
+
+      <!-- 중단: 리드타임 / 합격률 / 통계 -->
+      <div class="lt-mid-grid">
+        <div class="lt-col-mid-left">
+          <div class="lt-widget">
+            <h3 class="lt-widget-title">채용 단계별 리드타임 (평균)</h3>
+            <div class="lt-chart-md"><canvas id="lt-chart-leadtime"></canvas></div>
+          </div>
+          <div class="lt-widget">
+            <h3 class="lt-widget-title">경로별 지원자 합격률</h3>
+            <div id="lt-pass-rate-container"></div>
+          </div>
+        </div>
+        <div class="lt-widget lt-stage-stats">
+          <div class="lt-widget-head">
+            <h3>채용 단계별 인원 통계</h3>
+            <span class="lt-pill purple" id="lt-avg-duration">합격까지 평균 80일 소요</span>
+          </div>
+          <div class="lt-chart-lg"><canvas id="lt-chart-stage-stats"></canvas></div>
+          <div class="lt-kpi-row">
+            <div><p class="k">총 지원자</p><p class="v" id="lt-kpi-total">1,593명</p></div>
+            <div><p class="k">진행 중</p><p class="v" id="lt-kpi-progress">634명</p></div>
+            <div><p class="k">합격자</p><p class="v accent" id="lt-kpi-passed">8명</p></div>
+            <div><p class="k">불합격</p><p class="v muted" id="lt-kpi-failed">896명</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 오른쪽: 진단 패널 -->
+    <aside class="lt-col-aside">
+      <div class="lt-insight">
+        <div class="lt-insight-head">
+          <span id="lt-detail-badge" class="lt-badge red">최대 정체 구간</span>
+          <div class="lt-live"><span class="dot"></span> 실시간 프로세스 진단</div>
+        </div>
+        <div id="lt-insight-box" class="lt-insight-body">
+          <div class="lt-stage-meta">
+            <span id="lt-detail-stage-num" class="lt-phase">PHASE 06</span>
+            <h3 id="lt-detail-stage-name">처우 협의 및 검토</h3>
+            <p id="lt-detail-stage-desc">경력직 전형의 최종 입사 확정 지연 구간</p>
+          </div>
+
+          <div class="lt-quote">
+            <i class="ti ti-quote"></i>
+            <div class="lt-quote-label">담당자 인터뷰</div>
+            <p id="lt-detail-painpoint">"거기에 경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에…"</p>
+          </div>
+
+          <div class="lt-metric">
+            <div class="lt-metric-row">
+              <span>수기 조율 및 서류 검증 지연율</span>
+              <span id="lt-detail-ratio-text" class="lt-ratio red">98% 이상</span>
+            </div>
+            <div class="lt-bar-track"><div id="lt-detail-ratio-bar" class="lt-bar-fill red" style="width: 98%"></div></div>
+          </div>
+
+          <div class="lt-causes">
+            <p class="lt-causes-title">핵심 병목 요인</p>
+            <ul id="lt-detail-cause-list"></ul>
+          </div>
+
+          <div class="lt-solution">
+            <div class="lt-solution-head"><i class="ti ti-sparkles"></i> AI 기반 솔루션 처방</div>
+            <p id="lt-detail-ai-solution">처우 데이터 분석 기반 내부 가이드 자동 시뮬레이션…</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+    `;
+  }
+
+  // ===== 렌더링 =====
+  function renderFunnel() {
+    const data = dataset[currentType];
+    document.getElementById('lt-target-text').textContent = data.targetName;
+
+    const container = document.getElementById('lt-funnel-flow');
+    container.innerHTML = '';
+    container.style.gridTemplateColumns = `repeat(${data.funnel.length}, 1fr)`;
+
+    data.funnel.forEach(item => {
+      const card = document.createElement('div');
+      const selected = item.key === currentSelectedStage;
+      card.className = 'lt-funnel-card' + (selected ? ' selected' : '');
+      card.onclick = () => { currentSelectedStage = item.key; renderFunnel(); renderDiagnostics(); };
+      card.innerHTML = `
+        <div>
+          <p class="stage">${item.stage}</p>
+          <p class="period">${item.period}</p>
+        </div>
+        <div class="ratio-box"><p>${item.ratio}</p></div>
+        <div>
+          <p class="count">${item.count}</p>
+          <div class="passrate">전환율 ${item.passrate}</div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function renderDiagnostics() {
+    const d = dataset[currentType].diagnostics[currentSelectedStage];
+    if (!d) return;
+    const box = document.getElementById('lt-insight-box');
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(8px)';
+
+    setTimeout(() => {
+      const badge = document.getElementById('lt-detail-badge');
+      if (currentSelectedStage === 'offer') {
+        badge.textContent = '최대 정체 구간';
+        badge.className = 'lt-badge red';
+      } else if (['document_hr','document_dept','interview1','interview2'].includes(currentSelectedStage)) {
+        badge.textContent = '수동 조율 정체';
+        badge.className = 'lt-badge amber';
+      } else {
+        badge.textContent = '안정 수준';
+        badge.className = 'lt-badge green';
+      }
+
+      document.getElementById('lt-detail-stage-num').textContent = d.num;
+      document.getElementById('lt-detail-stage-name').textContent = d.name;
+      document.getElementById('lt-detail-stage-desc').textContent = d.desc;
+      document.getElementById('lt-detail-painpoint').textContent = d.painpoint;
+      document.getElementById('lt-detail-ratio-text').textContent = d.ratio + ' 수기/지연';
+      const bar = document.getElementById('lt-detail-ratio-bar');
+      bar.style.width = d.ratioVal + '%';
+
+      const colorClass = d.ratioVal >= 80 ? 'red' : d.ratioVal >= 40 ? 'amber' : 'green';
+      bar.className = 'lt-bar-fill ' + colorClass;
+      document.getElementById('lt-detail-ratio-text').className = 'lt-ratio ' + colorClass;
+
+      const list = document.getElementById('lt-detail-cause-list');
+      list.innerHTML = '';
+      d.causes.forEach(c => {
+        const li = document.createElement('li');
+        li.innerHTML = `<i class="ti ti-alert-circle"></i><span>${c}</span>`;
+        list.appendChild(li);
+      });
+
+      document.getElementById('lt-detail-ai-solution').textContent = d.solution;
+
+      box.style.opacity = '1';
+      box.style.transform = 'translateY(0)';
+    }, 120);
+  }
+
+  function renderStats() {
+    const d = dataset[currentType];
+    document.getElementById('lt-avg-duration').textContent = d.kpis.avgDuration;
+    document.getElementById('lt-kpi-total').textContent = d.kpis.total + '명';
+    document.getElementById('lt-kpi-progress').textContent = d.kpis.progress + '명';
+    document.getElementById('lt-kpi-passed').textContent = d.kpis.passed + '명';
+    document.getElementById('lt-kpi-failed').textContent = d.kpis.failed + '명';
+
+    const wrap = document.getElementById('lt-pass-rate-container');
+    wrap.innerHTML = '';
+    const maxRate = Math.max(...d.passRates.map(i => i.rate));
+    d.passRates.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'lt-rate-row';
+      row.innerHTML = `
+        <div class="lt-rate-label">
+          <span>${item.source} <em class="lt-rate-sub">지원 ${item.applicants}·합격 ${item.passed}</em></span>
+          <b>${item.rate}%</b>
+        </div>
+        <div class="lt-rate-track"><div class="lt-rate-fill" style="width:${(item.rate / maxRate * 100).toFixed(0)}%"></div></div>
+      `;
+      wrap.appendChild(row);
+    });
+  }
+
+  function renderInflow() {
+    const inf = dataset[currentType].inflow;
+    const tbl = document.getElementById('lt-inflow-table');
+    if (!tbl) return;
+    const m = inf.months, last = m.length - 1;
+    let head = '<tr><th>지원 경로</th>' + m.map(x => `<th>${x}</th>`).join('') + '<th>전월 대비</th></tr>';
+    let body = inf.channels.map(ch => {
+      const cur = ch.data[last], prev = ch.data[last - 1];
+      const pct = prev ? Math.round((cur - prev) / prev * 100) : 0;
+      const up = pct >= 0;
+      const mom = `<span class="lt-mom ${up ? 'up' : 'down'}">${up ? '▲' : '▼'} ${Math.abs(pct)}%</span>`;
+      const cells = ch.data.map((v, i) => `<td class="${i === last ? 'latest' : ''}">${v.toLocaleString()}</td>`).join('');
+      return `<tr><td><span class="ch-dot" style="background:${ch.color}"></span>${ch.name}</td>${cells}<td>${mom}</td></tr>`;
+    }).join('');
+    tbl.innerHTML = head + body;
+    const total = inf.channels.reduce((a, ch) => a + ch.data[last], 0);
+    document.getElementById('lt-inflow-total').textContent = '최근월 ' + total.toLocaleString() + '명';
+  }
+
+  function initCharts() {
+    const c = dataset[currentType].charts;
+    const p = dataset[currentType].pain;
+    const RED = '#E5446D', SKY = '#00AEEF', NAVY = '#273A92', SOFT = '#C5DBF5';
+
+    // W1 — 단계별 수기 공수 (가로 막대, 최대값 강조)
+    charts.effort = new Chart(document.getElementById('lt-chart-effort'), {
+      type: 'bar',
+      data: { labels: p.effort.labels, datasets: [{ data: p.effort.data, backgroundColor: barEmphasis(p.effort.data, RED, SOFT), borderRadius: 3 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + ' 시간' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+    });
+
+    // W2 — 처우 협의 소요일 분포 / (신입) 주차별 유입
+    charts.offer = new Chart(document.getElementById('lt-chart-offer'), {
+      type: 'bar',
+      data: { labels: p.offer.labels, datasets: [{ data: p.offer.data, backgroundColor: NAVY, borderRadius: 4 }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 9 } } }, y: { display: false } } }
+    });
+
+    // W3 — 면접 재조율률 / (신입) 미응시율 (도넛)
+    charts.recoord = new Chart(document.getElementById('lt-chart-recoord'), {
+      type: 'doughnut',
+      data: { datasets: [{ data: p.recoord.ratio, backgroundColor: [RED, '#EEF1F7'], borderWidth: 0 }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
+    });
+
+    // W4 — 단계별 후보자 이탈 (가로 막대)
+    charts.dropoff = new Chart(document.getElementById('lt-chart-dropoff'), {
+      type: 'bar',
+      data: { labels: p.dropoff.labels, datasets: [{ data: p.dropoff.data, backgroundColor: SKY, borderRadius: 3 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + '명' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+    });
+
+    // 유입 추이 — 채널별 멀티라인
+    const inf = dataset[currentType].inflow;
+    charts.inflow = new Chart(document.getElementById('lt-chart-inflow'), {
+      type: 'line',
+      data: {
+        labels: inf.months,
+        datasets: inf.channels.map(ch => ({
+          label: ch.name, data: ch.data,
+          borderColor: ch.color, backgroundColor: ch.color,
+          borderWidth: 2, tension: 0.35, pointRadius: 2, pointHoverRadius: 4, fill: false
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, font: { size: 10.5 }, usePointStyle: true } } },
+        scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { font: { size: 10 } } } }
+      }
+    });
+
+    charts.leadtime = new Chart(document.getElementById('lt-chart-leadtime'), {
+      type: 'bar',
+      data: {
+        labels: ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격'],
+        datasets: [{ data: c.leadtime, backgroundColor: ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#00AEEF','#C5DBF5'], borderRadius: 3 }]
+      },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { display: false } } } }
+    });
+
+    charts.stageStats = new Chart(document.getElementById('lt-chart-stage-stats'), {
+      type: 'bar',
+      data: {
+        labels: ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격'],
+        datasets: [{ label: '인원수', data: c.stageStats, backgroundColor: ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#00AEEF','#2DAE7B'], borderRadius: 5 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { beginAtZero: true } } }
+    });
+  }
+
+  function renderJourney() {
+    const j = dataset[currentType].journey;
+    const flow = document.getElementById('lt-journey-flow');
+    if (!flow) return;
+    flow.innerHTML = j.map((s, i) => `
+      <div class="lt-journey-step">
+        <div class="lt-jr-head"><span class="idx">${i + 1}</span>${s.stage}</div>
+        <div class="lt-jr-touch">${s.touch}</div>
+        <div class="lt-jr-wait ${s.bad ? '' : 'ok'}">
+          <div class="w-top"><b>${s.wait}</b><span>일 · 대기 리드타임</span></div>
+          <div class="w-note">${s.note}</div>
+          ${s.target ? `<div class="w-target"><i class="ti ti-trending-down"></i> AI 도입 후 <b>${s.target}</b></div>` : ''}
+        </div>
+      </div>`).join('');
+    const total = j.reduce((a, b) => a + b.wait, 0);
+    document.getElementById('lt-journey-total').textContent = '총 ' + total + '일 대기';
+  }
+
+  function barEmphasis(arr, hi, lo) {
+    const max = Math.max(...arr);
+    return arr.map(v => v === max ? hi : lo);
+  }
+
+  // 위젯 헤더·캡션 텍스트 동기화 (토글별)
+  function syncWidgetText() {
+    const p = dataset[currentType].pain;
+    document.getElementById('lt-w2-title').textContent = p.offer.title || '처우 협의 소요일 분포';
+    document.getElementById('lt-w2-pill').textContent = p.offer.pill || '경력직';
+    document.getElementById('lt-w3-title').textContent = p.recoord.title || '면접 일정 재조율률';
+    document.getElementById('lt-w3-pill').textContent = p.recoord.pill || '수기 조율';
+    document.getElementById('lt-w3-val').textContent = p.recoord.val + '%';
+    document.getElementById('lt-w3-sub').textContent = p.recoord.sub;
+    document.getElementById('lt-w1-cap').innerHTML = p.effort.cap;
+    document.getElementById('lt-w2-cap').innerHTML = p.offer.cap;
+    document.getElementById('lt-w3-cap').innerHTML = p.recoord.cap;
+    document.getElementById('lt-w4-cap').innerHTML = p.dropoff.cap;
+  }
+
+  function updateCharts() {
+    const c = dataset[currentType].charts;
+    const p = dataset[currentType].pain;
+    const isExp = currentType === 'experienced';
+    const RED = '#E5446D', SOFT = '#C5DBF5';
+    const labels = isExp
+      ? ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격']
+      : ['1차서류','2차서류','역량검사','1차면접','2차면접','최종합격'];
+
+    charts.effort.data.labels = p.effort.labels;
+    charts.effort.data.datasets[0].data = p.effort.data;
+    charts.effort.data.datasets[0].backgroundColor = barEmphasis(p.effort.data, RED, SOFT);
+    charts.effort.update();
+
+    charts.offer.data.labels = p.offer.labels;
+    charts.offer.data.datasets[0].data = p.offer.data;
+    charts.offer.update();
+
+    charts.recoord.data.datasets[0].data = p.recoord.ratio;
+    charts.recoord.update();
+
+    charts.dropoff.data.labels = p.dropoff.labels;
+    charts.dropoff.data.datasets[0].data = p.dropoff.data;
+    charts.dropoff.update();
+
+    syncWidgetText();
+    renderJourney();
+    renderInflow();
+    const inf = dataset[currentType].inflow;
+    charts.inflow.data.labels = inf.months;
+    charts.inflow.data.datasets = inf.channels.map(ch => ({
+      label: ch.name, data: ch.data, borderColor: ch.color, backgroundColor: ch.color,
+      borderWidth: 2, tension: 0.35, pointRadius: 2, pointHoverRadius: 4, fill: false
+    }));
+    charts.inflow.update();
+
+    charts.leadtime.data.labels = labels;
+    charts.leadtime.data.datasets[0].data = c.leadtime;
+    charts.leadtime.data.datasets[0].backgroundColor = isExp
+      ? ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#00AEEF','#C5DBF5']
+      : ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#C5DBF5'];
+    charts.leadtime.update();
+
+    charts.stageStats.data.labels = labels;
+    charts.stageStats.data.datasets[0].data = c.stageStats;
+    charts.stageStats.data.datasets[0].backgroundColor = isExp
+      ? ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#00AEEF','#2DAE7B']
+      : ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#2DAE7B'];
+    charts.stageStats.update();
+  }
+
+  // ===== 공개 API =====
+  return {
+    init() {
+      const mount = document.getElementById('leadtime-mount');
+      if (!mount) return;
+      mount.innerHTML = buildHTML();
+      renderFunnel();
+      renderDiagnostics();
+      renderStats();
+      initCharts();
+      syncWidgetText();
+      renderJourney();
+      renderInflow();
+    },
+    toggleType(type) {
+      currentType = type;
+      document.getElementById('lt-btn-experienced').classList.toggle('active', type === 'experienced');
+      document.getElementById('lt-btn-fresh').classList.toggle('active', type === 'fresh');
+      currentSelectedStage = (type === 'fresh') ? 'document_hr' : 'offer';
+      renderFunnel();
+      renderDiagnostics();
+      renderStats();
+      updateCharts();
+    }
+  };
+})();
 </script>
 
 </body>
