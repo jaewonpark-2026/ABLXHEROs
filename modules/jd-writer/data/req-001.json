@@ -44,7 +44,7 @@
   "manager_comments": [],
   "approval_status": {
     "requester": { "by": "마케팅팀 김부장", "at": "2026-05-22 11:20", "approved": true },
-    "hr_consent": { "by": "최병현 책임", "at": "2026-05-22 14:05", "approved": true },
+    "hr_consent": { "by": null, "at": null, "approved": false },
     "approved": { "by": null, "at": null, "approved": false }
   }
 }
