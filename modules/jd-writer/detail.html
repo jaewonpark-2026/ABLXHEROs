@@ -244,6 +244,9 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 /* 섹션 제목 */
 .pt-section-title { font-size: 20px; font-weight: 700; color: #E84545; margin: 36px 0 16px; letter-spacing: -0.3px; }
 .pt-section-title:first-child { margin-top: 0; }
+.pt-edit-deadline-btn { font-size: 11px; font-weight: 700; color: var(--main-1); background: var(--info-bg, #E6F1FB); border: 1px solid var(--main-1); padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-left: 10px; vertical-align: middle; display: inline-flex; align-items: center; gap: 4px; }
+.pt-edit-deadline-btn:hover { background: var(--main-1); color: white; }
+.pt-edit-deadline-btn i { font-size: 12px; }
 
 /* 모집 테이블 */
 .pt-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
@@ -506,24 +509,25 @@ function renderJDPanel(data) {
 
       <div class="jd-content" id="jdContent">
         <h2>${jd.title}</h2>
-        <h3>회사 소개</h3>
-        <p>${jd.company_intro}</p>
-        <h3>이런 분을 찾고 있어요</h3>
-        <p>${jd.role_summary}</p>
         <h3>주요 업무</h3>
         <ul>${jd.main_duties.map(d => `<li>${d}</li>`).join('')}</ul>
-        <h3>필수 자격요건</h3>
+        <h3>자격요건 (필수)</h3>
         <ul>${jd.required.map(r => `<li>${r}</li>`).join('')}</ul>
         <h3>우대 사항</h3>
         <ul>${jd.preferred.map(p => `<li>${p}</li>`).join('')}</ul>
-        <h3>인재상</h3>
-        <p>${jd.talent_profile}</p>
-        <h3>처우 및 복지</h3>
+        <h3>근무 조건</h3>
         <p><strong>고용 형태:</strong> ${jd.employment_type}<br>
         <strong>근무 위치:</strong> ${jd.location}<br>
         <strong>처우:</strong> ${jd.salary}<br>
         <strong>복리후생:</strong> ${jd.benefits}</p>
+        <h3>회사 소개</h3>
+        <p>${jd.company_intro}</p>
+        <h3>이런 분을 찾고 있어요</h3>
+        <p>${jd.role_summary}</p>
+        <h3>인재상</h3>
+        <p>${jd.talent_profile}</p>
       </div>
+      <!--END-JD-CONTENT-->
 
       ${isHR && data.current_step === 2 ? `
         <div class="action-section">
@@ -1006,9 +1010,68 @@ function saveJDEdit() {
   // currentData에 반영
   if (currentData && currentData.jd_draft) {
     currentData.jd_draft._editedHTML = content.innerHTML;
+    // 수정된 본문에서 각 섹션을 파싱해 jd_draft 필드에 반영 (공고 미리보기 동기화)
+    parseEditedJD(content, currentData.jd_draft);
   }
   jdEditOriginal = '';
-  showJDToast('JD 수정 내용이 저장되었습니다.');
+  showJDToast('JD 수정 내용이 저장되었습니다. 공고 미리보기에도 반영됩니다.');
+}
+
+// 수정된 JD 본문(HTML)에서 섹션별 내용을 추출해 jd_draft에 반영
+function parseEditedJD(contentEl, jd) {
+  try {
+    const nodes = Array.from(contentEl.children);
+    let currentSection = null;
+    const buckets = {}; // 섹션명 → {paras:[], items:[]}
+    let title = jd.title;
+
+    nodes.forEach(node => {
+      const tag = node.tagName ? node.tagName.toLowerCase() : '';
+      if (tag === 'h2') {
+        title = node.textContent.trim() || title;
+      } else if (tag === 'h3') {
+        currentSection = node.textContent.trim();
+        buckets[currentSection] = { paras: [], items: [] };
+      } else if (tag === 'ul' && currentSection) {
+        Array.from(node.querySelectorAll('li')).forEach(li => {
+          const t = li.textContent.trim();
+          if (t) buckets[currentSection].items.push(t);
+        });
+      } else if (tag === 'p' && currentSection) {
+        const t = node.textContent.trim();
+        if (t) buckets[currentSection].paras.push(t);
+      }
+    });
+
+    jd.title = title;
+    // 섹션 이름 매칭 (부분 일치)
+    const findBucket = (keywords) => {
+      for (const key in buckets) {
+        if (keywords.some(kw => key.includes(kw))) return buckets[key];
+      }
+      return null;
+    };
+
+    const duties = findBucket(['주요 업무', '주요업무']);
+    if (duties && duties.items.length) jd.main_duties = duties.items;
+
+    const required = findBucket(['자격요건', '필수']);
+    if (required && required.items.length) jd.required = required.items;
+
+    const preferred = findBucket(['우대']);
+    if (preferred && preferred.items.length) jd.preferred = preferred.items;
+
+    const company = findBucket(['회사 소개', '회사소개']);
+    if (company && company.paras.length) jd.company_intro = company.paras.join(' ');
+
+    const role = findBucket(['찾고', '이런 분']);
+    if (role && role.paras.length) jd.role_summary = role.paras.join(' ');
+
+    const talent = findBucket(['인재상']);
+    if (talent && talent.paras.length) jd.talent_profile = talent.paras.join(' ');
+  } catch (err) {
+    console.warn('JD 파싱 중 오류 (무시):', err);
+  }
 }
 
 function cancelJDEdit() {
@@ -1086,6 +1149,9 @@ function openPostingPreview() {
   // 히어로 타이틀 (회사명 + 팀 + 채용)
   const heroTitle = `에이비엘생명보험<br>${dept} ${recruitType}직 채용`;
 
+  // 접수기간 (저장된 값 우선, 없으면 기본값)
+  const applyDeadline = (data && data.posting_deadline) ? data.posting_deadline : '2026년 7월 10일(금) 23:59';
+
   const html = `
     <div class="pt-title"><span class="abl-red">[ABL생명]</span> ${dept} ${recruitType}직(${position}) 채용</div>
 
@@ -1153,9 +1219,11 @@ function openPostingPreview() {
     </ul>
 
     <!-- 접수기간 및 방법 -->
-    <div class="pt-section-title">접수기간 및 방법</div>
+    <div class="pt-section-title">접수기간 및 방법
+      <button class="pt-edit-deadline-btn" onclick="editPostingDeadline()"><i class="ti ti-pencil"></i> 접수기간 수정</button>
+    </div>
     <ul class="pt-list">
-      <li>지원서 접수기간 : <span class="hl-red">2026년 7월 10일(금) 23:59 마감</span></li>
+      <li>지원서 접수기간 : <span class="hl-red" id="ptDeadline">${applyDeadline} 마감</span></li>
       <li>마감일은 접수가 급증할 것으로 예상되오니 미리 접수하시기 바랍니다.</li>
       <li>접수방법 : <span class="hl-link">에이비엘생명보험㈜ 채용 홈페이지</span>에서 온라인 지원</li>
       <li>발표방법 : 에이비엘생명 채용담당자가 개별 연락 예정</li>
@@ -1183,6 +1251,19 @@ function closePostingPreview(e) {
   if (e && e.target.id !== 'postingBackdrop') return;
   document.getElementById('postingBackdrop').classList.remove('show');
   document.body.style.overflow = '';
+}
+
+// 접수기간 수정
+function editPostingDeadline() {
+  const cur = (currentData && currentData.posting_deadline) ? currentData.posting_deadline : '2026년 7월 10일(금) 23:59';
+  const input = prompt('지원서 접수 마감 일시를 입력하세요.\n(예: 2026년 8월 15일(금) 23:59)', cur);
+  if (input === null) return; // 취소
+  const val = input.trim();
+  if (!val) return;
+  if (currentData) currentData.posting_deadline = val;
+  const el = document.getElementById('ptDeadline');
+  if (el) el.textContent = val + ' 마감';
+  showJDToast('접수기간이 변경되었습니다.');
 }
 
 document.addEventListener('keydown', e => {
