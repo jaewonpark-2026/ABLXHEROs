@@ -1,7 +1,7 @@
 {
   "_note": "ABL 실제 충원요청서(Personnel Request Form) 양식 기반. 요구자격 6개 항목은 비워두면 detail 페이지에서 자동 숨김 처리됩니다.",
   "form_title": "직원충원요청서 (Personnel Request Form)",
-  "form_subtitle": "현업 부서의 인재 요구사항을 입력하면 AI가 JD 작성을 도와드립니다.",
+  "form_subtitle": "현업 부서의 인재 요구사항을 작성해주세요.",
 
   "sections": [
     {
@@ -25,7 +25,7 @@
       "icon": "ti-file-text",
       "fields": [
         {"id": "reason_category", "label": "충원 사유 구분", "type": "select", "options": ["결원 충원", "신규 사업", "조직 확대", "인력 보강", "기타"], "required": true},
-        {"id": "reason_detail", "label": "채용 요청 사유 상세", "type": "textarea", "placeholder": "채용 요청 사유에 대해 상세하게 기재해주세요 (Please specify reasons in detail justifying personnel request)", "required": true, "ai_hint": "AI가 자동으로 정리해드립니다"}
+        {"id": "reason_detail", "label": "채용 요청 사유 상세", "type": "textarea", "placeholder": "채용 요청 사유에 대해 상세하게 기재해주세요 (Please specify reasons in detail justifying personnel request)", "required": true}
       ]
     },
     {
@@ -33,7 +33,7 @@
       "title": "주요업무 (Job Description)",
       "icon": "ti-briefcase",
       "fields": [
-        {"id": "main_duties", "label": "담당 업무", "type": "textarea", "placeholder": "이 포지션이 수행할 핵심 업무를 자유롭게 작성해주세요.", "required": true, "ai_hint": "AI가 자동으로 항목별로 정리해드립니다"}
+        {"id": "main_duties", "label": "담당 업무", "type": "textarea", "placeholder": "이 포지션이 수행할 핵심 업무를 자유롭게 작성해주세요.", "required": true}
       ]
     },
     {
