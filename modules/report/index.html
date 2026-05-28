@@ -361,10 +361,10 @@ a { color: inherit; text-decoration: none; }
   /* Grid layout */
   .lt-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
     gap: 20px;
   }
-  .lt-col-main { display: flex; flex-direction: column; gap: 20px; }
+  .lt-col-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
 
   /* Mini widgets */
   .lt-mini-grid {
@@ -394,6 +394,7 @@ a { color: inherit; text-decoration: none; }
     border: 1px solid var(--lt-border);
     border-radius: 16px;
     padding: 18px 20px;
+    min-width: 0;
   }
   .lt-widget-head {
     display: flex;
@@ -480,10 +481,11 @@ a { color: inherit; text-decoration: none; }
   /* Mid grid */
   .lt-mid-grid {
     display: grid;
-    grid-template-columns: 5fr 7fr;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: 16px;
   }
-  .lt-col-mid-left { display: flex; flex-direction: column; gap: 16px; }
+  .lt-col-mid-left { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .lt-stage-stats { min-width: 0; }
 
   .lt-stage-stats { display: flex; flex-direction: column; justify-content: space-between; }
   .lt-kpi-row {
