@@ -44,7 +44,8 @@
         "culture": "주도성 매치."
       },
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 2,
@@ -79,7 +80,8 @@
         "culture": "피드백 수용"
       },
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 3,
@@ -114,7 +116,8 @@
         "culture": "협업 가치 좋음"
       },
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "fail"
     },
     {
       "id": 4,
@@ -156,7 +159,8 @@
         "culture": "유연한 소통"
       },
       "hrMemos": [],
-      "finalComment": "개발본부 핵심 인재 영입 추천."
+      "finalComment": "개발본부 핵심 인재 영입 추천.",
+      "stage1Result": "pass"
     },
     {
       "id": 5,
@@ -189,7 +193,8 @@
         "culture": "조직 융합 우수"
       },
       "hrMemos": [],
-      "finalComment": "포트폴리오는 뛰어났으나, 전반적인 면접 진행 방향이 맞지 않음."
+      "finalComment": "포트폴리오는 뛰어났으나, 전반적인 면접 진행 방향이 맞지 않음.",
+      "stage1Result": "fail"
     },
     {
       "id": 6,
@@ -220,7 +225,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 7,
@@ -251,7 +257,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 8,
@@ -285,7 +292,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 9,
@@ -316,7 +324,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 10,
@@ -354,7 +363,8 @@
         "culture": "조직 내 신뢰 지수 강력"
       },
       "hrMemos": [],
-      "finalComment": "전사 데이터 분석 전임자로 강력 추천."
+      "finalComment": "전사 데이터 분석 전임자로 강력 추천.",
+      "stage1Result": "pass"
     },
     {
       "id": 11,
@@ -385,7 +395,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 12,
@@ -416,7 +427,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 13,
@@ -450,7 +462,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 14,
@@ -481,7 +494,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 15,
@@ -512,7 +526,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 16,
@@ -543,7 +558,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 17,
@@ -577,7 +593,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 18,
@@ -608,7 +625,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 19,
@@ -642,7 +660,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 20,
@@ -673,7 +692,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 21,
@@ -704,7 +724,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 22,
@@ -738,7 +759,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 23,
@@ -769,7 +791,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 24,
@@ -800,7 +823,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 25,
@@ -838,7 +862,8 @@
         "culture": "기본 역량 보유"
       },
       "hrMemos": [],
-      "finalComment": "비즈니스 이해도가 전반적으로 부족함."
+      "finalComment": "비즈니스 이해도가 전반적으로 부족함.",
+      "stage1Result": "pass"
     },
     {
       "id": 26,
@@ -869,7 +894,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 27,
@@ -903,7 +929,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 28,
@@ -934,7 +961,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     },
     {
       "id": 29,
@@ -968,7 +996,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": "pass"
     },
     {
       "id": 30,
@@ -999,7 +1028,8 @@
       },
       "evalComments": {},
       "hrMemos": [],
-      "finalComment": ""
+      "finalComment": "",
+      "stage1Result": null
     }
   ]
 }
