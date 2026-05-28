@@ -287,6 +287,17 @@ a { color: inherit; text-decoration: none; }
 .wtm-low-row .wtm-time { background: #FFF7ED; }
 .wtm-sep-top td { border-top: 2px solid #FDBA74; }
 
+/* 메일 발송 내역 (조율 완료) */
+.mail-hist { display: flex; flex-direction: column; gap: 8px; }
+.mh-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; }
+.mh-ic { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mh-ic i { font-size: 15px; }
+.mh-body { flex: 1; min-width: 0; }
+.mh-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.mh-title { font-size: 13px; font-weight: 700; color: var(--text-1); }
+.mh-date { font-size: 11px; color: var(--text-3); font-weight: 700; white-space: nowrap; }
+.mh-meta { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
 /* Recoord list */
 .recoord-item { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.15s; }
 .recoord-item:hover { border-color: var(--main-1); box-shadow: 0 4px 12px rgba(0,103,172,0.08); }
@@ -728,7 +739,7 @@ function doOpenBulkCoord(round) {
   coordState = {
     cid: ids[0], round: round, cand: firstCand, step: 1,
     settings: { duration: '60', place: '본사 7층 면접실 A', deadline: '', period: '' },
-    selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids, mailEdits: {}
+    selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids, mailEdits: {}, remindMode: false
   };
   selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   miniCalMonth = { y: systemToday.y, m: systemToday.m };
@@ -884,7 +895,7 @@ function updateBadges() {
 
 
 // ===== Coordination modal state =====
-var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, selectedInts: [], selAltTime: null, isRecoord: false, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {} };
+var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, selectedInts: [], selAltTime: null, isRecoord: false, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {}, remindMode: false };
 
 function openCandidateCoord(cid, round, isRecoord) {
   var cand = null;
@@ -894,7 +905,7 @@ function openCandidateCoord(cid, round, isRecoord) {
   coordState = {
     cid: cid, round: round, cand: cand, step: 1,
     settings: { duration: cand.duration || '60', place: cand.place || '본사 7층 면접실 A', deadline: cand.deadline || '', period: cand.period || '' },
-    selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {}
+    selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {}, remindMode: false
   };
   selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   if (cand.period) {
@@ -1017,7 +1028,52 @@ function renderPendingBody() {
   html += '<div class="ig-row"><div class="ig-lbl">장소</div><div class="ig-val">' + (cand.place || '-') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">발송일</div><div class="ig-val">' + (cand.sentAt || '2026.06.04') + '</div></div></div>';
   if (cand.reminded) html += '<div class="pill pl-purple" style="margin-bottom:10px;"><i class="ti ti-bell-ringing"></i> 리마인드 발송 완료' + (cand.remindedAt ? ' · ' + cand.remindedAt : '') + '</div>';
+
+  // 리마인드 발송 모드: 메일 템플릿 미리보기/수정 + 예약/즉시 발송 탭
+  if (coordState.remindMode && !cand.reminded) {
+    html += renderRemindMailSection();
+  }
   return html;
+}
+
+// 리마인드 메일 발송 섹션 (지원자/면접관 리마인드 템플릿)
+function renderRemindMailSection() {
+  var candTmpl = TEMPLATES.find(t => t.type === 'cand' && t.stage === '리마인드');
+  var intTmpl = TEMPLATES.find(t => t.type === 'int' && t.stage === '리마인드');
+  var html = '<div class="stitle" style="margin-top:16px;"><i class="ti ti-bell" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>리마인드 메일 발송</div>';
+  html += '<div class="fg"><label class="fl">발송 대상</label>';
+  html += '<select class="fs w100" id="rmd-target" onchange="handleRemindTarget(this.value)">';
+  html += '<option value="cand" selected>지원자 본인</option>';
+  html += '<option value="int">면접관</option>';
+  html += '<option value="both">지원자 + 면접관 모두</option>';
+  html += '</select></div>';
+  html += '<div id="rmd-target-box">';
+  // 지원자 리마인드
+  html += '<div id="rmd-cand" class="fg" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 리마인드 템플릿</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">' + (candTmpl ? candTmpl.name : '리마인드 (지원자)') + '</div>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-rmd-cand" onclick="toggleInlinePreview(\'rmd-cand\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-rmd-cand" class="mail-preview"></div>';
+  html += '</div>';
+  // 면접관 리마인드
+  html += '<div id="rmd-int" class="fg hidden" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">면접관 리마인드 템플릿</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">' + (intTmpl ? intTmpl.name : '리마인드 (면접관)') + '</div>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-rmd-int" onclick="toggleInlinePreview(\'rmd-int\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-rmd-int" class="mail-preview"></div>';
+  html += '</div>';
+  html += '</div>';
+  if (coordState.reserveTime) {
+    html += '<div class="pill pl-purple" style="margin-top:6px;"><i class="ti ti-clock"></i> 예약 발송: ' + coordState.reserveTime + '</div>';
+  }
+  return html;
+}
+
+function handleRemindTarget(val) {
+  var c = document.getElementById('rmd-cand'), i = document.getElementById('rmd-int');
+  if (val === 'cand') { c.classList.remove('hidden'); i.classList.add('hidden'); }
+  else if (val === 'int') { c.classList.add('hidden'); i.classList.remove('hidden'); }
+  else { c.classList.remove('hidden'); i.classList.remove('hidden'); }
 }
 
 function renderConfirmWaitBody() {
@@ -1035,6 +1091,32 @@ function renderConfirmWaitBody() {
   return html;
 }
 
+function buildMailHistory(cand) {
+  var round = cand.round + '차';
+  var hist = [];
+  // 1) 조율 폼 발송 (done이면 무조건 보냄)
+  hist.push({
+    icon: 'ti-send', color: 'var(--main-1)', bg: 'var(--info-bg)',
+    title: '조율 요청 폼 발송', stage: round + ' 면접 일정 조율',
+    to: '지원자 + 면접관', date: cand.sentAt || '-'
+  });
+  // 2) 리마인드 (보낸 경우만)
+  if (cand.reminded) {
+    hist.push({
+      icon: 'ti-bell-ringing', color: 'var(--purple)', bg: 'var(--purple-bg)',
+      title: '응답 리마인드 발송', stage: '미응답 안내',
+      to: '지원자', date: cand.remindedAt || '-'
+    });
+  }
+  // 3) 확정 메일
+  hist.push({
+    icon: 'ti-circle-check', color: 'var(--ok)', bg: 'var(--ok-bg)',
+    title: '면접 확정 메일 발송', stage: cand.confirmedTime + ' 확정',
+    to: '지원자 + 면접관', date: cand.confirmedAt || '-'
+  });
+  return hist;
+}
+
 function renderDoneBody() {
   var cand = coordState.cand;
   var html = '';
@@ -1047,6 +1129,20 @@ function renderDoneBody() {
   html += '<div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">' + (cand.interviewers || []).join(', ') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">장소</div><div class="ig-val">' + cand.place + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">소요 시간</div><div class="ig-val">' + cand.duration + '분</div></div></div>';
+
+  // ===== 메일 발송 내역 =====
+  var hist = buildMailHistory(cand);
+  html += '<div class="stitle" style="margin-top:18px;"><i class="ti ti-mail-opened" style="font-size:14px;vertical-align:-2px;margin-right:4px;"></i>메일 발송 내역</div>';
+  html += '<div class="mail-hist">';
+  hist.forEach(function(m, i) {
+    html += '<div class="mh-item">';
+    html += '<div class="mh-ic" style="background:' + m.bg + ';color:' + m.color + ';"><i class="ti ' + m.icon + '"></i></div>';
+    html += '<div class="mh-body">';
+    html += '<div class="mh-top"><span class="mh-title">' + m.title + '</span><span class="mh-date">' + m.date + '</span></div>';
+    html += '<div class="mh-meta">' + m.stage + ' · 수신: ' + m.to + '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
   return html;
 }
 
@@ -1142,6 +1238,8 @@ function renderInlinePreview(type) {
   var tmpl, confTime = '';
   if (type === 'conf-cand') { tmpl = TEMPLATES.find(t => t.id === 't5'); confTime = coordState.selAltTime || cand.aiTime || ''; }
   else if (type === 'conf-int') { tmpl = TEMPLATES.find(t => t.id === 't6'); confTime = coordState.selAltTime || cand.aiTime || ''; }
+  else if (type === 'rmd-cand') { tmpl = TEMPLATES.find(t => t.type === 'cand' && t.stage === '리마인드'); }
+  else if (type === 'rmd-int') { tmpl = TEMPLATES.find(t => t.type === 'int' && t.stage === '리마인드'); }
   else {
     var selEl = document.getElementById('tmpl-' + type + '-sel');
     tmpl = TEMPLATES.find(t => t.id === (selEl ? selEl.value : null));
@@ -1420,19 +1518,27 @@ function renderCoordFooter() {
     }
     html += '</div>';
   } else if (status === 'pending') {
-    html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
-    html += '<div class="mla flex g8">';
-    if (!cand.reminded) {
+    if (coordState.remindMode && !cand.reminded) {
+      // 리마인드 메일 탭이 펼쳐진 상태 → 실제 발송 버튼
+      html += '<button class="btn btn-o" onclick="coordState.remindMode=false; coordState.reserveTime=null; renderCoordModal();">취소</button>';
+      html += '<div class="mla flex g8">';
       if (coordState.reserveTime) {
         html += '<button class="btn btn-o" onclick="openReserveModal(\'reminder\')"><i class="ti ti-clock"></i>예약 시간 변경</button>';
         html += '<button class="btn btn-p" onclick="doSendReminder()"><i class="ti ti-clock-check"></i>리마인드 예약 발송</button>';
       } else {
         html += '<button class="btn btn-o" onclick="openReserveModal(\'reminder\')"><i class="ti ti-clock"></i>예약 발송</button>';
-        html += '<button class="btn btn-o" onclick="doSendReminder()"><i class="ti ti-bell"></i>리마인드 발송</button>';
+        html += '<button class="btn btn-p" onclick="doSendReminder()"><i class="ti ti-send"></i>리마인드 지금 발송</button>';
       }
+      html += '</div>';
+    } else {
+      html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
+      html += '<div class="mla flex g8">';
+      if (!cand.reminded) {
+        html += '<button class="btn btn-p" onclick="coordState.remindMode=true; renderCoordModal();"><i class="ti ti-bell"></i>리마인드 발송</button>';
+      }
+      html += '<button class="btn btn-r" onclick="if(confirm(\'정말 재조율 하시겠습니까?\')) { coordState.isRecoord=true; coordState.cand.status=\'before\'; coordState.step=1; coordState.reserveTime=null; coordState.remindMode=false; renderCoordModal(); }"><i class="ti ti-refresh"></i>재조율</button>';
+      html += '</div>';
     }
-    html += '<button class="btn btn-r" onclick="if(confirm(\'정말 재조율 하시겠습니까?\')) { coordState.isRecoord=true; coordState.cand.status=\'before\'; coordState.step=1; coordState.reserveTime=null; renderCoordModal(); }"><i class="ti ti-refresh"></i>재조율</button>';
-    html += '</div>';
   } else if (status === 'confirm-wait') {
     html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
     html += '<div class="mla flex g8">';
@@ -1514,6 +1620,7 @@ function doSendReminder() {
     showToast('ok', '리마인드 메일 발송 완료', cand.name + ' 지원자에게 리마인드 메일이 발송되었습니다.');
   }
   coordState.reserveTime = null;
+  coordState.remindMode = false;
   // 모달을 닫지 않고 현재 화면을 갱신 → '응답 대기' 표시가 '리마인드 발송됨'으로 바뀜
   renderCoordModal();
   renderKanban(coordState.round);
@@ -1596,6 +1703,7 @@ function doConfirmSend() {
   var cand = coordState.cand;
   var time = coordState.selAltTime || cand.aiTime;
   cand.status = 'done';
+  cand.confirmedAt = coordState.reserveTime ? coordState.reserveTime.split(' ')[0].replace(/-/g, '.') : new Date().toLocaleDateString('ko');
   cand.confirmedTime = time.replace(/년 /g, '.').replace(/월 /g, '.').replace(/일 /g, ' ').replace(/오전 /g, '').replace(/오후 /g, '');
   if (coordState.reserveTime) {
     showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + cand.name + ' 지원자 및 면접관에게 확정 메일이 전송됩니다.');
