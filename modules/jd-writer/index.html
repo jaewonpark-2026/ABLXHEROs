@@ -247,7 +247,9 @@ function renderRoleBanner() {
         현업 검토 의견을 받아 AI가 즉시 반영하며, 최종 확정 후 채용공고로 등재됩니다.
       </div>`;
     document.getElementById('listTitle').textContent = '진행 중인 요청서';
-    document.getElementById('newBtnText').textContent = '새 JD 작성';
+    // HR은 충원요청서를 작성하지 않으므로 새로 만들기 버튼 숨김 (현업이 작성)
+    const newBtn = document.getElementById('newBtn');
+    if (newBtn) newBtn.style.display = 'none';
   }
 }
 
@@ -284,7 +286,7 @@ function renderList(reqs) {
           <div class="request-meta">
             <span><i class="ti ti-building" style="font-size:13px;vertical-align:-2px"></i> ${r.dept}</span>
             <span>·</span>
-            <span>${r.type} · ${r.level}</span>
+            <span>${r.type}</span>
             <span>·</span>
             <span>${r.headcount}명</span>
             <span>·</span>

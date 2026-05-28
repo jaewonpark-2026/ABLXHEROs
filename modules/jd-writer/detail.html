@@ -503,7 +503,7 @@ function renderJDPanel(data) {
         </div>
         <div style="display:flex; gap:6px;">
           <button class="btn-preview-posting" onclick="openPostingPreview()"><i class="ti ti-eye"></i> 최종 공고 미리보기</button>
-          ${isHR ? '<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>' : ''}
+          ${isHR ? '<span id="jdEditBtnArea"><button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button></span>' : ''}
         </div>
       </div>
 
@@ -639,7 +639,7 @@ function render(data) {
         <h1>${data.request.position}</h1>
         <div class="page-meta">
           <span>${data.request.office ? data.request.office + ' · ' : ''}${data.request.dept}</span><span>·</span>
-          <span>${data.request.type} · ${data.request.level}</span><span>·</span>
+          <span>${data.request.type}</span><span>·</span>
           <span>${data.request.headcount}명</span><span>·</span>
           <span>${data.request.created_at} 등록</span>
         </div>
@@ -971,12 +971,13 @@ function toggleJDEdit() {
     content.style.background = '#FAFCFE';
     content.style.boxShadow = '0 0 0 3px rgba(0,103,172,0.08)';
     content.focus();
-    // 버튼 교체 → 저장 + 취소
-    btn.parentElement.innerHTML = `
+    // 버튼 교체 → 저장 + 취소 (jdEditBtnArea만 교체, 미리보기 버튼 보호)
+    const btnArea = document.getElementById('jdEditBtnArea');
+    if (btnArea) btnArea.innerHTML = `
       <button class="btn" id="btnJDCancel" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="cancelJDEdit()">
         <i class="ti ti-x" style="font-size:13px;"></i> 취소
       </button>
-      <button class="btn" id="btnJDSave" style="background:var(--grad-blue); color:white; border:none; padding:6px 14px; font-size:11px; width:auto;" onclick="saveJDEdit()">
+      <button class="btn" id="btnJDSave" style="background:var(--grad-blue); color:white; border:none; padding:6px 14px; font-size:11px; width:auto; margin-left:6px;" onclick="saveJDEdit()">
         <i class="ti ti-device-floppy" style="font-size:13px;"></i> 저장
       </button>
     `;
@@ -1002,10 +1003,10 @@ function saveJDEdit() {
   // 안내 제거
   const guide = document.getElementById('jdEditGuide');
   if (guide) guide.remove();
-  // 버튼 원복
-  const btnArea = content.parentElement.querySelector('[id^="btnJDSave"], [id^="btnJDCancel"]');
-  if (btnArea && btnArea.parentElement) {
-    btnArea.parentElement.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
+  // 버튼 원복 (jdEditBtnArea만)
+  const btnArea2 = document.getElementById('jdEditBtnArea');
+  if (btnArea2) {
+    btnArea2.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
   }
   // currentData에 반영
   if (currentData && currentData.jd_draft) {
@@ -1087,11 +1088,10 @@ function cancelJDEdit() {
   content.style.boxShadow = '';
   const guide = document.getElementById('jdEditGuide');
   if (guide) guide.remove();
-  // 버튼 원복
-  const container = content.parentElement;
-  const cancelBtn = container.querySelector('#btnJDCancel, #btnJDSave');
-  if (cancelBtn) {
-    cancelBtn.parentElement.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
+  // 버튼 원복 (jdEditBtnArea만)
+  const btnArea3 = document.getElementById('jdEditBtnArea');
+  if (btnArea3) {
+    btnArea3.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
   }
   jdEditOriginal = '';
 }
