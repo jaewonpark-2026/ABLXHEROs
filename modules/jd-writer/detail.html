@@ -1166,13 +1166,13 @@ function finalizeRewrite() {
     detail: `현업 수정 의견을 분석하여 ${rewriteProposals.length}개 항목 제안 중 ${appliedCount}개를 반영해 v${currentData.jd_draft.version}으로 재생성했습니다.`
   });
 
-  // 현업 의견 처리 완료 → step 2(검토요청 전)로 되돌려 HR이 재검토 요청 가능하게
+  // 현업 의견 반영 완료 → 바로 공고 등재 단계로
   localStorage.removeItem('pendingFeedback-' + currentData.id);
-  currentData.current_step = 2;
-  currentData.status = 'JD 수정 완료 · 재검토 요청 대기';
-  saveReqState(currentData.id, { current_step: 2, status: 'JD 수정 완료', status_color: 'blue' });
+  currentData.current_step = 4;
+  currentData.status = '공고 등재 대기';
+  saveReqState(currentData.id, { current_step: 4, status: '공고 등재 대기', status_color: 'teal' });
 
-  alert(`JD가 재생성되었습니다. (${appliedCount}개 항목 반영)\n\n수정된 JD를 다시 현업에 검토 요청하거나, 바로 공고 등재를 진행할 수 있습니다.`);
+  alert(`JD가 재생성되었습니다. (${appliedCount}개 항목 반영)\n\n현업 수정 의견이 반영되었습니다. 이제 채용공고를 등재할 수 있습니다.`);
   render(currentData);
 }
 
