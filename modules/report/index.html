@@ -178,6 +178,1531 @@ a { color: inherit; text-decoration: none; }
 .toast-msg { font-size: 12px; font-weight: 700; color: var(--text-1); }
 
 
+  /* ===== 합격자 채용 리포트 ===== */
+
+  /* ===== 합격자 채용 리포트 (스코프 변수 — 원본 팔레트를 우리 톤으로 매핑) ===== */
+  .report-scope {
+    --grad: linear-gradient(95deg, #123F6D 0%, #0067AC 30%, #2482C5 60%, #1A8FC9 82%, #00AEC6 100%);
+    --brand: #0067AC;
+    --brand-dark: #123F6D;
+    --brand-soft: #E6F1FB;
+    --brand-pink: #00AEC6;
+    --brand-pink-soft: #E0F5FD;
+    --bg: #F6F9FC;
+    --bg-soft: #FAFCFE;
+    --surface: #FFFFFF;
+    --border: #E8EDF3;
+    --border-strong: #DCE3EC;
+    --text-1: #1A2233;
+    --text-2: #44506A;
+    --text-3: #5A6478;
+    --text-4: #8A93A6;
+    --text-disabled: #B4BCC9;
+    --feedback: #5B7CFA;
+    --feedback-bg: #ECF1FF;
+    --strength: #E5446D;
+    --strength-bg: #FDECF1;
+    --improve: #F39237;
+    --improve-bg: #FFF1E1;
+    --direction: #2DAE7B;
+    --direction-bg: #E3F5EC;
+    --warn: #E0633C;
+    --shadow-sm: 0 1px 2px rgba(20,19,43,0.04), 0 1px 1px rgba(20,19,43,0.03);
+    --shadow-md: 0 4px 14px rgba(20,19,43,0.06), 0 1px 3px rgba(20,19,43,0.04);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+  }
+  /* ============ LIST GRID (반기 / 합격자) ============ */
+  .list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .list-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px 20px;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .list-card:not(.disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(74, 36, 135, 0.08);
+    border-color: #C5DBF5;
+  }
+
+  .list-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.62;
+    background: var(--bg-soft);
+  }
+
+  .list-card-pill {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  .list-card-pill.recent {
+    background: linear-gradient(95deg, var(--brand) 0%, var(--brand-pink) 100%);
+    color: #fff;
+  }
+
+  .list-card-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-1);
+    margin: 0 0 4px;
+  }
+
+  .list-card-period {
+    font-size: 12.5px;
+    color: var(--text-3);
+    margin-bottom: 16px;
+  }
+
+  .list-card-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+    gap: 8px;
+  }
+
+  .list-card-stats > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .list-card-stats .k {
+    font-size: 10.5px;
+    color: var(--text-4);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .list-card-stats .v {
+    font-size: 14px;
+    color: var(--text-1);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .list-card-cta {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: -0.01em;
+  }
+
+  .list-card.disabled .list-card-cta {
+    color: var(--text-4);
+  }
+
+  /* ============ MOTIVATION GRID-2 LAYOUT ============ */
+  .motivation-list.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .motivation-list.grid-2 .mot-item.full-span {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 860px) {
+    .motivation-list.grid-2 { grid-template-columns: 1fr; }
+  }
+  .motivation-list.grid-2 .mot-item {
+    padding: 18px 20px;
+  }
+  .motivation-list.grid-2 .mot-head {
+    margin-bottom: 8px;
+  }
+  .motivation-list.grid-2 .mot-name {
+    font-size: 15px;
+  }
+  .motivation-list.grid-2 .mot-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+  .motivation-list.grid-2 .source-btn {
+    margin-left: 0;
+  }
+  /* hide quote box in grid layout */
+  .motivation-list.grid-2 .mot-quote { display: none; }
+
+  /* ============ LEADERSHIP COMPACT ============ */
+  .leadership-grid.compact .lead-item {
+    padding: 4px 0 4px 12px;
+  }
+  .leadership-grid.compact .lead-item .title {
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+  .leadership-grid.compact .lead-item .desc {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .leadership-grid.compact .lead-items {
+    gap: 10px;
+  }
+
+  /* ============ SOURCE POPUP (원문 인용 펼치기) ============ */
+  .source-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text-3);
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: all 0.15s ease;
+  }
+  .source-btn:hover {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    border-color: #C5DBF5;
+  }
+  .source-btn.active {
+    background: var(--brand);
+    color: #fff;
+    border-color: var(--brand);
+  }
+  .source-popup {
+    display: none;
+    margin-top: 14px;
+    background: #0E1A3D;
+    border-radius: 12px;
+    padding: 16px 18px;
+    color: #fff;
+  }
+  .source-popup.open { display: block; }
+  .source-popup-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    flex-wrap: wrap;
+  }
+  .source-popup-head .source-type {
+    font-size: 11px;
+    font-weight: 800;
+    color: #7DCFF5;
+  }
+  .source-popup-head .source-meta {
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.5);
+    flex: 1;
+  }
+  .source-deep-link {
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .source-deep-link:hover {
+    background: rgba(255,255,255,0.18);
+  }
+  .source-popup-body p {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    margin: 0 0 8px;
+  }
+  .source-popup-body p:last-child { margin-bottom: 0; }
+  .source-popup-body .who {
+    display: inline-block;
+    font-weight: 800;
+    color: #7DCFF5;
+    margin-right: 6px;
+  }
+  .source-popup-body .who.candidate {
+    color: #FFB374;
+  }
+
+  /* ============ DIALOG CARDS (1-on-1 가이드) ============ */
+  .dialog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .dialog-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    position: relative;
+  }
+  .dialog-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 22px; width: 36px; height: 3px;
+    background: var(--grad);
+    border-radius: 0 0 3px 3px;
+  }
+  .dialog-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .dialog-period {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--brand-dark);
+    background: var(--brand-soft);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .dialog-purpose {
+    font-size: 11.5px;
+    color: var(--text-4);
+    font-weight: 600;
+  }
+  .dialog-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+  .dialog-questions {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dialog-questions li {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.65;
+    padding-left: 18px;
+    position: relative;
+  }
+  .dialog-questions li::before {
+    content: "Q";
+    position: absolute;
+    left: 0; top: 0;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--brand);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+  }
+  .dialog-hint {
+    background: var(--brand-soft);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--brand-dark);
+    line-height: 1.6;
+  }
+
+  /* ============ MEMO GRID (HR + 현업 팀장) ============ */
+  .memo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 860px) {
+    .memo-grid { grid-template-columns: 1fr; }
+  }
+  .memo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    border-top: 3px solid var(--brand);
+  }
+  .memo-card.lead {
+    border-top-color: var(--brand-pink);
+  }
+  .memo-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .memo-tag {
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+  .memo-tag.hr {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+  }
+  .memo-tag.lead {
+    background: #E0F5FD;
+    color: #0E5C8A;
+  }
+  .memo-meta {
+    font-size: 11.5px;
+    color: var(--text-4);
+  }
+  .memo-input {
+    width: 100%;
+    min-height: 130px;
+    border: none;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-1);
+    background: transparent;
+    padding: 0;
+  }
+  .memo-input::placeholder { color: var(--text-4); }
+  .memo-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px dashed var(--border);
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  .memo-saved {
+    font-size: 11px;
+    color: var(--text-4);
+  }
+  .memo-save-btn {
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .memo-save-btn:hover { background: var(--brand-dark); }
+
+  /* ============ REPORT NEW COMPONENTS ============ */
+  .empty-section {
+    background: var(--bg-soft);
+    border: 1px dashed var(--border-strong);
+    border-radius: 16px;
+    padding: 56px 24px;
+    text-align: center;
+    color: var(--text-3);
+  }
+  .empty-section svg {
+    color: var(--text-4);
+    margin-bottom: 12px;
+  }
+  .empty-section h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-2);
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+  }
+  .empty-section p {
+    font-size: 13px;
+    color: var(--text-4);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .lead-comment {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .lead-comment-input {
+    width: 100%;
+    min-height: 110px;
+    border: none;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text-1);
+    background: transparent;
+    padding: 0;
+  }
+  .lead-comment-input::placeholder {
+    color: var(--text-4);
+  }
+  .lead-comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--text-4);
+    border-top: 1px dashed var(--border);
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+  .lead-comment-meta .dot {
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--text-4);
+  }
+
+  .report-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    border: 1px solid transparent;
+    letter-spacing: -0.01em;
+  }
+  .action-btn.ghost {
+    background: var(--surface);
+    color: var(--text-2);
+    border-color: var(--border-strong);
+  }
+  .action-btn.ghost:hover {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    border-color: #C5DBF5;
+  }
+  .action-btn.primary {
+    background: var(--grad);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(14, 31, 91, 0.20);
+  }
+  .action-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(14, 31, 91, 0.30);
+  }
+
+  /* ============ REPORT CARD (개별 리포트 카드) ============ */
+  .report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+  }
+
+  .report-card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 24px 18px;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    overflow: hidden;
+  }
+
+  .report-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--grad);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .report-card:not(.disabled):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(14, 31, 91, 0.10);
+    border-color: #C5DBF5;
+  }
+
+  .report-card:not(.disabled):hover::before {
+    transform: scaleX(1);
+  }
+
+  .report-card.disabled {
+    cursor: not-allowed;
+    background: var(--bg-soft);
+  }
+
+  .report-card.disabled .report-avatar,
+  .report-card.disabled .report-card-name,
+  .report-card.disabled .tag,
+  .report-card.disabled .eval-cell .v {
+    opacity: 0.65;
+  }
+
+  .report-card-pill {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 9px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    background: var(--grad);
+    color: #fff;
+    z-index: 1;
+  }
+
+  .report-card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .report-avatar {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: var(--grad);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(14, 31, 91, 0.18);
+  }
+
+  .report-head-info {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .report-card-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-1);
+    margin: 0 0 4px;
+    letter-spacing: -0.025em;
+  }
+
+  .report-card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-3);
+    line-height: 1.4;
+  }
+
+  .report-card-meta .dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--text-4);
+    display: inline-block;
+  }
+
+  .report-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 16px;
+  }
+
+  .report-card-tags .tag.skill {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .report-card-tags .tag.skill.bold {
+    background: var(--brand);
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .report-card-eval {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+    gap: 8px;
+  }
+
+  .eval-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .eval-cell .k {
+    font-size: 10.5px;
+    color: var(--text-4);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .eval-cell .v {
+    font-size: 13px;
+    color: var(--text-1);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .eval-cell .v b {
+    font-size: 15px;
+    color: var(--brand-dark);
+    font-weight: 800;
+    margin-right: 2px;
+  }
+
+  .report-card-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .report-status {
+    font-size: 11.5px;
+    color: var(--direction);
+    font-weight: 700;
+  }
+
+  .report-status.pending {
+    color: var(--text-4);
+  }
+
+  .report-card-cta {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand);
+    letter-spacing: -0.01em;
+  }
+
+  .report-card.disabled .report-card-cta {
+    color: var(--text-4);
+  }
+
+
+  /* ============ PANEL HEADER (per panel) ============ */
+  .panel-header {
+    margin-bottom: 28px;
+  }
+
+  .panel-header .crumb {
+    font-size: 12px;
+    color: var(--text-4);
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .panel-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    margin: 0 0 6px;
+    color: var(--text-1);
+  }
+
+  .panel-header p {
+    color: var(--text-3);
+    margin: 0;
+    font-size: 14px;
+  }
+
+  /* ============ HERO (in 채용 리포트) ============ */
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(107, 45, 168, 0.10), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-id {
+    font-size: 12px;
+    color: var(--text-4);
+    font-weight: 500;
+  }
+
+  .hero h2 {
+    margin: 6px 0 8px;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.3;
+  }
+
+  .hero h2 .em {
+    background: linear-gradient(95deg, #0E1F5B 0%, #2563CC 50%, #00AEEF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-sub {
+    color: var(--text-3);
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-strong);
+  }
+
+  .hero-cell .label {
+    font-size: 12px;
+    color: var(--text-4);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .hero-cell .value {
+    font-size: 15px;
+    color: var(--text-1);
+    font-weight: 700;
+  }
+
+  /* ============ SECTION ============ */
+  .section {
+    margin-top: 48px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+
+  .section-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 34px;
+    font-style: italic;
+    color: var(--brand);
+    line-height: 1;
+    font-weight: 400;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-1);
+    margin: 0;
+  }
+
+  .section-desc {
+    color: var(--text-3);
+    margin: 4px 0 20px;
+    font-size: 13.5px;
+    padding-left: 32px;
+  }
+
+  /* guide */
+  .guide {
+    background: var(--brand-soft);
+    border: 1px solid #C5DBF5;
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  .guide .tag {
+    flex-shrink: 0;
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    letter-spacing: 0.04em;
+  }
+
+  /* summary quote */
+  .summary-quote {
+    background: linear-gradient(135deg, #F0F5FC 0%, #F7FAFE 100%);
+    border: 1px solid #C5DBF5;
+    border-left: 4px solid var(--brand);
+    border-radius: var(--radius-md);
+    padding: 22px 26px;
+    margin-bottom: 22px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+
+  .summary-quote::before {
+    content: "“";
+    position: absolute;
+    top: 4px; left: 14px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    color: var(--brand);
+    opacity: 0.4;
+    line-height: 1;
+  }
+
+  .summary-quote .quote-body {
+    padding-left: 22px;
+  }
+
+  /* score overview */
+  .score-overview {
+    display: grid;
+    grid-template-columns: 1.05fr 2fr;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .grade-label {
+    font-size: 11px;
+    color: var(--text-3);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .grade-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .grade-letter {
+    font-family: 'Instrument Serif', serif;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 1;
+    background: linear-gradient(135deg, #0E1F5B 0%, #2563CC 60%, #00AEEF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.02em;
+  }
+
+  .grade-meta {
+    font-size: 14px;
+    color: var(--text-3);
+  }
+
+  .grade-meta strong {
+    color: var(--text-1);
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .recommend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--direction-bg);
+    color: var(--direction);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+    width: fit-content;
+  }
+
+  .recommend-pill::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--direction);
+  }
+
+  /* competency bars */
+  .competency {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 26px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .competency-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-2);
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 44px;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 0;
+  }
+
+  .bar-label {
+    font-size: 13px;
+    color: var(--text-2);
+    font-weight: 500;
+  }
+
+  .bar-track {
+    background: #F1EFFA;
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s ease;
+  }
+
+  .bar-fill.high { background: linear-gradient(90deg, #273A92, #00AEEF); }
+  .bar-fill.mid  { background: linear-gradient(90deg, #2563CC, #4FB8E8); }
+  .bar-fill.low  { background: linear-gradient(90deg, #00AEEF, #7DCFF5); }
+
+  .bar-score {
+    font-family: 'Instrument Serif', serif;
+    font-size: 18px;
+    color: var(--text-1);
+    text-align: right;
+    font-style: italic;
+  }
+
+  /* feedback cards */
+  .fb-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .fb-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .fb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .fb-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .fb-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+
+  .fb-icon svg { width: 14px; height: 14px; }
+
+  .fb-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .fb-card.feedback  .fb-icon { background: var(--feedback);  color: #fff; }
+  .fb-card.feedback  .fb-title { color: var(--feedback); }
+  .fb-card.strength  .fb-icon { background: var(--strength);  color: #fff; }
+  .fb-card.strength  .fb-title { color: var(--strength); }
+  .fb-card.improve   .fb-icon { background: var(--improve);   color: #fff; }
+  .fb-card.improve   .fb-title { color: var(--improve); }
+  .fb-card.direction .fb-icon { background: var(--direction); color: #fff; }
+  .fb-card.direction .fb-title { color: var(--direction); }
+
+  .fb-lead {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin: 4px 0 10px;
+    line-height: 1.5;
+  }
+
+  .fb-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .fb-list li {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .fb-list li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 9px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-4);
+  }
+
+  /* motivation */
+  .motivation-profile {
+    background: #EFF3FA;
+    border: 1px solid #C5DBF5;
+    border-radius: var(--radius-lg);
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+  }
+
+  .motivation-profile strong { color: var(--text-1); }
+
+  .motivation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .mot-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mot-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .mot-rank {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mot-rank .badge {
+    width: 38px; height: 36px;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .mot-item:nth-child(1) .badge { background: var(--brand); color: #fff; }
+  .mot-item:nth-child(2) .badge { background: #C5DBF5; color: var(--brand-dark); }
+  .mot-item:nth-child(3) .badge { background: #D9E7F8; color: var(--brand); }
+
+  .mot-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+  }
+
+  .mot-scores {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .mot-scores b {
+    color: var(--text-1);
+    font-weight: 700;
+    margin-left: 4px;
+  }
+
+  .mot-quote {
+    font-size: 13.5px;
+    color: var(--text-2);
+    background: #F7FAFE;
+    border-left: 3px solid var(--brand);
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 10px 0 12px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .mot-desc {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* leadership */
+  .leadership-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .lead-col {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .lead-col.do .lead-head    { color: var(--direction); }
+  .lead-col.dont .lead-head  { color: var(--warn); }
+
+  .lead-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 14px;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .lead-head .icon {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    display: grid; place-items: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .lead-col.do   .icon { background: var(--direction); }
+  .lead-col.dont .icon { background: var(--warn); }
+
+  .lead-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lead-item {
+    border-left: 3px solid var(--direction);
+    padding: 6px 0 6px 14px;
+  }
+
+  .lead-col.dont .lead-item {
+    border-left-color: var(--warn);
+  }
+
+  .lead-item .title {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--text-1);
+    margin-bottom: 4px;
+  }
+
+  .lead-item .desc {
+    font-size: 13px;
+    color: var(--text-3);
+    line-height: 1.6;
+  }
+
+  /* roadmap */
+  .roadmap {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .roadmap::before {
+    content: "";
+    position: absolute;
+    left: 9px; top: 14px; bottom: 14px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--brand) 0%, #C5DBF5 50%, var(--border-strong) 100%);
+  }
+
+  .phase {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: -23px; top: 26px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--brand);
+    box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--brand);
+  }
+
+  .phase:nth-child(2)::before { background: #2563CC; box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px #2563CC; }
+  .phase:nth-child(3)::before { background: #00AEEF; box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px #00AEEF; }
+
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .phase-tag {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .phase-period {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+  }
+
+  .phase-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+    margin: 0;
+    flex: 1 1 100%;
+  }
+
+  .phase-body {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .phase-tasks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border-strong);
+  }
+
+  .phase-tasks .item {
+    display: flex;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.55;
+  }
+
+  .phase-tasks .item .key {
+    color: var(--brand-dark);
+    font-weight: 700;
+    flex-shrink: 0;
+    min-width: 56px;
+  }
+
+  /* placeholder panel (경력직 / 인재풀) */
+  .placeholder {
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-xl);
+    padding: 64px 32px;
+    text-align: center;
+  }
+
+  .placeholder-icon {
+    width: 60px; height: 60px;
+    margin: 0 auto 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #E8EFFB 0%, #D6F0FB 100%);
+    display: grid; place-items: center;
+    border: 1px solid #C5DBF5;
+    color: var(--brand);
+  }
+
+  .placeholder h3 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 6px;
+    letter-spacing: -0.025em;
+  }
+
+  .placeholder p {
+    color: var(--text-3);
+    font-size: 14px;
+    max-width: 480px;
+    margin: 0 auto 22px;
+    line-height: 1.7;
+  }
+
+  .placeholder .features {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .placeholder .feature-pill {
+    background: #EFF3FA;
+    color: var(--text-2);
+    border: 1px solid var(--border);
+    font-size: 12.5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  /* meta footer */
+  .meta-footer {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-4);
+  }
+
+  .meta-footer .left {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .pill-meta {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+
   /* ===== 리드타임 분석 (전사 채용 데이터) ===== */
   /* ============ LEADTIME ANALYSIS MODULE ============ */
   .lt-root {
@@ -860,10 +2385,299 @@ a { color: inherit; text-decoration: none; }
           <h1>합격자 채용 리포트</h1>
           <p>합격자별 평가·동기부여·온보딩 가이드를 담은 개인 인사이트 리포트입니다.</p>
         </div>
+        <div class="report-scope">
+      <div class="report-grid">
+
+        <!-- 박서윤: 상품본부 상품개발팀 (경력 / 메인 리포트) -->
+        <div class="report-card" onclick="navigateReport('parkseoyoon')">
+          <div class="report-card-pill recent">최신 합격</div>
+          <div class="report-card-head">
+            <div class="report-avatar">박</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">박서윤</h3>
+              <div class="report-card-meta">
+                <span>상품본부 · 상품개발팀</span>
+                <span class="dot"></span>
+                <span>시니어 매니저</span>
+                <span class="dot"></span>
+                <span>2026.05.18 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">보험계리사(FIAK)</span>
+            <span class="tag skill">Pricing/수익성 분석</span>
+            <span class="tag skill">기초서류 작성</span>
+            <span class="tag skill">상품 공시</span>
+            <span class="tag skill">VBA</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 89</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">4</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.06.16</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status"><i class="ti ti-circle-check" style="font-size:13px;vertical-align:-1px"></i> 리포트 발행 완료</span>
+            <span class="report-card-cta">상세 보기 →</span>
+          </div>
+        </div>
+
+        <!-- 이도윤: 디지털 IT 기획팀 (신입) -->
+        <div class="report-card" onclick="navigateReport('leedoyoon')">
+          <div class="report-card-pill recent">최신 합격</div>
+          <div class="report-card-head">
+            <div class="report-avatar">이</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">이도윤</h3>
+              <div class="report-card-meta">
+                <span>디지털 IT 기획팀</span>
+                <span class="dot"></span>
+                <span>신입</span>
+                <span class="dot"></span>
+                <span>2026.05.21 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">정보처리기사</span>
+            <span class="tag skill">SQLD</span>
+            <span class="tag skill">VBA 자동화</span>
+            <span class="tag skill">금융 표준 아키텍처</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 86</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">3</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.06.09</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status"><i class="ti ti-circle-check" style="font-size:13px;vertical-align:-1px"></i> 리포트 발행 완료</span>
+            <span class="report-card-cta">상세 보기 →</span>
+          </div>
+        </div>
+
+        <!-- 한지민: 계리분석부 (신입) -->
+        <div class="report-card disabled">
+          <div class="report-card-head">
+            <div class="report-avatar">한</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">한지민</h3>
+              <div class="report-card-meta">
+                <span>계리분석부</span>
+                <span class="dot"></span>
+                <span>신입</span>
+                <span class="dot"></span>
+                <span>2026.05.15 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">보험계리사 1차</span>
+            <span class="tag skill">VBA</span>
+            <span class="tag skill">SQL 숙련</span>
+            <span class="tag skill">통계 분석</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 85</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">3</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.06.16</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status pending"><i class="ti ti-clock" style="font-size:13px;vertical-align:-1px"></i> 리포트 생성 중</span>
+            <span class="report-card-cta">발행 대기</span>
+          </div>
+        </div>
+
+        <!-- 김도현: 상품본부 상품기획팀 -->
+        <div class="report-card disabled">
+          <div class="report-card-head">
+            <div class="report-avatar">김</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">김도현</h3>
+              <div class="report-card-meta">
+                <span>상품본부 · 상품기획팀</span>
+                <span class="dot"></span>
+                <span>책임</span>
+                <span class="dot"></span>
+                <span>2026.05.14 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">ASA(미국계리)</span>
+            <span class="tag skill">연간 상품 전략</span>
+            <span class="tag skill">시장 수요 분석</span>
+            <span class="tag skill">국내외 상품 조사</span>
+            <span class="tag skill">VBA</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 90</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">4</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.07.01</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status pending"><i class="ti ti-clock" style="font-size:13px;vertical-align:-1px"></i> 리포트 생성 중</span>
+            <span class="report-card-cta">발행 대기</span>
+          </div>
+        </div>
+
+        <!-- 정유나: 경영기획지원 · 총무 지원팀 -->
+        <div class="report-card disabled">
+          <div class="report-card-head">
+            <div class="report-avatar">정</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">정유나</h3>
+              <div class="report-card-meta">
+                <span>마케팅 기획팀 · 디자인</span>
+                <span class="dot"></span>
+                <span>과장급</span>
+                <span class="dot"></span>
+                <span>2026.05.10 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">공인중개사</span>
+            <span class="tag skill">부동산 자산관리</span>
+            <span class="tag skill">사옥 임차</span>
+            <span class="tag skill">금융회사 근무</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 91</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">4</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.07.01</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status pending"><i class="ti ti-clock" style="font-size:13px;vertical-align:-1px"></i> 리포트 생성 중</span>
+            <span class="report-card-cta">발행 대기</span>
+          </div>
+        </div>
+
+        <!-- 한지윤: 마케팅 기획팀 (디자인) -->
+        <div class="report-card disabled">
+          <div class="report-card-head">
+            <div class="report-avatar">한</div>
+            <div class="report-head-info">
+              <h3 class="report-card-name">한지윤</h3>
+              <div class="report-card-meta">
+                <span>마케팅 기획팀</span>
+                <span class="dot"></span>
+                <span>디자이너 (대리급)</span>
+                <span class="dot"></span>
+                <span>2026.05.07 합격</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-card-tags">
+            <span class="tag skill bold">GTQ 1급</span>
+            <span class="tag skill bold">ACP</span>
+            <span class="tag skill">포토샵 / 일러스트</span>
+            <span class="tag skill">웹·앱 배너 제작</span>
+            <span class="tag skill">금융 브랜드 디자인</span>
+          </div>
+
+          <div class="report-card-eval">
+            <div class="eval-cell">
+              <span class="k">종합 평가</span>
+              <span class="v"><b>A</b> · 84</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">면접 라운드</span>
+              <span class="v">3</span>
+            </div>
+            <div class="eval-cell">
+              <span class="k">합류 예정</span>
+              <span class="v">26.07.01</span>
+            </div>
+          </div>
+
+          <div class="report-card-foot">
+            <span class="report-status pending"><i class="ti ti-clock" style="font-size:13px;vertical-align:-1px"></i> 리포트 생성 중</span>
+            <span class="report-card-cta">발행 대기</span>
+          </div>
+        </div>
+
+      </div>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 박서윤 경력 상세 리포트 — 3-B에서 채움 ============ -->
+      <section class="view" id="view-report-parkseoyoon">
+        <div class="back-link" onclick="navigate('reports-list')"><i class="ti ti-arrow-left"></i> 합격자 리스트로</div>
         <div class="placeholder">
-          <div class="placeholder-icon"><i class="ti ti-file-text" style="font-size:28px"></i></div>
-          <h3>합격자 리포트 화면 (작업 예정 · 3단계)</h3>
-          <p>합격자 리스트와 개인별 상세 리포트(경력/신입)가 이 자리에 들어옵니다.</p>
+          <div class="placeholder-icon"><i class="ti ti-user-check" style="font-size:28px"></i></div>
+          <h3>박서윤 경력 리포트 (작업 예정 · 3-B)</h3>
+          <p>경력직 합격자의 종합 평가·동기부여·온보딩 리포트가 이 자리에 들어옵니다.</p>
+        </div>
+      </section>
+
+      <!-- ============ VIEW: 이도윤 신입 상세 리포트 — 3-C에서 채움 ============ -->
+      <section class="view" id="view-report-leedoyoon">
+        <div class="back-link" onclick="navigate('reports-list')"><i class="ti ti-arrow-left"></i> 합격자 리스트로</div>
+        <div class="placeholder">
+          <div class="placeholder-icon"><i class="ti ti-school" style="font-size:28px"></i></div>
+          <h3>이도윤 신입 리포트 (작업 예정 · 3-C)</h3>
+          <p>신입 합격자의 종합 평가·동기부여·온보딩 리포트가 이 자리에 들어옵니다.</p>
         </div>
       </section>
 
@@ -941,6 +2755,11 @@ function navigate(viewId) {
       if (typeof Leadtime !== 'undefined') { Leadtime.init(); leadtimeInitialized = true; }
     }, 80);
   }
+}
+
+// 합격자 리포트 분기 (parkseoyoon=경력 / leedoyoon=신입)
+function navigateReport(who) {
+  navigate('report-' + who);
 }
 
 // ===== Toast =====
