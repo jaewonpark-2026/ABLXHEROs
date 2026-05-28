@@ -256,16 +256,29 @@ a { color: inherit; text-decoration: none; }
 .mc-day.start, .mc-day.end { background: var(--grad-blue); color: white; }
 
 /* WTM (가용 시간대 표) */
+.wtm-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; font-size: 11px; color: var(--text-2); font-weight: 700; }
+.wtm-lg { display: inline-flex; align-items: center; gap: 5px; }
+.wtm-lg-box { width: 13px; height: 13px; border-radius: 3px; border: 1px solid var(--border); background: white; flex-shrink: 0; }
+.wtm-lg-box.on { background: var(--main-1); border-color: var(--main-1); }
+.wtm-lg-box.busy { background: #eef0f3; border-color: #e0e3e8; }
+.wtm-lg-box.low { background: #FFF7ED; border-color: #FDBA74; }
+.wtm-lg-box.cand { box-shadow: inset 0 0 0 2px var(--ok); }
 .wtm-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; background: white; }
-.wtm-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-.wtm-table th, .wtm-table td { padding: 5px 4px; text-align: center; font-size: 10px; border: 1px solid var(--border); }
-.wtm-table th { background: var(--bg-page); color: var(--text-2); font-weight: 700; }
-.wtm-table .wtm-time { background: var(--bg-page); color: var(--text-3); font-weight: 700; }
-.wtm-slot { width: 36px; height: 26px; cursor: pointer; background: white; transition: background 0.1s; }
-.wtm-slot.on { background: var(--info-bg); border-color: var(--main-1) !important; }
+.wtm-table { width: 100%; border-collapse: collapse; min-width: 520px; table-layout: fixed; }
+.wtm-table th, .wtm-table td { text-align: center; font-size: 10px; border: 1px solid var(--border); }
+.wtm-table th { background: var(--bg-page); color: var(--text-2); font-weight: 700; padding: 5px 2px; line-height: 1.25; }
+.wtm-table .wtm-time { width: 52px; background: var(--bg-page); color: var(--text-2); font-weight: 700; padding: 0 4px; white-space: nowrap; }
+.wtm-table .wtm-time.low { color: #C2410C; }
+.wtm-slot { height: 18px; cursor: pointer; background: white; transition: background 0.1s; }
+.wtm-slot:hover { background: #EAF2FB; }
+.wtm-slot.on { background: var(--main-1); }
+.wtm-slot.on:hover { background: var(--main-2); }
+.wtm-slot.low { background: #FFF7ED; }
+.wtm-slot.low.on { background: var(--main-1); }
 .wtm-slot.cand-ok { box-shadow: inset 0 0 0 2px var(--ok); }
-.wtm-slot.cand-ok.on { background: var(--ok-bg); }
-.wtm-slot.busy { background: #f3f4f6; cursor: not-allowed; color: var(--text-3); }
+.wtm-slot.busy { background: #eef0f3; cursor: not-allowed; }
+.wtm-low-row .wtm-time { background: #FFF7ED; }
+.wtm-sep-top td { border-top: 2px solid #FDBA74; }
 
 /* Recoord list */
 .recoord-item { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer; transition: all 0.15s; }
@@ -632,10 +645,16 @@ function renderKanban(round) {
     { key: 'done', label: '조율 완료', color: 'var(--ok)' }
   ];
 
-  columns.forEach(function(colInfo) {
+  // 상태 필터 값(select) → 칸반 컬럼 key 매핑
+  var statusToCol = { 'before': 'before', 'pending': 'coordinating', 'done': 'done' };
+  var sfCol = sf ? statusToCol[sf] : '';
+
+  // 상태 필터가 선택되면 해당 컬럼만 표시
+  var visibleColumns = sfCol ? columns.filter(function(c) { return c.key === sfCol; }) : columns;
+
+  visibleColumns.forEach(function(colInfo) {
     var items = groups[colInfo.key].filter(function(c) {
       if (df && c.dept !== df) return false;
-      if (sf && sf !== 'pending' && c.status !== sf) return false;
       if (sv && c.name.toLowerCase().indexOf(sv) === -1) return false;
       return true;
     });
@@ -667,7 +686,16 @@ function renderKanban(round) {
     });
     html += '</div></div>';
   });
-  document.getElementById('kanban-' + round).innerHTML = html;
+  var kb = document.getElementById('kanban-' + round);
+  kb.innerHTML = html;
+  // 보이는 컬럼 수에 맞춰 그리드 조정 (1열일 땐 가로로 안 늘어지게 좌측 정렬)
+  if (visibleColumns.length < 3) {
+    kb.style.gridTemplateColumns = 'repeat(' + visibleColumns.length + ', minmax(0, 360px))';
+    kb.style.justifyContent = 'start';
+  } else {
+    kb.style.gridTemplateColumns = '';
+    kb.style.justifyContent = '';
+  }
 }
 
 function filterCandidates(round) { renderKanban(round); }
@@ -695,7 +723,7 @@ function doOpenBulkCoord(round) {
     settings: { duration: '60', place: '본사 7층 면접실 A', deadline: '', period: '' },
     selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids
   };
-  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmInitialized = false;
+  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   miniCalMonth = { y: systemToday.y, m: systemToday.m };
   openModal('modal-coord');
   renderCoordModal();
@@ -840,7 +868,7 @@ function openCandidateCoord(cid, round, isRecoord) {
     settings: { duration: cand.duration || '60', place: cand.place || '본사 7층 면접실 A', deadline: cand.deadline || '', period: cand.period || '' },
     selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: []
   };
-  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmInitialized = false;
+  selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   if (cand.period) {
     var pts = cand.period.split('~');
     selPeriodStart = pts[0].trim().replace(/\./g, '-');
@@ -1169,23 +1197,46 @@ function pickDate(dateStr) {
 
 // ===== WTM (When To Meet 가용 시간표) =====
 var WTM_TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'];
+// 비선호 시간대: 점심(12:00~13:30) + 18시 이후 (경력직은 선호하나 기본 미선택, 클릭 시 선택 가능)
+var WTM_LUNCH = ['12:00', '12:30', '13:00', '13:30'];
+function isLowPref(t) { return WTM_LUNCH.indexOf(t) >= 0 || t >= '18:00'; }
 var wtmSelected = {};
-var wtmCandAvail = {
-  '2026-06-09': ['10:00', '10:30', '11:00', '14:00', '14:30'],
-  '2026-06-10': ['09:30', '10:00', '10:30', '11:00', '15:00', '15:30'],
-  '2026-06-11': ['11:00', '11:30', '14:00', '14:30'],
-  '2026-06-12': ['09:30', '10:00', '15:30', '16:00'],
-  '2026-06-13': ['10:00', '14:00']
-};
-var wtmIntAvail = {
-  '2026-06-09': ['09:00', '09:30', '10:00', '10:30', '11:00', '14:00', '14:30', '15:00'],
-  '2026-06-10': ['09:30', '10:00', '10:30', '11:00', '15:00', '15:30', '16:00'],
-  '2026-06-11': ['09:00', '11:00', '11:30', '14:00', '14:30', '15:00'],
-  '2026-06-12': ['09:30', '10:00', '14:00', '15:30', '16:00'],
-  '2026-06-13': ['10:00', '14:00', '14:30']
-};
 var wtmDays = [];
-var wtmInitialized = false;
+
+// 요일 패턴 기반 면접관 가용 슬롯 동적 생성 (어떤 기간을 골라도 작동)
+// 주말은 가용 없음, 평일은 업무시간 내에서 요일별로 약간씩 다른 패턴 부여
+function getIntAvail(dateStr) {
+  var d = new Date(dateStr);
+  var dow = d.getDay();
+  if (dow === 0 || dow === 6) return []; // 주말 면접 없음
+  var avail = [];
+  // 요일 시드로 시작/종료 시간을 살짝 다르게 → 현실감
+  WTM_TIMES.forEach(function(t, i) {
+    var hour = parseInt(t.slice(0, 2), 10);
+    // 점심시간(12~13:30)은 면접관도 자리 비움 → 가용에서 제외 (단 비선호 클릭 가능 대상은 18시 이후만)
+    if (WTM_LUNCH.indexOf(t) >= 0) return;
+    // 요일별 가용 범위
+    var startH = (dow === 1) ? 10 : 9;      // 월요일은 오전회의로 10시부터
+    var endH = (dow === 5) ? 18 : 20;       // 금요일은 18시까지(이후 비선호도 막음)
+    if (hour < startH || hour >= endH) return;
+    // 요일·인덱스 기반으로 드문드문 바쁜 슬롯 제거 (캘린더 일정 있는 것처럼)
+    if ((i + dow) % 7 === 3) return;
+    avail.push(t);
+  });
+  return avail;
+}
+
+// 지원자 응답 가능 슬롯 (confirm-wait 단계 표시용) — 면접관 가용의 부분집합 + 약간의 변형
+function getCandAvail(dateStr) {
+  var intA = getIntAvail(dateStr);
+  var d = new Date(dateStr);
+  var dow = d.getDay();
+  var res = [];
+  intA.forEach(function(t, i) {
+    if ((i + dow) % 3 === 0) res.push(t); // 일부만 가능하다고 응답
+  });
+  return res;
+}
 
 function getPeriodDays() {
   if (!selPeriodStart || !selPeriodEnd) return [];
@@ -1199,15 +1250,15 @@ function getPeriodDays() {
   return days;
 }
 
+// 기간이 바뀔 때마다 호출 → 가용 슬롯 중 '비선호 아닌' 것만 기본 선택
 function updateWTMFromPeriod() {
   wtmDays = getPeriodDays();
-  if (!wtmInitialized) {
-    // 면접관 가용 시간으로 초기화
-    wtmDays.forEach(day => {
-      (wtmIntAvail[day] || []).forEach(t => { wtmSelected[day + '|' + t] = true; });
+  wtmSelected = {};
+  wtmDays.forEach(function(day) {
+    getIntAvail(day).forEach(function(t) {
+      if (!isLowPref(t)) wtmSelected[day + '|' + t] = true; // 점심·저녁 제외하고 기본 선택
     });
-    wtmInitialized = true;
-  }
+  });
 }
 
 function renderWTM(containerId, showCandResp) {
@@ -1218,24 +1269,39 @@ function renderWTM(containerId, showCandResp) {
     ct.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-3);font-size:12px;background:var(--bg-page);border-radius:8px;">먼저 면접 가능 기간을 선택해 주세요.</div>';
     return;
   }
-  var html = '<div class="wtm-wrap"><table class="wtm-table"><thead><tr><th class="wtm-time">시간</th>';
-  wtmDays.forEach(day => {
+  var dows = ['일', '월', '화', '수', '목', '금', '토'];
+  // 범례
+  var legend = '<div class="wtm-legend">' +
+    '<span class="wtm-lg"><span class="wtm-lg-box on"></span>선택됨 (폼에 포함)</span>' +
+    '<span class="wtm-lg"><span class="wtm-lg-box"></span>미선택 (클릭하면 추가)</span>' +
+    '<span class="wtm-lg"><span class="wtm-lg-box busy"></span>면접관 불가</span>' +
+    (showCandResp ? '<span class="wtm-lg"><span class="wtm-lg-box cand"></span>지원자 가능</span>' : '<span class="wtm-lg"><span class="wtm-lg-box low"></span>점심·18시 이후 (비선호)</span>') +
+    '</div>';
+
+  var html = legend + '<div class="wtm-wrap"><table class="wtm-table"><thead><tr><th class="wtm-time">시간</th>';
+  wtmDays.forEach(function(day) {
     var d = new Date(day);
-    var dows = ['일', '월', '화', '수', '목', '금', '토'];
     html += '<th>' + (d.getMonth() + 1) + '/' + d.getDate() + '<br><span style="font-weight:400;color:var(--text-3)">(' + dows[d.getDay()] + ')</span></th>';
   });
   html += '</tr></thead><tbody>';
-  WTM_TIMES.forEach(t => {
-    html += '<tr><td class="wtm-time">' + t + '</td>';
-    wtmDays.forEach(day => {
+  WTM_TIMES.forEach(function(t, ti) {
+    var low = isLowPref(t);
+    // 점심 시작 지점에 구분선
+    var rowCls = low ? 'wtm-low-row' : '';
+    if (t === '12:00') rowCls += ' wtm-sep-top';
+    if (t === '18:00') rowCls += ' wtm-sep-top';
+    html += '<tr class="' + rowCls + '"><td class="wtm-time' + (low ? ' low' : '') + '">' + t + '</td>';
+    wtmDays.forEach(function(day) {
       var key = day + '|' + t;
       var on = wtmSelected[key];
-      var candOk = showCandResp && (wtmCandAvail[day] || []).includes(t);
-      var intOk = (wtmIntAvail[day] || []).includes(t);
+      var intOk = getIntAvail(day).indexOf(t) >= 0;
+      var candOk = showCandResp && getCandAvail(day).indexOf(t) >= 0;
+      // 점심은 면접관 가용에서 빠지므로 busy, 18시 이후는 가용이면 클릭 가능(비선호)
       var cls = 'wtm-slot';
+      if (!intOk) { cls += ' busy'; html += '<td class="' + cls + '"></td>'; return; }
       if (on) cls += ' on';
+      if (low) cls += ' low';
       if (candOk) cls += ' cand-ok';
-      if (!intOk && !candOk) cls += ' busy';
       html += '<td class="' + cls + '" onclick="toggleWTM(\'' + key + '\')"></td>';
     });
     html += '</tr>';
@@ -1424,9 +1490,18 @@ function doConfirmSend() {
 function openAltTimeModal() {
   var cand = coordState.cand;
   var matchTimes = [];
-  Object.keys(wtmCandAvail).forEach(day => {
-    (wtmCandAvail[day] || []).forEach(t => {
-      if ((wtmIntAvail[day] || []).includes(t)) matchTimes.push({ day: day, time: t });
+  // 후보자 면접 기간에서 날짜 목록 복원 (wtmDays가 비어있을 수 있음)
+  var days = wtmDays.slice();
+  if (!days.length && cand.period) {
+    var pts = cand.period.split('~');
+    var s = pts[0].trim().replace(/\./g, '-');
+    var e = (pts[1] || pts[0]).trim().replace(/\./g, '-');
+    var d = new Date(s), ed = new Date(e);
+    while (d <= ed) { days.push(d.toISOString().slice(0, 10)); d.setDate(d.getDate() + 1); }
+  }
+  days.forEach(function(day) {
+    getCandAvail(day).forEach(function(t) {
+      if (getIntAvail(day).indexOf(t) >= 0) matchTimes.push({ day: day, time: t });
     });
   });
 
