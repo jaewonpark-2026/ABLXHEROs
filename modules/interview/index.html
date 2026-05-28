@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 진행 · RECRUIT AI</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --grad-card-icon: linear-gradient(135deg, #E6F1FB 0%, #D0E5F5 100%);
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+  --ok: #16a34a; --ok-bg: #eaf8ef;
+  --warn: #f97316; --warn-bg: #fff3e8;
+  --err: #dc2626; --err-bg: #fff1f2;
+  --info: #0067AC; --info-bg: #E6F1FB;
+  --purple: #6D28D9; --purple-bg: #ede9fe;
+  --r: 8px; --rl: 12px;
+  /* 면접 진행/리포트용 다크 패널 (우리 톤에 맞춘 네이비 계열) */
+  --dk-1: #0E1B2E;   /* 가장 어두운 배경 */
+  --dk-2: #15263D;   /* 패널 배경 */
+  --dk-card: #1B2E47;
+  --dk-border: #2A3F5C;
+  --dk-text-1: #EAF1F8;
+  --dk-text-2: #9FB2C8;
+  --dk-text-3: #6E83A0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); font-size: 14px; line-height: 1.6; }
+button, input, select, textarea { font-family: inherit; }
+button { cursor: pointer; border: 0; background: transparent; }
+a { color: inherit; text-decoration: none; }
+.hidden { display: none !important; }
+
+/* ===== Layout (디자인 시스템) ===== */
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; overflow-y: auto; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: background 0.15s; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label, .layout.collapsed .status-monitor { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+
+/* 사이드바 상태 모니터 */
+.status-monitor { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 12px; }
+.sm-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; color: rgba(255,255,255,0.8); }
+.sm-row .v { font-weight: 700; color: white; }
+.sm-sub { padding-left: 12px; font-size: 11px; }
+.sm-sub .sm-row { color: rgba(255,255,255,0.6); }
+.sm-divide { border-top: 1px solid rgba(255,255,255,0.12); margin: 6px 0; padding-top: 6px; }
+
+.main-area { display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); margin-right: 8px; }
+
+/* Content */
+.content { padding: 28px 32px 40px; }
+.page-header { margin-bottom: 22px; }
+.page-eyebrow { display: inline-flex; padding: 6px 11px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); font-size: 11px; font-weight: 700; margin-bottom: 10px; letter-spacing: 0.02em; }
+.page-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.page-subtitle { color: var(--text-2); font-size: 13px; }
+
+/* Sub-nav (전체/1차/2차 전환) */
+.subnav { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.subnav-item { padding: 9px 16px; border-radius: 10px; border: 1px solid var(--border); background: white; color: var(--text-2); font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; cursor: pointer; }
+.subnav-item:hover { border-color: var(--main-1); color: var(--main-1); }
+.subnav-item.active { background: var(--grad-blue); color: white; border-color: transparent; }
+
+/* Buttons */
+.btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
+.btn i { font-size: 14px; }
+.btn-o { border: 1px solid var(--border); background: white; color: var(--text-2); }
+.btn-o:hover { border-color: var(--main-1); color: var(--main-1); }
+.btn-p { background: var(--grad-blue); color: white; border: none; }
+.btn-p:hover { opacity: 0.9; }
+.btn-g { background: var(--ok); color: white; }
+.btn-g:hover { opacity: 0.9; }
+.btn-r { background: var(--err); color: white; }
+.btn-r:hover { opacity: 0.9; }
+.btn-purple { background: var(--purple); color: white; }
+.btn-purple:hover { opacity: 0.9; }
+.btn-sm { height: 30px; padding: 0 12px; font-size: 11px; }
+.btn-lg { height: 42px; padding: 0 22px; font-size: 13px; }
+
+/* Cards & forms */
+.card { background: white; border: 1px solid var(--border); border-radius: 12px; }
+.f-inp, .f-sel { height: 38px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-1); background: white; font-size: 13px; font-weight: 700; outline: none; font-family: inherit; }
+.f-inp:focus, .f-sel:focus { border-color: var(--main-1); }
+.f-sel { appearance: none; padding-right: 28px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A6478' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+
+/* Pills */
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.pl-blue { background: var(--info-bg); color: var(--main-1); }
+.pl-green { background: var(--ok-bg); color: var(--ok); }
+.pl-orange { background: var(--warn-bg); color: var(--warn); }
+.pl-red { background: var(--err-bg); color: var(--err); }
+.pl-purple { background: var(--purple-bg); color: var(--purple); }
+.pl-gray { background: #EEF1F5; color: var(--text-2); }
+
+/* Toast */
+.toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { display: flex; align-items: flex-start; gap: 10px; min-width: 280px; max-width: 360px; padding: 12px 16px; border-radius: 10px; background: white; box-shadow: 0 12px 32px rgba(15,35,65,0.16); border: 1px solid var(--border); border-left: 4px solid var(--main-1); transform: translateX(20px); opacity: 0; transition: all 0.25s; }
+.toast.show { transform: translateX(0); opacity: 1; }
+.toast.success { border-left-color: var(--ok); }
+.toast.error { border-left-color: var(--err); }
+.toast.info { border-left-color: var(--main-1); }
+.toast-ic { width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; }
+.toast.success .toast-ic { background: var(--ok-bg); color: var(--ok); }
+.toast.error .toast-ic { background: var(--err-bg); color: var(--err); }
+.toast.info .toast-ic { background: var(--info-bg); color: var(--main-1); }
+.toast-msg { font-size: 12px; font-weight: 700; color: var(--text-1); }
+
+/* Modal base */
+.mbd { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 22px; background: rgba(15,35,65,0.5); }
+.mbd.show { display: flex; }
+.modal-card { width: min(560px, 100%); max-height: 90vh; overflow-y: auto; border-radius: 14px; background: white; box-shadow: 0 24px 60px rgba(0,0,0,0.24); }
+.m-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.m-title { font-size: 16px; font-weight: 700; }
+.m-body { padding: 18px 22px; }
+.m-ft { display: flex; align-items: center; gap: 8px; padding: 14px 22px; border-top: 1px solid var(--border); background: #fbfdff; }
+.mla { margin-left: auto; }
+.flex { display: flex; } .g8 { gap: 8px; } .g16 { gap: 16px; }
+
+/* placeholder (단계별로 채워짐) */
+.stage-placeholder { padding: 60px 20px; text-align: center; color: var(--text-3); font-size: 13px; border: 2px dashed var(--border); border-radius: 12px; }
+
+/* ===== 전체 지원자 테이블 (SCREEN 0) ===== */
+.tbl-toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.filter-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+.search-box { position: relative; flex: 1; min-width: 220px; }
+.search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: 16px; }
+.search-box input { width: 100%; height: 38px; padding: 0 12px 0 36px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 700; outline: none; font-family: inherit; color: var(--text-1); }
+.search-box input:focus { border-color: var(--main-1); }
+.filter-bar .f-sel { min-width: 150px; }
+.filter-count { margin-left: auto; font-size: 12px; color: var(--text-3); font-weight: 700; white-space: nowrap; }
+.adv-filter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+.adv-col label { display: block; font-size: 11px; font-weight: 700; color: var(--text-3); margin-bottom: 6px; letter-spacing: 0.02em; }
+.adv-col .f-sel { width: 100%; height: 34px; }
+
+.tbl-card { overflow: hidden; }
+.tbl-scroll { overflow-x: auto; max-height: calc(100vh - 280px); overflow-y: auto; }
+.data-tbl { width: 100%; border-collapse: collapse; min-width: 760px; }
+.data-tbl thead th { position: sticky; top: 0; background: var(--bg-page); z-index: 5; padding: 13px 18px; text-align: left; font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1px solid var(--border); cursor: pointer; white-space: nowrap; user-select: none; }
+.data-tbl thead th:hover { background: #EEF3F8; color: var(--main-1); }
+.data-tbl .sort-ic i { font-size: 13px; margin-left: 2px; }
+.data-tbl tbody td { padding: 14px 18px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.data-tbl tbody tr:last-child td { border-bottom: none; }
+.data-tbl tbody tr { transition: background 0.12s; }
+.data-tbl tbody tr:hover { background: #F8FBFE; }
+.td-name { font-weight: 700; color: var(--text-1); }
+.td-dept { font-weight: 700; color: var(--text-1); font-size: 12px; }
+.td-role { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.tag-stage { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; border: 1px solid; }
+.tag-stage.s1 { background: var(--info-bg); color: var(--main-1); border-color: #BCD9F0; }
+.tag-stage.s2 { background: var(--purple-bg); color: var(--purple); border-color: #D6C8F5; }
+.status-cell { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; border: 1px solid; }
+.status-cell i { font-size: 13px; }
+.status-cell.wait { background: #EEF1F5; color: var(--text-2); border-color: #DCE1E8; }
+.status-cell.hold { background: var(--warn-bg); color: #B45309; border-color: #FDD9A8; }
+.status-cell.done { background: var(--ok-bg); color: #15803D; border-color: #BBE8C9; }
+.result-badge { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+.result-badge.pass { background: var(--ok); color: white; }
+.result-badge.fail { background: var(--err); color: white; }
+.result-badge.trm { background: var(--sub-2); color: #DFF1FB; border: 1px solid var(--sub-3); }
+.result-badge.ing { color: var(--text-3); font-weight: 700; }
+.btn-report-sm { display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; background: var(--sub-2); color: white; border: none; cursor: pointer; transition: opacity 0.15s; }
+.btn-report-sm:hover { opacity: 0.88; }
+
+/* ===== 다크 패널 (면접 진행/리포트) — 4·5단계에서 본격 사용 ===== */
+.dk-wrap { background: var(--dk-1); color: var(--dk-text-1); border-radius: 14px; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label, .status-monitor { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); transition: transform 0.25s; z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .mobile-menu-btn { display: flex; }
+  .content { padding: 20px 16px 32px; }
+  .topbar { padding: 12px 16px; }
+  .logo-woori { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item active" href="index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item" href="../report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+
+      <div class="status-monitor">
+        <div class="nav-section-title" style="padding:0 0 8px; opacity:0.6;">STATUS MONITOR</div>
+        <div class="sm-row"><span>총 지원자</span><span class="v" id="sb-total-count">0명</span></div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>1차 면접 대기</span><span class="v" id="sb-wait-1-count" style="color:#FFE08A">0명</span></div>
+          <div class="sm-sub">
+            <div class="sm-row"><span>└ 1차 채점 전</span><span class="v" id="sb-stage1-hold">0명</span></div>
+            <div class="sm-row"><span>└ 1차 합격</span><span class="v" id="sb-stage1-pass">0명</span></div>
+            <div class="sm-row"><span>└ 1차 불합격</span><span class="v" id="sb-stage1-fail">0명</span></div>
+          </div>
+        </div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>2차 면접 대기</span><span class="v" id="sb-wait-2-count" style="color:#D6BCFA">0명</span></div>
+          <div class="sm-sub">
+            <div class="sm-row"><span>└ 2차 채점 전</span><span class="v" id="sb-stage2-hold">0명</span></div>
+          </div>
+        </div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>최종 합격</span><span class="v" id="sb-pass-count" style="color:#86EFAC">0명</span></div>
+          <div class="sm-row"><span>최종 불합격</span><span class="v" id="sb-fail-count" style="color:#FCA5A5">0명</span></div>
+        </div>
+        <div class="sm-divide">
+          <div class="sm-row"><span>TRM 인재 풀</span><span class="v" id="sb-trm-count" style="color:#7DD3FC">0명</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <span class="page-eyebrow">면접 진행 관리</span>
+        <h1 class="page-title" id="page-title">1차 면접 관리 대시보드</h1>
+        <p class="page-subtitle" id="page-subtitle">실무진(HR) 면접 대상자 리스트입니다. 카드를 눌러 세부 서류를 확인하세요.</p>
+      </div>
+
+      <nav class="subnav">
+        <div class="subnav-item" id="nav-all" onclick="switchMainView('all')"><i class="ti ti-list"></i> 전체 지원자 현황</div>
+        <div class="subnav-item active" id="nav-stage1" onclick="switchMainView('stage1')"><i class="ti ti-users"></i> 1차 면접 (HR 실무진)</div>
+        <div class="subnav-item" id="nav-stage2" onclick="switchMainView('stage2')"><i class="ti ti-user-star"></i> 2차 면접 (임원진)</div>
+      </nav>
+
+      <!-- SCREEN 0: 전체 지원자 테이블 -->
+      <section id="view-all-candidates" class="hidden">
+        <div class="tbl-toolbar">
+          <button class="btn btn-p" onclick="sendBulkFeedback()"><i class="ti ti-send"></i> 불합격자 피드백 일괄 전송</button>
+          <button class="btn btn-o" onclick="toggleFilterPanel()"><i class="ti ti-adjustments-horizontal"></i> 상세 필터</button>
+        </div>
+
+        <div class="filter-bar">
+          <div class="search-box">
+            <i class="ti ti-search"></i>
+            <input type="text" id="all-search-input" oninput="renderAllCandidatesTable()" placeholder="이름, 직무, 부서를 검색하세요...">
+          </div>
+          <select class="f-sel" id="all-filter-dept" onchange="renderAllCandidatesTable()">
+            <option value="all">부서 전체</option>
+            <option value="개발본부">개발본부</option>
+            <option value="마케팅팀">마케팅팀</option>
+            <option value="인사팀">인사팀</option>
+          </select>
+          <select class="f-sel" id="all-filter-role" onchange="renderAllCandidatesTable()">
+            <option value="all">직무 전체</option>
+            <option value="백엔드 개발자">백엔드 개발자</option>
+            <option value="프론트엔드 개발자">프론트엔드 개발자</option>
+            <option value="퍼포먼스 마케터">퍼포먼스 마케터</option>
+            <option value="브랜드 디자이너">브랜드 디자이너</option>
+            <option value="HRD 담당자">HRD 담당자</option>
+            <option value="인프라 엔지니어">인프라 엔지니어</option>
+            <option value="데이터 분석가">데이터 분석가</option>
+          </select>
+          <span class="filter-count" id="all-filter-result-count">총 0명 매칭됨</span>
+        </div>
+
+        <div id="advanced-filter-panel" class="hidden adv-filter">
+          <div class="adv-col">
+            <label>전형 단계</label>
+            <select class="f-sel" id="tbl-filter-stage" onchange="renderAllCandidatesTable()">
+              <option value="all">전체</option><option value="1">1차 면접</option><option value="2">2차 면접</option>
+            </select>
+          </div>
+          <div class="adv-col">
+            <label>진행 상태</label>
+            <select class="f-sel" id="tbl-filter-status" onchange="renderAllCandidatesTable()">
+              <option value="all">전체</option><option value="대기">면접 전 (대기)</option><option value="완료">면접 후 (완료)</option>
+            </select>
+          </div>
+          <div class="adv-col">
+            <label>최종 결과</label>
+            <select class="f-sel" id="tbl-filter-result" onchange="renderAllCandidatesTable()">
+              <option value="all">전체</option><option value="none">진행중</option><option value="최종 합격">최종 합격</option><option value="불합격">불합격</option><option value="TRM">TRM 등록자</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card tbl-card">
+          <div class="tbl-scroll">
+            <table class="data-tbl">
+              <thead>
+                <tr>
+                  <th onclick="handleTableSort('name')">이름 <span class="sort-ic" id="sort-icon-name"></span></th>
+                  <th onclick="handleTableSort('dept')">지원 부서 / 직무 <span class="sort-ic" id="sort-icon-dept"></span></th>
+                  <th onclick="handleTableSort('stage')">현재 전형 단계 <span class="sort-ic" id="sort-icon-stage"></span></th>
+                  <th onclick="handleTableSort('status')">면접 진행 상태 <span class="sort-ic" id="sort-icon-status"></span></th>
+                  <th onclick="handleTableSort('finalResult')">최종 결과 <span class="sort-ic" id="sort-icon-finalResult"></span></th>
+                  <th style="text-align:right;cursor:default;">관리</th>
+                </tr>
+              </thead>
+              <tbody id="all-candidates-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 1&2: 대시보드 그리드 (3단계에서 구현) -->
+      <section id="view-dashboard" class="hidden">
+        <div class="stage-placeholder">[3단계 예정] 면접 대상자 카드 그리드</div>
+      </section>
+    </div>
+
+    <!-- SCREEN 2: 면접 진행 (4단계에서 구현 - 전체화면 다크) -->
+    <section id="view-interview" class="hidden">
+      <div class="stage-placeholder" style="margin:40px;">[4단계 예정] 실시간 면접 진행 화면</div>
+    </section>
+
+    <!-- SCREEN 3: 종합 리포트 (5단계에서 구현 - 전체화면 다크) -->
+    <section id="view-report" class="hidden">
+      <div class="stage-placeholder" style="margin:40px;">[5단계 예정] 종합 채용 리포트</div>
+    </section>
+  </div>
+</div>
+
+<!-- ============ MODALS (3·5단계에서 내부 구현) ============ -->
+<div id="modal-group-setup" class="mbd"></div>
+<div id="modal-routing" class="mbd"></div>
+<div id="modal-compare" class="mbd"></div>
+<div id="details-drawer-backdrop" class="mbd" style="justify-content:flex-end; padding:0;"></div>
+
+<div class="toast-wrap" id="toast-container"></div>
+
+<script>
+// ===== Auth =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) {
+  sessionStorage.setItem('empId', '10234');
+  sessionStorage.setItem('role', 'hr');
+  window.location.reload();
+}
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+/* ===== 데이터 & 전역 상태 ===== */
+let candidates = [];
+let currentMainView = 'stage1';
+let currentStageFilter = 1;
+let activeView = 'dashboard';
+let compareMode = false;
+let selectedForCompare = [];
+let activeInterviewSession = { candidates: [], currentCandidateId: null, timerInterval: null, seconds: 0 };
+let activeReportCandidateId = null;
+let currentDrawerCandidateId = null;
+let reportSource = 'dashboard';
+let isHrEditing = false;
+let isExecEditing = false;
+let tableSortKey = 'none';
+let tableSortOrder = 'none';
+
+/* ===== 사이드바 상태 모니터 ===== */
+function updateSidebarCounts() {
+  const total = candidates.length;
+  const wait1 = candidates.filter(c => c.stage === 1 && c.status === '대기' && c.finalResult === null).length;
+  const s1hold = candidates.filter(c => c.stage === 1 && c.status === '완료' && (c.passFail === null || c.passFail === 'hold')).length;
+  const s1pass = candidates.filter(c => c.stage === 1 && c.passFail === 'pass').length;
+  const s1fail = candidates.filter(c => c.stage === 1 && c.passFail === 'fail').length;
+  const wait2 = candidates.filter(c => c.stage === 2 && c.status === '대기' && c.finalResult === null).length;
+  const s2hold = candidates.filter(c => c.stage === 2 && c.status === '완료' && (c.passFail === null || c.passFail === 'hold')).length;
+  const pass = candidates.filter(c => c.finalResult === '최종 합격').length;
+  const fail = candidates.filter(c => c.finalResult === '불합격').length;
+  const trm = candidates.filter(c => c.trmStatus).length;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v + '명'; };
+  set('sb-total-count', total); set('sb-wait-1-count', wait1);
+  set('sb-stage1-hold', s1hold); set('sb-stage1-pass', s1pass); set('sb-stage1-fail', s1fail);
+  set('sb-wait-2-count', wait2); set('sb-stage2-hold', s2hold);
+  set('sb-pass-count', pass); set('sb-fail-count', fail); set('sb-trm-count', trm);
+}
+
+/* ===== 화면 전환 ===== */
+function switchMainView(viewType) {
+  currentMainView = viewType;
+  document.querySelectorAll('.subnav-item').forEach(el => el.classList.remove('active'));
+  const nav = document.getElementById('nav-' + viewType);
+  if (nav) nav.classList.add('active');
+
+  const titleEl = document.getElementById('page-title');
+  const subEl = document.getElementById('page-subtitle');
+
+  if (viewType === 'all') {
+    showView('all-candidates');
+    titleEl.textContent = '전체 지원자 통합 관리';
+    subEl.textContent = '모든 지원자의 현재 전형 단계 및 최종 합불 여부를 한눈에 관리합니다.';
+  } else if (viewType === 'stage1') {
+    currentStageFilter = 1;
+    showView('dashboard');
+    titleEl.textContent = '1차 면접 관리 대시보드';
+    subEl.textContent = '실무진(HR) 면접 대상자 리스트입니다. 카드를 눌러 세부 서류를 확인하세요.';
+  } else if (viewType === 'stage2') {
+    currentStageFilter = 2;
+    showView('dashboard');
+    titleEl.textContent = '2차 면접 관리 대시보드 (임원진)';
+    subEl.textContent = '임원진 최종 면접 대상자 리스트입니다. 1차 합격 코멘트와 함께 확인하세요.';
+  }
+}
+
+function showView(viewId) {
+  activeView = viewId;
+  ['all-candidates', 'dashboard', 'interview', 'report'].forEach(id => {
+    const el = document.getElementById('view-' + id);
+    if (el) el.classList.toggle('hidden', id !== viewId);
+  });
+  if (viewId === 'all-candidates') renderAllCandidatesTable();
+  // dashboard / interview / report 렌더는 3~5단계에서 연결
+}
+
+/* ===== 전체 지원자 테이블 ===== */
+function toggleFilterPanel() {
+  document.getElementById('advanced-filter-panel').classList.toggle('hidden');
+}
+
+function handleTableSort(key) {
+  if (tableSortKey === key) {
+    if (tableSortOrder === 'asc') tableSortOrder = 'desc';
+    else if (tableSortOrder === 'desc') { tableSortKey = 'none'; tableSortOrder = 'none'; }
+  } else { tableSortKey = key; tableSortOrder = 'asc'; }
+  renderAllCandidatesTable();
+}
+
+function renderAllCandidatesTable() {
+  const tbody = document.getElementById('all-candidates-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  const fDept = document.getElementById('all-filter-dept').value;
+  const fRole = document.getElementById('all-filter-role').value;
+  const fStage = document.getElementById('tbl-filter-stage').value;
+  const fStatus = document.getElementById('tbl-filter-status').value;
+  const fResult = document.getElementById('tbl-filter-result').value;
+  const searchVal = document.getElementById('all-search-input').value.toLowerCase();
+
+  let list = candidates.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchVal) || c.role.toLowerCase().includes(searchVal) || c.dept.toLowerCase().includes(searchVal);
+    const matchesDept = fDept === 'all' || c.dept === fDept;
+    const matchesRole = fRole === 'all' || c.role === fRole;
+    const matchesStage = fStage === 'all' || String(c.stage) === fStage;
+    const matchesStatus = fStatus === 'all' || c.status === fStatus;
+    let matchesResult = true;
+    if (fResult !== 'all') {
+      if (fResult === 'none' && c.finalResult !== null) matchesResult = false;
+      else if (fResult === 'TRM' && !c.trmStatus) matchesResult = false;
+      else if (fResult !== 'none' && fResult !== 'TRM' && c.finalResult !== fResult) matchesResult = false;
+    }
+    return matchesSearch && matchesDept && matchesRole && matchesStage && matchesStatus && matchesResult;
+  });
+
+  document.getElementById('all-filter-result-count').textContent = '총 ' + list.length + '명 매칭됨';
+
+  if (tableSortKey !== 'none' && tableSortOrder !== 'none') {
+    list.sort((a, b) => {
+      let valA = a[tableSortKey], valB = b[tableSortKey];
+      if (tableSortKey === 'stage') { valA = Number(a.stage); valB = Number(b.stage); }
+      if (valA === null || valA === undefined) return 1;
+      if (valB === null || valB === undefined) return -1;
+      if (valA < valB) return tableSortOrder === 'asc' ? -1 : 1;
+      if (valA > valB) return tableSortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  } else { list.sort((a, b) => a.id - b.id); }
+
+  ['name', 'dept', 'stage', 'status', 'finalResult'].forEach(k => {
+    const el = document.getElementById('sort-icon-' + k);
+    if (!el) return;
+    if (tableSortKey === k && tableSortOrder === 'asc') el.innerHTML = '<i class="ti ti-sort-ascending" style="color:var(--main-1)"></i>';
+    else if (tableSortKey === k && tableSortOrder === 'desc') el.innerHTML = '<i class="ti ti-sort-descending" style="color:var(--main-1)"></i>';
+    else el.innerHTML = '<i class="ti ti-arrows-sort" style="color:var(--text-3)"></i>';
+  });
+
+  if (list.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:32px;text-align:center;color:var(--text-3);font-size:12px;">조건에 일치하는 대상자가 없습니다.</td></tr>';
+    return;
+  }
+
+  let html = '';
+  list.forEach(c => {
+    const sBadge = c.stage === 1
+      ? '<span class="tag-stage s1">1차 실무</span>'
+      : '<span class="tag-stage s2">2차 임원</span>';
+
+    let statusCell;
+    if (c.status === '완료') {
+      if (c.passFail === 'hold' || c.passFail === null)
+        statusCell = '<span class="status-cell hold"><i class="ti ti-hourglass"></i>면접 후 (채점 전)</span>';
+      else
+        statusCell = '<span class="status-cell done"><i class="ti ti-circle-check"></i>면접 후 (완료)</span>';
+    } else {
+      statusCell = '<span class="status-cell wait"><i class="ti ti-clock"></i>면접 전 (대기)</span>';
+    }
+
+    let rText = '<span class="result-badge ing">진행 중</span>';
+    if (c.finalResult === '최종 합격') rText = '<span class="result-badge pass">최종 합격</span>';
+    if (c.finalResult === '불합격') {
+      rText = c.trmStatus
+        ? '<span class="result-badge trm">불합격 (TRM 풀)</span>'
+        : '<span class="result-badge fail">불합격</span>';
+    }
+
+    html += '<tr>'
+      + '<td class="td-name">' + c.name + '</td>'
+      + '<td><div class="td-dept">' + c.dept + '</div><div class="td-role">' + c.role + '</div></td>'
+      + '<td>' + sBadge + '</td>'
+      + '<td>' + statusCell + '</td>'
+      + '<td>' + rText + '</td>'
+      + '<td style="text-align:right;"><button class="btn-report-sm" onclick="openReportFromAll(' + c.id + ')"><i class="ti ti-file-text"></i>리포트 보기</button></td>'
+      + '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function openReportFromAll(id) {
+  // 리포트 화면은 5단계에서 구현 — 현재는 안내
+  showToast('채용 리포트 화면은 곧 연결됩니다. (5단계 예정)', 'info');
+}
+
+function sendBulkFeedback() {
+  const failedList = candidates.filter(c => c.finalResult === '불합격' && !c.feedbackSent);
+  if (failedList.length === 0) {
+    showToast('현재 발송 대기 중인 신규 불합격 대상 지원자가 없습니다.', 'info');
+    return;
+  }
+  failedList.forEach(c => c.feedbackSent = true);
+  updateSidebarCounts();
+  renderAllCandidatesTable();
+  showToast('총 ' + failedList.length + '명의 불합격 지원자에게 AI 맞춤 성장 피드백 서한이 일괄 발송되었습니다.', 'success');
+}
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toast-container');
+  const icons = { success: 'ti-check', error: 'ti-x', info: 'ti-info-circle' };
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.innerHTML = '<div class="toast-ic"><i class="ti ' + (icons[type] || 'ti-info-circle') + '"></i></div><div class="toast-msg">' + message + '</div>';
+  container.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 2600);
+}
+
+/* ===== Init ===== */
+fetch('data/candidates.json')
+  .then(r => r.json())
+  .then(data => {
+    candidates = data.candidates;
+    updateSidebarCounts();
+    switchMainView('stage1');
+  })
+  .catch(err => {
+    console.error('데이터 로드 실패:', err);
+    showToast('데이터를 불러올 수 없습니다.', 'error');
+  });
+</script>
+
+</body>
+</html>
