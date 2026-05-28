@@ -6,6 +6,21 @@
 <title>채용 리포트 · RECRUIT AI</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 처우협의 화면 전용 Tailwind (preflight off로 기존 화면 영향 차단) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    corePlugins: { preflight: false },
+    theme: { extend: {
+      fontFamily: { sans: ['Wooridaum', 'Malgun Gothic', 'sans-serif'] },
+      colors: {
+        corp: { light: '#2482C5', DEFAULT: '#0067AC', dark: '#123F6D' },
+        slate: { 850: '#1e293b' }
+      },
+      borderRadius: { '8': '8px' }
+    } }
+  };
+</script>
 <style>
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
@@ -1702,6 +1717,18 @@ a { color: inherit; text-decoration: none; }
     color: var(--text-3);
   }
 
+
+  /* ===== 처우 협의 (경력직) 전용 ===== */
+  .neg-scope { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; }
+  .neg-scope .system-card { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03); }
+  .neg-scope .range-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #cbd5e1; outline: none; margin-top: 20px; }
+  .neg-scope .range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #ffffff; cursor: pointer; border: 3px solid #0067AC; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.1s; position: relative; z-index: 50; }
+  .neg-scope .range-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+  .neg-scope .range-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #ffffff; cursor: pointer; border: 3px solid #0067AC; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+  @keyframes neg-pulse-dot { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+  .neg-scope .status-dot { animation: neg-pulse-dot 2s infinite; }
+  /* 처우협의 모달 */
+  #system-modal { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; }
 
   /* ===== 인재풀 관리 (TRM) ===== */
   /* ============ POOL (인재풀 관리) ============ */
@@ -4570,20 +4597,209 @@ a { color: inherit; text-decoration: none; }
           <h1>경력직 처우 협의 데이터</h1>
           <p>유사 직무·연차·시장 데이터를 기반으로 처우 협의 시 활용할 데이터를 제공합니다.</p>
         </div>
-        <div class="placeholder">
-          <div class="placeholder-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <h3>경력직 처우 협의 대시보드 (개발 예정)</h3>
-          <p>내부 유사 직무 보유자의 보상 분포, 시장 임금 벤치마크, 후보자 기대 처우를 한 화면에서 비교할 수 있는 대시보드를 준비 중입니다.</p>
-          <div class="features">
-            <span class="feature-pill">직무·연차별 내부 분포</span>
-            <span class="feature-pill">시장 임금 벤치마크</span>
-            <span class="feature-pill">기대 처우 vs 제안 처우</span>
-            <span class="feature-pill">총보상 시뮬레이션</span>
-          </div>
+        <div class="neg-scope">
+
+                <!-- STEP 1. 후보자 프로필 -->
+                <section class="system-card p-5">
+                    <div class="flex justify-between items-start mb-5">
+                        <div class="flex items-center">
+                            <div class="w-1.5 h-4 bg-corp-DEFAULT rounded-full mr-2"></div>
+                            <h2 class="text-sm font-bold text-slate-800">지원자 정보 및 인사이트</h2>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="showModal('이력서 연동', '현재 이력서 파싱 기능은 채용기획 파트에서 개발 중입니다. (v1.2 업데이트 예정)', 'info')" class="text-xs px-3 py-1.5 bg-white text-slate-600 font-medium rounded border border-slate-200 hover:bg-slate-50 flex items-center transition-colors">
+                                <i class="ti ti-file-type-pdf text-slate-400 mr-1.5"></i> 이력서
+                            </button>
+                            <button onclick="showModal('면접 평가 연동', '지원자의 면접 평가 결과 데이터 연동은 시스템팀에서 작업 중입니다.', 'info')" class="text-xs px-3 py-1.5 bg-white text-slate-600 font-medium rounded border border-slate-200 hover:bg-slate-50 flex items-center transition-colors">
+                                <i class="ti ti-clipboard-check text-slate-400 mr-1.5"></i> 면접 평가
+                            </button>
+                            <div class="h-4 w-px bg-slate-300 mx-2"></div>
+                            <select id="candidate-select" class="bg-white border border-slate-300 rounded p-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-corp-DEFAULT" onchange="loadCandidateData()">
+                                <option value="c1">김나현 (금융·보험 / 대리급)</option>
+                                <option value="c2">이철수 (경영기획·지원 / 과장급)</option>
+                                <option value="c3">박지민 (디자인 / 사원급)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="md:col-span-1 border-r border-slate-100 pr-4">
+                            <div class="mb-4">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">현재 연봉 (추정)</span>
+                                <div class="text-lg font-bold text-slate-800"><span id="cand-current">4,800</span><span class="text-xs font-normal text-slate-500 ml-1">만원</span></div>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-corp-DEFAULT uppercase tracking-wider block mb-1">희망 연봉</span>
+                                <div class="text-lg font-bold text-corp-DEFAULT"><span id="cand-hope">5,600</span><span class="text-xs font-normal text-corp-light ml-1">만원</span></div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-3 pl-2">
+                            <div class="mb-2 flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">면접 분석 기반 주요 니즈</span>
+                                <span class="text-[9px] text-slate-400 font-medium"><i class="ti ti-robot mr-1"></i>AI Extracted</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-3" id="cand-tags"></div>
+                            <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                                <p class="text-xs text-slate-600 leading-relaxed font-medium" id="cand-insight"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 2. 내부 페이밴드 시뮬레이션 -->
+                <section class="system-card p-0">
+                    <div class="bg-white px-5 py-3 border-b border-slate-200 flex justify-between items-center rounded-t-8">
+                        <div class="flex items-center">
+                            <div class="w-1.5 h-4 bg-corp-DEFAULT rounded-full mr-2"></div>
+                            <h2 class="text-sm font-bold text-slate-800 mr-4">내부 형평성 시뮬레이션</h2>
+                            <div class="flex items-center px-2 py-0.5 bg-slate-50 rounded border border-slate-200">
+                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 status-dot"></div>
+                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">실시간 사내 DB 연동</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <select id="job-select" class="bg-white border border-slate-200 text-xs font-medium p-1 rounded text-slate-600 focus:outline-none" onchange="runSimulation()">
+                                <option value="finance">금융·보험</option>
+                                <option value="planning">경영기획·지원</option>
+                                <option value="design">디자인</option>
+                            </select>
+                            <select id="level-select" class="bg-white border border-slate-200 text-xs font-medium p-1 rounded text-slate-600 focus:outline-none" onchange="runSimulation()">
+                                <option value="staff">사원급 (1~3년)</option>
+                                <option value="assistant">대리급 (4~6년)</option>
+                                <option value="manager">과장급 (7~10년)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 bg-white rounded-b-8">
+                        <div class="flex justify-between items-end mb-10">
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">동일 직무/직급 재직자 연봉 밴드</h3>
+                                <p class="text-[11px] text-slate-400">슬라이더를 조정하여 적정 오퍼를 시뮬레이션 하세요.</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">설정된 오퍼 금액</p>
+                                <div class="text-2xl font-bold text-corp-DEFAULT" id="display-offer">0<span class="text-xs font-normal text-slate-500 ml-1">만원</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="relative h-12 w-full mb-8">
+                            <!-- 밴드 뼈대 (가장 넓은 회색 바) -->
+                            <div class="absolute top-1/2 left-0 w-full h-2 -translate-y-1/2 bg-slate-100 rounded border border-slate-200"></div>
+                            <!-- 상/하위 25% 집중 분포 구간 (파란색 바) -->
+                            <div class="absolute top-1/2 h-2 -translate-y-1/2 bg-blue-100 border-y border-blue-200 transition-all duration-300" id="band-iqr"></div>
+                            <!-- 중위값 인디케이터 (수직 바) -->
+                            <div class="absolute top-1/2 h-4 w-1 bg-slate-400 -translate-y-1/2 z-10 rounded-full" id="band-median"></div>
+
+                            <!-- 구간 텍스트 마커 -->
+                            <div class="absolute -bottom-5 -translate-x-1/2 text-center" id="pos-min"><p class="text-[9px] text-slate-400 font-medium uppercase">Min <span id="band-min" class="text-slate-600 font-bold ml-0.5">-</span></p></div>
+                            <div class="absolute -top-6 -translate-x-1/2 text-center w-max" id="pos-q1"><p class="text-[9px] text-slate-500 font-medium">하위 25% <span id="band-q1" class="font-bold ml-0.5">-</span></p></div>
+                            <div class="absolute -bottom-6 -translate-x-1/2 text-center z-10" id="pos-mid"><p class="text-[9px] text-slate-500 font-medium uppercase">Mid <span id="band-mid" class="font-bold ml-0.5">-</span></p></div>
+                            <div class="absolute -top-6 -translate-x-1/2 text-center w-max" id="pos-q3"><p class="text-[9px] text-slate-500 font-medium">상위 25% <span id="band-q3" class="font-bold ml-0.5">-</span></p></div>
+                            <div class="absolute -bottom-5 -translate-x-1/2 text-center" id="pos-max"><p class="text-[9px] text-slate-400 font-medium uppercase">Max <span id="band-max" class="text-slate-600 font-bold ml-0.5">-</span></p></div>
+
+                            <!-- 인터랙티브 슬라이더 -->
+                            <input type="range" id="offer-slider" class="range-slider absolute top-1/2 -translate-y-1/2 left-0 w-full z-20 m-0 bg-transparent" oninput="updateOfferAnalysis(this.value)">
+                        </div>
+                        
+                        <div id="ai-equity-container" class="mt-4 p-3 rounded border flex items-start transition-colors">
+                            <div id="ai-equity-icon" class="mt-0.5 mr-2"></div>
+                            <div>
+                                <h4 class="text-[10px] font-bold uppercase tracking-wider mb-0.5" id="ai-equity-title">System Diagnosis</h4>
+                                <p id="ai-equity-text" class="text-xs font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 3 & 4 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pb-6">
+                    <!-- STEP 3 -->
+                    <section class="system-card flex flex-col">
+                        <div class="p-4 border-b border-slate-100">
+                            <div class="flex items-center">
+                                <div class="w-1.5 h-4 bg-slate-800 rounded-full mr-2"></div>
+                                <h2 class="text-sm font-bold text-slate-800">대외 경쟁력 및 앵커링 가이드</h2>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col space-y-4">
+                            <div class="flex gap-3">
+                                <div class="flex-1 bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">외부 시장 벤치마크</span>
+                                    <div class="flex items-end justify-between">
+                                        <span class="text-base font-bold text-slate-800" id="market-avg-display">-</span>
+                                        <div id="market-gap-badge"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 bg-slate-50 p-3 rounded border border-slate-100">
+                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">전 직장 대비 인상률</span>
+                                    <div class="flex items-end justify-between">
+                                        <span class="text-base font-bold" id="salary-increase-rate">-</span>
+                                        <span class="text-[9px] text-slate-400 font-medium">통상 10% 내외</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">협상 룸(Room) 가이드라인</h4>
+                                <div class="bg-slate-50 p-3 rounded border border-slate-100 space-y-2 mb-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[11px] text-slate-500 font-medium">권장 앵커링 (1차 제안 범위)</span>
+                                        <span id="anchor-range" class="text-[11px] font-bold text-slate-800">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[11px] text-slate-500 font-medium">확보된 협상 여유 (Buffer)</span>
+                                        <span id="negotiation-buffer" class="text-[11px] font-bold text-corp-DEFAULT">-</span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                                        <span class="text-[11px] text-slate-500 font-medium">내부 결재 마지노선</span>
+                                        <span id="max-approval-limit" class="text-[11px] font-bold text-red-600">-</span>
+                                    </div>
+                                </div>
+                                <p class="text-[9px] text-slate-400 mt-1">※ 고정 금액 대신 위 권장 범위를 선제시하여 심리적 통제권을 확보하십시오.</p>
+                            </div>
+
+                            <div class="mt-auto border-t border-slate-100 pt-3">
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">데이터 기반 협상 대응 가이드</h4>
+                                <div id="hr-script" class="space-y-2"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- STEP 4 -->
+                    <section class="system-card flex flex-col">
+                        <div class="p-4 border-b border-slate-100">
+                            <div class="flex items-center">
+                                <div class="w-1.5 h-4 bg-slate-800 rounded-full mr-2"></div>
+                                <h2 class="text-sm font-bold text-slate-800">보상 패키지 리포트 및 협상 시나리오</h2>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <div class="mb-4">
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">분석된 총보상 레버리지</h4>
+                                <div id="rewards-analysis" class="space-y-1"></div>
+                            </div>
+
+                            <div class="flex flex-col flex-1 relative mt-2">
+                                <div class="flex justify-between items-end mb-2">
+                                    <h4 class="text-[10px] font-bold text-slate-600 uppercase tracking-wider">최종 협상 전략 및 기안 메모</h4>
+                                    <button onclick="generateAIDraft()" class="text-[10px] px-2 py-1 bg-white text-slate-500 font-medium rounded border border-slate-200 hover:bg-slate-50 transition-colors flex items-center">
+                                        <i class="ti ti-sparkles text-corp-DEFAULT mr-1.5"></i> AI 기안 초안 생성
+                                    </button>
+                                </div>
+                                <textarea id="proposal-draft" class="w-full h-full min-h-[120px] p-3 bg-slate-50 border border-slate-200 rounded text-xs outline-none focus:border-corp-DEFAULT transition-colors resize-none text-slate-700 leading-relaxed font-mono" placeholder="데이터를 바탕으로 담당자의 최종 판단과 협상 전략을 이곳에 기록하세요. (예: 시장 대비 인상률이 낮으나, 후보자의 성장 니즈를 반영하여 자격증 취득 지원 제도를 적극 어필할 계획임.)"></textarea>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 하단 액션 버튼 영역 -->
+                <div class="flex justify-end items-center space-x-2 pt-4 border-t border-slate-200 mt-2 pb-6">
+                    <button class="px-5 py-2.5 bg-white border border-slate-200 text-slate-500 rounded text-xs font-bold hover:bg-slate-50 hover:text-slate-700 transition-all">취소</button>
+                    <button class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded text-xs font-bold hover:bg-slate-200 transition-all">임시저장</button>
+                    <button onclick="saveData()" class="px-8 py-2.5 bg-corp-DEFAULT text-white rounded text-xs font-bold shadow-md hover:bg-corp-dark hover:shadow-lg transition-all">데이터 저장</button>
+                </div>
         </div>
       </section>
 
@@ -5278,6 +5494,27 @@ a { color: inherit; text-decoration: none; }
 </aside>
 </div>
 
+<!-- ============ 처우협의 시스템 모달 ============ -->
+<div class="neg-scope">
+    <!-- 시스템 모달 (팝업) 영역 -->
+    <div id="system-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-200" id="modal-content">
+            <div class="p-5 border-b border-slate-100 flex items-center">
+                <div class="w-8 h-8 rounded-full bg-corp-DEFAULT/10 flex items-center justify-center mr-3" id="modal-icon-bg">
+                    <i class="ti ti-info-circle text-corp-DEFAULT" id="modal-icon"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800" id="modal-title">알림</h3>
+            </div>
+            <div class="p-5">
+                <p class="text-sm text-slate-600 leading-relaxed font-medium" id="modal-message">메시지 내용</p>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded transition-colors">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="toast-wrap" id="toast-container"></div>
 
 <script>
@@ -5307,6 +5544,13 @@ function navigate(viewId) {
     setTimeout(function() {
       if (typeof Leadtime !== 'undefined') { Leadtime.init(); leadtimeInitialized = true; }
     }, 80);
+  }
+
+  // 처우협의 화면 진입 시 후보 데이터/시뮬레이션 초기화
+  if (viewId === 'negotiation') {
+    setTimeout(function() {
+      if (typeof loadCandidateData === 'function') loadCandidateData();
+    }, 50);
   }
 }
 
@@ -6040,6 +6284,314 @@ function showToast(message, type) {
       cell.textContent = next ? next.text : '전체 완료';
     });
   }
+
+// ===== 경력직 처우 협의 =====
+        // --- 팝업 모달 관리 함수 ---
+        function showModal(title, message, type='info') {
+            const modal = document.getElementById('system-modal');
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            
+            const icon = document.getElementById('modal-icon');
+            const iconBg = document.getElementById('modal-icon-bg');
+            
+            if(type === 'success') {
+                icon.className = 'ti ti-check text-emerald-500';
+                iconBg.className = 'w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center mr-3';
+            } else {
+                icon.className = 'ti ti-info-circle text-corp-DEFAULT';
+                iconBg.className = 'w-8 h-8 rounded-full bg-corp-DEFAULT/10 flex items-center justify-center mr-3';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                document.getElementById('modal-content').classList.remove('scale-95');
+                document.getElementById('modal-content').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('system-modal');
+            modal.classList.add('opacity-0');
+            document.getElementById('modal-content').classList.remove('scale-100');
+            document.getElementById('modal-content').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function saveData() {
+            const name = document.getElementById('candidate-select').options[document.getElementById('candidate-select').selectedIndex].text;
+            showModal('저장 완료', `${name}의 협상 전략 및 처우 데이터가 시스템에 안전하게 저장되었습니다.`, 'success');
+        }
+
+        /* 
+        ========================================================================
+        데이터 구조화 (브로드밴딩 및 성과 기반 격차 반영)
+        - 통계적 평균뿐만 아니라, 성과에 따른 편차를 충분히 반영하여 밴드를 넓게 설정
+        ========================================================================
+        */
+        const CANDIDATE_DB = {
+            c1: { 
+                name: '김나현', job: 'finance', level: 'assistant', current: 4800, hope: 5600,
+                tags: ['성장 지향형', '전문성 중심', '계리사 자격증 준비중'],
+                insight: "입사 후 명확한 커리어 패스 및 성장 기회에 강한 동기를 보임. 연봉 외 전문성 강화 지원 제도를 어필 포인트로 활용 가능."
+            },
+            c2: { 
+                name: '이철수', job: 'planning', level: 'manager', current: 5900, hope: 6400,
+                tags: ['안정 지향형', '육아 병행', '근무 유연성 중시'],
+                insight: "일과 삶의 균형(워라밸) 및 예측 가능한 근무 환경을 선호함. 내부 밴드 상단 요구 시, 유연근무 등 비금전적 혜택으로 협상 우회 고려."
+            },
+            c3: {
+                name: '박지민', job: 'design', level: 'staff', current: 3600, hope: 4200,
+                tags: ['보상 중시형', '포트폴리오 우수', '근무 환경 중시'],
+                insight: "시장 트렌드에 민감하며, 성과에 대한 확실한 금전적 보상을 원함. 기본급 인상 여력이 부족할 경우 성과 기반 인센티브(PS/PI) 제도 상세 어필 필요."
+            }
+        };
+
+        const INTERNAL_DB = {
+            finance: {
+                staff:     { min: 3800, q1: 4300, mid: 4650, q3: 5000, max: 5600 },
+                assistant: { min: 4600, q1: 5100, mid: 5400, q3: 5900, max: 6800 },
+                manager:   { min: 5500, q1: 6100, mid: 6500, q3: 7200, max: 8200 }
+            },
+            planning: {
+                staff:     { min: 3600, q1: 4100, mid: 4400, q3: 4800, max: 5400 },
+                assistant: { min: 4400, q1: 4900, mid: 5200, q3: 5700, max: 6500 },
+                manager:   { min: 5200, q1: 5800, mid: 6200, q3: 6800, max: 7800 }
+            },
+            design: {
+                staff:     { min: 3400, q1: 3900, mid: 4200, q3: 4600, max: 5200 },
+                assistant: { min: 4200, q1: 4600, mid: 4900, q3: 5400, max: 6200 },
+                manager:   { min: 5000, q1: 5500, mid: 5900, q3: 6400, max: 7200 }
+            }
+        };
+
+        const MARKET_DB = {
+            finance:   { staff: 4300, assistant: 5100, manager: 6000 },
+            planning:  { staff: 4100, assistant: 5000, manager: 5800 },
+            design:    { staff: 4000, assistant: 4700, manager: 5500 }
+        };
+
+        let currentVisualMin = 0;
+        let currentVisualMax = 0;
+
+        function loadCandidateData() {
+            const candId = document.getElementById('candidate-select').value;
+            const cand = CANDIDATE_DB[candId];
+
+            document.getElementById('cand-current').innerText = cand.current.toLocaleString();
+            document.getElementById('cand-hope').innerText = cand.hope.toLocaleString();
+            
+            const tagsHtml = cand.tags.map(tag => `<span class="px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 text-[10px] font-bold rounded">${tag}</span>`).join('');
+            document.getElementById('cand-tags').innerHTML = tagsHtml;
+            document.getElementById('cand-insight').innerText = cand.insight;
+
+            document.getElementById('job-select').value = cand.job;
+            document.getElementById('level-select').value = cand.level;
+
+            const internalData = INTERNAL_DB[cand.job][cand.level];
+            const startOffer = Math.min(cand.hope, internalData.max); 
+            runSimulation(startOffer);
+            renderTotalRewards(cand.tags.join(' '));
+        }
+
+        function runSimulation(initValue = null) {
+            const job = document.getElementById('job-select').value;
+            const level = document.getElementById('level-select').value;
+            const data = INTERNAL_DB[job][level];
+            
+            const slider = document.getElementById('offer-slider');
+            // 밴드가 넓어졌으므로 시각적 여백도 충분히 확보
+            currentVisualMin = data.min - 1000;
+            currentVisualMax = data.max + 1000;
+            slider.min = currentVisualMin; 
+            slider.max = currentVisualMax;
+            slider.value = initValue || data.mid; 
+
+            document.getElementById('band-min').innerText = data.min.toLocaleString();
+            document.getElementById('band-q1').innerText = data.q1.toLocaleString();
+            document.getElementById('band-mid').innerText = data.mid.toLocaleString();
+            document.getElementById('band-q3').innerText = data.q3.toLocaleString();
+            document.getElementById('band-max').innerText = data.max.toLocaleString();
+            
+            const getPct = (val) => ((val - currentVisualMin) / (currentVisualMax - currentVisualMin)) * 100;
+            
+            const bandIqr = document.getElementById('band-iqr');
+            bandIqr.style.left = `${getPct(data.q1)}%`;
+            bandIqr.style.width = `${getPct(data.q3) - getPct(data.q1)}%`;
+            document.getElementById('band-median').style.left = `${getPct(data.mid)}%`;
+
+            document.getElementById('pos-min').style.left = `${getPct(data.min)}%`;
+            document.getElementById('pos-q1').style.left = `${getPct(data.q1)}%`;
+            document.getElementById('pos-mid').style.left = `${getPct(data.mid)}%`;
+            document.getElementById('pos-q3').style.left = `${getPct(data.q3)}%`;
+            document.getElementById('pos-max').style.left = `${getPct(data.max)}%`;
+
+            updateOfferAnalysis(slider.value);
+        }
+
+        function updateOfferAnalysis(val) {
+            const offer = parseInt(val);
+            const candId = document.getElementById('candidate-select').value;
+            const cand = CANDIDATE_DB[candId];
+            const job = document.getElementById('job-select').value;
+            const level = document.getElementById('level-select').value;
+            const data = INTERNAL_DB[job][level];
+            const marketAvg = MARKET_DB[job][level];
+
+            document.getElementById('display-offer').innerHTML = `${offer.toLocaleString()}<span class="text-xs font-normal text-slate-500 ml-1">만원</span>`;
+
+            // 시스템 진단 로직
+            const equityContainer = document.getElementById('ai-equity-container');
+            const equityIcon = document.getElementById('ai-equity-icon');
+            const equityTitle = document.getElementById('ai-equity-title');
+            const equityText = document.getElementById('ai-equity-text');
+
+            if (offer > data.max) {
+                equityContainer.className = "mt-4 p-3 rounded border border-red-200 bg-red-50 flex items-start";
+                equityIcon.innerHTML = `<i class="ti ti-alert-circle text-red-500 text-sm"></i>`;
+                equityTitle.className = "text-[10px] font-bold uppercase tracking-wider text-red-600 mb-0.5";
+                equityText.className = "text-xs font-medium text-red-800";
+                equityText.innerHTML = `밴드 상한선 초과. 부서 내 극심한 연봉 역전이 예상됩니다. 예외 품의가 강제되며, 사인온 보너스 전환을 권장합니다.`;
+            } else if (offer >= data.q3) {
+                equityContainer.className = "mt-4 p-3 rounded border border-orange-200 bg-orange-50 flex items-start";
+                equityIcon.innerHTML = `<i class="ti ti-alert-triangle text-orange-500 text-sm"></i>`;
+                equityTitle.className = "text-[10px] font-bold uppercase tracking-wider text-orange-600 mb-0.5";
+                equityText.className = "text-xs font-medium text-orange-800";
+                equityText.innerHTML = `상위 25% 구간 진입. 고성과자 중심의 급여 구간으로, 기존 재직자와의 연봉 역전 리스크가 존재합니다. 향후 정기 인상률 제한 가능성을 고지해야 합니다.`;
+            } else if (offer >= data.q1) {
+                equityContainer.className = "mt-4 p-3 rounded border border-slate-200 bg-slate-100 flex items-start";
+                equityIcon.innerHTML = `<i class="ti ti-check text-slate-500 text-sm"></i>`;
+                equityTitle.className = "text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-0.5";
+                equityText.className = "text-xs font-medium text-slate-600";
+                equityText.innerHTML = `내부 인력 밀집 구간(안정권). 형평성 방어가 용이하며, 가장 리스크가 적은 표준 제안 범위입니다.`;
+            } else {
+                 equityContainer.className = "mt-4 p-3 rounded border border-slate-200 bg-slate-50 flex items-start";
+                 equityIcon.innerHTML = `<i class="ti ti-info-circle text-slate-400 text-sm"></i>`;
+                 equityTitle.className = "text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-0.5";
+                 equityText.className = "text-xs font-medium text-slate-600";
+                 equityText.innerHTML = `하위 밴드 구간. 시장 경쟁력 하락에 따른 오퍼 거절 확률이 존재합니다. 총보상 패키지 레버리지가 필수적입니다.`;
+            }
+
+            // 외부 시장 벤치마크
+            document.getElementById('market-avg-display').innerText = `${marketAvg.toLocaleString()} 만원`;
+            const compRatio = ((offer / marketAvg) * 100).toFixed(0);
+            const marketBadge = document.getElementById('market-gap-badge');
+            
+            if (offer >= marketAvg * 1.05) {
+                marketBadge.innerHTML = `<span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">시장 대비 +${compRatio - 100}% 상회</span>`;
+            } else if (offer >= marketAvg * 0.95) {
+                marketBadge.innerHTML = `<span class="text-[10px] font-bold text-slate-500 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200">시장 평균 부합</span>`;
+            } else {
+                marketBadge.innerHTML = `<span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">시장 대비 -${100 - compRatio}% 하회</span>`;
+            }
+
+            // 전 직장 대비 인상률
+            const incRate = (((offer - cand.current) / cand.current) * 100).toFixed(1);
+            const incRateEl = document.getElementById('salary-increase-rate');
+            incRateEl.innerText = `${incRate > 0 ? '+' : ''}${incRate}%`;
+            incRateEl.className = `text-base font-bold ${incRate >= 15 ? 'text-orange-600' : (incRate < 5 ? 'text-red-600' : 'text-slate-800')}`;
+
+            // 협상 가이드라인
+            const anchorBottom = Math.floor(offer * 0.93 / 100) * 100; 
+            const anchorTop = Math.floor(offer * 0.98 / 100) * 100;
+            
+            // 현실적인 마지노선: 제안액의 5% 버퍼 (단, 페이밴드 Max를 초과할 수 없음)
+            const maxLimit = Math.min(Math.floor(offer * 1.05 / 100) * 100, data.max); 
+            const buffer = Math.max(0, maxLimit - anchorTop);
+
+            document.getElementById('anchor-range').innerText = `${anchorBottom.toLocaleString()} ~ ${anchorTop.toLocaleString()} 만원`;
+            document.getElementById('negotiation-buffer').innerText = `최대 +${buffer.toLocaleString()} 만원`;
+            document.getElementById('max-approval-limit').innerText = `${maxLimit.toLocaleString()} 만원`;
+
+            // 스크립트 가이드
+            let script = `
+            <div class="p-2.5 bg-slate-50 border-l-2 border-slate-300 rounded-r text-xs text-slate-600 font-medium leading-relaxed mb-1.5">
+                <span class="font-bold text-slate-700 block mb-0.5">앵커링(Anchoring) 제안 기준</span>
+                내부 밴드를 고려하여 초기 제안 시 <b>${anchorBottom.toLocaleString()}~${anchorTop.toLocaleString()}만원</b> 구간 형태의 범위(Range) 제안을 권장합니다.
+            </div>`;
+            
+            if (offer >= data.q3) {
+                script += `
+                <div class="p-2.5 bg-orange-50 border-l-2 border-orange-400 rounded-r text-xs text-orange-800 font-medium leading-relaxed">
+                    <span class="font-bold text-orange-700 block mb-0.5">상위 밴드 진입 리스크</span>
+                    해당 오퍼는 밴드 상단에 위치하여 입사 후 정기 연봉 인상 폭이 제한될 수 있습니다. 성과 기반 인센티브(PS/PI) 등 변동급 중심의 보상 확대 가능성을 선제적으로 고지하십시오.
+                </div>`;
+            } else if (incRate < 10) {
+                script += `
+                <div class="p-2.5 bg-blue-50 border-l-2 border-corp-DEFAULT rounded-r text-xs text-corp-dark font-medium leading-relaxed">
+                    <span class="font-bold text-corp-DEFAULT block mb-0.5">오퍼 수락률 보완 가이드</span>
+                    전 직장 대비 기본급 인상폭이 낮아 오퍼 거절 리스크가 존재합니다. STEP 4의 '총보상(Total Rewards) 패키지' 요소를 적극 활용하여 비금전적 혜택 중심의 우회 설득 논리를 준비하십시오.
+                </div>`;
+            }
+            document.getElementById('hr-script').innerHTML = script;
+        }
+
+        function renderTotalRewards(tagsStr) {
+            const container = document.getElementById('rewards-analysis');
+            let html = "";
+
+            if (tagsStr.includes('성장') || tagsStr.includes('전문성')) {
+                html += `
+                <div class="flex items-start py-1.5">
+                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-700">커리어 성장</p>
+                        <p class="text-[10px] text-slate-500">계리사/CFA 자격 취득 지원 및 직무 컨퍼런스 참여 보장 어필</p>
+                    </div>
+                </div>`;
+            }
+            if (tagsStr.includes('육아') || tagsStr.includes('안정') || tagsStr.includes('유연성')) {
+                html += `
+                <div class="flex items-start py-1.5">
+                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-700">근무 유연성 및 복지</p>
+                        <p class="text-[10px] text-slate-500">패밀리데이(수요일 조기퇴근) 및 종합검진(배우자 포함) 어필</p>
+                    </div>
+                </div>`;
+            }
+            if (html === "") {
+                html = `
+                <div class="flex items-start py-1.5">
+                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-700">인정 체계</p>
+                        <p class="text-[10px] text-slate-500">명확한 성과 기반 인센티브(PS/PI) 구조 및 장기근속 포상 어필</p>
+                    </div>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function generateAIDraft() {
+            const candId = document.getElementById('candidate-select').value;
+            const cand = CANDIDATE_DB[candId];
+            const job = document.getElementById('job-select').value;
+            const level = document.getElementById('level-select').value;
+            
+            const currentOffer = parseInt(document.getElementById('offer-slider').value);
+            const internalData = INTERNAL_DB[job][level];
+            const marketAvg = MARKET_DB[job][level];
+            
+            const incRate = (((currentOffer - cand.current) / cand.current) * 100).toFixed(1);
+            
+            let internalEquityStr = "";
+            if (currentOffer > internalData.max) internalEquityStr = "내부 밴드 상한 초과 (예외 품의 필요)";
+            else if (currentOffer >= internalData.q3) internalEquityStr = "상위 25% 진입 (향후 인상률 조정 검토)";
+            else if (currentOffer >= internalData.q1) internalEquityStr = "중위 50% 안정권 (내부 형평성 우수)";
+            else internalEquityStr = "하위 25% 구간 (시장 경쟁력 보완 필요)";
+
+            const draftText = `[처우 협의 기안 초안]\n\n1. 제안 요약\n- 대상자: ${cand.name} (${document.getElementById('job-select').options[document.getElementById('job-select').selectedIndex].text} / ${document.getElementById('level-select').options[document.getElementById('level-select').selectedIndex].text})\n- 최종 제안액: ${currentOffer.toLocaleString()} 만원 (전 직장 대비 ${incRate > 0 ? '+' : ''}${incRate}%)\n\n2. 데이터 기반 적정성 검토\n- 내부 형평성: ${internalEquityStr} (밴드: ${internalData.min.toLocaleString()}~${internalData.max.toLocaleString()} 만원)\n- 대외 경쟁력: 외부 시장 평균(${marketAvg.toLocaleString()} 만원) 대비 적정 수준 검토 완료\n\n3. 비금전적 레버리지 연계 방안\n- 후보자 주요 니즈(${cand.tags.join(', ')})를 반영하여, ABL 총보상 패키지 어필 예정\n\n4. HR 종합 의견 (Action Plan)\n- [담당자 판단 및 최종 협상 스탠스를 이곳에 작성하세요.]`;
+
+            const textarea = document.getElementById('proposal-draft');
+            textarea.value = draftText;
+            
+            textarea.classList.add('bg-blue-50');
+            setTimeout(() => textarea.classList.remove('bg-blue-50'), 300);
+        }
 
 // ESC: 모바일 사이드바 + 후보 패널 + 후보추가 모달 닫기
 document.addEventListener('keydown', function(e) {
