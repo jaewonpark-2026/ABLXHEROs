@@ -279,6 +279,36 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .pt-notice-box .pt-section-title { margin-top: 0; }
 
 .pt-info-block { margin-bottom: 28px; }
+
+/* ===== [3번] AI 재작성 전/후 비교 카드 ===== */
+.diff-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; transition: all 0.2s; }
+.diff-card.decided-accept { border-color: #16a34a; background: linear-gradient(135deg, #FAFFFB, #F0FAF3); }
+.diff-card.decided-reject { border-color: var(--border); background: #FAFAFA; opacity: 0.7; }
+.diff-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.diff-section-label { font-size: 13px; font-weight: 700; color: var(--text-1); display: flex; align-items: center; gap: 6px; }
+.diff-section-label i { color: var(--main-1); font-size: 15px; }
+.diff-decision-badge { font-size: 11px; font-weight: 700; }
+.db-accept { color: #16a34a; display: inline-flex; align-items: center; gap: 3px; }
+.db-reject { color: var(--text-3); display: inline-flex; align-items: center; gap: 3px; }
+.diff-cols { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.diff-col { border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.6; }
+.diff-before { background: #FFF5F5; border: 1px solid #FAD4D4; }
+.diff-after { background: #F0F7FF; border: 1px solid #C5DEF5; }
+.diff-col-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; }
+.diff-before .diff-col-label { color: #C0392B; }
+.diff-after .diff-col-label { color: var(--main-1); }
+.diff-col-body { color: var(--text-1); }
+.diff-arrow { display: flex; align-items: center; color: var(--main-1); font-size: 18px; }
+.diff-actions { display: flex; gap: 8px; margin-top: 12px; }
+.diff-btn { flex: 1; padding: 8px; border-radius: 6px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; border: 1px solid var(--border); background: white; transition: all 0.15s; }
+.diff-reject { color: var(--text-2); }
+.diff-reject:hover { background: #FFF5F5; border-color: #E74C3C; color: #C0392B; }
+.diff-accept { color: var(--main-1); border-color: var(--main-1); }
+.diff-accept:hover { background: var(--main-1); color: white; }
+@media (max-width: 720px) {
+  .diff-cols { grid-template-columns: 1fr; }
+  .diff-arrow { transform: rotate(90deg); justify-content: center; padding: 4px 0; }
+}
 </style>
 </head>
 <body>
@@ -592,6 +622,10 @@ function renderJDPanel(data) {
         </div>
       ` : ''}
 
+      ${isHR && data.current_step === 3 ? `
+        <div id="hrFeedbackArea"></div>
+      ` : ''}
+
       ${isHR && data.current_step === 4 ? `
         <div class="action-section">
           <div class="action-title"><i class="ti ti-rocket"></i> 최종 단계</div>
@@ -654,6 +688,45 @@ function render(data) {
       <div id="jdPanel">${renderJDPanel(data)}</div>
     </div>
   `;
+
+  // HR이 현업 의견 도착(step3) 상태면 피드백 영역 렌더
+  if (isHR && data.current_step === 3) {
+    renderHRFeedbackArea(data);
+  }
+}
+
+// ===== HR 현업 피드백 처리 영역 =====
+function renderHRFeedbackArea(data) {
+  const area = document.getElementById('hrFeedbackArea');
+  if (!area) return;
+  const fbRaw = sessionStorage.getItem('pendingFeedback-' + data.id);
+
+  // 현업 의견이 아직 없으면: 검토 대기 안내
+  if (!fbRaw) {
+    area.innerHTML = `
+      <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
+        <div class="action-title" style="color:#9A6D00;"><i class="ti ti-clock"></i> 현업 검토 대기 중</div>
+        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">현업(마케팅팀 김부장)에게 JD 검토를 요청한 상태입니다. 현업이 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
+      </div>`;
+    return;
+  }
+
+  let fb;
+  try { fb = JSON.parse(fbRaw); } catch (e) { return; }
+
+  area.innerHTML = `
+    <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
+      <div class="action-title" style="color:#9A6D00;"><i class="ti ti-message-report"></i> 현업 수정 의견이 도착했습니다</div>
+      <div style="background:white; border-radius:8px; padding:14px 16px; margin:10px 0 16px; border:1px solid #F0D9A8;">
+        <div style="font-size:11px; font-weight:700; color:#9A6D00; margin-bottom:6px;">마케팅팀 김부장 · ${fb.at}</div>
+        <div style="font-size:13px; color:var(--text-1); line-height:1.7; white-space:pre-wrap;">${fb.refined || fb.raw}</div>
+      </div>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="startAIRewrite()">
+        <i class="ti ti-sparkles"></i> AI로 수정 의견 반영하기
+      </button>
+      <p style="font-size:11px; color:var(--text-3); margin-top:8px; text-align:center;">AI가 의견을 분석해 수정안을 제안합니다. 반영 여부는 직접 선택하실 수 있습니다.</p>
+    </div>
+    <div id="rewriteDiffArea"></div>`;
 }
 
 function startAIGenerate() {
@@ -903,6 +976,191 @@ function rewriteJD() {
     }
     render(currentData);
   }, 3500);
+}
+
+// ===== [3번] HR: AI 재작성 (현업 의견 → 제안 → 전/후 비교 → 선택) =====
+let rewriteProposals = [];
+
+// 현업 의견을 분석해 어떤 섹션을 어떻게 바꿀지 "제안" 생성
+function buildRewriteProposals(comment, jd) {
+  const proposals = [];
+  const c = comment;
+
+  if (c.includes('스마트') || c.includes('인재상') || c.includes('가치')) {
+    proposals.push({
+      key: 'talent_profile', label: '인재상', type: 'text',
+      before: jd.talent_profile,
+      after: "특히 '스마트' 가치를 최우선으로 봅니다. 빠른 학습력과 실험적 사고를 가진 분, 가설을 세우고 데이터로 검증하는 과정을 즐기는 분, 기존 마케팅 방식에 도전적으로 접근하는 분을 찾습니다."
+    });
+  }
+  if (c.includes('구체') || c.includes('업무') || c.includes('상세')) {
+    proposals.push({
+      key: 'main_duties', label: '주요 업무', type: 'list',
+      before: jd.main_duties,
+      after: [
+        "디지털 마케팅 캠페인 통합 운영 (검색·디스플레이·SNS·CRM 전 채널)",
+        "GA4 및 Tableau 기반 사용자 행동 분석 및 LTV/CAC 모니터링",
+        "주 단위 A/B 테스트 설계·실행 (월 4건 이상 목표)",
+        "Braze 기반 마케팅 자동화 시나리오 설계 및 30+ 트리거 운영",
+        "신규 디지털 채널 발굴 및 PoC 추진 (분기 1건 이상)",
+        "예산 관리 및 ROI 리포팅 (월간 경영진 보고)"
+      ]
+    });
+  }
+  if (c.includes('엄격') || c.includes('자격') || c.includes('경력') || c.includes('높')) {
+    proposals.push({
+      key: 'required', label: '자격요건 (필수)', type: 'list',
+      before: jd.required,
+      after: [
+        "디지털 마케팅 직무 5년 이상의 실무 경력 (B2C 우대)",
+        "Google Analytics 4 (GA4) 전문가 수준 활용",
+        "A/B 테스트 설계·실행 50건 이상 경험",
+        "SQL 중급 이상 (조인, 윈도우 함수 활용 가능)",
+        "정량적 성과 입증 가능한 프로젝트 3건 이상"
+      ]
+    });
+  }
+  if (c.includes('복지') || c.includes('처우') || c.includes('연봉') || c.includes('보상')) {
+    proposals.push({
+      key: 'benefits', label: '복리후생', type: 'text',
+      before: jd.benefits,
+      after: "4대 보험, 퇴직연금, 성과급, 학자금 지원, 종합검진, 콘도미니엄, 복지카드, 동호회 지원, 자기계발비 지원, 유연근무제"
+    });
+  }
+
+  // 매칭된 게 없으면 회사소개/직무요약을 일반 보정
+  if (proposals.length === 0) {
+    proposals.push({
+      key: 'role_summary', label: '직무 요약', type: 'text',
+      before: jd.role_summary,
+      after: jd.role_summary + " (현업 의견 반영: " + comment.substring(0, 40) + (comment.length > 40 ? '…' : '') + ")"
+    });
+  }
+  return proposals;
+}
+
+function startAIRewrite() {
+  const fbRaw = sessionStorage.getItem('pendingFeedback-' + currentData.id);
+  if (!fbRaw) { alert('반영할 현업 의견이 없습니다.'); return; }
+  let fb; try { fb = JSON.parse(fbRaw); } catch(e){ return; }
+  const comment = fb.raw || fb.refined || '';
+
+  const diffArea = document.getElementById('rewriteDiffArea');
+  diffArea.innerHTML = `
+    <div class="action-section" style="text-align:center; padding:32px;">
+      <div class="spinner" style="margin:0 auto 14px;"></div>
+      <div style="font-size:14px; font-weight:700; color:var(--main-1);" id="rwSub">AI가 현업 의견을 분석하고 있습니다</div>
+    </div>`;
+  const sub = () => document.getElementById('rwSub');
+  setTimeout(() => { if(sub()) sub().textContent = '수정이 필요한 섹션 식별 중...'; }, 1200);
+  setTimeout(() => { if(sub()) sub().textContent = '수정안 생성 중...'; }, 2400);
+
+  setTimeout(() => {
+    rewriteProposals = buildRewriteProposals(comment, currentData.jd_draft);
+    renderRewriteDiff();
+  }, 3400);
+}
+
+// 수정 전/후 비교 + 항목별 반영 선택 UI
+function renderRewriteDiff() {
+  const diffArea = document.getElementById('rewriteDiffArea');
+  const fmt = (v, type) => {
+    if (type === 'list') return '<ul style="margin:0; padding-left:18px;">' + v.map(x => `<li style="margin-bottom:4px;">${x}</li>`).join('') + '</ul>';
+    return `<div>${v}</div>`;
+  };
+
+  let cards = rewriteProposals.map((p, i) => `
+    <div class="diff-card" id="diffCard-${i}" data-decision="pending">
+      <div class="diff-card-head">
+        <div class="diff-section-label"><i class="ti ti-pencil"></i> ${p.label}</div>
+        <div class="diff-decision-badge" id="diffBadge-${i}"></div>
+      </div>
+      <div class="diff-cols">
+        <div class="diff-col diff-before">
+          <div class="diff-col-label">수정 전 (현재 JD)</div>
+          <div class="diff-col-body">${fmt(p.before, p.type)}</div>
+        </div>
+        <div class="diff-arrow"><i class="ti ti-arrow-right"></i></div>
+        <div class="diff-col diff-after">
+          <div class="diff-col-label">AI 수정 제안</div>
+          <div class="diff-col-body">${fmt(p.after, p.type)}</div>
+        </div>
+      </div>
+      <div class="diff-actions">
+        <button class="diff-btn diff-reject" onclick="decideDiff(${i}, 'reject')"><i class="ti ti-x"></i> 거부 (현재 유지)</button>
+        <button class="diff-btn diff-accept" onclick="decideDiff(${i}, 'accept')"><i class="ti ti-check"></i> 반영</button>
+      </div>
+    </div>
+  `).join('');
+
+  diffArea.innerHTML = `
+    <div class="action-section" style="border:1px solid var(--main-1);">
+      <div class="action-title"><i class="ti ti-git-compare"></i> AI 수정 제안 · 전/후 비교</div>
+      <p style="font-size:12px; color:var(--text-2); line-height:1.7; margin-bottom:16px;">
+        AI가 현업 의견을 반영한 수정안입니다. 각 항목을 확인하고 <strong style="color:var(--main-1);">반영</strong> 또는 <strong>거부</strong>를 선택하세요.
+        선택하신 항목만 최종 JD에 적용됩니다.
+      </p>
+      ${cards}
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button class="btn" style="flex:1; background:white; border:1px solid var(--border); color:var(--text-2);" onclick="applyAllDiff('reject')">전체 거부</button>
+        <button class="btn" style="flex:1; background:white; border:1px solid var(--main-1); color:var(--main-1);" onclick="applyAllDiff('accept')">전체 반영</button>
+        <button class="btn btn-primary" style="flex:2;" onclick="finalizeRewrite()"><i class="ti ti-check"></i> 선택 내용으로 JD 재생성</button>
+      </div>
+    </div>`;
+  setTimeout(() => document.getElementById('rewriteDiffArea').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+function decideDiff(i, decision) {
+  const card = document.getElementById('diffCard-' + i);
+  const badge = document.getElementById('diffBadge-' + i);
+  card.dataset.decision = decision;
+  card.classList.remove('decided-accept', 'decided-reject');
+  card.classList.add(decision === 'accept' ? 'decided-accept' : 'decided-reject');
+  badge.innerHTML = decision === 'accept'
+    ? '<span class="db-accept"><i class="ti ti-check"></i> 반영함</span>'
+    : '<span class="db-reject"><i class="ti ti-x"></i> 거부함</span>';
+}
+
+function applyAllDiff(decision) {
+  rewriteProposals.forEach((p, i) => decideDiff(i, decision));
+}
+
+function finalizeRewrite() {
+  // 미선택 항목 체크
+  const pending = rewriteProposals.filter((p, i) => document.getElementById('diffCard-' + i).dataset.decision === 'pending');
+  if (pending.length > 0) {
+    if (!confirm('아직 선택하지 않은 항목이 ' + pending.length + '개 있습니다.\n미선택 항목은 "거부(현재 유지)"로 처리됩니다. 계속할까요?')) return;
+  }
+
+  let appliedCount = 0;
+  rewriteProposals.forEach((p, i) => {
+    const decision = document.getElementById('diffCard-' + i).dataset.decision;
+    if (decision === 'accept') {
+      currentData.jd_draft[p.key] = p.after;
+      appliedCount++;
+    }
+  });
+
+  currentData.jd_draft.version = (currentData.jd_draft.version || 1) + 1;
+  currentData.jd_draft.last_updated = new Date().toISOString().slice(0, 16).replace('T', ' ');
+  currentData.jd_draft._editedHTML = null; // 직접수정 HTML 캐시 무효화
+
+  currentData.review_history.push({
+    actor: "AI",
+    actor_role: "ai",
+    timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
+    action: "현업 의견 반영 재작성",
+    detail: `현업 수정 의견을 분석하여 ${rewriteProposals.length}개 항목 제안 중 ${appliedCount}개를 반영해 v${currentData.jd_draft.version}으로 재생성했습니다.`
+  });
+
+  // 현업 의견 처리 완료 → step 2(검토요청 전)로 되돌려 HR이 재검토 요청 가능하게
+  sessionStorage.removeItem('pendingFeedback-' + currentData.id);
+  currentData.current_step = 2;
+  currentData.status = 'JD 수정 완료 · 재검토 요청 대기';
+  saveReqState(currentData.id, { current_step: 2, status: 'JD 수정 완료', status_color: 'blue' });
+
+  alert(`JD가 재생성되었습니다. (${appliedCount}개 항목 반영)\n\n수정된 JD를 다시 현업에 검토 요청하거나, 바로 공고 등재를 진행할 수 있습니다.`);
+  render(currentData);
 }
 
 function approveJD() {
