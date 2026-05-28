@@ -219,8 +219,7 @@ a { color: inherit; text-decoration: none; }
 .cc-status-wrap { margin-top: 10px; display: flex; align-items: center; gap: 4px; justify-content: center; }
 .cc-status-sel { height: 26px; font-size: 10px; font-weight: 700; border-radius: 6px; padding: 0 6px; border: 1px solid; cursor: pointer; outline: none; font-family: inherit; }
 .cc-status-sel.done { background: var(--ok-bg); color: #15803D; border-color: #BBE8C9; }
-.cc-status-sel.wait { background: var(--warn-bg); color: #B45309; border-color: #FDD9A8; cursor: not-allowed; }
-.cc-lock { font-size: 10px; color: var(--text-3); }
+.cc-status-sel.wait { background: #F1F3F6; color: var(--text-3); border-color: var(--border); cursor: not-allowed; opacity: 0.85; }
 .cand-empty { grid-column: 1/-1; text-align: center; padding: 50px 0; color: var(--text-3); font-size: 13px; }
 
 /* 모달 공통 보조 */
@@ -237,6 +236,15 @@ a { color: inherit; text-decoration: none; }
 .setup-item .si-name { font-size: 13px; font-weight: 700; color: var(--text-1); }
 .setup-item .si-role { font-size: 11px; color: var(--text-3); }
 .setup-empty { grid-column: 1/-1; text-align: center; padding: 30px; color: var(--text-3); font-size: 12px; }
+.setup-groups { display: flex; flex-direction: column; gap: 14px; max-height: 360px; overflow-y: auto; padding-right: 2px; }
+.setup-group { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.setup-group-hd { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F4F8FC; border-bottom: 1px solid var(--border); cursor: pointer; }
+.setup-group-hd input { width: 15px; height: 15px; accent-color: var(--main-1); }
+.setup-group-hd .sg-dept { font-size: 12.5px; font-weight: 700; color: var(--main-1); }
+.setup-group-hd .sg-role { font-size: 11px; color: var(--text-2); }
+.setup-group-hd .sg-divider { color: var(--text-3); font-size: 10px; }
+.setup-group-hd .sg-count { margin-left: auto; font-size: 11px; color: var(--text-3); font-weight: 700; }
+.setup-group-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
 
 /* 라우팅 */
 .route-ic { width: 60px; height: 60px; border-radius: 50%; background: var(--info-bg); color: var(--main-1); display: inline-flex; align-items: center; justify-content: center; font-size: 26px; }
@@ -356,6 +364,14 @@ a { color: inherit; text-decoration: none; }
 .ai-rec-tag { font-size: 10px; font-weight: 700; color: #FCA5A5; text-transform: uppercase; letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 5px; }
 .ai-rec-text { font-size: 12px; color: var(--dk-text-1); margin-top: 6px; line-height: 1.55; font-weight: 700; }
 .ai-rec-sub { font-size: 11px; color: var(--dk-text-2); margin-top: 4px; line-height: 1.5; }
+.ai-rec { opacity: 0; transform: translateY(8px); animation: aiRecIn 0.45s cubic-bezier(0.22,0.61,0.36,1) forwards; }
+@keyframes aiRecIn { to { opacity: 1; transform: translateY(0); } }
+.ai-listening { display: flex; align-items: center; gap: 9px; padding: 11px 13px; border: 1px dashed var(--dk-border); border-radius: 10px; font-size: 11.5px; font-weight: 700; color: var(--dk-text-2); }
+.ai-listening .dots { display: inline-flex; gap: 4px; }
+.ai-listening .dots span { width: 6px; height: 6px; border-radius: 50%; background: #FCA5A5; animation: aiDot 1s infinite ease-in-out; }
+.ai-listening .dots span:nth-child(2) { animation-delay: 0.18s; }
+.ai-listening .dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes aiDot { 0%,80%,100% { opacity: 0.25; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
 
 @media (max-width: 900px) { .iv-grid { grid-template-columns: 1fr; } .iv-tabs { max-width: 100%; } }
 
@@ -880,7 +896,8 @@ a { color: inherit; text-decoration: none; }
     </div>
     <div class="m-body">
       <h4 class="mini-label">면접 참가 지원자 선택</h4>
-      <div id="match-candidate-grid" class="setup-grid"></div>
+      <p style="font-size:11.5px;color:var(--text-3);margin:-4px 0 12px;line-height:1.5;">같은 부서·직무 단위로 묶어 표시됩니다. 보통 동일 부서·직무 지원자끼리 한 세션으로 진행합니다.</p>
+      <div id="match-candidate-grid" class="setup-groups"></div>
     </div>
     <div class="m-ft">
       <button class="btn btn-o" onclick="closeGroupSetupModal()">취소</button>
@@ -1014,8 +1031,8 @@ function updateSidebarCounts() {
   const total = candidates.length;
   const wait1 = candidates.filter(c => c.stage === 1 && c.status === '대기' && c.finalResult === null).length;
   const s1hold = candidates.filter(c => c.stage === 1 && c.status === '완료' && (c.passFail === null || c.passFail === 'hold')).length;
-  const s1pass = candidates.filter(c => c.stage === 1 && c.passFail === 'pass').length;
-  const s1fail = candidates.filter(c => c.stage === 1 && c.passFail === 'fail').length;
+  const s1pass = candidates.filter(c => c.stage1Result === 'pass').length;
+  const s1fail = candidates.filter(c => c.stage1Result === 'fail' || (c.stage === 1 && c.passFail === 'fail')).length;
   const wait2 = candidates.filter(c => c.stage === 2 && c.status === '대기' && c.finalResult === null).length;
   const s2hold = candidates.filter(c => c.stage === 2 && c.status === '완료' && (c.passFail === null || c.passFail === 'hold')).length;
   const pass = candidates.filter(c => c.finalResult === '최종 합격').length;
@@ -1222,7 +1239,6 @@ function renderDashboardCandidates() {
     html += '<div class="cc-avatar' + avatarDone + '">' + c.name.substring(0, 3) + '</div>';
     html += '<div><div class="cc-name">' + c.name + '</div><div class="cc-role">' + c.role + '</div></div>';
     html += '<div class="cc-status-wrap">';
-    if (isWait) html += '<i class="ti ti-lock cc-lock"></i>';
     html += '<select class="cc-status-sel ' + (c.status === '완료' ? 'done' : 'wait') + '" ' + (isWait ? 'disabled' : '') + ' onclick="event.stopPropagation();" onchange="changeCandidateStatus(event,' + c.id + ',this.value,this)">';
     html += '<option value="대기" ' + (c.status === '대기' ? 'selected' : '') + '>면접 전 (대기)</option>';
     html += '<option value="완료" ' + (c.status === '완료' ? 'selected' : '') + '>면접 후 (완료)</option>';
@@ -1431,12 +1447,49 @@ function openGroupSetupModal() {
   const list = candidates.filter(c => c.stage === currentStageFilter && c.finalResult === null && c.status === '대기');
   if (list.length === 0) {
     grid.innerHTML = '<div class="setup-empty">세션을 시작할 대기 상태 지원자가 없습니다.</div>';
-  } else {
-    list.forEach(c => {
-      grid.innerHTML += '<label class="setup-item"><input type="checkbox" data-id="' + c.id + '" class="setup-cand-check"><div><div class="si-name">' + c.name + '</div><div class="si-role">' + c.role + '</div></div></label>';
-    });
+    document.getElementById('modal-group-setup').classList.add('show');
+    return;
   }
+  // 부서 → 직무 순으로 그룹핑
+  const groups = {};
+  const order = [];
+  list.forEach(c => {
+    const key = (c.dept || '기타') + '||' + (c.role || '기타');
+    if (!groups[key]) { groups[key] = []; order.push(key); }
+    groups[key].push(c);
+  });
+  // 부서명, 직무명 순으로 정렬
+  order.sort((a, b) => a.localeCompare(b, 'ko'));
+
+  let html = '';
+  order.forEach((key, gi) => {
+    const [dept, role] = key.split('||');
+    const members = groups[key];
+    html += '<div class="setup-group">';
+    html += '<label class="setup-group-hd">'
+      + '<input type="checkbox" class="setup-group-all" data-group="' + gi + '" onchange="toggleSetupGroup(' + gi + ',this.checked)">'
+      + '<span class="sg-dept">' + dept + '</span><span class="sg-divider">›</span><span class="sg-role">' + role + '</span>'
+      + '<span class="sg-count">' + members.length + '명</span></label>';
+    html += '<div class="setup-group-body">';
+    members.forEach(c => {
+      html += '<label class="setup-item"><input type="checkbox" data-id="' + c.id + '" data-group="' + gi + '" class="setup-cand-check" onchange="syncSetupGroupHeader(' + gi + ')">'
+        + '<div><div class="si-name">' + c.name + '</div><div class="si-role">' + c.role + '</div></div></label>';
+    });
+    html += '</div></div>';
+  });
+  grid.innerHTML = html;
   document.getElementById('modal-group-setup').classList.add('show');
+}
+function toggleSetupGroup(gi, checked) {
+  document.querySelectorAll('.setup-cand-check[data-group="' + gi + '"]').forEach(cb => { cb.checked = checked; });
+}
+function syncSetupGroupHeader(gi) {
+  const boxes = document.querySelectorAll('.setup-cand-check[data-group="' + gi + '"]');
+  const head = document.querySelector('.setup-group-all[data-group="' + gi + '"]');
+  if (!head) return;
+  const checkedCount = Array.from(boxes).filter(b => b.checked).length;
+  head.checked = checkedCount === boxes.length;
+  head.indeterminate = checkedCount > 0 && checkedCount < boxes.length;
 }
 function closeGroupSetupModal() { document.getElementById('modal-group-setup').classList.remove('show'); }
 
@@ -1660,16 +1713,43 @@ var AI_RECS = {
   ]
 };
 
+var liveAiRecTimers = [];
+function clearLiveAiRecTimers() {
+  liveAiRecTimers.forEach(t => clearTimeout(t));
+  liveAiRecTimers = [];
+}
 function renderLiveAiRecs() {
   const box = document.getElementById('live-ai-recommendations');
   if (!box) return;
+  clearLiveAiRecTimers();
   const c = candidates.find(item => item.id === activeInterviewSession.currentCandidateId);
   const recs = AI_RECS[roleCategory(c ? c.role : '')] || AI_RECS.etc;
-  box.innerHTML = recs.map(r =>
+  const sessionId = activeInterviewSession.currentCandidateId;
+
+  // 면접 답변을 듣는 중 인디케이터부터 표시
+  box.innerHTML = '<div class="ai-listening"><i class="ti ti-microphone"></i> AI가 답변을 분석하는 중<span class="dots"><span></span><span></span><span></span></span></div>';
+
+  const recHtml = r =>
     '<div class="ai-rec"><span class="ai-rec-tag"><i class="ti ti-alert-triangle"></i> ' + r.tag + '</span>'
     + '<div class="ai-rec-text">' + r.text + '</div>'
-    + '<div class="ai-rec-sub">' + r.sub + '</div></div>'
-  ).join('');
+    + '<div class="ai-rec-sub">' + r.sub + '</div></div>';
+
+  // 항목을 하나씩 실시간 감지되는 것처럼 순차 표시
+  recs.forEach((r, i) => {
+    const delay = 1400 + i * 2600; // 첫 감지까지 약 1.4초, 이후 약 2.6초 간격
+    const t = setTimeout(() => {
+      // 후보가 바뀌었으면 중단
+      if (activeInterviewSession.currentCandidateId !== sessionId) return;
+      // 첫 항목이 뜨기 직전 인디케이터 제거
+      if (i === 0) box.innerHTML = '';
+      box.insertAdjacentHTML('beforeend', recHtml(r));
+      // 마지막 항목 이후에도 계속 듣고 있다는 인디케이터 유지
+      if (i === recs.length - 1) {
+        box.insertAdjacentHTML('beforeend', '<div class="ai-listening"><i class="ti ti-microphone"></i> 계속 분석하는 중<span class="dots"><span></span><span></span><span></span></span></div>');
+      }
+    }, delay);
+    liveAiRecTimers.push(t);
+  });
 }
 
 function runMiniGemini() {
@@ -1708,6 +1788,7 @@ function addRefinedQuestion(text) {
 
 function triggerInterviewFinish() {
   if (activeInterviewSession.timerInterval) clearInterval(activeInterviewSession.timerInterval);
+  clearLiveAiRecTimers();
   activeInterviewSession.candidates.forEach(id => {
     const c = candidates.find(item => item.id === id);
     if (c) c.status = '완료';
@@ -1952,12 +2033,14 @@ function saveAndPublishReport() {
   if (c.passFail === 'hold') {
     showToast(c.name + ' 지원자의 리포트가 \'임시저장(채점 전/보류)\' 상태로 저장되었습니다.', 'info');
   } else if (c.stage === 1 && c.passFail === 'pass') {
+    c.stage1Result = 'pass';
     c.stage = 2; c.status = '대기'; c.passFail = null; c.sttData = {}; c.customQuestions = []; c.geminiHistory = [];
     showToast(c.name + ' 지원자가 1차 합격하여 2차 임원진 전형 대기열로 이동되었습니다.', 'success');
   } else if (c.stage === 2 && c.passFail === 'pass') {
     c.finalResult = '최종 합격';
     showToast(c.name + ' 지원자가 최종 합격하셨습니다.', 'success');
   } else if (c.passFail === 'fail') {
+    if (c.stage === 1) c.stage1Result = 'fail';
     c.finalResult = '불합격';
     showToast(c.name + ' 지원자가 불합격 처리되었습니다.', 'error');
   }
@@ -1972,7 +2055,7 @@ function closeReportView() {
 
 function navigateReport(direction) {
   let list = reportSource === 'all'
-    ? [...candidates]
+    ? candidates.filter(item => item.status === '완료')
     : candidates.filter(item => item.stage === currentStageFilter && item.status === '완료' && item.finalResult === null);
   if (list.length <= 1) return;
   let idx = list.findIndex(item => item.id === activeReportCandidateId);
