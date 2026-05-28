@@ -3113,10 +3113,410 @@ a { color: inherit; text-decoration: none; }
       <!-- ============ VIEW: 이도윤 신입 상세 리포트 — 3-C에서 채움 ============ -->
       <section class="view" id="view-report-leedoyoon">
         <div class="back-link" onclick="navigate('reports-list')"><i class="ti ti-arrow-left"></i> 합격자 리스트로</div>
-        <div class="placeholder">
-          <div class="placeholder-icon"><i class="ti ti-school" style="font-size:28px"></i></div>
-          <h3>이도윤 신입 리포트 (작업 예정 · 3-C)</h3>
-          <p>신입 합격자의 종합 평가·동기부여·온보딩 리포트가 이 자리에 들어옵니다.</p>
+        <div class="report-scope">
+      <div class="panel-header">
+        <div class="crumb">채용 데이터 · 채용 리포트 · 이도윤</div>
+        <h1>채용 데이터 분석 리포트</h1>
+        <p>채용이 완료된 신입 합격자의 평가 데이터를 종합해 자동 생성한 인사이트 리포트입니다.</p>
+      </div>
+
+      <section class="hero">
+        <div class="hero-row">
+          <span class="hero-tag"><i class="ti ti-file-description" style="vertical-align:-2px"></i> 채용 피드백 리포트 · 신입</span>
+          <span class="hero-id">REPORT ID · RC-2026-0518</span>
+        </div>
+        <h2>ABL생명 2026 상반기 신입 공채<br/><span class="em">최종 평가 인사이트 리포트</span></h2>
+        <p class="hero-sub">
+          서류·역량검사·실무 면접·임원 면접 전 단계의 평가 데이터를 통합하여
+          신입 합격자의 역량·잠재력, 그리고 입사 후 적응 가이드를 제시합니다.
+        </p>
+        <div class="hero-grid">
+          <div class="hero-cell">
+            <span class="label">지원자</span>
+            <span class="value">이도윤</span>
+          </div>
+          <div class="hero-cell">
+            <span class="label">면접일자</span>
+            <span class="value">2026년 5월 19일</span>
+          </div>
+          <div class="hero-cell">
+            <span class="label">채용 명</span>
+            <span class="value">ABL생명 2026 상반기 신입 공채</span>
+          </div>
+          <div class="hero-cell">
+            <span class="label">전형</span>
+            <span class="value">디지털 IT 기획팀 (신입)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1. 종합 요약 -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">1</span>
+          <h2 class="section-title">종합 요약</h2>
+        </div>
+        <p class="section-desc">전체 평가 단계의 핵심 데이터를 한눈에 확인할 수 있도록 정리한 섹션입니다.</p>
+        <div class="empty-section">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="9" y1="9" x2="15" y2="9"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="17" x2="13" y2="17"/>
+          </svg>
+          <h3>종합 요약 영역</h3>
+          <p>평가 데이터·면접 코멘트·역량검사 결과가 종합 분석되어<br/>이 자리에 자동 생성됩니다.</p>
+        </div>
+      </section>
+
+      <!-- 2. 동기부여 요인 분석 -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">2</span>
+          <h2 class="section-title">동기부여 요인 분석</h2>
+        </div>
+        <p class="section-desc">이도윤 님이 어떤 상황과 보상에서 가장 큰 에너지를 얻는지에 대한 신호를 우선순위로 정리합니다.</p>
+
+        <div class="guide">
+          <span class="tag">GUIDE</span>
+          <div>면접 답변 텍스트와 역량검사 결과의 Sentiment 신호를 결합해 자동 분류했습니다. 신입 입사자 특성상 학습·성장 동기 비중이 높게 측정되는 경향이 있으니 참고용으로 활용해 주세요.</div>
+        </div>
+
+        <div class="motivation-profile">
+          <strong>종합 동기부여 프로파일.</strong>
+          "배움 드리븐" 성향이 매우 강한 신입 인재. 새로운 기술·도메인을 빠르게 학습하고 자신의 결과물을 동료에게 인정받는 과정에서 가장 큰 에너지를 얻습니다.
+          단순 반복 업무보다 작은 단위라도 본인의 손에서 완성되는 산출물이 있을 때 몰입도가 가파르게 상승합니다.
+        </div>
+
+        <div class="motivation-list grid-2">
+
+          <div class="mot-item">
+            <div class="mot-head">
+              <div class="mot-rank">
+                <div class="badge">1ST</div>
+                <div class="mot-name">학습 곡선과 성장 가시화</div>
+              </div>
+              <div class="mot-scores">
+                <span>신호 강도 <b>9.4</b></span>
+                <span>응답 빈도 <b>16회</b></span>
+              </div>
+            </div>
+            <p class="mot-desc">
+              "배우다", "익히다", "처음 해봤다" 같은 학습 표현이 답변 전반에 매우 빈번하게 등장.
+              인턴 기간 동안 정보처리기사·SQLD 자격을 자발적으로 취득한 이력에서 학습 의지가 직접 확인됩니다.
+            </p>
+            <button class="source-btn" onclick="toggleSource(this)"><i class="ti ti-paperclip" style="vertical-align:-1px"></i> 원문 보기</button>
+            <div class="source-popup">
+              <div class="source-popup-head">
+                <span class="source-type"><i class="ti ti-microphone" style="vertical-align:-1px"></i> 면접 녹취</span>
+                <span class="source-meta">2026.05.19 · 실무 면접 · 13:45~13:48</span>
+                <button class="source-deep-link" onclick="showToast('ATS 면접 녹취 원본 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">원본 페이지 →</button>
+              </div>
+              <div class="source-popup-body">
+                <p><span class="who">면접관 (김재현 팀장)</span> "인턴 기간 동안 가장 빨리 익혔다고 생각하는 게 있다면요?"</p>
+                <p><span class="who candidate">이도윤</span> "처음 SQL을 한 달 안에 SQLD 합격할 정도로 익혔던 경험이 있습니다. 누가 시켜서가 아니라 데이터를 보고 싶어서 자발적으로 시작했고, 그게 가장 빠르게 성장한 순간이었어요."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mot-item">
+            <div class="mot-head">
+              <div class="mot-rank">
+                <div class="badge">2ND</div>
+                <div class="mot-name">완결된 산출물과 인정</div>
+              </div>
+              <div class="mot-scores">
+                <span>신호 강도 <b>8.2</b></span>
+                <span>응답 빈도 <b>9회</b></span>
+              </div>
+            </div>
+            <p class="mot-desc">
+              "마무리했다", "보여드렸다", "공유했다" 같은 완결·공유 표현이 자주 등장.
+              본인이 작은 단위라도 끝까지 완성한 결과물을 동료·멘토에게 공유받았을 때 강한 보람을 느낍니다.
+            </p>
+            <button class="source-btn" onclick="toggleSource(this)"><i class="ti ti-paperclip" style="vertical-align:-1px"></i> 원문 보기</button>
+            <div class="source-popup">
+              <div class="source-popup-head">
+                <span class="source-type"><i class="ti ti-microphone" style="vertical-align:-1px"></i> 면접 녹취</span>
+                <span class="source-meta">2026.05.19 · 실무 면접 · 14:02~14:05</span>
+                <button class="source-deep-link" onclick="showToast('ATS 면접 녹취 원본 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">원본 페이지 →</button>
+              </div>
+              <div class="source-popup-body">
+                <p><span class="who">면접관 (김재현 팀장)</span> "인턴 프로젝트 중 가장 기억에 남는 게 있나요?"</p>
+                <p><span class="who candidate">이도윤</span> "VBA로 반복 작업 자동화한 게 있었는데, 사수분께 보여드리니 다른 분들도 쓰셨으면 좋겠다고 하셔서 사내에 공유한 경험이 있어요. 그때 작은 거라도 누군가 쓴다는 게 너무 좋았어요."</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mot-item full-span">
+            <div class="mot-head">
+              <div class="mot-rank">
+                <div class="badge">3RD</div>
+                <div class="mot-name">선배·멘토와의 관계 형성</div>
+              </div>
+              <div class="mot-scores">
+                <span>신호 강도 <b>7.5</b></span>
+                <span>응답 빈도 <b>7회</b></span>
+              </div>
+            </div>
+            <p class="mot-desc">
+              신입 특성상 동기·선배 등 인간관계 안에서 동기를 얻는 비중이 높음.
+              "사수가 알려주셨다", "선배 따라가서 봤다" 등 멘토에 대한 긍정적 언급이 빈번하여, 멘토 매칭이 잘 이뤄지면 적응 속도가 평균을 크게 상회할 것으로 예측됩니다.
+            </p>
+            <button class="source-btn" onclick="toggleSource(this)"><i class="ti ti-paperclip" style="vertical-align:-1px"></i> 원문 보기</button>
+            <div class="source-popup">
+              <div class="source-popup-head">
+                <span class="source-type"><i class="ti ti-microphone" style="vertical-align:-1px"></i> 면접 녹취</span>
+                <span class="source-meta">2026.05.19 · 임원 면접 · 16:12~16:14</span>
+                <button class="source-deep-link" onclick="showToast('ATS 면접 녹취 원본 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">원본 페이지 →</button>
+              </div>
+              <div class="source-popup-body">
+                <p><span class="who">면접관 (임승현 본부장)</span> "ABL에 합류하면 어떤 선배가 가장 도움이 될 것 같나요?"</p>
+                <p><span class="who candidate">이도윤</span> "질문이 많을 텐데 잘 받아주실 분이요. 인턴 때 사수가 그런 분이셨는데, 모르는 걸 모른다고 말할 수 있는 분위기가 가장 빠르게 배울 수 있는 환경이었어요."</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 3. 리더십 가이드 -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">3</span>
+          <h2 class="section-title">리더십 가이드</h2>
+        </div>
+        <p class="section-desc">이도윤 님의 성장 곡선을 최대화하기 위해 팀장님이 우선 고려할 만한 행동 가이드입니다.</p>
+
+        <div class="leadership-grid compact">
+          <div class="lead-col do">
+            <div class="lead-head"><span class="icon">✓</span><span>권장 행동</span></div>
+            <div class="lead-items">
+              <div class="lead-item">
+                <div class="title">전담 멘토 1명 명시적 지정</div>
+                <div class="desc">"질문 받아주는 사수"가 핵심 동기 — 합류 첫 주 시니어 1명을 공식 멘토로 매칭</div>
+              </div>
+              <div class="lead-item">
+                <div class="title">작은 완결 단위 업무 부여</div>
+                <div class="desc">큰 프로젝트의 일부보다 본인이 끝까지 완성할 수 있는 작은 산출물 1건씩 부여</div>
+              </div>
+              <div class="lead-item">
+                <div class="title">학습 결과 공유 자리 마련</div>
+                <div class="desc">월 1회 본부 단위 짧은 발표 기회 — 본인 학습 성과를 동료에게 보여줄 수 있는 환경</div>
+              </div>
+            </div>
+          </div>
+          <div class="lead-col dont">
+            <div class="lead-head"><span class="icon">!</span><span>주의 행동</span></div>
+            <div class="lead-items">
+              <div class="lead-item">
+                <div class="title">방치형 OJT</div>
+                <div class="desc">"알아서 배워라" 식 접근은 신입에게 가장 큰 좌절 요인 — 첫 3개월은 구조화된 학습 동반</div>
+              </div>
+              <div class="lead-item">
+                <div class="title">큰 프로젝트의 잡무 위주 배치</div>
+                <div class="desc">본인 산출물로 인정받을 수 없는 보조 업무만 지속되면 동기가 빠르게 소진</div>
+              </div>
+              <div class="lead-item">
+                <div class="title">실수에 대한 과도한 책망</div>
+                <div class="desc">신입 단계에서의 실수를 학습 자산으로 전환하지 못하면 질문 자체를 회피하게 됨</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 업무 부여 로드맵 (신입 6개월) -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">4</span>
+          <h2 class="section-title">업무 부여 로드맵 (Onboarding)</h2>
+        </div>
+        <p class="section-desc">디지털 IT 기획팀 합류 후 6개월 권장 흐름입니다. 신입 입사자 특성상 학습·관계 형성·작은 완결 사이클의 반복에 비중을 두었습니다.</p>
+
+        <div class="roadmap">
+
+          <div class="phase">
+            <div class="phase-head">
+              <span class="phase-tag">PHASE 1</span>
+              <span class="phase-period">1~2개월</span>
+              <h3 class="phase-title">ABL 시스템·도메인 학습 + 멘토 안착</h3>
+            </div>
+            <p class="phase-body">
+              ABL의 IT 시스템(상품계·계약계·정산계) 구조와 보험 도메인 기본 지식을 학습하는 단계.
+              전담 멘토와의 신뢰 형성이 가장 중요한 시기로, 업무보다 학습·관계 형성에 비중을 둡니다.
+            </p>
+            <div class="phase-tasks">
+              <div class="item"><span class="key">학습</span><span>ABL IT 시스템 구조 학습, 보험 도메인 입문, 사내 코딩 컨벤션 숙지</span></div>
+              <div class="item"><span class="key">멘토링</span><span>전담 멘토 주 2회 30분 1:1, 멘토 업무 쉐도잉</span></div>
+              <div class="item"><span class="key">업무 비중</span><span>20% — 멘토 보조 작업 (코드 리뷰 옵저버, 회의록 정리)</span></div>
+              <div class="item"><span class="key">체크포인트</span><span>매주 멘토 + 팀장 1:1, 8주차 종합 리뷰</span></div>
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-head">
+              <span class="phase-tag">PHASE 2</span>
+              <span class="phase-period">3~4개월</span>
+              <h3 class="phase-title">첫 완결 산출물 + 본부 공유</h3>
+            </div>
+            <p class="phase-body">
+              본인 동기 2순위인 "완결된 산출물"을 충족시키는 단계.
+              작은 단위의 업무 1건을 처음부터 끝까지 책임지게 하고, 본부에 공유하는 자리를 마련합니다.
+            </p>
+            <div class="phase-tasks">
+              <div class="item"><span class="key">목표</span><span>작은 업무 1건(예: 내부 자동화 도구) 완수, 본부 짧은 발표</span></div>
+              <div class="item"><span class="key">기대 산출물</span><span>완성 산출물 1건, 본인 작성 1-pager, 회고 노트</span></div>
+              <div class="item"><span class="key">업무 비중</span><span>60% — 첫 책임 업무 + 멘토 협업 유지</span></div>
+              <div class="item"><span class="key">체크포인트</span><span>중간 리뷰 1회, 산출물 완성 직후 인정 피드백 즉시 전달</span></div>
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-head">
+              <span class="phase-tag">PHASE 3</span>
+              <span class="phase-period">5~6개월</span>
+              <h3 class="phase-title">정규 프로젝트 합류 + 1년차 목표 합의</h3>
+            </div>
+            <p class="phase-body">
+              팀의 정규 프로젝트에 한 명의 팀원으로 합류시키는 단계.
+              6개월차 종합 면담에서 1년차 시점에 어떤 영역을 본인 강점으로 만들지 합의합니다.
+            </p>
+            <div class="phase-tasks">
+              <div class="item"><span class="key">목표</span><span>정규 프로젝트 합류, 본인 명의의 작은 결정 권한 1건 부여</span></div>
+              <div class="item"><span class="key">기대 산출물</span><span>프로젝트 산출물 일부 책임, 6개월 회고 발표</span></div>
+              <div class="item"><span class="key">업무 비중</span><span>100% — 멘토 의존도 점진적 감소, 독립성 점차 확보</span></div>
+              <div class="item"><span class="key">체크포인트</span><span>6개월 종합 면담 (1년차 목표 합의)</span></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 5. 1-on-1 대화 가이드 -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">5</span>
+          <h2 class="section-title">1-on-1 대화 가이드</h2>
+        </div>
+        <p class="section-desc">팀장님이 면담 시점별로 활용할 수 있는 대화 스크립트입니다. 이도윤 님의 동기부여 프로파일을 기반으로 자동 생성되었습니다.</p>
+
+        <div class="dialog-grid">
+          <div class="dialog-card">
+            <div class="dialog-head">
+              <span class="dialog-period">1개월차</span>
+              <span class="dialog-purpose">적응 + 멘토 안착</span>
+            </div>
+            <h4 class="dialog-title">학습 환경 점검</h4>
+            <ul class="dialog-questions">
+              <li>"입사 4주 동안 가장 빠르게 익혔다고 느끼는 영역은 무엇인가요?"</li>
+              <li>"멘토와의 1:1은 어떠셨나요? 더 도움이 필요한 영역이 있나요?"</li>
+              <li>"현재 학습 페이스가 본인에게 적절한가요? 너무 빠르거나 느린 부분은요?"</li>
+            </ul>
+            <div class="dialog-hint">
+              <i class="ti ti-bulb" style="vertical-align:-1px;margin-right:2px"></i> 신입은 첫 한 달 멘토와의 관계가 잔존율에 가장 큰 영향을 미칩니다. 멘토 만족도를 직접 확인해 주세요.
+            </div>
+          </div>
+          <div class="dialog-card">
+            <div class="dialog-head">
+              <span class="dialog-period">3개월차</span>
+              <span class="dialog-purpose">첫 산출물 인정</span>
+            </div>
+            <h4 class="dialog-title">완결 사이클 점검</h4>
+            <ul class="dialog-questions">
+              <li>"첫 책임 업무에서 가장 자부심을 느낀 순간은 언제였나요?"</li>
+              <li>"다음 분기에 본인이 직접 끝까지 해보고 싶은 작은 프로젝트가 있나요?"</li>
+              <li>"본부 발표 후 받은 피드백 중 가장 도움이 된 것은 무엇이었나요?"</li>
+            </ul>
+            <div class="dialog-hint">
+              <i class="ti ti-bulb" style="vertical-align:-1px;margin-right:2px"></i> 이도윤 님의 동기 2순위가 "완결된 산출물"입니다. 본인 입으로 성취를 정리해보게 하는 질문이 가장 효과적입니다.
+            </div>
+          </div>
+          <div class="dialog-card">
+            <div class="dialog-head">
+              <span class="dialog-period">6개월차</span>
+              <span class="dialog-purpose">1년차 목표 합의</span>
+            </div>
+            <h4 class="dialog-title">강점 정의 + 다음 단계</h4>
+            <ul class="dialog-questions">
+              <li>"6개월간 본인이 가장 잘하게 된 영역과, 더 강화하고 싶은 영역은요?"</li>
+              <li>"1년차 시점에 동기들 사이에서 '○○하면 이도윤'이라는 평가를 받고 싶다면, 그 ○○는 무엇인가요?"</li>
+              <li>"멘토에서 점차 독립하는 시점에 대해 어떻게 생각하시나요?"</li>
+            </ul>
+            <div class="dialog-hint">
+              <i class="ti ti-bulb" style="vertical-align:-1px;margin-right:2px"></i> 신입 6개월차는 본인의 강점 정체성을 정립하는 시점입니다. 본인 표현으로 강점을 정의해보게 하면 장기 잔존율이 크게 상승합니다.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. HR 메모 -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">6</span>
+          <h2 class="section-title">HR 메모</h2>
+        </div>
+        <p class="section-desc">채용 맥락과 현업 팀장님에게 전달할 사항을 기록하세요. "시스템 전송" 클릭 시 함께 발송됩니다.</p>
+
+        <div class="memo-grid">
+          <div class="memo-card hr">
+            <div class="memo-head">
+              <span class="memo-tag hr">HR 내부 메모</span>
+              <span class="memo-meta">작성자: 이수민 책임 · 인재경영실</span>
+            </div>
+            <textarea class="memo-input" placeholder="채용 과정에서의 특이사항을 기록하세요.">신입 평가 최상위권. 인턴 기간 동안 자발적 자격 취득(SQLD·정보처리기사) 이력에서 학습 의지가 매우 강함을 확인.
+
+멘토 매칭이 잔존율 핵심 변수로 판단됨. 합류 1주차 내 멘토 공식 지정 필요. 멘토 후보로는 인턴 시 사수 역할을 해본 경험이 있는 시니어 권장.</textarea>
+            <div class="memo-foot">
+              <span class="memo-saved">최종 저장: 2026.05.21 14:20</span>
+              <button class="memo-save-btn" onclick="showToast('HR 내부 메모가 저장되었습니다')">저장</button>
+            </div>
+          </div>
+          <div class="memo-card lead">
+            <div class="memo-head">
+              <span class="memo-tag lead">현업 팀장에게 전달할 메모</span>
+              <span class="memo-meta">수신: 김재현 팀장 · 디지털 IT 기획팀</span>
+            </div>
+            <textarea class="memo-input" placeholder="현업 팀장님께 별도로 전달할 사항을 작성하세요.">신입이지만 학습 의지가 매우 강해 멘토 매칭만 잘 이뤄지면 적응 속도가 평균을 크게 상회할 것으로 예상됩니다. 합류 첫 주 안에 전담 멘토 공식 지정을 권장드립니다.
+
+작은 완결 단위 산출물을 자주 만들어 본부에 공유할 수 있는 환경을 마련해 주시면 동기부여 효과가 가장 크게 작동합니다.</textarea>
+            <div class="memo-foot">
+              <span class="memo-saved">최종 저장: 2026.05.21 14:35</span>
+              <button class="memo-save-btn" onclick="showToast('전달 메모가 저장되었습니다')">저장</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="report-actions">
+        <button class="action-btn ghost" onclick="showToast('PDF 다운로드 기능은 곧 제공됩니다', 'info')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          PDF 다운로드
+        </button>
+        <button class="action-btn ghost" onclick="showToast('이메일 발송 기능은 곧 제공됩니다', 'info')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+          이메일로 발송
+        </button>
+        <button class="action-btn primary" onclick="showToast('현업 팀장(김재현 팀장)에게 리포트가 전송되었습니다')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          현업 팀장에게 시스템 전송
+        </button>
+      </div>
+
+      <footer class="meta-footer">
+        <div class="left">
+          <span class="pill-meta">분석 모델 v3.2.1</span>
+          <span class="pill-meta">데이터 소스: 평가지·면접 녹취·역량검사</span>
+          <span class="pill-meta">생성일 2026.05.21 14:35 KST</span>
+        </div>
+        <div>© ABL생명 Talent Insight</div>
+      </footer>
         </div>
       </section>
 
