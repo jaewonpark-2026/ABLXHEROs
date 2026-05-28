@@ -1703,6 +1703,1046 @@ a { color: inherit; text-decoration: none; }
   }
 
 
+  /* ===== 인재풀 관리 (TRM) ===== */
+  /* ============ POOL (인재풀 관리) ============ */
+  .pool-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  .pool-filters + .pool-filters {
+    margin-bottom: 16px;
+  }
+  .filter-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-4);
+    letter-spacing: 0.06em;
+    padding: 0 8px 0 2px;
+    margin-right: 4px;
+    border-right: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+  .filter-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--border-strong);
+    margin: 0 4px;
+  }
+  /* 후보자 추가 모달 */
+  .add-modal-backdrop {
+    position: fixed; inset: 0; background: rgba(20,19,43,0.45);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .add-modal-backdrop.open { opacity: 1; pointer-events: auto; }
+  .add-modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-46%);
+    width: 480px; max-width: 92vw; max-height: 88vh; overflow-y: auto;
+    background: var(--surface); border-radius: 18px; z-index: 201;
+    opacity: 0; pointer-events: none; transition: all 0.22s;
+    box-shadow: 0 24px 60px rgba(20,19,43,0.25);
+  }
+  .add-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%,-50%); }
+  .add-modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+  }
+  .add-modal-head h3 { margin: 0; font-size: 17px; font-weight: 800; }
+  .add-modal-head button { background: none; border: none; font-size: 16px; color: var(--text-3); cursor: pointer; }
+  .add-modal-body { padding: 20px 24px; display: grid; gap: 12px; }
+  .add-modal-body label {
+    display: flex; flex-direction: column; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--text-2);
+  }
+  .add-modal-body input, .add-modal-body select {
+    border: 1px solid var(--border-strong); border-radius: 8px;
+    padding: 9px 12px; font-size: 13px; font-family: inherit; font-weight: 400;
+    color: var(--text-1); outline: none;
+  }
+  .add-modal-body input:focus, .add-modal-body select:focus { border-color: var(--brand); }
+  .add-modal-foot {
+    display: flex; gap: 8px; justify-content: flex-end;
+    padding: 16px 24px; border-top: 1px solid var(--border);
+  }
+  .add-cancel, .add-submit {
+    padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700;
+    font-family: inherit; cursor: pointer; border: 1px solid transparent;
+  }
+  .add-cancel { background: var(--surface); border-color: var(--border-strong); color: var(--text-2); }
+  .add-submit { background: var(--grad); color: #fff; }
+
+  /* ============ BULK ACTION BAR ============ */
+  .bulk-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(95deg, #0E1F5B 0%, #273A92 100%);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(14, 31, 91, 0.20);
+    animation: slideDown 0.2s ease;
+  }
+  .bulk-bar.show { display: flex; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .bulk-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 13px;
+  }
+  .bulk-count-wrap b {
+    font-size: 16px;
+    font-weight: 800;
+    color: #7DCFF5;
+    margin-right: 4px;
+  }
+  .bulk-clear {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.85);
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .bulk-clear:hover { background: rgba(255,255,255,0.10); }
+  .bulk-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .bulk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: #fff;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .bulk-btn:hover {
+    background: rgba(255,255,255,0.20);
+    border-color: rgba(255,255,255,0.35);
+  }
+  .bulk-btn.danger {
+    background: rgba(229, 68, 109, 0.20);
+    border-color: rgba(229, 68, 109, 0.40);
+  }
+  .bulk-btn.danger:hover {
+    background: rgba(229, 68, 109, 0.32);
+  }
+
+  /* ============ POOL EMPTY ============ */
+  .pool-empty {
+    display: none;
+    text-align: center;
+    padding: 56px 24px;
+    color: var(--text-4);
+  }
+  .pool-empty svg { margin-bottom: 10px; }
+  .pool-empty p { font-size: 13px; margin: 0; }
+
+  /* ============ TASK PROGRESS (테이블 cell) ============ */
+  .task-progress {
+    display: inline-block;
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-right: 6px;
+    letter-spacing: -0.005em;
+  }
+  .task-progress.complete {
+    background: var(--direction-bg);
+    color: var(--direction);
+  }
+
+  /* ============ CHECKLIST (패널 내) ============ */
+  .cp-checklist-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .cp-checklist-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .cp-checklist-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .cp-checklist-progress-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--brand-dark);
+  }
+  .cp-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cp-task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s ease;
+  }
+  .cp-task:hover {
+    background: var(--brand-soft);
+  }
+  .cp-task input[type="checkbox"] {
+    margin-top: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--brand);
+  }
+  .cp-task-text {
+    font-size: 13px;
+    color: var(--text-1);
+    line-height: 1.55;
+  }
+  .cp-task.done .cp-task-text {
+    text-decoration: line-through;
+    color: var(--text-4);
+  }
+
+  .pool-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .pool-chip:hover {
+    border-color: var(--border-strong);
+    background: #FAF9FD;
+  }
+
+  .pool-chip.active {
+    background: var(--brand-soft);
+    border-color: #C5DBF5;
+    color: var(--brand-dark);
+  }
+
+  .pool-chip .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pool-chip .count {
+    font-size: 11.5px;
+    background: #E6EBF5;
+    color: var(--text-3);
+    padding: 1px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .pool-chip.active .count {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  .pool-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .pool-search {
+    flex: 1;
+    min-width: 240px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    gap: 8px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .pool-search:focus-within {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(107, 45, 168, 0.08);
+  }
+
+  .pool-search svg {
+    width: 16px; height: 16px;
+    color: var(--text-4);
+    flex-shrink: 0;
+  }
+
+  .pool-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 13.5px;
+    font-family: inherit;
+    background: transparent;
+    color: var(--text-1);
+    min-width: 0;
+  }
+
+  .pool-search input::placeholder { color: var(--text-4); }
+
+  .pool-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .pool-action:hover {
+    border-color: var(--border-strong);
+    background: #FAF9FD;
+  }
+
+  .pool-action svg { width: 14px; height: 14px; }
+
+  .pool-action.primary {
+    background: var(--brand);
+    color: #fff;
+    border-color: var(--brand);
+  }
+
+  .pool-action.primary:hover {
+    background: var(--brand-dark);
+    border-color: var(--brand-dark);
+  }
+
+  .pool-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .pool-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 1340px;
+  }
+
+  .pool-table thead th {
+    text-align: left;
+    padding: 13px 16px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    background: #FAFAFE;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .pool-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-2);
+    vertical-align: top;
+  }
+
+  .pool-table tbody tr {
+    transition: background 0.12s ease;
+  }
+
+  .pool-table tbody tr:hover {
+    background: #F7FAFE;
+  }
+
+  .pool-table tbody tr:last-child td { border-bottom: none; }
+
+  .pool-table .check-col {
+    width: 36px;
+    padding-right: 0;
+  }
+
+  .pool-table input[type="checkbox"] {
+    accent-color: var(--brand);
+    cursor: pointer;
+    width: 14px; height: 14px;
+  }
+
+  .candidate-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-pink) 100%);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 11px;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .candidate-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .candidate-info .name {
+    font-weight: 700;
+    color: var(--text-1);
+    font-size: 13.5px;
+    letter-spacing: -0.01em;
+  }
+
+  .candidate-info .sub {
+    font-size: 11.5px;
+    color: var(--text-4);
+  }
+
+  .status-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-1);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-dot.send    { background: #5B7CFA; }
+  .status-dot.wait    { background: #F39237; }
+  .status-dot.fail    { background: #E5446D; }
+  .status-dot.success { background: #2DAE7B; }
+  .status-dot.parked  { background: #9C9AB4; }
+
+  .status-meta {
+    font-size: 11.5px;
+    color: var(--text-4);
+    margin-top: 3px;
+  }
+
+  .stage-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .stage-pill.new        { background: #ECF1FF; color: #5B7CFA; }
+  .stage-pill.outreach   { background: #FFF1E1; color: #C97318; }
+  .stage-pill.reengage   { background: var(--brand-soft); color: var(--brand-dark); }
+  .stage-pill.evaluating { background: #E0F5FD; color: #1C8EE0; }
+  .stage-pill.agreed     { background: var(--direction-bg); color: var(--direction); }
+  .stage-pill.parked     { background: #E6EBF5; color: var(--text-3); }
+
+  .task-cell {
+    font-size: 12.5px;
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+
+  .contact-cell {
+    font-size: 12.5px;
+    color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .career-cell { min-width: 180px; }
+
+  .career-cell .role {
+    font-weight: 600;
+    color: var(--text-1);
+    font-size: 13px;
+    letter-spacing: -0.005em;
+  }
+
+  .career-cell .company {
+    font-size: 11.5px;
+    color: var(--text-4);
+    margin-top: 2px;
+  }
+
+  .years-cell {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-1);
+    font-weight: 500;
+  }
+
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 220px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .tag.skill {
+    background: var(--brand-soft);
+    color: var(--brand-dark);
+  }
+
+  .tag.outcome {
+    background: #FFF1EE;
+    color: var(--warn);
+    border: 1px solid #FCDDD2;
+  }
+
+  .tag.outcome.success {
+    background: var(--direction-bg);
+    color: var(--direction);
+    border-color: #C2E7D3;
+  }
+
+  .tag.outcome.hold {
+    background: #FFF8E1;
+    color: #B97A20;
+    border-color: #F2E2BD;
+  }
+
+  .note-cell {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.55;
+    max-width: 260px;
+  }
+
+  .note-pin {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 800;
+    margin-right: 6px;
+    letter-spacing: 0.04em;
+    vertical-align: middle;
+  }
+
+  .note-pin.recommend { background: var(--brand-pink-soft); color: var(--brand-pink); }
+  .note-pin.priority  { background: #FEF3E1; color: #B97A20; }
+  .note-pin.confirmed { background: var(--direction-bg); color: var(--direction); }
+
+  /* ============ CANDIDATE DETAIL PANEL ============ */
+  .candidate-row { cursor: pointer; }
+
+  .panel-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 19, 43, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .panel-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .candidate-panel {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 820px;
+    max-width: 94vw;
+    background: var(--surface);
+    z-index: 101;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.24, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -20px 0 48px rgba(20, 19, 43, 0.18);
+  }
+
+  .candidate-panel.open { transform: translateX(0); }
+
+  .cp-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #FAFAFE 0%, var(--surface) 100%);
+  }
+
+  .cp-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: var(--text-3);
+    transition: all 0.15s ease;
+  }
+
+  .cp-close:hover {
+    background: #EFF3FA;
+    color: var(--text-1);
+    border-color: var(--border-strong);
+  }
+
+  .cp-close svg { width: 16px; height: 16px; }
+
+  .cp-crumb {
+    font-size: 11px;
+    color: var(--text-4);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .cp-identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cp-avatar {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-pink) 100%);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    box-shadow: 0 6px 16px rgba(107, 45, 168, 0.20);
+    flex-shrink: 0;
+  }
+
+  .cp-name-block .name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-1);
+    margin-bottom: 4px;
+  }
+
+  .cp-name-block .role {
+    font-size: 13px;
+    color: var(--text-3);
+  }
+
+  .cp-applied {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--brand-soft);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: var(--brand-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cp-applied .key {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .cp-ats-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .cp-ats-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .cp-ats-btn:hover {
+    background: var(--brand-soft);
+    border-color: #C5DBF5;
+    color: var(--brand-dark);
+  }
+  .cp-ats-btn svg { flex-shrink: 0; }
+
+  .cp-body {
+    overflow-y: auto;
+    padding: 24px 28px 80px;
+    flex: 1;
+  }
+
+  .cp-section + .cp-section { margin-top: 30px; }
+
+  .cp-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cp-section-title::before {
+    content: "";
+    width: 3px; height: 13px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+
+  /* status card (replaces grade-letter card) */
+  .cp-status-card {
+    background: linear-gradient(135deg, #F0F5FC 0%, #F7FAFE 100%);
+    border: 1px solid #C5DBF5;
+    border-radius: 16px;
+    padding: 20px 22px;
+  }
+
+  .cp-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: -0.005em;
+    margin-bottom: 14px;
+  }
+
+  .cp-status-badge::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .cp-status-badge.priority {
+    background: linear-gradient(95deg, var(--brand) 0%, var(--brand-pink) 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(107, 45, 168, 0.22);
+  }
+  .cp-status-badge.priority::before { background: #fff; }
+
+  .cp-status-badge.confirmed { background: var(--direction); color: #fff; }
+  .cp-status-badge.confirmed::before { background: #fff; }
+
+  .cp-status-badge.monitor { background: #FEF3E1; color: #B97A20; }
+  .cp-status-badge.monitor::before { background: #B97A20; }
+
+  .cp-status-badge.hold { background: #FFF1EE; color: var(--warn); }
+  .cp-status-badge.hold::before { background: var(--warn); }
+
+  .cp-status-badge.long-term { background: #E6EBF5; color: var(--text-3); }
+  .cp-status-badge.long-term::before { background: var(--text-4); }
+
+  .cp-summary-line {
+    font-size: 14px;
+    color: var(--text-1);
+    line-height: 1.7;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .cp-meta-row {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed #BDD5F0;
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-3);
+    flex-wrap: wrap;
+  }
+
+  .cp-meta-row .item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cp-meta-row .key {
+    color: var(--text-4);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cp-meta-row .value {
+    color: var(--text-1);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* funnel */
+  .cp-funnel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(72px, 1fr));
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 14px;
+  }
+
+  .cp-stage {
+    text-align: center;
+    position: relative;
+  }
+
+  .cp-stage .icon {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    margin: 0 auto 8px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: 15px;
+  }
+
+  .cp-stage.pass .icon { background: var(--direction-bg); color: var(--direction); }
+  .cp-stage.fail .icon { background: var(--strength-bg); color: var(--strength); }
+  .cp-stage.hold .icon { background: #FFF8E1; color: #B97A20; }
+  .cp-stage.skip .icon { background: #E6EBF5; color: var(--text-4); }
+
+  .cp-stage .label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-2);
+    line-height: 1.3;
+  }
+
+  .cp-stage .score {
+    font-size: 10.5px;
+    color: var(--text-4);
+    margin-top: 3px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  /* interviewer scores */
+  .cp-interviewers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cp-interviewer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    background: #FAFAFE;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .cp-interviewer .iv-stage {
+    font-size: 10.5px;
+    color: var(--text-4);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .cp-interviewer .iv-person {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-1);
+    letter-spacing: -0.01em;
+  }
+
+  .cp-interviewer .iv-dept {
+    font-size: 11.5px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .cp-interviewer .iv-score {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .cp-interviewer .iv-score .num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: var(--brand-dark);
+    line-height: 1;
+  }
+
+  .cp-interviewer .iv-score .denom {
+    font-size: 11px;
+    color: var(--text-4);
+    font-weight: 600;
+  }
+
+  /* comments */
+  .cp-comments {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cp-comment {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brand);
+    border-radius: 4px 12px 12px 4px;
+    padding: 14px 18px;
+  }
+
+  .cp-comment .ch {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .cp-comment .who {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-1);
+  }
+
+  .cp-comment .who small {
+    font-weight: 500;
+    color: var(--text-3);
+    margin-left: 6px;
+    font-size: 11.5px;
+  }
+
+  .cp-comment .stage-mini {
+    font-size: 10.5px;
+    color: var(--brand-dark);
+    background: var(--brand-soft);
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .cp-comment .text {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+
   /* ===== 리드타임 분석 (전사 채용 데이터) ===== */
   /* ============ LEADTIME ANALYSIS MODULE ============ */
   .lt-root {
@@ -3553,15 +4593,687 @@ a { color: inherit; text-decoration: none; }
           <h1>인재풀 관리</h1>
           <p>이전 채용 프로세스에서 만난 우수 인재의 평가·연락처·탈락 사유를 보존하여, ABL생명의 후속 채용·TO 발생 시점에 빠르게 재활용하기 위한 데이터베이스입니다.</p>
         </div>
-        <div class="placeholder">
-          <div class="placeholder-icon"><i class="ti ti-users" style="font-size:28px"></i></div>
-          <h3>인재풀 관리 화면 (작업 예정 · 4단계)</h3>
-          <p>인재풀 후보 테이블, 필터·정렬, 후보 상세 패널, 일괄 액션이 이 자리에 들어옵니다.</p>
+        <div class="report-scope">
+      <!-- ===== 필터 (부문 + 상태 통합) ===== -->
+      <div class="pool-filters">
+        <span class="filter-label">부문</span>
+        <button class="pool-chip active" data-filter-type="dept" data-filter-value="all">전체</button>
+        <button class="pool-chip" data-filter-type="dept" data-filter-value="finance">금융·보험</button>
+        <button class="pool-chip" data-filter-type="dept" data-filter-value="design">디자인</button>
+        <button class="pool-chip" data-filter-type="dept" data-filter-value="support">경영 기획·지원</button>
+
+        <span class="filter-divider"></span>
+
+        <span class="filter-label">상태</span>
+        <button class="pool-chip active" data-filter-type="status" data-filter-value="all">전체 <span class="count">12</span></button>
+        <button class="pool-chip" data-filter-type="status" data-filter-value="new">
+          <span class="dot" style="background:#5B7CFA;"></span>신규 리드 <span class="count">3</span>
+        </button>
+        <button class="pool-chip" data-filter-type="status" data-filter-value="sent">
+          <span class="dot" style="background:#C97318;"></span>제안 발송 <span class="count">2</span>
+        </button>
+        <button class="pool-chip" data-filter-type="status" data-filter-value="contact">
+          <span class="dot" style="background:var(--brand);"></span>컨택 중 <span class="count">3</span>
+        </button>
+        <button class="pool-chip" data-filter-type="status" data-filter-value="accepted">
+          <span class="dot" style="background:var(--direction);"></span>제안 수락 <span class="count">1</span>
+        </button>
+        <button class="pool-chip" data-filter-type="status" data-filter-value="rejected">
+          <span class="dot" style="background:#9C9AB4;"></span>제안 거절 <span class="count">2</span>
+        </button>
+      </div>
+
+      <!-- ===== 검색 + 액션 ===== -->
+      <div class="pool-toolbar">
+        <div class="pool-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input id="pool-search-input" type="text" placeholder="이름 또는 이메일, 연락처로 검색" oninput="onPoolSearch(this.value)" />
+        </div>
+        <button class="pool-action" onclick="onPoolSearch(document.getElementById('pool-search-input').value)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          검색
+        </button>
+        <button class="pool-action" id="pool-sort-btn" onclick="togglePoolSort()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M6 12h12M10 18h4"/>
+          </svg>
+          <span id="pool-sort-label">최신순</span>
+        </button>
+        <button class="pool-action primary" onclick="openAddCandidate()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          후보자 추가
+        </button>
+      </div>
+
+      <!-- ===== 일괄 액션 바 (선택 시 표시) ===== -->
+      <div class="bulk-bar" id="bulk-bar">
+        <div class="bulk-left">
+          <span class="bulk-count-wrap"><b id="bulk-count">0</b>명 선택됨</span>
+          <button class="bulk-clear" onclick="clearBulkSelection()">선택 해제</button>
+        </div>
+        <div class="bulk-actions">
+          <button class="bulk-btn" onclick="bulkAction('email')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            일괄 메일 발송
+          </button>
+          <button class="bulk-btn" onclick="bulkAction('status')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            상태 변경
+          </button>
+          <button class="bulk-btn" onclick="bulkAction('report')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            리포트 발행
+          </button>
+          <button class="bulk-btn danger" onclick="bulkAction('discard')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            풀에서 폐기
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== 테이블 ===== -->
+      <div class="pool-table-wrap">
+        <table class="pool-table">
+          <thead>
+            <tr>
+              <th class="check-col"><input type="checkbox" /></th>
+              <th>후보자명</th>
+              <th>최근 연락 상태</th>
+              <th>단계</th>
+              <th>태스크</th>
+              <th>연락처</th>
+              <th>최근 경력</th>
+              <th>총 경력</th>
+              <th>태그</th>
+              <th>채용담당자 노트</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ROW 1 : 디지털 마케팅 / 최종면접 탈락 -->
+            <tr class="candidate-row" data-order="7" data-status="sent" data-dept="finance" data-candidate-id="c001" onclick="openCandidatePanel('c001')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">박</div>
+                  <div class="candidate-info">
+                    <div class="name">박지호</div>
+                    <div class="sub">park.jiho@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>후속 메일 발송</div>
+                <div class="status-meta">7일 전 · 미답변</div>
+              </td>
+              <td><span class="stage-pill outreach">후속 연락 중</span></td>
+              <td class="task-cell">후속 메일 보내기</td>
+              <td class="contact-cell">010-2871-3456</td>
+              <td class="career-cell">
+                <div class="role">디지털 마케팅 매니저</div>
+                <div class="company">S생명 · 마케팅실</div>
+              </td>
+              <td class="years-cell">6년 2개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">디지털마케팅</span>
+                  <span class="tag skill">퍼포먼스</span>
+                  <span class="tag skill">GA4</span>
+                  <span class="tag outcome">최종면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin recommend">추천</span>디지털본부 우선 추천. 25년 하반기 디지털 채용 시 1순위 재연락.
+              </td>
+            </tr>
+
+            <!-- ROW 2 : 보험계리 / 처우협의 결렬 -->
+            <tr class="candidate-row" data-order="120" data-status="rejected" data-dept="finance" data-candidate-id="c002" onclick="openCandidatePanel('c002')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">김</div>
+                  <div class="candidate-info">
+                    <div class="name">김서연</div>
+                    <div class="sub">kim.seoyeon@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot fail"></span>처우 협의 결렬</div>
+                <div class="status-meta">4개월 전</div>
+              </td>
+              <td><span class="stage-pill parked">장기 보존</span></td>
+              <td class="task-cell">커피챗 제안 메일 보내기</td>
+              <td class="contact-cell">010-4521-7890</td>
+              <td class="career-cell">
+                <div class="role">계리 시니어 매니저</div>
+                <div class="company">H생명 · 계리팀</div>
+              </td>
+              <td class="years-cell">8년 4개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">보험계리</span>
+                  <span class="tag skill">SAS</span>
+                  <span class="tag skill">IFRS17</span>
+                  <span class="tag skill">K-ICS</span>
+                  <span class="tag skill">리스크관리</span>
+                  <span class="tag outcome hold">처우협의 결렬</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin priority">우선</span>역량은 충분. 처우 조건만 맞으면 즉시 합류 가능 — 26년 채용 시 1순위.
+              </td>
+            </tr>
+
+            <!-- ROW 3 : 디지털 마케팅 신입 / 최종면접 탈락 (TO 부족) -->
+            <tr class="candidate-row" data-order="1" data-status="new" data-dept="finance" data-candidate-id="c003" onclick="openCandidatePanel('c003')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">이</div>
+                  <div class="candidate-info">
+                    <div class="name">이도윤</div>
+                    <div class="sub">lee.doyoon@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
+                <div class="status-meta">1일 전</div>
+              </td>
+              <td><span class="stage-pill new">신규</span></td>
+              <td class="task-cell">지원 제안 메일 보내기</td>
+              <td class="contact-cell">010-3398-1122</td>
+              <td class="career-cell">
+                <div class="role">디지털 마케팅 (인턴)</div>
+                <div class="company">스타트업 · 그로스팀</div>
+              </td>
+              <td class="years-cell">신입</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">디지털마케팅</span>
+                  <span class="tag skill">A/B 테스트</span>
+                  <span class="tag skill">SQL</span>
+                  <span class="tag outcome">최종면접 탈락 (TO)</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin recommend">추천</span>신입 평가 최상위권. 26년 상반기 신입 디지털 직군 1순위 후보.
+              </td>
+            </tr>
+
+            <!-- ROW 4 : 데이터 분석 / 2차 면접 탈락 -->
+            <tr class="candidate-row" data-order="14" data-status="contact" data-dept="finance" data-candidate-id="c004" onclick="openCandidatePanel('c004')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">정</div>
+                  <div class="candidate-info">
+                    <div class="name">정민재</div>
+                    <div class="sub">jung.minjae@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot wait"></span>답변 대기 중</div>
+                <div class="status-meta">14일 전</div>
+              </td>
+              <td><span class="stage-pill reengage">재접촉 진행</span></td>
+              <td class="task-cell">커피챗 제안 메일 보내기</td>
+              <td class="contact-cell">010-7745-2266</td>
+              <td class="career-cell">
+                <div class="role">데이터 분석가</div>
+                <div class="company">핀테크 스타트업</div>
+              </td>
+              <td class="years-cell">4년 11개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">SQL</span>
+                  <span class="tag skill">Python</span>
+                  <span class="tag skill">BI 대시보드</span>
+                  <span class="tag skill">코호트 분석</span>
+                  <span class="tag outcome">2차면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                데이터플랫폼팀 시니어 TO 발생 시 우선 검토. 신계약·보유계약 분석 경험은 없으나 모델링 역량 우수.
+              </td>
+            </tr>
+
+            <!-- ROW 5 : 상품기획 / 임원면접 통과 (TO 부족) -->
+            <tr class="candidate-row" data-order="3" data-status="contact" data-dept="finance" data-candidate-id="c005" onclick="openCandidatePanel('c005')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">윤</div>
+                  <div class="candidate-info">
+                    <div class="name">윤채린</div>
+                    <div class="sub">yoon.chaerin@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>처우 협의서 발송</div>
+                <div class="status-meta">3일 전</div>
+              </td>
+              <td><span class="stage-pill evaluating">재평가 진행</span></td>
+              <td class="task-cell">후속 메일 보내기</td>
+              <td class="contact-cell">010-2233-8899</td>
+              <td class="career-cell">
+                <div class="role">상품기획 책임</div>
+                <div class="company">K생명 · 상품개발</div>
+              </td>
+              <td class="years-cell">9년 1개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">보험상품 설계</span>
+                  <span class="tag skill">변액보험</span>
+                  <span class="tag skill">종신·CI</span>
+                  <span class="tag skill">채널 전략</span>
+                  <span class="tag outcome hold">임원면접 통과 (TO)</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin priority">우선</span>상품본부 시니어 포지션 합의 진행 중. 11월 합류 목표.
+              </td>
+            </tr>
+
+            <!-- ROW 6 : 백엔드 개발 / 실무면접 탈락 -->
+            <tr class="candidate-row" data-order="21" data-status="contact" data-dept="finance" data-candidate-id="c006" onclick="openCandidatePanel('c006')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">한</div>
+                  <div class="candidate-info">
+                    <div class="name">한태경</div>
+                    <div class="sub">han.taekyung@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>후속 메일 발송</div>
+                <div class="status-meta">21일 전 · 미답변</div>
+              </td>
+              <td><span class="stage-pill outreach">후속 연락 중</span></td>
+              <td class="task-cell">후속 메일 보내기</td>
+              <td class="contact-cell">010-5566-4422</td>
+              <td class="career-cell">
+                <div class="role">백엔드 개발자</div>
+                <div class="company">IT 서비스 · 결제팀</div>
+              </td>
+              <td class="years-cell">5년 7개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">Java</span>
+                  <span class="tag skill">Spring</span>
+                  <span class="tag skill">AWS</span>
+                  <span class="tag skill">MSA</span>
+                  <span class="tag outcome">실무면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                디지털전환본부 백엔드 TO 발생 시 검토. 보험 도메인 경험 없음 → 온보딩 비용 고려.
+              </td>
+            </tr>
+
+            <!-- ROW 7 : UX 리서치 / 실무면접 탈락 -->
+            <tr class="candidate-row" data-order="60" data-status="rejected" data-dept="design" data-candidate-id="c007" onclick="openCandidatePanel('c007')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">최</div>
+                  <div class="candidate-info">
+                    <div class="name">최유진</div>
+                    <div class="sub">choi.yujin@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot parked"></span>미답변</div>
+                <div class="status-meta">2개월 전</div>
+              </td>
+              <td><span class="stage-pill parked">장기 보존</span></td>
+              <td class="task-cell">지원 제안 메일 보내기</td>
+              <td class="contact-cell">010-8899-1144</td>
+              <td class="career-cell">
+                <div class="role">UX 리서처</div>
+                <div class="company">디자인 에이전시</div>
+              </td>
+              <td class="years-cell">3년 5개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">UX 리서치</span>
+                  <span class="tag skill">사용성 테스트</span>
+                  <span class="tag skill">심층 인터뷰</span>
+                  <span class="tag outcome">실무면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                디지털 채널(앱/웹) UX 개선 프로젝트 착수 시 검토 가능.
+              </td>
+            </tr>
+
+            <!-- ROW 8 : 언더라이팅 / 보류 후 합류 -->
+            <tr class="candidate-row" data-order="1" data-status="accepted" data-dept="finance" data-candidate-id="c008" onclick="openCandidatePanel('c008')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">강</div>
+                  <div class="candidate-info">
+                    <div class="name">강현우</div>
+                    <div class="sub">kang.hyunwoo@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot success"></span>합류 합의 완료</div>
+                <div class="status-meta">1일 전</div>
+              </td>
+              <td><span class="stage-pill agreed">합류 합의</span></td>
+              <td class="task-cell">전체 완료</td>
+              <td class="contact-cell">010-3344-7788</td>
+              <td class="career-cell">
+                <div class="role">언더라이터</div>
+                <div class="company">D보험 · 심사2팀</div>
+              </td>
+              <td class="years-cell">7년 6개월</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">언더라이팅</span>
+                  <span class="tag skill">리스크 평가</span>
+                  <span class="tag skill">보험 심사</span>
+                  <span class="tag outcome success">2차면접 통과 (보류 후 합류)</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin confirmed">확정</span>언더라이팅팀 합류 확정. 26년 1월 1일 입사 예정.
+              </td>
+            </tr>
+
+
+            <!-- c009: 디지털 IT 기획팀 (신입) -->
+            <tr class="candidate-row" data-order="2" data-status="new" data-dept="finance" data-candidate-id="c009" onclick="openCandidatePanel('c009')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">서</div>
+                  <div class="candidate-info">
+                    <div class="name">서지안</div>
+                    <div class="sub">seo.jian@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
+                <div class="status-meta">2일 전</div>
+              </td>
+              <td><span class="stage-pill new">신규</span></td>
+              <td class="task-cell">지원 제안 메일 보내기</td>
+              <td class="contact-cell">010-3344-5566</td>
+              <td class="career-cell">
+                <div class="role">IT 기획 (인턴)</div>
+                <div class="company">FISA 금융아카데미</div>
+              </td>
+              <td class="years-cell">신입</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">정보처리기사</span>
+                  <span class="tag skill">SQLD</span>
+                  <span class="tag skill">VBA 자동화</span>
+                  <span class="tag outcome">최종면접 탈락 (TO)</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin recommend">추천</span>금융 표준 아키텍처 모델 연구 우수. 차기 IT 직군 신입 채용 시 1순위 검토.
+              </td>
+            </tr>
+
+            <!-- c010: 상품본부 상품개발팀 (신입) -->
+            <tr class="candidate-row" data-order="6" data-status="sent" data-dept="finance" data-candidate-id="c010" onclick="openCandidatePanel('c010')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">조</div>
+                  <div class="candidate-info">
+                    <div class="name">조은별</div>
+                    <div class="sub">cho.eunbyul@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>지원 제안 메일 발송</div>
+                <div class="status-meta">6일 전 · 미답변</div>
+              </td>
+              <td><span class="stage-pill reengage">재접촉 진행</span></td>
+              <td class="task-cell">후속 메일 보내기</td>
+              <td class="contact-cell">010-7788-9911</td>
+              <td class="career-cell">
+                <div class="role">계리 학회 우수 학생</div>
+                <div class="company">A대학교 통계학과</div>
+              </td>
+              <td class="years-cell">신입</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">계리 1차</span>
+                  <span class="tag skill">통계 분석</span>
+                  <span class="tag skill">R</span>
+                  <span class="tag outcome">2차면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin priority">우선</span>계리 1차 합격, 학회 우수 발표 이력. 26년 하반기 신입 계리 채용 시 우선 컨택.
+              </td>
+            </tr>
+
+            <!-- c011: 마케팅 기획팀 (신입) -->
+            <tr class="candidate-row" data-order="1" data-status="new" data-dept="design" data-candidate-id="c011" onclick="openCandidatePanel('c011')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">노</div>
+                  <div class="candidate-info">
+                    <div class="name">노하준</div>
+                    <div class="sub">noh.hajun@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
+                <div class="status-meta">1일 전</div>
+              </td>
+              <td><span class="stage-pill new">신규</span></td>
+              <td class="task-cell">지원 제안 메일 보내기</td>
+              <td class="contact-cell">010-2244-6688</td>
+              <td class="career-cell">
+                <div class="role">디자인 공모전 수상</div>
+                <div class="company">B대학교 시각디자인학과</div>
+              </td>
+              <td class="years-cell">신입</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">GTQ 1급</span>
+                  <span class="tag skill">포토샵</span>
+                  <span class="tag skill">UX·UI</span>
+                  <span class="tag outcome">최종면접 탈락</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                금융권 공모전 입상 경력. 디지털 채널 배너 기획 즉시 투입 가능 수준.
+            <!-- c012: 총무지원팀 (경력) -->
+            <tr class="candidate-row" data-order="0" data-status="new" data-dept="support" data-candidate-id="c012" onclick="openCandidatePanel('c012')">
+              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+              <td>
+                <div class="candidate-cell">
+                  <div class="avatar">김</div>
+                  <div class="candidate-info">
+                    <div class="name">김나연</div>
+                    <div class="sub">kim.nayeon@email.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
+                <div class="status-meta">방금</div>
+              </td>
+              <td><span class="stage-pill new">신규</span></td>
+              <td class="task-cell">지원 제안 메일 보내기</td>
+              <td class="contact-cell">010-2255-6611</td>
+              <td class="career-cell">
+                <div class="role">총무·자산관리</div>
+                <div class="company">전 금융회사 · 총무팀</div>
+              </td>
+              <td class="years-cell">3년</td>
+              <td>
+                <div class="tag-group">
+                  <span class="tag skill">공인중개사</span>
+                  <span class="tag skill">총무·지원</span>
+                  <span class="tag skill">자산관리</span>
+                </div>
+              </td>
+              <td class="note-cell">
+                <span class="note-pin recommend">추천</span>금융회사 총무 경력 3년. 공인중개사 보유 → 사옥·부동산 자산관리 직무 적합. 총무지원팀 TO 발생 시 우선 검토.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="pool-empty" class="pool-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <p>조건에 맞는 후보자가 없습니다.</p>
+        </div>
+      </div>
+
+      <!-- 후보자 추가 모달 -->
+      <div class="add-modal-backdrop" id="add-modal-backdrop" onclick="closeAddCandidate()"></div>
+      <div class="add-modal" id="add-modal">
+        <div class="add-modal-head">
+          <h3>후보자 추가</h3>
+          <button onclick="closeAddCandidate()">✕</button>
+        </div>
+        <div class="add-modal-body">
+          <label>이름<input id="add-name" type="text" placeholder="예) 김민수" /></label>
+          <label>이메일<input id="add-email" type="text" placeholder="예) kim@email.com" /></label>
+          <label>연락처<input id="add-phone" type="text" placeholder="예) 010-0000-0000" /></label>
+          <label>최근 경력 (직무)<input id="add-role" type="text" placeholder="예) 상품개발 매니저" /></label>
+          <label>회사<input id="add-company" type="text" placeholder="예) A생명 · 상품개발팀" /></label>
+          <label>총 경력<input id="add-years" type="text" placeholder="예) 5년 2개월 / 신입" /></label>
+          <label>부문
+            <select id="add-dept">
+              <option value="finance">금융·보험</option>
+              <option value="design">디자인</option>
+              <option value="support">경영 기획·지원</option>
+            </select>
+          </label>
+          <label>스킬셋 (쉼표로 구분)<input id="add-skills" type="text" placeholder="예) Pricing, VBA, SQL" /></label>
+          <label>채용담당자 노트<input id="add-note" type="text" placeholder="예) 차기 채용 우선 검토" /></label>
+        </div>
+        <div class="add-modal-foot">
+          <button class="add-cancel" onclick="closeAddCandidate()">취소</button>
+          <button class="add-submit" onclick="submitAddCandidate()">추가</button>
+        </div>
+      </div>
         </div>
       </section>
 
     </div>
   </div>
+</div>
+
+<!-- ============ CANDIDATE DETAIL PANEL (인재풀 후보 상세) ============ -->
+<div class="report-scope" id="candidate-panel-scope">
+<div class="panel-backdrop" id="panel-backdrop" onclick="closeCandidatePanel()"></div>
+
+<aside class="candidate-panel" id="candidate-panel" role="dialog" aria-modal="true" aria-labelledby="cp-name">
+  <header class="cp-header">
+    <button class="cp-close" onclick="closeCandidatePanel()" aria-label="닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="cp-crumb">후보자 평가 데이터</div>
+    <div class="cp-identity">
+      <div class="cp-avatar" id="cp-avatar">박</div>
+      <div class="cp-name-block">
+        <div class="name" id="cp-name">박지호</div>
+        <div class="role" id="cp-role">디지털 마케팅 매니저 · 6년 2개월</div>
+      </div>
+    </div>
+    <div class="cp-applied">
+      <span class="key">지원 포지션</span>
+      <span id="cp-applied">2025 상반기 디지털 마케팅 시니어</span>
+    </div>
+    <div class="cp-ats-actions">
+      <button class="cp-ats-btn" onclick="showToast('ATS 지원서 원본 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        </svg>
+        지원서 원본 보기
+      </button>
+      <button class="cp-ats-btn" onclick="showToast('ATS 면접 녹취 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+        면접 녹취 보기
+      </button>
+    </div>
+  </header>
+
+  <div class="cp-body">
+
+    <section class="cp-section">
+      <h3 class="cp-section-title">종합 평가</h3>
+      <div class="cp-status-card">
+        <span class="cp-status-badge priority" id="cp-status">차기 우선 컨택</span>
+        <p class="cp-summary-line" id="cp-summary">디지털 채널 운영 경험이 풍부하고 캠페인 ROI를 데이터로 풀어내는 사고 체계가 안정적인 시니어 마케터.</p>
+        <div class="cp-meta-row">
+          <div class="item">
+            <span class="key">마지막 평가</span>
+            <span class="value" id="cp-eval-date">2025.05.21</span>
+          </div>
+          <div class="item">
+            <span class="key">평가자</span>
+            <span class="value" id="cp-evaluator-count">4명</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cp-section">
+      <h3 class="cp-section-title">평가 현황</h3>
+      <div class="cp-funnel" id="cp-funnel"></div>
+    </section>
+
+    <section class="cp-section">
+      <h3 class="cp-section-title">담당자 태스크 체크리스트</h3>
+      <div class="cp-checklist-wrap">
+        <div class="cp-checklist-head">
+          <span class="cp-checklist-label">진행 현황</span>
+          <span class="cp-checklist-progress-text" id="cp-checklist-progress">0/0</span>
+        </div>
+        <div id="cp-checklist" class="cp-checklist"></div>
+      </div>
+    </section>
+
+    <section class="cp-section">
+      <h3 class="cp-section-title">면접관별 평가 점수</h3>
+      <div class="cp-interviewers" id="cp-interviewers"></div>
+    </section>
+
+    <section class="cp-section">
+      <h3 class="cp-section-title">평가 코멘트</h3>
+      <div class="cp-comments" id="cp-comments"></div>
+    </section>
+
+  </div>
+</aside>
 </div>
 
 <div class="toast-wrap" id="toast-container"></div>
@@ -3626,9 +5338,714 @@ function showToast(message, type) {
   setTimeout(function() { toast.classList.remove('show'); setTimeout(function() { toast.remove(); }, 300); }, 2600);
 }
 
-// ESC로 모바일 사이드바 닫기
+// ===== 인재풀 관리 (TRM) =====
+  const candidateData = {
+
+    c001: {
+      avatar: '박', name: '박지호',
+      role: '디지털 마케팅 매니저 · 6년 2개월',
+      appliedFor: '2025 상반기 디지털 마케팅 시니어',
+      overall: {
+        status: 'priority',
+        statusLabel: '차기 우선 컨택',
+        summary: '디지털 채널 운영 경험이 풍부하고 캠페인 ROI를 데이터로 풀어내는 사고 체계가 안정적인 시니어 마케터. 보험 도메인 학습 사이클만 별도 마련된다면 즉시 활용 가능.',
+        lastEvalDate: '2025.05.21'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 88 },
+        { label: '역량검사',   result: 'pass', score: 82 },
+        { label: '1차 면접', result: 'pass', score: 85 },
+        { label: '2차 면접', result: 'pass', score: 83 },
+        { label: '임원 면접', result: 'fail', score: 76 }
+      ],
+      interviewers: [
+        { stage: '서류 평가',   name: '이수민 책임', dept: '인재경영실 · 채용파트',  score: 88 },
+        { stage: '1차 실무',   name: '김재현 팀장', dept: '디지털마케팅팀',         score: 85 },
+        { stage: '2차 실무',   name: '박상우 본부장', dept: '디지털본부',           score: 83 },
+        { stage: '임원 면접',  name: '정혜진 상무', dept: '마케팅총괄',            score: 76 }
+      ],
+      comments: [
+        { who: '김재현 팀장', dept: '디지털마케팅팀', stage: '1차 실무', text: '디지털 채널 운영 경험이 풍부하고, 캠페인 ROI를 데이터로 풀어내는 사고 체계가 안정적임. 자사 캠페인 사례를 수치로 명확히 설명함.' },
+        { who: '박상우 본부장', dept: '디지털본부', stage: '2차 실무', text: '최근 3년간 신상품 캠페인 성과가 인상적. 단, 보험 도메인 학습 사이클은 별도 온보딩이 필요하며 적응 의지는 충분히 확인됨.' },
+        { who: '정혜진 상무', dept: '마케팅총괄', stage: '임원 면접', text: '장기 비전과 ABL의 디지털 전환 방향성 간 fit에 대한 추가 검증이 필요. 본 라운드는 보류하나, 차기 디지털 직군 채용 시 우선 후보로 추천.' }
+      ]
+    },
+
+    c002: {
+      avatar: '김', name: '김서연',
+      role: '계리 시니어 매니저 · 8년 4개월',
+      appliedFor: '2024 하반기 계리 시니어 (IFRS17 전담)',
+      overall: {
+        status: 'priority',
+        statusLabel: '처우 재협의 시 즉시 합류',
+        summary: 'IFRS17 전환 프로젝트 실무 리딩 경험을 보유한 8년차 계리 시니어. K-ICS·리스크 모델링까지 즉시 핵심 인력으로 활용 가능한 전문성.',
+        lastEvalDate: '2024.10.18'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 92 },
+        { label: '역량검사',   result: 'pass', score: 85 },
+        { label: '1차 면접', result: 'pass', score: 88 },
+        { label: '2차 면접', result: 'pass', score: 91 },
+        { label: '임원 면접', result: 'pass', score: 87 },
+        { label: '처우 협의', result: 'hold', score: null }
+      ],
+      interviewers: [
+        { stage: '서류 평가',  name: '박상호 책임', dept: '인재경영실 · 채용파트',     score: 92 },
+        { stage: '1차 실무',  name: '윤미경 팀장', dept: '계리팀 · IFRS17 PMO',     score: 88 },
+        { stage: '2차 실무',  name: '김도훈 본부장', dept: '계리·리스크본부',          score: 91 },
+        { stage: '임원 면접', name: '정현우 전무', dept: '재무총괄',                score: 87 }
+      ],
+      comments: [
+        { who: '윤미경 팀장', dept: '계리팀', stage: '1차 실무', text: 'IFRS17 전환 프로젝트 실무 리딩 경험이 가장 큰 차별점. K-ICS 자본요구량 산출 로직에 대한 이해도가 매우 높음.' },
+        { who: '김도훈 본부장', dept: '계리·리스크본부', stage: '2차 실무', text: '리스크 모델링 역량과 커뮤니케이션 모두 시니어급 이상. 본부 합류 시 즉시 핵심 인력으로 활용 가능.' },
+        { who: '정현우 전무', dept: '재무총괄', stage: '임원 면접', text: '전반적 역량은 의심의 여지가 없음. 처우 조건만 합의되면 즉시 합류 가능 — 26년 채용 시 1순위 재오퍼 권장.' }
+      ]
+    },
+
+    c003: {
+      avatar: '이', name: '이도윤',
+      role: '디지털 마케팅 (신입) · 인턴 1년',
+      appliedFor: '2026 상반기 신입 공채 · 디지털 마케팅',
+      overall: {
+        status: 'priority',
+        statusLabel: '신규 TO 시 우선 합류',
+        summary: 'GA4·A/B 테스트 결과를 자기 언어로 정확히 설명하는 신입 평가 최상위권. 인턴 1년의 실전 분석 경험이 신입 평균을 크게 상회.',
+        lastEvalDate: '2026.03.12'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 85 },
+        { label: '역량검사',   result: 'pass', score: 83 },
+        { label: '1차 면접', result: 'pass', score: 88 },
+        { label: '임원 면접', result: 'hold', score: null }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '이수민 책임', dept: '인재경영실 · 채용파트', score: 85 },
+        { stage: '실무 면접', name: '김재현 팀장', dept: '디지털마케팅팀',       score: 88 },
+        { stage: '임원 면접', name: '박상우 본부장', dept: '디지털본부',         score: 86 }
+      ],
+      comments: [
+        { who: '김재현 팀장', dept: '디지털마케팅팀', stage: '실무 면접', text: '인턴 경험에서 GA4·A/B 테스트 결과를 자기 언어로 명확히 설명. 신입 지원자 평균을 크게 상회하는 분석력.' },
+        { who: '박상우 본부장', dept: '디지털본부', stage: '임원 면접', text: '신입 평가 최상위권. 다만 본 라운드 TO 부족으로 보류. 26년 하반기 신입 디지털 직군 추가 채용 시 1순위 재컨택.' }
+      ]
+    },
+
+    c004: {
+      avatar: '정', name: '정민재',
+      role: '데이터 분석가 · 4년 11개월',
+      appliedFor: '2025 상반기 데이터플랫폼팀 시니어',
+      overall: {
+        status: 'monitor',
+        statusLabel: '모니터링',
+        summary: 'Python·SQL 기반의 모델링 역량이 안정적인 데이터 분석가. 단, 신계약·보유계약 등 보험 도메인 데이터 구조 학습이 추가로 필요.',
+        lastEvalDate: '2025.04.08'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 82 },
+        { label: '역량검사',   result: 'pass', score: 80 },
+        { label: '1차 면접', result: 'pass', score: 81 },
+        { label: '2차 면접', result: 'fail', score: 71 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '박상호 책임', dept: '인재경영실 · 채용파트', score: 82 },
+        { stage: '1차 실무', name: '한지원 팀장', dept: '데이터플랫폼팀',        score: 81 },
+        { stage: '2차 실무', name: '임승현 본부장', dept: 'IT·디지털전환본부',    score: 71 }
+      ],
+      comments: [
+        { who: '한지원 팀장', dept: '데이터플랫폼팀', stage: '1차 실무', text: 'Python·SQL 등 코어 기술 역량은 안정적. 코호트 분석 케이스 스터디에서 모델링 사고 흐름이 잘 드러남.' },
+        { who: '임승현 본부장', dept: 'IT·디지털전환본부', stage: '2차 실무', text: '기술 역량은 충분하나, 신계약·보유계약 등 보험 데이터 구조에 대한 사전 학습이 부족. 시니어 포지션 기준에는 다소 미달.' }
+      ]
+    },
+
+    c005: {
+      avatar: '윤', name: '윤채린',
+      role: '상품기획 책임 · 9년 1개월',
+      appliedFor: '2025 하반기 상품본부 책임 (변액·종신)',
+      overall: {
+        status: 'confirmed',
+        statusLabel: '합류 협의 마무리 중',
+        summary: '변액·종신 시장 분석과 채널별 상품 전략을 KPI 단위까지 설계 가능한 9년차 책임. 합류 시 신상품 개발 사이클 단축이 기대.',
+        lastEvalDate: '2025.09.30'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 93 },
+        { label: '역량검사',   result: 'pass', score: 88 },
+        { label: '1차 면접', result: 'pass', score: 90 },
+        { label: '2차 면접', result: 'pass', score: 92 },
+        { label: '임원 면접', result: 'pass', score: 89 },
+        { label: '처우 협의', result: 'pass', score: null }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '이수민 책임', dept: '인재경영실 · 채용파트', score: 93 },
+        { stage: '1차 실무', name: '송지호 팀장', dept: '상품기획팀',           score: 90 },
+        { stage: '2차 실무', name: '강민철 본부장', dept: '상품본부',           score: 92 },
+        { stage: '임원 면접', name: '최진영 상무', dept: '상품총괄',            score: 89 }
+      ],
+      comments: [
+        { who: '송지호 팀장', dept: '상품기획팀', stage: '1차 실무', text: '변액보험 시장 분석과 채널별 상품 포지셔닝 전략을 구체적인 KPI 단위까지 설명. 즉시 책임급 업무 수행 가능.' },
+        { who: '강민철 본부장', dept: '상품본부', stage: '2차 실무', text: '경쟁사 종신·CI 상품 분석이 매우 정밀. 합류 시 신상품 개발 사이클을 2개월 이상 단축시킬 수 있을 것으로 판단.' },
+        { who: '최진영 상무', dept: '상품총괄', stage: '임원 면접', text: '본부 시니어 포지션 합의 완료. 11월 합류 목표로 처우 협의 진행 중. 합류 확정 시 본부 핵심 인력으로 즉시 활용.' }
+      ]
+    },
+
+    c006: {
+      avatar: '한', name: '한태경',
+      role: '백엔드 개발자 · 5년 7개월',
+      appliedFor: '2025 상반기 디지털전환본부 백엔드',
+      overall: {
+        status: 'long-term',
+        statusLabel: '장기 보존',
+        summary: 'Java·Spring·MSA 기술 스택이 안정적인 백엔드 개발자. 핀테크·보험 도메인 경험 보강 후 재검토 권장.',
+        lastEvalDate: '2025.05.07'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 80 },
+        { label: '역량검사',   result: 'pass', score: 78 },
+        { label: '1차 면접', result: 'fail', score: 64 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '박상호 책임', dept: '인재경영실 · 채용파트', score: 80 },
+        { stage: '실무 면접', name: '임승현 본부장', dept: 'IT·디지털전환본부',    score: 64 }
+      ],
+      comments: [
+        { who: '임승현 본부장', dept: 'IT·디지털전환본부', stage: '실무 면접', text: 'Java·Spring·MSA 기술 스택은 안정적이나, 핀테크/보험 도메인 경험이 전무하여 온보딩 비용이 큼. 차기 백엔드 TO 발생 시 검토 가능.' }
+      ]
+    },
+
+    c007: {
+      avatar: '최', name: '최유진',
+      role: 'UX 리서처 · 3년 5개월',
+      appliedFor: '2024 하반기 디지털 채널 UX 리서처',
+      overall: {
+        status: 'monitor',
+        statusLabel: '프로젝트 착수 시 재컨택',
+        summary: 'UX 리서치 방법론과 사용성 테스트 설계 역량이 우수한 리서처. 디지털 채널 개편 프로젝트 착수 시점에 재컨택 적합.',
+        lastEvalDate: '2024.11.22'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 83 },
+        { label: '역량검사',   result: 'pass', score: 81 },
+        { label: '1차 면접', result: 'fail', score: 70 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '이수민 책임', dept: '인재경영실 · 채용파트', score: 83 },
+        { stage: '실무 면접', name: '한지원 팀장', dept: '데이터플랫폼팀',        score: 70 }
+      ],
+      comments: [
+        { who: '한지원 팀장', dept: '데이터플랫폼팀', stage: '실무 면접', text: 'UX 리서치 방법론과 사용성 테스트 설계 역량은 우수. 다만 본 채용 시점의 우선순위와 직무 fit이 다소 어긋남. 디지털 채널(앱/웹) 개편 프로젝트 착수 시 재검토 권장.' }
+      ]
+    },
+
+    c008: {
+      avatar: '강', name: '강현우',
+      role: '언더라이터 (시니어) · 7년 6개월',
+      appliedFor: '2025 하반기 언더라이팅팀 시니어',
+      overall: {
+        status: 'confirmed',
+        statusLabel: '26.01.01 입사 확정',
+        summary: '생보·손보 양쪽 7년 심사 경험을 보유한 시니어. 리스크 평가 기준 설계까지 가능한 즉시 투입형 인력.',
+        lastEvalDate: '2025.10.14'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 94 },
+        { label: '역량검사',   result: 'pass', score: 90 },
+        { label: '1차 면접', result: 'pass', score: 89 },
+        { label: '2차 면접', result: 'pass', score: 92 },
+        { label: '임원 면접', result: 'pass', score: 90 },
+        { label: '처우 협의', result: 'pass', score: null }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '박상호 책임', dept: '인재경영실 · 채용파트', score: 94 },
+        { stage: '1차 실무', name: '이정민 팀장', dept: '언더라이팅팀',          score: 89 },
+        { stage: '2차 실무', name: '김도훈 본부장', dept: '계리·리스크본부',      score: 92 },
+        { stage: '임원 면접', name: '정현우 전무', dept: '재무총괄',             score: 90 }
+      ],
+      comments: [
+        { who: '이정민 팀장', dept: '언더라이팅팀', stage: '1차 실무', text: '7년간 생보·손보 양쪽의 심사 경험을 모두 보유. 고위험군 심사 사례 설명이 매우 구체적이며 실전 즉시 투입 가능.' },
+        { who: '김도훈 본부장', dept: '계리·리스크본부', stage: '2차 실무', text: '리스크 평가 기준 설계 경험이 ABL 심사2팀 운영에 즉시 도움이 됨. 시니어 매니저급 역할 즉시 수행 가능.' },
+        { who: '정현우 전무', dept: '재무총괄', stage: '임원 면접', text: '인성·역량·도메인 모두 합격선 이상. 26년 1월 1일 합류 확정. 합류 후 첫 분기는 심사2팀 운영 정상화에 우선 투입 예정.' }
+      ]
+    },
+
+    c009: {
+      avatar: '서', name: '서지안',
+      role: 'IT 기획 (인턴) · FISA 금융아카데미',
+      appliedFor: '2026 상반기 신입 공채 · 디지털 IT 기획',
+      overall: {
+        status: 'priority',
+        statusLabel: '차기 신입 채용 우선 컨택',
+        summary: '금융 표준 아키텍처 모델 연구 경험을 보유한 신입 평가 최상위권. 정보처리기사·SQLD 자격까지 갖춰 즉시 실무 투입 가능.',
+        lastEvalDate: '2026.04.18'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 86 },
+        { label: '역량검사',   result: 'pass', score: 84 },
+        { label: '1차 면접', result: 'pass', score: 87 },
+        { label: '임원 면접', result: 'hold', score: null }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '이수민 책임', dept: '인재경영실 · 채용파트', score: 86 },
+        { stage: '실무 면접', name: '김재현 팀장', dept: '디지털 IT 기획팀',       score: 87 },
+        { stage: '임원 면접', name: '임승현 본부장', dept: 'IT·디지털전환본부',    score: 85 }
+      ],
+      comments: [
+        { who: '이수민 책임', dept: '인재경영실', stage: '서류 평가', text: '금융 표준 아키텍처 학회 발표 이력이 신입 지원자 평균을 크게 상회. 정보처리기사·SQLD 자격까지 보유한 즉시 투입형 신입.' },
+        { who: '김재현 팀장', dept: '디지털 IT 기획팀', stage: '실무 면접', text: '인턴 경험에서 차세대 아키텍처 표준 학습 결과를 자기 언어로 명확히 설명. 코드 리뷰 케이스에서도 안정적인 사고 흐름 확인.' },
+        { who: '임승현 본부장', dept: 'IT·디지털전환본부', stage: '임원 면접', text: '신입 평가 최상위권. 본 라운드 TO 부족으로 보류하나 26년 하반기 신입 IT 채용 시 1순위 재컨택 권장.' }
+      ]
+    },
+
+    c010: {
+      avatar: '조', name: '조은별',
+      role: '계리 학회 우수 학생 · A대학교 통계학과',
+      appliedFor: '2026 상반기 신입 공채 · 상품개발팀',
+      overall: {
+        status: 'priority',
+        statusLabel: '하반기 신입 채용 우선 컨택',
+        summary: '계리 1차 합격, 학회 우수 발표 이력 보유. 통계·R 활용 역량은 우수하나 면접 표현력에서 추가 성장 여지가 관찰됨.',
+        lastEvalDate: '2026.04.12'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 83 },
+        { label: '역량검사',   result: 'pass', score: 79 },
+        { label: '1차 면접', result: 'pass', score: 80 },
+        { label: '2차 면접', result: 'fail', score: 70 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '박상호 책임', dept: '인재경영실 · 채용파트', score: 83 },
+        { stage: '1차 실무', name: '윤미경 팀장', dept: '계리팀',                score: 80 },
+        { stage: '2차 실무', name: '김도훈 본부장', dept: '계리·리스크본부',      score: 70 }
+      ],
+      comments: [
+        { who: '박상호 책임', dept: '인재경영실', stage: '서류 평가', text: '계리 1차 합격에 학회 우수 발표 이력까지 보유. 통계·R 등 분석 도구 활용도가 신입 평균을 상회.' },
+        { who: '윤미경 팀장', dept: '계리팀', stage: '1차 실무', text: '통계 모델링 케이스 스터디에서 사고의 깊이를 확인. 다만 면접 답변의 구조화는 추가 학습 필요.' },
+        { who: '김도훈 본부장', dept: '계리·리스크본부', stage: '2차 실무', text: '잠재력은 우수하나 본 라운드 평가 기준에는 다소 미달. 계리 2차 응시 후 26년 하반기 재지원 권장.' }
+      ]
+    },
+
+    c011: {
+      avatar: '노', name: '노하준',
+      role: '디자인 공모전 수상 · B대학교 시각디자인학과',
+      appliedFor: '2026 상반기 신입 공채 · 마케팅 기획팀',
+      overall: {
+        status: 'monitor',
+        statusLabel: '하반기 마케팅 채용 시 검토',
+        summary: '금융권 디자인 공모전 입상 이력 보유. GTQ 1급·UX/UI 역량까지 갖춘 신입이나, 보험 도메인 학습은 추가로 필요.',
+        lastEvalDate: '2026.04.05'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 84 },
+        { label: '역량검사',   result: 'pass', score: 80 },
+        { label: '1차 면접', result: 'pass', score: 82 },
+        { label: '임원 면접', result: 'fail', score: 72 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '이수민 책임', dept: '인재경영실 · 채용파트', score: 84 },
+        { stage: '실무 면접', name: '박상우 본부장', dept: '디지털본부',          score: 82 },
+        { stage: '임원 면접', name: '정혜진 상무', dept: '마케팅총괄',           score: 72 }
+      ],
+      comments: [
+        { who: '이수민 책임', dept: '인재경영실', stage: '서류 평가', text: '금융권 공모전 입상 포트폴리오 인상적. GTQ 1급·UX 툴 활용 역량까지 갖춘 신입 디자이너로 평가.' },
+        { who: '박상우 본부장', dept: '디지털본부', stage: '실무 면접', text: '디지털 채널 배너 기획 케이스에서 안정적인 디자인 사고 흐름 확인. 단, 보험 상품 컨텍스트 이해는 추가 학습 필요.' },
+        { who: '정혜진 상무', dept: '마케팅총괄', stage: '임원 면접', text: '디자인 역량은 충분하나 ABL 브랜드 방향성 이해도가 다소 부족. 26년 하반기 마케팅 신입 채용 시 재검토 가능.' }
+      ]
+    },
+    c012: {
+      avatar: '김', name: '김나연',
+      role: '총무·자산관리 · 전 금융회사 총무팀 3년',
+      appliedFor: '인재풀 직접 등록 · 경영 기획·지원 (총무지원팀)',
+      overall: {
+        status: 'monitor',
+        statusLabel: '총무지원팀 TO 발생 시 검토',
+        summary: '금융회사 총무 경력 3년. 공인중개사 자격 보유로 사옥·부동산 등 자산관리 직무 적합도가 높음. 정식 평가 이력은 없는 풀 신규 등록 후보.',
+        lastEvalDate: '미실시'
+      },
+      funnel: [
+        { label: '서류',     result: 'skip', score: null },
+        { label: '역량검사',   result: 'skip', score: null },
+        { label: '1차 면접', result: 'skip', score: null },
+        { label: '임원 면접', result: 'skip', score: null }
+      ],
+      interviewers: [],
+      comments: [
+        { who: '인재경영실', dept: '채용파트', stage: '풀 등록', text: '금융회사 총무 3년 + 공인중개사 보유. 총무지원팀 자산관리 직무 수요 발생 시 우선 컨택 대상으로 등록.' }
+      ]
+    }
+
+  };
+
+  // ============ 패널 열기/닫기 ============
+  const ICON_PASS = '✓';
+  const ICON_FAIL = '✕';
+  const ICON_HOLD = '◐';
+  const ICON_SKIP = '·';
+
+  function stageIcon(result) {
+    return result === 'pass' ? ICON_PASS
+         : result === 'fail' ? ICON_FAIL
+         : result === 'hold' ? ICON_HOLD
+         : ICON_SKIP;
+  }
+
+  function renderFunnel(funnel) {
+    return funnel.map(s => `
+      <div class="cp-stage ${s.result}">
+        <div class="icon">${stageIcon(s.result)}</div>
+        <div class="label">${s.label}</div>
+        <div class="score">${s.score != null ? s.score : '—'}</div>
+      </div>
+    `).join('');
+  }
+
+  function ivDimensions(stage, score) {
+    let labels;
+    if (stage.includes('서류'))      labels = ['직무 연관 경력', '핵심 역량 보유도', '지원 동기·적합성'];
+    else if (stage.includes('임원')) labels = ['조직문화 적합성', '리더십·성장 잠재력', '중장기 기여 기대'];
+    else                              labels = ['직무 전문성', '문제 해결·실행력', '커뮤니케이션·협업'];
+    const deltas = [3, -2, -1];
+    return labels.map((l, i) => ({ label: l, score: Math.max(45, Math.min(100, score + deltas[i])) }));
+  }
+  function renderInterviewers(interviewers, comments) {
+    comments = comments || [];
+    return interviewers.map(iv => {
+      const cm = comments.find(c => c.who === iv.name);
+      const bars = ivDimensions(iv.stage, iv.score).map(d => `
+        <div class="iv-dim">
+          <span class="iv-dim-label">${d.label}</span>
+          <span class="iv-dim-bar"><i style="width:${d.score}%"></i></span>
+          <span class="iv-dim-score">${d.score}</span>
+        </div>`).join('');
+      const opinion = cm
+        ? `<div class="iv-opinion">“${cm.text}”</div>`
+        : `<div class="iv-opinion muted">이 단계의 상세 평가 코멘트는 기록되지 않았습니다.</div>`;
+      return `
+      <div class="cp-interviewer" onclick="toggleInterviewer(this)">
+        <div>
+          <div class="iv-stage">${iv.stage}</div>
+          <div class="iv-person">${iv.name}</div>
+          <div class="iv-dept">${iv.dept}</div>
+        </div>
+        <div class="iv-right">
+          <div class="iv-score"><span class="num">${iv.score}</span><span class="denom">/100</span></div>
+          <span class="iv-chevron">⌄</span>
+        </div>
+        <div class="iv-detail">
+          <div class="iv-detail-head">세부 평가 항목</div>
+          ${bars}
+          ${opinion}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  function toggleInterviewer(el) { el.classList.toggle('expanded'); }
+
+  function renderComments(comments) {
+    return comments.map(c => `
+      <div class="cp-comment">
+        <div class="ch">
+          <div class="who">${c.who}<small>${c.dept || ''}</small></div>
+          <span class="stage-mini">${c.stage}</span>
+        </div>
+        <div class="text">"${c.text}"</div>
+      </div>
+    `).join('');
+  }
+
+  function openCandidatePanel(id) {
+    const c = candidateData[id];
+    if (!c) return;
+
+    document.getElementById('cp-avatar').textContent = c.avatar;
+    document.getElementById('cp-name').textContent = c.name;
+    document.getElementById('cp-role').textContent = c.role;
+    document.getElementById('cp-applied').textContent = c.appliedFor;
+
+    // status card (replaces grade/score)
+    const statusEl = document.getElementById('cp-status');
+    statusEl.textContent = c.overall.statusLabel;
+    statusEl.className = 'cp-status-badge ' + c.overall.status;
+    document.getElementById('cp-summary').textContent = c.overall.summary;
+    document.getElementById('cp-eval-date').textContent = c.overall.lastEvalDate;
+    document.getElementById('cp-evaluator-count').textContent = c.interviewers.length + '명';
+
+    document.getElementById('cp-funnel').innerHTML = renderFunnel(c.funnel);
+    document.getElementById('cp-interviewers').innerHTML = renderInterviewers(c.interviewers, c.comments);
+    document.getElementById('cp-comments').innerHTML = renderComments(c.comments);
+    renderChecklist(id);
+
+    document.getElementById('candidate-panel').classList.add('open');
+    document.getElementById('panel-backdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.cp-body').scrollTop = 0;
+  }
+
+  function closeCandidatePanel() {
+    document.getElementById('candidate-panel').classList.remove('open');
+    document.getElementById('panel-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ============ 인재풀 필터링 + 검색 + 일괄 액션 ============
+  const poolFilter = { status: 'all', dept: 'all', search: '' };
+
+  function applyPoolFilter() {
+    const q = poolFilter.search.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('.candidate-row').forEach(row => {
+      const matchStatus = poolFilter.status === 'all' || row.dataset.status === poolFilter.status;
+      const matchDept   = poolFilter.dept   === 'all' || row.dataset.dept   === poolFilter.dept;
+      const matchSearch = !q || row.textContent.toLowerCase().includes(q);
+      const show = matchStatus && matchDept && matchSearch;
+      row.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    // empty state
+    const empty = document.getElementById('pool-empty');
+    if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  function onPoolSearch(val) {
+    poolFilter.search = val;
+    applyPoolFilter();
+  }
+
+  // 정렬 (최신순 ↔ 오래된순) — data-order(경과일, 작을수록 최신) 기준
+  let poolSortNewest = true;
+  function sortPool() {
+    const tbody = document.querySelector('#view-pool tbody');
+    if (!tbody) return;
+    const rows = Array.from(tbody.querySelectorAll('.candidate-row'));
+    rows.sort((a, b) => {
+      const x = +a.dataset.order || 0, y = +b.dataset.order || 0;
+      return poolSortNewest ? x - y : y - x;
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+  function togglePoolSort() {
+    poolSortNewest = !poolSortNewest;
+    document.getElementById('pool-sort-label').textContent = poolSortNewest ? '최신순' : '오래된순';
+    sortPool();
+  }
+  sortPool(); // 로드 시 최신순 정렬 적용
+
+  // 후보자 추가 모달
+  function openAddCandidate() {
+    document.getElementById('add-modal').classList.add('open');
+    document.getElementById('add-modal-backdrop').classList.add('open');
+  }
+  function closeAddCandidate() {
+    document.getElementById('add-modal').classList.remove('open');
+    document.getElementById('add-modal-backdrop').classList.remove('open');
+  }
+  function submitAddCandidate() {
+    const g = id => document.getElementById(id).value.trim();
+    const name = g('add-name');
+    if (!name) { showToast('이름을 입력해 주세요', 'error'); return; }
+    const dept = document.getElementById('add-dept').value;
+    const skills = g('add-skills').split(',').map(s => s.trim()).filter(Boolean);
+    const skillTags = skills.map(s => `<span class="tag skill">${s}</span>`).join('');
+    const tbody = document.querySelector('#view-pool tbody');
+    const tr = document.createElement('tr');
+    tr.className = 'candidate-row';
+    tr.dataset.status = 'new';
+    tr.dataset.dept = dept;
+    tr.dataset.order = '0'; // 방금 등록 = 최신
+    tr.innerHTML = `
+      <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
+      <td><div class="candidate-cell"><div class="avatar">${name.charAt(0)}</div>
+        <div class="candidate-info"><div class="name">${name}</div><div class="sub">${g('add-email')}</div></div></div></td>
+      <td><div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div><div class="status-meta">방금</div></td>
+      <td><span class="stage-pill new">신규</span></td>
+      <td class="task-cell">초기 컨택 준비</td>
+      <td class="contact-cell">${g('add-phone')}</td>
+      <td class="career-cell"><div class="role">${g('add-role')}</div><div class="company">${g('add-company')}</div></td>
+      <td class="years-cell">${g('add-years')}</td>
+      <td><div class="tag-group">${skillTags}</div></td>
+      <td class="note-cell">${g('add-note')}</td>
+    `;
+    tbody.insertBefore(tr, tbody.firstChild);
+    sortPool();
+    closeAddCandidate();
+    ['add-name','add-email','add-phone','add-role','add-company','add-years','add-skills','add-note'].forEach(id=>document.getElementById(id).value='');
+    showToast(name + ' 님이 인재풀에 추가되었습니다');
+  }
+
+  document.querySelectorAll('.pool-chip[data-filter-type]').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const type = chip.dataset.filterType;
+      const value = chip.dataset.filterValue;
+      document.querySelectorAll(`.pool-chip[data-filter-type="${type}"]`).forEach(c => {
+        c.classList.toggle('active', c === chip);
+      });
+      poolFilter[type] = value;
+      applyPoolFilter();
+    });
+  });
+
+  // ===== 체크박스 일괄 액션 =====
+  function updateBulkBar() {
+    const checked = document.querySelectorAll('.candidate-row input[type="checkbox"]:checked');
+    const bar = document.getElementById('bulk-bar');
+    const count = document.getElementById('bulk-count');
+    if (!bar) return;
+    if (checked.length > 0) {
+      bar.classList.add('show');
+      count.textContent = checked.length;
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  function clearBulkSelection() {
+    document.querySelectorAll('.candidate-row input[type="checkbox"]:checked').forEach(cb => cb.checked = false);
+    updateBulkBar();
+  }
+
+  function bulkAction(action) {
+    const checked = document.querySelectorAll('.candidate-row input[type="checkbox"]:checked');
+    const names = Array.from(checked).map(cb => cb.closest('tr').querySelector('.name')?.textContent).filter(Boolean);
+    const messages = {
+      email:   `${names.length}명에게 일괄 메일을 발송합니다.\n\n대상: ${names.join(', ')}`,
+      status:  `${names.length}명의 상태를 일괄 변경합니다.\n\n대상: ${names.join(', ')}`,
+      report:  `${names.length}명의 평가 리포트를 발행합니다.\n\n대상: ${names.join(', ')}`,
+      discard: `${names.length}명을 인재풀에서 폐기합니다.\n\n대상: ${names.join(', ')}\n\n폐기된 후보자는 복구할 수 없습니다.`
+    };
+    if (confirm(messages[action])) {
+      showToast('처리되었습니다 (실제 전송은 다음 단계 연동 예정)');
+      clearBulkSelection();
+    }
+  }
+
+  // 체크박스 이벤트 위임
+  document.addEventListener('change', (e) => {
+    if (e.target.matches('.candidate-row input[type="checkbox"]')) {
+      updateBulkBar();
+    }
+  });
+
+  // ===== 태스크 체크리스트 (패널 안) =====
+  const taskData = {
+    c001: [
+      { text: '실무진 리뷰 마감', done: true },
+      { text: '추가 리서치 정보 정리 (포트폴리오 신규 작업 확인)', done: true },
+      { text: '커피챗 제안 메일 발송', done: true },
+      { text: '커피챗 장소 및 시간 조율', done: false },
+      { text: '재면접 일정 잡기 (26년 하반기 디지털 마케팅 채용 시)', done: false }
+    ],
+    c002: [
+      { text: '직전 회사 인센티브 변동성 자료 정리', done: true },
+      { text: '내부 처우 밴드 재산정', done: true },
+      { text: '26년 하반기 처우 재제안서 작성', done: false },
+      { text: '재오퍼 메일 발송', done: false }
+    ],
+    c003: [
+      { text: '풀 신규 등록 데이터 검토', done: true },
+      { text: '디지털 IT 기획팀 추천 메모 작성', done: false },
+      { text: '하반기 신입 IT 채용 우선 컨택 안내', done: false }
+    ],
+    c004: [
+      { text: '아키텍처 실무 인터뷰 일정 조율', done: false },
+      { text: '본부장 추천서 검토', done: false },
+      { text: '재면접 진행 결정', done: false }
+    ],
+    c005: [
+      { text: '처우 협의서 발송', done: true },
+      { text: '본인 응답 대기', done: true },
+      { text: '처우 조건 피드백 정리', done: false },
+      { text: '본부장 최종 결재 진행', done: false }
+    ],
+    c006: [
+      { text: '사옥 자산 관리 직무 범위 협의', done: true },
+      { text: '후속 연락 1차 메일 발송', done: true },
+      { text: '커피챗 일정 조율', done: false }
+    ],
+    c007: [
+      { text: 'UX 리서처 풀 등록 완료', done: true },
+      { text: '디지털 채널 개편 프로젝트 착수 모니터링', done: false }
+    ],
+    c008: [
+      { text: '입사 처우 협의 완료', done: true },
+      { text: '입사 일정 확정 (26.01.01)', done: true },
+      { text: '온보딩 패키지 발송', done: true },
+      { text: '심사2팀 인계 미팅 조율', done: false }
+    ],
+    c009: [
+      { text: '신규 등록 검토', done: true },
+      { text: '신입 IT 채용 우선 컨택 메모 작성', done: false }
+    ],
+    c010: [
+      { text: '후속 연락 1차 메일 발송', done: true },
+      { text: '본인 응답 대기', done: false },
+      { text: '하반기 신입 공채 응시 안내', done: false }
+    ],
+    c011: [
+      { text: '디자인 포트폴리오 수령', done: false },
+      { text: '실무진 리뷰 일정 조율', done: false }
+    ],
+    c012: [
+      { text: '풀 신규 등록 데이터 검토', done: true },
+      { text: '총무지원팀 TO 발생 시 우선 컨택', done: false }
+    ]
+  };
+
+  function renderChecklist(id) {
+    const tasks = taskData[id] || [];
+    const list = document.getElementById('cp-checklist');
+    const progress = document.getElementById('cp-checklist-progress');
+    if (!list) return;
+    list.innerHTML = tasks.map((t, i) => `
+      <label class="cp-task ${t.done ? 'done' : ''}">
+        <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask('${id}', ${i}, this.checked)" />
+        <span class="cp-task-text">${t.text}</span>
+      </label>
+    `).join('');
+    updateProgress(id);
+  }
+
+  function updateProgress(id) {
+    const tasks = taskData[id] || [];
+    const done = tasks.filter(t => t.done).length;
+    const total = tasks.length;
+    const next = tasks.find(t => !t.done);
+    document.getElementById('cp-checklist-progress').textContent = `${done}/${total} 완료${next ? ` · 다음: ${next.text}` : ' · 전체 완료'}`;
+  }
+
+  function toggleTask(id, idx, checked) {
+    taskData[id][idx].done = checked;
+    const label = document.querySelectorAll('#cp-checklist .cp-task')[idx];
+    label.classList.toggle('done', checked);
+    updateProgress(id);
+    // 테이블 task 셀도 업데이트
+    const row = document.querySelector(`.candidate-row[data-candidate-id="${id}"] .task-cell`);
+    if (row) {
+      const tasks = taskData[id];
+      const done = tasks.filter(t => t.done).length;
+      const total = tasks.length;
+      const next = tasks.find(t => !t.done);
+      row.textContent = next ? next.text : '전체 완료';
+    }
+  }
+
+  // 테이블 태스크 셀 ↔ 체크리스트 연동 (로드 시 1회)
+  function syncTaskCells() {
+    document.querySelectorAll('.candidate-row[data-candidate-id]').forEach(row => {
+      const id = row.dataset.candidateId;
+      const cell = row.querySelector('.task-cell');
+      const tasks = taskData[id];
+      if (!cell || !tasks) return;
+      const done = tasks.filter(t => t.done).length;
+      const total = tasks.length;
+      const next = tasks.find(t => !t.done);
+      cell.textContent = next ? next.text : '전체 완료';
+    });
+  }
+
+// ESC: 모바일 사이드바 + 후보 패널 + 후보추가 모달 닫기
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') document.querySelector('.layout').classList.remove('mobile-open');
+  if (e.key === 'Escape') {
+    document.querySelector('.layout').classList.remove('mobile-open');
+    if (typeof closeCandidatePanel === 'function') closeCandidatePanel();
+    if (typeof closeAddCandidate === 'function') closeAddCandidate();
+  }
 });
 </script>
 
