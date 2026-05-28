@@ -255,6 +255,13 @@ a { color: inherit; text-decoration: none; }
 .mc-day.in { background: var(--info-bg); color: var(--main-1); }
 .mc-day.start, .mc-day.end { background: var(--grad-blue); color: white; }
 
+/* 인라인 메일 미리보기 */
+.mail-preview { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.mail-preview.open { display: block; }
+.mp-label { font-size: 11px; font-weight: 700; color: var(--text-2); margin-bottom: 4px; }
+.mp-subj { width: 100%; }
+.mp-body { width: 100%; height: 150px; resize: vertical; line-height: 1.6; white-space: pre-wrap; }
+
 /* WTM (가용 시간대 표) */
 .wtm-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 8px; font-size: 11px; color: var(--text-2); font-weight: 700; }
 .wtm-lg { display: inline-flex; align-items: center; gap: 5px; }
@@ -721,7 +728,7 @@ function doOpenBulkCoord(round) {
   coordState = {
     cid: ids[0], round: round, cand: firstCand, step: 1,
     settings: { duration: '60', place: '본사 7층 면접실 A', deadline: '', period: '' },
-    selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids
+    selectedInts: [], isRecoord: false, reserveTime: null, isBulk: true, bulkIds: ids, mailEdits: {}
   };
   selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   miniCalMonth = { y: systemToday.y, m: systemToday.m };
@@ -793,16 +800,37 @@ function renderRecoord() {
 }
 
 // ===== Reply modal (메일 회신) =====
+var _replyReserve = null;
 function openReplyModal(email, candName) {
+  _replyReserve = null;
   document.getElementById('reply-to').value = email || 'from@abllife.co.kr';
   document.getElementById('reply-subj').value = 'RE: ' + (candName || '면접') + ' 일정 관련 회신';
   document.getElementById('reply-body').value = '안녕하세요,\n\n메일 잘 받았습니다.\n\n다시 일정 조율을 진행하여 새로운 면접 시간 후보를 보내드리겠습니다.\n조금만 더 기다려 주시면 감사하겠습니다.\n\n감사합니다.\nABL생명 인사팀 드림';
-  document.getElementById('reply-footer').innerHTML = '<button class="btn btn-o" onclick="closeModal(\'modal-reply\')">취소</button><div class="mla flex g8"><button class="btn btn-o" onclick="openReserveModal(\'reply\')"><i class="ti ti-clock"></i>예약 발송</button><button class="btn btn-p" onclick="doSendReply()"><i class="ti ti-send"></i>지금 발송</button></div>';
+  renderReplyFooter();
   openModal('modal-reply');
 }
 
+function renderReplyFooter() {
+  var html = '<button class="btn btn-o" onclick="closeModal(\'modal-reply\')">취소</button><div class="mla flex g8">';
+  if (_replyReserve) {
+    html += '<button class="btn btn-o" onclick="openReserveModal(\'reply\')"><i class="ti ti-clock"></i>예약 시간 변경</button>';
+    html += '<button class="btn btn-p" onclick="doSendReply()"><i class="ti ti-clock-check"></i>예약 발송</button>';
+  } else {
+    html += '<button class="btn btn-o" onclick="openReserveModal(\'reply\')"><i class="ti ti-clock"></i>예약 발송</button>';
+    html += '<button class="btn btn-p" onclick="doSendReply()"><i class="ti ti-send"></i>지금 발송</button>';
+  }
+  html += '</div>';
+  document.getElementById('reply-footer').innerHTML = html;
+}
+
 function doSendReply() {
-  showToast('ok', '회신 메일 발송 완료', document.getElementById('reply-to').value + ' 에게 메일이 발송되었습니다.');
+  var to = document.getElementById('reply-to').value;
+  if (_replyReserve) {
+    showToast('ok', '예약 발송되었습니다', '선택하신 ' + _replyReserve + ' 에 ' + to + ' 에게 회신 메일이 전송됩니다.');
+  } else {
+    showToast('ok', '회신 메일 발송 완료', to + ' 에게 메일이 발송되었습니다.');
+  }
+  _replyReserve = null;
   closeModal('modal-reply');
 }
 
@@ -856,7 +884,7 @@ function updateBadges() {
 
 
 // ===== Coordination modal state =====
-var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, selectedInts: [], selAltTime: null, isRecoord: false, reserveTime: null, isBulk: false, bulkIds: [] };
+var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, selectedInts: [], selAltTime: null, isRecoord: false, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {} };
 
 function openCandidateCoord(cid, round, isRecoord) {
   var cand = null;
@@ -866,7 +894,7 @@ function openCandidateCoord(cid, round, isRecoord) {
   coordState = {
     cid: cid, round: round, cand: cand, step: 1,
     settings: { duration: cand.duration || '60', place: cand.place || '본사 7층 면접실 A', deadline: cand.deadline || '', period: cand.period || '' },
-    selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: []
+    selectedInts: cand.interviewers || [], isRecoord: !!isRecoord, reserveTime: null, isBulk: false, bulkIds: [], mailEdits: {}
   };
   selPeriodStart = null; selPeriodEnd = null; wtmSelected = {}; wtmDays = [];
   if (cand.period) {
@@ -977,14 +1005,18 @@ function renderBeforeBody() {
 function renderPendingBody() {
   var cand = coordState.cand;
   var html = '';
+  // 대기 중 표시: 리마인드 발송된 경우 함께 안내
+  var waitTag = cand.reminded
+    ? '<span style="color:var(--warn);font-weight:700">대기 중</span> <span class="pill pl-purple" style="margin-left:4px;"><i class="ti ti-bell-ringing"></i> 리마인드 발송됨</span>'
+    : '<span style="color:var(--warn);font-weight:700">대기 중</span>';
   html += '<div class="stitle">조율 진행 현황</div>';
-  html += '<div class="info-grid mb12"><div class="ig-row"><div class="ig-lbl">지원자</div><div class="ig-val">' + (cand.candResp ? '<span style="color:var(--ok);font-weight:700">✓ 회신완료</span>' : '<span style="color:var(--warn);font-weight:700">대기 중</span>') + '</div></div>';
+  html += '<div class="info-grid mb12"><div class="ig-row"><div class="ig-lbl">지원자</div><div class="ig-val">' + (cand.candResp ? '<span style="color:var(--ok);font-weight:700">✓ 회신완료</span>' : waitTag) + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">면접관</div><div class="ig-val">' + (cand.intResp ? '<span style="color:var(--ok);font-weight:700">✓ 회신완료</span>' : '<span style="color:var(--warn);font-weight:700">대기 중</span>') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">응답 마감</div><div class="ig-val">' + (cand.deadline || '-') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">면접 기간</div><div class="ig-val">' + (cand.period || '-') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">장소</div><div class="ig-val">' + (cand.place || '-') + '</div></div>';
   html += '<div class="ig-row"><div class="ig-lbl">발송일</div><div class="ig-val">' + (cand.sentAt || '2026.06.04') + '</div></div></div>';
-  if (cand.reminded) html += '<div class="pill pl-purple" style="margin-bottom:10px;">리마인드 발송 완료</div>';
+  if (cand.reminded) html += '<div class="pill pl-purple" style="margin-bottom:10px;"><i class="ti ti-bell-ringing"></i> 리마인드 발송 완료' + (cand.remindedAt ? ' · ' + cand.remindedAt : '') + '</div>';
   return html;
 }
 
@@ -1055,21 +1087,23 @@ function renderMailSection(status) {
   // 지원자용
   html += '<div id="tmpl-cand" class="fg" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
   html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 메일 템플릿</div>';
-  html += '<select class="fs w100 mb12" id="tmpl-cand-sel">';
+  html += '<select class="fs w100 mb12" id="tmpl-cand-sel" onchange="if(document.getElementById(\'preview-cand\').classList.contains(\'open\')) renderInlinePreview(\'cand\')">';
   candTmpls.forEach(t => {
     html += '<option value="' + t.id + '" ' + (t.id === candTmplDefault.id ? 'selected' : '') + '>' + t.name + '</option>';
   });
   html += '</select>';
-  html += '<button class="btn btn-o btn-sm" onclick="previewMail(\'cand\', document.getElementById(\'tmpl-cand-sel\').value)"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-cand" onclick="toggleInlinePreview(\'cand\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-cand" class="mail-preview"></div>';
   html += '</div>';
 
   // 면접관용
   html += '<div id="tmpl-int" class="fg" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:var(--bg-page);">';
   html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">면접관 메일 템플릿</div>';
-  html += '<select class="fs w100 mb12" id="tmpl-int-sel">';
+  html += '<select class="fs w100 mb12" id="tmpl-int-sel" onchange="if(document.getElementById(\'preview-int\').classList.contains(\'open\')) renderInlinePreview(\'int\')">';
   intTmpls.forEach(t => { html += '<option value="' + t.id + '">' + t.name + '</option>'; });
   html += '</select>';
-  html += '<button class="btn btn-o btn-sm" onclick="previewMail(\'int\', document.getElementById(\'tmpl-int-sel\').value)"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-int" onclick="toggleInlinePreview(\'int\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-int" class="mail-preview"></div>';
   html += '</div>';
 
   html += '</div>';
@@ -1080,16 +1114,61 @@ function renderMailSection(status) {
   return html;
 }
 
-function previewMail(type, tmplId) {
-  var tmpl = TEMPLATES.find(t => t.id === tmplId);
-  if (!tmpl) return;
+function toggleInlinePreview(type) {
+  var box = document.getElementById('preview-' + type);
+  var btn = document.getElementById('preview-btn-' + type);
+  if (!box) return;
+  if (box.classList.contains('open')) {
+    box.classList.remove('open');
+    box.innerHTML = '';
+    if (btn) btn.innerHTML = '<i class="ti ti-eye"></i>미리보기';
+  } else {
+    box.classList.add('open');
+    if (btn) btn.innerHTML = '<i class="ti ti-eye-off"></i>미리보기 닫기';
+    renderInlinePreview(type);
+  }
+}
+
+// 현재 선택된 템플릿 + 임시 수정분을 채워서 미리보기/수정 영역 렌더
+function renderInlinePreview(type) {
+  var box = document.getElementById('preview-' + type);
+  if (!box) return;
   var cand = coordState.cand;
-  var firstInt = coordState.selectedInts[0] || '면접관';
+  var firstInt = coordState.selectedInts[0] || (cand.interviewers && cand.interviewers[0]) || '면접관';
   var period = coordState.settings.period || (selPeriodStart && selPeriodEnd ? selPeriodStart.replace(/-/g, '.') + '~' + selPeriodEnd.replace(/-/g, '.') : '미설정');
   var deadline = coordState.settings.deadline || '2026.06.10 18:00';
-  var filledSubj = fillTemplate(tmpl.subj, cand, firstInt, '', period, deadline);
-  var filledBody = fillTemplate(tmpl.body, cand, firstInt, '', period, deadline);
-  alert('[제목]\n' + filledSubj + '\n\n[본문]\n' + filledBody);
+
+  // 확정 메일(conf-cand/conf-int)은 고정 템플릿(t5/t6) + 확정일시 사용
+  var tmpl, confTime = '';
+  if (type === 'conf-cand') { tmpl = TEMPLATES.find(t => t.id === 't5'); confTime = coordState.selAltTime || cand.aiTime || ''; }
+  else if (type === 'conf-int') { tmpl = TEMPLATES.find(t => t.id === 't6'); confTime = coordState.selAltTime || cand.aiTime || ''; }
+  else {
+    var selEl = document.getElementById('tmpl-' + type + '-sel');
+    tmpl = TEMPLATES.find(t => t.id === (selEl ? selEl.value : null));
+  }
+  if (!tmpl) { box.innerHTML = '<div style="font-size:12px;color:var(--text-3);padding:8px 0;">템플릿을 찾을 수 없습니다.</div>'; return; }
+
+  if (!coordState.mailEdits) coordState.mailEdits = {};
+  var edit = coordState.mailEdits[type];
+  // 임시 수정분이 있으면 그것을, 없으면 템플릿을 채운 결과를 표시
+  var subj = edit ? edit.subj : fillTemplate(tmpl.subj, cand, firstInt, confTime, period, deadline);
+  var body = edit ? edit.body : fillTemplate(tmpl.body, cand, firstInt, confTime, period, deadline);
+
+  var h = '';
+  h += '<div class="mp-label">제목</div>';
+  h += '<input class="fi mp-subj" id="mp-subj-' + type + '" value="' + subj.replace(/"/g, '&quot;') + '" oninput="saveMailEdit(\'' + type + '\')">';
+  h += '<div class="mp-label" style="margin-top:8px;">본문 <span style="font-weight:400;color:var(--text-3)">(수정 시 이번 발송분만 적용)</span></div>';
+  h += '<textarea class="fta mp-body" id="mp-body-' + type + '" oninput="saveMailEdit(\'' + type + '\')">' + body.replace(/</g, '&lt;') + '</textarea>';
+  if (edit) h += '<div class="pill pl-purple" style="margin-top:8px;"><i class="ti ti-pencil"></i> 수정됨 · 원본 템플릿은 유지됩니다</div>';
+  box.innerHTML = h;
+}
+
+function saveMailEdit(type) {
+  if (!coordState.mailEdits) coordState.mailEdits = {};
+  var s = document.getElementById('mp-subj-' + type);
+  var b = document.getElementById('mp-body-' + type);
+  if (!s || !b) return;
+  coordState.mailEdits[type] = { subj: s.value, body: b.value };
 }
 
 function fillTemplate(text, cand, intName, confirmedTime, period, deadline) {
@@ -1330,15 +1409,29 @@ function renderCoordFooter() {
       if (s === 2 && !coordState.selectedInts.length) canNext = false;
       html += '<button class="btn btn-p" ' + (canNext ? '' : 'disabled style="opacity:0.5;cursor:not-allowed"') + ' onclick="' + (canNext ? 'coordStep(1)' : '') + '">다음 <i class="ti ti-chevron-right"></i></button>';
     } else {
-      html += '<button class="btn btn-o" onclick="openReserveModal(\'send\')"><i class="ti ti-clock"></i>예약 발송</button>';
-      html += '<button class="btn btn-p" onclick="doSendForm()"><i class="ti ti-send"></i>지금 발송</button>';
+      if (coordState.reserveTime) {
+        // 예약 시간이 설정됨 → '지금 발송'이 '예약 발송'으로 전환
+        html += '<button class="btn btn-o" onclick="openReserveModal(\'send\')"><i class="ti ti-clock"></i>예약 시간 변경</button>';
+        html += '<button class="btn btn-p" onclick="doSendForm()"><i class="ti ti-clock-check"></i>예약 발송</button>';
+      } else {
+        html += '<button class="btn btn-o" onclick="openReserveModal(\'send\')"><i class="ti ti-clock"></i>예약 발송</button>';
+        html += '<button class="btn btn-p" onclick="doSendForm()"><i class="ti ti-send"></i>지금 발송</button>';
+      }
     }
     html += '</div>';
   } else if (status === 'pending') {
     html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
     html += '<div class="mla flex g8">';
-    if (!cand.reminded) html += '<button class="btn btn-o" onclick="doSendReminder()"><i class="ti ti-bell"></i>리마인드 발송</button>';
-    html += '<button class="btn btn-r" onclick="if(confirm(\'정말 재조율 하시겠습니까?\')) { coordState.isRecoord=true; coordState.cand.status=\'before\'; coordState.step=1; renderCoordModal(); }"><i class="ti ti-refresh"></i>재조율</button>';
+    if (!cand.reminded) {
+      if (coordState.reserveTime) {
+        html += '<button class="btn btn-o" onclick="openReserveModal(\'reminder\')"><i class="ti ti-clock"></i>예약 시간 변경</button>';
+        html += '<button class="btn btn-p" onclick="doSendReminder()"><i class="ti ti-clock-check"></i>리마인드 예약 발송</button>';
+      } else {
+        html += '<button class="btn btn-o" onclick="openReserveModal(\'reminder\')"><i class="ti ti-clock"></i>예약 발송</button>';
+        html += '<button class="btn btn-o" onclick="doSendReminder()"><i class="ti ti-bell"></i>리마인드 발송</button>';
+      }
+    }
+    html += '<button class="btn btn-r" onclick="if(confirm(\'정말 재조율 하시겠습니까?\')) { coordState.isRecoord=true; coordState.cand.status=\'before\'; coordState.step=1; coordState.reserveTime=null; renderCoordModal(); }"><i class="ti ti-refresh"></i>재조율</button>';
     html += '</div>';
   } else if (status === 'confirm-wait') {
     html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
@@ -1384,7 +1477,11 @@ function doSendForm() {
       }
     });
     selectedCands = {};
-    showToast('ok', '일괄 메일 발송 완료', coordState.bulkIds.length + '명 지원자에게 조율 요청 메일이 발송되었습니다.');
+    if (coordState.reserveTime) {
+      showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + coordState.bulkIds.length + '명에게 메일이 전송됩니다.');
+    } else {
+      showToast('ok', '일괄 메일 발송 완료', coordState.bulkIds.length + '명 지원자에게 조율 요청 메일이 발송되었습니다.');
+    }
   } else {
     cand.status = 'pending';
     cand.interviewers = coordState.selectedInts.slice();
@@ -1395,7 +1492,11 @@ function doSendForm() {
     cand.intResp = false;
     cand.candResp = false;
     cand.sentAt = new Date().toLocaleDateString('ko');
-    showToast('ok', '조율 요청 메일 발송 완료', cand.name + ' 지원자와 면접관에게 메일이 발송되었습니다.');
+    if (coordState.reserveTime) {
+      showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + cand.name + ' 지원자와 면접관에게 메일이 전송됩니다.');
+    } else {
+      showToast('ok', '조율 요청 메일 발송 완료', cand.name + ' 지원자와 면접관에게 메일이 발송되었습니다.');
+    }
   }
   closeModal('modal-coord');
   renderKanban(coordState.round);
@@ -1406,13 +1507,22 @@ function doSendForm() {
 function doSendReminder() {
   var cand = coordState.cand;
   cand.reminded = true;
-  showToast('ok', '리마인드 메일 발송 완료', cand.name + ' 지원자에게 리마인드 메일이 발송되었습니다.');
-  closeModal('modal-coord');
+  cand.remindedAt = new Date().toLocaleDateString('ko');
+  if (coordState.reserveTime) {
+    showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + cand.name + ' 지원자에게 리마인드 메일이 전송됩니다.');
+  } else {
+    showToast('ok', '리마인드 메일 발송 완료', cand.name + ' 지원자에게 리마인드 메일이 발송되었습니다.');
+  }
+  coordState.reserveTime = null;
+  // 모달을 닫지 않고 현재 화면을 갱신 → '응답 대기' 표시가 '리마인드 발송됨'으로 바뀜
+  renderCoordModal();
   renderKanban(coordState.round);
 }
 
 // ===== Confirm modal (확정 메일 발송) =====
 function openConfirmModal() {
+  // 확정 메일 미리보기 임시 수정분 초기화
+  if (coordState.mailEdits) { delete coordState.mailEdits['conf-cand']; delete coordState.mailEdits['conf-int']; }
   openModal('modal-confirm');
   renderConfirmModalBody();
 }
@@ -1440,11 +1550,15 @@ function renderConfirmModalBody() {
 
   html += '<div id="conf-tmpl-cand" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--bg-page);">';
   html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 확정 메일</div>';
-  html += '<div style="font-size:12px;color:var(--text-2);">' + (candConfTmpl ? candConfTmpl.name : '면접 확정 안내') + '</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">' + (candConfTmpl ? candConfTmpl.name : '면접 확정 안내') + '</div>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-conf-cand" onclick="toggleInlinePreview(\'conf-cand\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-conf-cand" class="mail-preview"></div>';
   html += '</div>';
   html += '<div id="conf-tmpl-int" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--bg-page);">';
   html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">면접관 확정 메일</div>';
-  html += '<div style="font-size:12px;color:var(--text-2);">' + (intConfTmpl ? intConfTmpl.name : '면접 확정 안내 (면접관)') + '</div>';
+  html += '<div style="font-size:12px;color:var(--text-2);margin-bottom:8px;">' + (intConfTmpl ? intConfTmpl.name : '면접 확정 안내 (면접관)') + '</div>';
+  html += '<button class="btn btn-o btn-sm" id="preview-btn-conf-int" onclick="toggleInlinePreview(\'conf-int\')"><i class="ti ti-eye"></i>미리보기</button>';
+  html += '<div id="preview-conf-int" class="mail-preview"></div>';
   html += '</div>';
 
   document.getElementById('confirm-body').innerHTML = html;
@@ -1467,8 +1581,13 @@ function handleTargetChangeConf(val) {
 function updateConfirmFooter() {
   var html = '<button class="btn btn-o" onclick="closeModal(\'modal-confirm\')">취소</button>';
   html += '<div class="mla flex g8">';
-  html += '<button class="btn btn-o" onclick="openReserveModal(\'confirm\')"><i class="ti ti-clock"></i>예약 발송</button>';
-  html += '<button class="btn btn-g" onclick="doConfirmSend()"><i class="ti ti-send"></i>지금 확정 메일 발송</button>';
+  if (coordState.reserveTime) {
+    html += '<button class="btn btn-o" onclick="openReserveModal(\'confirm\')"><i class="ti ti-clock"></i>예약 시간 변경</button>';
+    html += '<button class="btn btn-g" onclick="doConfirmSend()"><i class="ti ti-clock-check"></i>예약 발송</button>';
+  } else {
+    html += '<button class="btn btn-o" onclick="openReserveModal(\'confirm\')"><i class="ti ti-clock"></i>예약 발송</button>';
+    html += '<button class="btn btn-g" onclick="doConfirmSend()"><i class="ti ti-send"></i>지금 확정 메일 발송</button>';
+  }
   html += '</div>';
   document.getElementById('confirm-footer').innerHTML = html;
 }
@@ -1478,7 +1597,11 @@ function doConfirmSend() {
   var time = coordState.selAltTime || cand.aiTime;
   cand.status = 'done';
   cand.confirmedTime = time.replace(/년 /g, '.').replace(/월 /g, '.').replace(/일 /g, ' ').replace(/오전 /g, '').replace(/오후 /g, '');
-  showToast('ok', '확정 메일 발송 완료', cand.name + ' 지원자 및 면접관에게 확정 메일이 발송되었습니다.');
+  if (coordState.reserveTime) {
+    showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + cand.name + ' 지원자 및 면접관에게 확정 메일이 전송됩니다.');
+  } else {
+    showToast('ok', '확정 메일 발송 완료', cand.name + ' 지원자 및 면접관에게 확정 메일이 발송되었습니다.');
+  }
   closeModal('modal-confirm');
   closeModal('modal-coord');
   renderKanban(coordState.round);
@@ -1547,14 +1670,19 @@ function confirmReserveTime() {
   var dt = document.getElementById('reserve-datetime').value;
   if (!dt) { showToast('warn', '예약 일시를 선택해 주세요', ''); return; }
   var formatted = dt.replace('T', ' ');
-  coordState.reserveTime = formatted;
   closeModal('modal-reserve');
-  showToast('info', '예약 발송 시간 설정 완료', formatted + ' 에 자동 발송됩니다.');
-  if (currentReserveAction === 'send') {
-    // step 4 메일 섹션 다시 렌더
-    renderCoordModal();
-  } else if (currentReserveAction === 'confirm') {
-    renderConfirmModalBody();
+  showToast('info', '예약 발송 시간 설정 완료', formatted + ' 으로 예약되었습니다. 발송 버튼을 눌러 확정하세요.');
+  if (currentReserveAction === 'reply') {
+    // 재조율 회신은 별도 상태
+    _replyReserve = formatted;
+    renderReplyFooter();
+  } else {
+    coordState.reserveTime = formatted;
+    if (currentReserveAction === 'send' || currentReserveAction === 'reminder') {
+      renderCoordModal();
+    } else if (currentReserveAction === 'confirm') {
+      renderConfirmModalBody();
+    }
   }
   currentReserveAction = null;
 }
