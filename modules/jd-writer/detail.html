@@ -500,7 +500,7 @@ function renderJDPanel(data) {
         </div>
         <div style="display:flex; gap:6px;">
           <button class="btn-preview-posting" onclick="openPostingPreview()"><i class="ti ti-eye"></i> 최종 공고 미리보기</button>
-          ${isHR ? '<button class="btn" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>' : ''}
+          ${isHR ? '<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>' : ''}
         </div>
       </div>
 
@@ -945,6 +945,107 @@ async function loadData() {
   }
 }
 loadData();
+
+// ===== JD 직접 수정 =====
+let jdEditOriginal = '';
+let jdIsEditing = false;
+
+function toggleJDEdit() {
+  const content = document.getElementById('jdContent');
+  const btn = document.getElementById('btnJDEdit');
+  if (!content || !btn) return;
+
+  if (!jdIsEditing) {
+    // 편집 모드 진입
+    jdEditOriginal = content.innerHTML;
+    jdIsEditing = true;
+    content.contentEditable = 'true';
+    content.style.outline = 'none';
+    content.style.border = '1.5px solid var(--main-1)';
+    content.style.borderRadius = '8px';
+    content.style.padding = '16px';
+    content.style.background = '#FAFCFE';
+    content.style.boxShadow = '0 0 0 3px rgba(0,103,172,0.08)';
+    content.focus();
+    // 버튼 교체 → 저장 + 취소
+    btn.parentElement.innerHTML = `
+      <button class="btn" id="btnJDCancel" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="cancelJDEdit()">
+        <i class="ti ti-x" style="font-size:13px;"></i> 취소
+      </button>
+      <button class="btn" id="btnJDSave" style="background:var(--grad-blue); color:white; border:none; padding:6px 14px; font-size:11px; width:auto;" onclick="saveJDEdit()">
+        <i class="ti ti-device-floppy" style="font-size:13px;"></i> 저장
+      </button>
+    `;
+    // 편집 안내 띠
+    const guide = document.createElement('div');
+    guide.id = 'jdEditGuide';
+    guide.style.cssText = 'font-size:11px; color:var(--main-1); background:linear-gradient(135deg,#E6F1FB,#D5E8F5); padding:8px 14px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:6px; font-weight:700;';
+    guide.innerHTML = '<i class="ti ti-pencil" style="font-size:14px;"></i> 편집 모드 · 본문을 직접 수정하세요. 완료 후 저장을 누르세요.';
+    content.parentElement.insertBefore(guide, content);
+  }
+}
+
+function saveJDEdit() {
+  const content = document.getElementById('jdContent');
+  if (!content) return;
+  jdIsEditing = false;
+  content.contentEditable = 'false';
+  content.style.border = '';
+  content.style.borderRadius = '';
+  content.style.padding = '';
+  content.style.background = '';
+  content.style.boxShadow = '';
+  // 안내 제거
+  const guide = document.getElementById('jdEditGuide');
+  if (guide) guide.remove();
+  // 버튼 원복
+  const btnArea = content.parentElement.querySelector('[id^="btnJDSave"], [id^="btnJDCancel"]');
+  if (btnArea && btnArea.parentElement) {
+    btnArea.parentElement.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
+  }
+  // currentData에 반영
+  if (currentData && currentData.jd_draft) {
+    currentData.jd_draft._editedHTML = content.innerHTML;
+  }
+  jdEditOriginal = '';
+  showJDToast('JD 수정 내용이 저장되었습니다.');
+}
+
+function cancelJDEdit() {
+  const content = document.getElementById('jdContent');
+  if (!content) return;
+  jdIsEditing = false;
+  content.innerHTML = jdEditOriginal;
+  content.contentEditable = 'false';
+  content.style.border = '';
+  content.style.borderRadius = '';
+  content.style.padding = '';
+  content.style.background = '';
+  content.style.boxShadow = '';
+  const guide = document.getElementById('jdEditGuide');
+  if (guide) guide.remove();
+  // 버튼 원복
+  const container = content.parentElement;
+  const cancelBtn = container.querySelector('#btnJDCancel, #btnJDSave');
+  if (cancelBtn) {
+    cancelBtn.parentElement.innerHTML = `<button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button>`;
+  }
+  jdEditOriginal = '';
+}
+
+function showJDToast(msg) {
+  let t = document.getElementById('jdToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'jdToast';
+    t.style.cssText = 'position:fixed; left:50%; bottom:26px; transform:translate(-50%,20px); padding:12px 18px; border-radius:999px; color:white; background:rgba(15,35,65,0.92); font-size:13px; font-weight:700; opacity:0; pointer-events:none; transition:0.2s; z-index:9999; box-shadow:0 8px 24px rgba(0,0,0,0.18); display:flex; align-items:center; gap:8px;';
+    document.body.appendChild(t);
+  }
+  t.innerHTML = '<i class="ti ti-check" style="font-size:15px; color:#4ade80;"></i>' + msg;
+  t.style.opacity = '1'; t.style.transform = 'translate(-50%,0)';
+  clearTimeout(showJDToast._t);
+  showJDToast._t = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%,20px)'; }, 2000);
+}
 
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
 
