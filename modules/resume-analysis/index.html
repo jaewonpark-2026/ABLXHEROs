@@ -141,6 +141,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .candidate-avatar { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: white; font-weight: 700; font-size: 14px; background: var(--grad-blue); }
 .candidate-name { color: var(--text-1); font-size: 13px; font-weight: 700; }
 .candidate-id { color: var(--text-3); font-size: 11px; margin-top: 2px; }
+.channel-tag { display: inline-flex; align-items: center; gap: 2px; padding: 1px 7px; border-radius: 999px; background: #F1F5F9; color: var(--text-2); font-size: 10.5px; font-weight: 600; }
 
 .type-pill, .status-pill, .phase-pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .type-pill.new { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
@@ -254,13 +255,6 @@ tbody tr:last-child td { border-bottom: 0; }
             </div>
             <span class="job-status">진행 중</span>
           </div>
-          <div class="job-tabs">
-            <button class="job-tab active" type="button">서류</button>
-            <button class="job-tab" type="button">실무면접</button>
-            <button class="job-tab" type="button">임원면접</button>
-            <button class="job-tab" type="button">처우협의</button>
-            <button class="job-tab" type="button">최종합격</button>
-          </div>
         </div>
 
         <div class="card process-card">
@@ -279,7 +273,7 @@ tbody tr:last-child td { border-bottom: 0; }
           <div class="toolbar-top">
             <div>
               <div class="section-title">지원자 목록</div>
-              <p class="section-desc">자동심사 통과 118명 · 현재 목록 <span id="visibleCount">0</span>명 표시</p>
+              <p class="section-desc">자동심사 통과 118명</p>
             </div>
             <div class="search-wrap">
               <i class="ti ti-search search-icon"></i>
@@ -402,7 +396,7 @@ function renderTable() {
   const empty = document.getElementById('emptyState');
   const visibleCount = document.getElementById('visibleCount');
   const filtered = getFilteredCandidates();
-  visibleCount.textContent = filtered.length;
+  if (visibleCount) visibleCount.textContent = filtered.length;
   table.innerHTML = '';
 
   filtered.forEach(c => {
@@ -413,7 +407,7 @@ function renderTable() {
     const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
     const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
     tr.innerHTML = `
-      <td><div class="candidate-cell"><div class="candidate-avatar">${c.name.charAt(0)}</div><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}</div></div></div></td>
+      <td><div class="candidate-cell"><div class="candidate-avatar">${c.name.charAt(0)}</div><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
       <td><span class="type-pill ${typeClass}">${c.type}</span></td>
       <td><strong style="color:var(--text-1)">${c.role}</strong></td>
       <td>${c.exp}</td>
