@@ -269,7 +269,7 @@ tbody tr:last-child td { border-bottom: 0; }
             <div class="process-step"><span>지원 완료</span><span>142명</span></div>
             <div class="process-step"><span>자동심사 통과</span><span>118명</span></div>
             <div class="process-step active"><span>서류 검토 중</span><span id="stageReviewCount">94명</span></div>
-            <div class="process-step"><span>현업 전달</span><span id="stageDoneCount">24명</span></div>
+            <div class="process-step"><span>해당 부서 전달</span><span id="stageDoneCount">24명</span></div>
           </div>
         </div>
       </section>
@@ -297,7 +297,7 @@ tbody tr:last-child td { border-bottom: 0; }
             <div class="filter-group" aria-label="전형 상태 필터">
               <button class="chip active" type="button" data-phase="전체">전체 상태</button>
               <button class="chip" type="button" data-phase="서류 검토 대기">서류 검토 대기</button>
-              <button class="chip" type="button" data-phase="현업 전달 완료">현업 전달 완료</button>
+              <button class="chip" type="button" data-phase="해당 부서 전달 완료">해당 부서 전달 완료</button>
             </div>
 
             <select class="select" id="roleFilter" aria-label="직무별 보기">
@@ -371,7 +371,7 @@ const statusClassMap = {
   '부적합': 'status-risk'
 };
 
-function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
+function getPhaseClass(p) { return p === '해당 부서 전달 완료' ? 'phase-done' : 'phase-pending'; }
 
 function getFilteredCandidates() {
   const keyword = state.search.trim().toLowerCase();
@@ -437,9 +437,9 @@ fetch('data/applicants.json')
     stageCounts = { review: data.stage_counts.in_review, done: data.stage_counts.delivered };
     const deliveredIds = data.initial_delivered_ids || [];
     candidates.forEach(c => {
-      c.phase = deliveredIds.indexOf(c.id) !== -1 ? '현업 전달 완료' : '서류 검토 대기';
+      c.phase = deliveredIds.indexOf(c.id) !== -1 ? '해당 부서 전달 완료' : '서류 검토 대기';
       // 시연용 sessionStorage 핸드오프 반영
-      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '현업 전달 완료';
+      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '해당 부서 전달 완료';
     });
     renderStageCounts();
     renderTable();

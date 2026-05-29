@@ -375,10 +375,10 @@ a { color: inherit; text-decoration: none; }
 <div class="confirm-backdrop" id="handoffConfirm" onclick="closeHandoffConfirm(event)">
   <section class="confirm-card" onclick="event.stopPropagation()" role="dialog" aria-modal="true">
     <div class="confirm-head">
-      <strong>현업에게 전달하시겠습니까?</strong>
-      <p id="handoffConfirmBody">전달하면 해당 지원자는 1차 서류심사 합격 처리되어 현업 검토 단계로 이동합니다.</p>
+      <strong>해당 부서에 전달하시겠습니까?</strong>
+      <p id="handoffConfirmBody">전달하면 해당 지원자는 1차 서류심사 합격 처리되어 해당 부서 검토 단계로 이동합니다.</p>
     </div>
-    <div class="confirm-warning">전달 후에는 AI 검토 점수, 근거, 현업 전달 내용을 수정할 수 없습니다.</div>
+    <div class="confirm-warning">전달 후에는 AI 검토 점수, 근거, 해당 부서 전달 내용을 수정할 수 없습니다.</div>
     <div class="confirm-actions">
       <button class="confirm-cancel" type="button" onclick="closeHandoffConfirm()">취소</button>
       <button class="confirm-submit" type="button" onclick="confirmHandoffToBusiness()">전달하기</button>
@@ -411,9 +411,9 @@ const resumeQuestions = [
 const roleCriteriaMap = {
   "디지털/IT": {
     team:"디지털 IT 기획팀",
-    competencies:["시스템 개발·운영 역량","LT 프로젝트 관리 능력","현업 요구사항 분석 능력","데이터 활용 능력"],
-    content:{label:"직무 수행 내용", text:"시스템 개발·운영 과제, LT 프로젝트 추진, 현업 요구사항 분석, 데이터 기반 서비스 개선 업무를 수행할 수 있는지 검토합니다.", answer:"디지털/IT 직무는 현업의 요구사항을 구조화하고 이를 시스템 개선 과제와 LT 프로젝트 실행계획으로 연결하는 역량이 중요하다고 이해하고 있습니다.", keywords:["시스템 개발·운영","LT 프로젝트","요구사항 분석","데이터 활용"]},
-    attitude:{label:"직무 수행 태도", text:"현업과 개발 조직 사이에서 요구사항을 조율하고, 일정과 이슈를 책임감 있게 관리하는 태도를 검토합니다.", answer:"현업과 개발 조직의 관점이 다를 때도 기준을 세워 요구사항을 정리하고 일정에 맞춰 실행하려는 태도를 보여주고 있습니다.", keywords:["조율","책임감","일정관리","협업"]},
+    competencies:["시스템 개발·운영 역량","LT 프로젝트 관리 능력","해당 부서 요구사항 분석 능력","데이터 활용 능력"],
+    content:{label:"직무 수행 내용", text:"시스템 개발·운영 과제, LT 프로젝트 추진, 해당 부서 요구사항 분석, 데이터 기반 서비스 개선 업무를 수행할 수 있는지 검토합니다.", answer:"디지털/IT 직무는 해당 부서의 요구사항을 구조화하고 이를 시스템 개선 과제와 LT 프로젝트 실행계획으로 연결하는 역량이 중요하다고 이해하고 있습니다.", keywords:["시스템 개발·운영","LT 프로젝트","요구사항 분석","데이터 활용"]},
+    attitude:{label:"직무 수행 태도", text:"해당 부서와 개발 조직 사이에서 요구사항을 조율하고, 일정과 이슈를 책임감 있게 관리하는 태도를 검토합니다.", answer:"해당 부서와 개발 조직의 관점이 다를 때도 기준을 세워 요구사항을 정리하고 일정에 맞춰 실행하려는 태도를 보여주고 있습니다.", keywords:["조율","책임감","일정관리","협업"]},
     knowledge:{label:"필요 지식", text:"IT 시스템 구조, 프로젝트 관리 방식, 업무 프로세스 및 데이터 활용에 대한 기본 이해를 검토합니다.", answer:"시스템과 업무 프로세스를 함께 이해해야 한다는 관점에서 자료를 정리하고 판단 기준을 세운 경험을 제시하고 있습니다.", keywords:["IT 시스템","프로젝트 관리","업무 프로세스","데이터"]},
     skill:{label:"필요 기술", text:"요구사항 정리, 데이터 분석, 문서화, 프로젝트 관리 도구 활용 등 실무 수행 기술을 검토합니다.", answer:"흩어진 정보를 기준별로 분류하고 진행상황을 표로 정리한 경험은 요구사항 정리와 프로젝트 관리 기술로 연결됩니다.", keywords:["요구사항 정리","데이터 분석","문서화","PM"]}
   },
@@ -476,7 +476,7 @@ const roleCriteriaMap = {
 };
 
 function getJobCriteria(c) { return roleCriteriaMap[c.role] || roleCriteriaMap["인사/경영지원"]; }
-function getPhaseClass(p) { return p === '현업 전달 완료' ? 'phase-done' : 'phase-pending'; }
+function getPhaseClass(p) { return p === '해당 부서 전달 완료' ? 'phase-done' : 'phase-pending'; }
 function getValueKeyword(c) {
   if (c.role === "디지털/IT") return "스마트";
   if (c.role === "재무/회계") return "전문성";
@@ -656,10 +656,10 @@ function renderReviewPane(c, profile) {
     `;
   });
 
-  const isDelivered = c.phase === '현업 전달 완료';
-  const handoffText = isDelivered ? '현업 전달 완료' : '현업에게 전달';
+  const isDelivered = c.phase === '해당 부서 전달 완료';
+  const handoffText = isDelivered ? '해당 부서 전달 완료' : '해당 부서에 전달';
   const handoffDisabled = isDelivered ? ' disabled' : '';
-  const handoffNote = isDelivered ? '이미 현업 전달 완료되어 검토 내용 수정이 제한됩니다.' : '전달 시 1차 서류심사 합격 처리 후 현업 검토 단계로 이동합니다.';
+  const handoffNote = isDelivered ? '이미 해당 부서 전달 완료되어 검토 내용 수정이 제한됩니다.' : '전달 시 1차 서류심사 합격 처리 후 해당 부서 검토 단계로 이동합니다.';
   const previewSub = isDelivered ? '전달 완료된 내용입니다. 수정할 수 없습니다.' : '종합 의견과 추가 확인사항을 확인한 뒤 수정할 수 있습니다.';
 
   document.getElementById('reviewPane').innerHTML = `
@@ -701,7 +701,7 @@ function renderReviewPane(c, profile) {
 
     <section class="handoff-section">
       <div class="handoff-preview-panel" id="handoffPreviewPanel">
-        <div class="handoff-preview-head"><div><strong>현업 전달 내용 미리보기</strong><br><span>${previewSub}</span></div><button class="small-action-btn" id="handoffPreviewEditBtn" type="button"${handoffDisabled}>수정</button></div>
+        <div class="handoff-preview-head"><div><strong>해당 부서 전달 내용 미리보기</strong><br><span>${previewSub}</span></div><button class="small-action-btn" id="handoffPreviewEditBtn" type="button"${handoffDisabled}>수정</button></div>
         <textarea class="handoff-preview-text" id="handoffPreviewText" disabled></textarea>
         <div class="handoff-preview-actions"><button class="small-action-btn" id="handoffPreviewCloseBtn" type="button">닫기</button><button class="small-action-btn" id="handoffPreviewSaveBtn" type="button"${handoffDisabled}>내용 저장</button></div>
       </div>
@@ -1024,7 +1024,7 @@ function buildHandoffPreviewText() {
   if (j < 82) checks.push(activeCandidate.role + ' 직무 수행 내용과 실제 경험의 연결성 확인');
   if (activeCandidate.type === '경력') checks.push('이전 경력에서 직접 담당한 업무 범위, 산출물, 성과 재현 가능성 확인');
   if (!checks.length) checks.push('지원서상 강점으로 제시된 경험의 구체적 역할과 성과 지표 확인');
-  return '[현업 전달 요약]\n지원자: ' + activeCandidate.name + ' / ' + activeCandidate.role + ' / ' + activeCandidate.type + ' / ' + activeCandidate.exp + '\nAI 서류 점수: ' + activeCandidate.score + '점\n전형 상태: 1차 서류심사 합격 예정\n\n[종합 의견]\n' + activeCandidate.summary + '\n\n[핵심 강점]\n- ' + strengths.join('\n- ') + '\n\n[주요 적합도]\n- 1차 기초 검토: ' + primaryAvg + '점\n- 조직 적합도: ' + o + '점\n- 직무 적합도: ' + j + '점\n- 산업 이해도: ' + i + '점\n\n[추후 확인 필요 사항]\n- ' + checks.join('\n- ') + '\n\n[현업 검토 요청]\n지원자의 경험이 실제 부서 업무 상황에서 재현 가능한지, 면접 단계에서 위 확인사항을 중심으로 검토 요청드립니다.';
+  return '[해당 부서 전달 요약]\n지원자: ' + activeCandidate.name + ' / ' + activeCandidate.role + ' / ' + activeCandidate.type + ' / ' + activeCandidate.exp + '\nAI 서류 점수: ' + activeCandidate.score + '점\n전형 상태: 1차 서류심사 합격 예정\n\n[종합 의견]\n' + activeCandidate.summary + '\n\n[핵심 강점]\n- ' + strengths.join('\n- ') + '\n\n[주요 적합도]\n- 1차 기초 검토: ' + primaryAvg + '점\n- 조직 적합도: ' + o + '점\n- 직무 적합도: ' + j + '점\n- 산업 이해도: ' + i + '점\n\n[추후 확인 필요 사항]\n- ' + checks.join('\n- ') + '\n\n[해당 부서 검토 요청]\n지원자의 경험이 실제 부서 업무 상황에서 재현 가능한지, 면접 단계에서 위 확인사항을 중심으로 검토 요청드립니다.';
 }
 function ensureHandoffPreviewText() {
   const text = document.getElementById('handoffPreviewText');
@@ -1041,7 +1041,7 @@ function toggleHandoffPreview() {
 function setHandoffPreviewEditing(next) {
   const text = document.getElementById('handoffPreviewText');
   const editBtn = document.getElementById('handoffPreviewEditBtn');
-  if (activeCandidate && activeCandidate.phase === '현업 전달 완료') {
+  if (activeCandidate && activeCandidate.phase === '해당 부서 전달 완료') {
     text.disabled = true; text.classList.remove('is-editing');
     editBtn.textContent = '수정 불가'; editBtn.disabled = true;
     return;
@@ -1053,29 +1053,29 @@ function setHandoffPreviewEditing(next) {
 function saveHandoffPreview() {
   const text = document.getElementById('handoffPreviewText');
   if (!activeCandidate) return;
-  if (activeCandidate.phase === '현업 전달 완료') { showToast('현업 전달 완료 후에는 내용을 수정할 수 없습니다.'); return; }
+  if (activeCandidate.phase === '해당 부서 전달 완료') { showToast('해당 부서 전달 완료 후에는 내용을 수정할 수 없습니다.'); return; }
   activeCandidate.handoffMemo = text.value;
   setHandoffPreviewEditing(false);
-  showToast('현업 전달 내용이 저장되었습니다.');
+  showToast('해당 부서 전달 내용이 저장되었습니다.');
 }
 function handoffToBusiness() {
   if (!activeCandidate) return;
-  if (activeCandidate.phase === '현업 전달 완료') { showToast('이미 현업 전달 완료된 지원자입니다.'); return; }
+  if (activeCandidate.phase === '해당 부서 전달 완료') { showToast('이미 해당 부서 전달 완료된 지원자입니다.'); return; }
   ensureHandoffPreviewText();
-  document.getElementById('handoffConfirmBody').textContent = activeCandidate.name + ' 지원자를 1차 서류심사 합격 처리하고 현업 검토 단계로 전달합니다.';
+  document.getElementById('handoffConfirmBody').textContent = activeCandidate.name + ' 지원자를 1차 서류심사 합격 처리하고 해당 부서 검토 단계로 전달합니다.';
   document.getElementById('handoffConfirm').classList.add('open');
 }
 function closeHandoffConfirm(event) { if (event && event.target.id !== 'handoffConfirm') return; document.getElementById('handoffConfirm').classList.remove('open'); }
 function confirmHandoffToBusiness() {
   if (!activeCandidate) return;
-  if (activeCandidate.phase !== '현업 전달 완료') {
+  if (activeCandidate.phase !== '해당 부서 전달 완료') {
     const text = document.getElementById('handoffPreviewText');
     if (text) activeCandidate.handoffMemo = text.value || buildHandoffPreviewText();
-    activeCandidate.phase = '현업 전달 완료';
+    activeCandidate.phase = '해당 부서 전달 완료';
     try { sessionStorage.setItem('handoff_' + activeCandidate.id, '1'); } catch (e) {}
   }
   document.getElementById('handoffConfirm').classList.remove('open');
-  showToast(activeCandidate.name + ' 지원자가 현업 검토 단계로 전달되었습니다.');
+  showToast(activeCandidate.name + ' 지원자가 해당 부서 검토 단계로 전달되었습니다.');
   setTimeout(() => { window.location.href = 'index.html'; }, 1200);
 }
 
@@ -1094,8 +1094,8 @@ fetch('data/applicants.json')
     allCandidates = data.candidates;
     initialDeliveredIds = data.initial_delivered_ids || [];
     allCandidates.forEach(c => {
-      c.phase = initialDeliveredIds.indexOf(c.id) !== -1 ? '현업 전달 완료' : '서류 검토 대기';
-      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '현업 전달 완료';
+      c.phase = initialDeliveredIds.indexOf(c.id) !== -1 ? '해당 부서 전달 완료' : '서류 검토 대기';
+      if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '해당 부서 전달 완료';
     });
     let targetId = getQueryParam('id');
     if (!targetId) targetId = allCandidates[0].id;
