@@ -191,7 +191,7 @@ const role = _asParam === 'manager' ? 'manager' : _asParam === 'hr' ? 'hr' : (se
 if (!empId) window.location.href = '../../index.html';
 document.getElementById('userId').textContent = '사번 ' + empId;
 
-const STEPS = ['요청서 작성', 'JD 작성·검토 요청', '현업 검토', '공고 등재'];
+const STEPS = ['요청서 작성', 'JD 작성·검토 요청', '해당 부서 검토', '공고 등재'];
 
 function renderNav() {
   const isHR = role === 'hr';
@@ -226,7 +226,7 @@ function renderNav() {
   const badge = document.getElementById('userBadge');
   if (!isHR) {
     badge.classList.add('manager-role');
-    badge.innerHTML = '<i class="ti ti-user-check"></i> 현업 리더';
+    badge.innerHTML = '<i class="ti ti-user-check"></i> 해당 부서 리더';
   }
 }
 
@@ -236,7 +236,7 @@ function renderRoleBanner() {
     banner.innerHTML = `
       <i class="ti ti-bulb"></i>
       <div class="role-banner-text">
-        <strong>현업 리더 화면:</strong> 충원이 필요한 인재 요건을 입력하면, AI가 인사팀의 JD 작성을 도와드립니다.
+        <strong>해당 부서 리더 화면:</strong> 충원이 필요한 인재 요건을 입력하면, AI가 인사팀의 JD 작성을 도와드립니다.
         작성된 JD 초안은 검토 후 자연어로 의견을 남기시면 AI가 즉시 반영해 다시 작성합니다.
       </div>`;
     document.getElementById('pageTitle').textContent = '채용 니즈 입력';
@@ -248,11 +248,11 @@ function renderRoleBanner() {
     banner.innerHTML = `
       <i class="ti ti-bulb"></i>
       <div class="role-banner-text">
-        <strong>HR 담당자 화면:</strong> 현업이 작성한 충원요청서를 기반으로 AI가 JD 초안을 자동 생성합니다.
-        현업 검토 의견을 받아 AI가 즉시 반영하며, 최종 확정 후 채용공고로 등재됩니다.
+        <strong>HR 담당자 화면:</strong> 해당 부서가 작성한 충원요청서를 기반으로 AI가 JD 초안을 자동 생성합니다.
+        해당 부서 검토 의견을 받아 AI가 즉시 반영하며, 최종 확정 후 채용공고로 등재됩니다.
       </div>`;
     document.getElementById('listTitle').textContent = '진행 중인 요청서';
-    // HR은 충원요청서를 작성하지 않으므로 새로 만들기 버튼 숨김 (현업이 작성)
+    // HR은 충원요청서를 작성하지 않으므로 새로 만들기 버튼 숨김 (해당 부서가 작성)
     const newBtn = document.getElementById('newBtn');
     if (newBtn) newBtn.style.display = 'none';
   }
