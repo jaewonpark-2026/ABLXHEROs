@@ -207,7 +207,7 @@
         "confirmedAt": "2026.06.19"
       }
     ],
-    "newgrad": [
+    "newgrad_r1": [
       {
         "id": "ng1",
         "name": "강민서",
@@ -267,6 +267,47 @@
         "isRecoorded": false,
         "univ": "성균관대 경제",
         "track": "리스크"
+      }
+    ],
+    "newgrad_r2": [
+      {
+        "id": "ng6",
+        "name": "강민서",
+        "dept": "IT개발",
+        "email": "kang.minseo@email.com",
+        "status": "before",
+        "applied": "2026.05.26",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "서강대 컴퓨터공학",
+        "track": "개발",
+        "passedR1": "2026.06.03"
+      },
+      {
+        "id": "ng7",
+        "name": "박지호",
+        "dept": "보험계리",
+        "email": "park.jiho@email.com",
+        "status": "before",
+        "applied": "2026.05.26",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "연세대 응용통계",
+        "track": "계리",
+        "passedR1": "2026.06.03"
+      },
+      {
+        "id": "ng8",
+        "name": "이서윤",
+        "dept": "영업관리",
+        "email": "lee.seoyoon@email.com",
+        "status": "before",
+        "applied": "2026.05.27",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "고려대 경영",
+        "track": "영업",
+        "passedR1": "2026.06.04"
       }
     ]
   },
