@@ -237,8 +237,8 @@ a { color: inherit; text-decoration: none; }
 .setup-item .si-role { font-size: 11px; color: var(--text-3); }
 .setup-empty { grid-column: 1/-1; text-align: center; padding: 30px; color: var(--text-3); font-size: 12px; }
 .setup-groups { display: flex; flex-direction: column; gap: 14px; max-height: 360px; overflow-y: auto; padding-right: 2px; }
-.setup-group { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.setup-group-hd { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F4F8FC; border-bottom: 1px solid var(--border); cursor: pointer; }
+.setup-group { border: 1px solid var(--border); border-radius: 12px; flex-shrink: 0; }
+.setup-group-hd { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #F4F8FC; border-bottom: 1px solid var(--border); border-radius: 12px 12px 0 0; cursor: pointer; }
 .setup-group-hd input { width: 15px; height: 15px; accent-color: var(--main-1); }
 .setup-group-hd .sg-dept { font-size: 12.5px; font-weight: 700; color: var(--main-1); }
 .setup-group-hd .sg-role { font-size: 11px; color: var(--text-2); }
