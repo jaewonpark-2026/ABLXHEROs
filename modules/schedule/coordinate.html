@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>면접 일정 조율 · RECRUIT AI</title>
+<link rel="icon" href="../../assets/logos/favicon.png" type="image/png">
+<title>에이비엘생명보험 채용 | 면접 일정 조율</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
 @font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
@@ -143,6 +144,20 @@ a { color: inherit; text-decoration: none; }
 .bdg-b { background: var(--info-bg); color: var(--info); }
 .bdg-r { background: var(--err-bg); color: var(--err); }
 .bdg-g { background: #DCFCE7; color: #166534; }
+
+/* 라운드 내부 섹션 카드 (신입 / 경력 분리) */
+.section-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
+.section-card.section-newgrad { border-left: 3px solid #16A34A; }
+.section-card.section-career { border-left: 3px solid var(--main-1); }
+.section-hd { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+.section-hd-l { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 240px; }
+.section-tag { font-size: 10.5px; font-weight: 800; padding: 5px 10px; border-radius: 999px; letter-spacing: 0.04em; flex-shrink: 0; margin-top: 2px; }
+.section-tag.ng { background: #DCFCE7; color: #166534; }
+.section-tag.career { background: var(--info-bg); color: var(--main-1); }
+.section-title { font-size: 14px; font-weight: 700; color: var(--text-1); letter-spacing: -0.02em; margin-bottom: 4px; }
+.section-desc { font-size: 11.5px; color: var(--text-3); line-height: 1.55; max-width: 560px; }
+.section-hd-r { flex-shrink: 0; }
+.ng-filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
 
 /* 신입 공채 리스트 */
 .ng-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; background: white; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; transition: all 0.15s; }
@@ -432,106 +447,165 @@ a { color: inherit; text-decoration: none; }
       <div id="dashboard-summary" class="dash-mini"></div>
 
       <div class="round-tabs">
-        <div class="rt" id="rt-newgrad" onclick="switchRound('newgrad', this)">
-          신입 공채 1차 <span class="badge bdg-g" id="badge-newgrad">5</span>
-        </div>
         <div class="rt active" id="rt-r1" onclick="switchRound('r1', this)">
-          1차 면접 (경력직) <span class="badge bdg-o" id="badge-r1">7</span>
+          1차 면접 <span class="badge bdg-o" id="badge-r1">7</span>
         </div>
         <div class="rt" id="rt-r2" onclick="switchRound('r2', this)">
-          2차 면접 (경력직) <span class="badge bdg-b" id="badge-r2">5</span>
+          2차 면접 <span class="badge bdg-b" id="badge-r2">5</span>
         </div>
         <div class="rt" id="rt-recoord" onclick="switchRound('recoord', this)">
           재조율 요청 <span class="badge bdg-r" id="badge-recoord">3</span>
         </div>
       </div>
 
-      <!-- 신입 공채 1차 -->
-      <div id="round-newgrad" class="hidden">
-        <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#166534;font-weight:700;display:flex;align-items:center;gap:8px;">
-          <i class="ti ti-info-circle" style="font-size:15px;"></i>
-          신입 공채는 면접관 일정 조율 없이 HR이 지정한 시간 슬롯에 지원자를 자동 배정합니다.
-        </div>
-        <div class="filter-bar">
-          <div class="search-box">
-            <i class="ti ti-search"></i>
-            <input class="f-inp" id="search-newgrad" placeholder="이름·학교 검색..." oninput="renderNewgradList()">
-          </div>
-          <select class="f-sel" id="filter-track-newgrad" onchange="renderNewgradList()">
-            <option value="">전체 트랙</option>
-            <option value="개발">IT개발</option>
-            <option value="계리">보험계리</option>
-            <option value="영업">영업관리</option>
-            <option value="리스크">리스크관리</option>
-          </select>
-          <span class="tx-muted tx-sm" id="newgrad-selected-info"></span>
-          <div class="mla">
-            <button class="btn btn-p btn-sm" onclick="openNewgradBulkModal()">
-              <i class="ti ti-send"></i>일괄 일정 배정 · 메일·SMS 발송
-            </button>
-          </div>
-        </div>
-        <div id="newgrad-list"></div>
-      </div>
-
-      <!-- 1차 -->
+      <!-- 1차 면접 (신입 + 경력) -->
       <div id="round-r1">
-        <div class="filter-bar">
-          <div class="search-box">
-            <i class="ti ti-search"></i>
-            <input class="f-inp" id="search-r1" placeholder="이름 검색..." oninput="filterCandidates('r1')">
+        <!-- 신입 공채 섹션 -->
+        <div class="section-card section-newgrad">
+          <div class="section-hd">
+            <div class="section-hd-l">
+              <span class="section-tag ng">신입 공채</span>
+              <div>
+                <div class="section-title">신입 공채 · 1차 면접 시간 일괄 안내</div>
+                <div class="section-desc">조율 과정 없이 HR이 지정한 시간에 면접을 진행합니다. 선택한 지원자에게 면접 시간을 자동 분배하여 안내 메일·SMS를 발송합니다.</div>
+              </div>
+            </div>
+            <div class="section-hd-r">
+              <button class="btn btn-p btn-sm" onclick="openNewgradBulkModal('r1')">
+                <i class="ti ti-send"></i>일괄 일정 배정 · 메일·SMS 발송
+              </button>
+            </div>
           </div>
-          <select class="f-sel" id="filter-status-r1" onchange="filterCandidates('r1')">
-            <option value="">전체 상태</option>
-            <option value="before">조율 전</option>
-            <option value="pending">조율 중</option>
-            <option value="done">조율 완료</option>
-          </select>
-          <select class="f-sel" id="filter-dept-r1" onchange="filterCandidates('r1')">
-            <option value="">전체 직군</option>
-            <option value="보험계리">보험계리</option>
-            <option value="IT개발">IT개발</option>
-            <option value="투자운용">투자운용</option>
-            <option value="리스크관리">리스크관리</option>
-          </select>
-          <span class="tx-muted tx-sm" id="r1-selected-info"></span>
-          <div class="mla">
-            <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r1')">
-              <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 메일·SMS 발송
-            </button>
+          <div class="ng-filter-bar">
+            <div class="search-box">
+              <i class="ti ti-search"></i>
+              <input class="f-inp" id="search-newgrad-r1" placeholder="이름·학교 검색..." oninput="renderNewgradList('r1')">
+            </div>
+            <select class="f-sel" id="filter-track-newgrad-r1" onchange="renderNewgradList('r1')">
+              <option value="">전체 트랙</option>
+              <option value="개발">IT개발</option>
+              <option value="계리">보험계리</option>
+              <option value="영업">영업관리</option>
+              <option value="리스크">리스크관리</option>
+            </select>
+            <span class="tx-muted tx-sm" id="newgrad-r1-selected-info"></span>
           </div>
+          <div id="newgrad-list-r1"></div>
         </div>
-        <div class="status-cols" id="kanban-r1"></div>
+
+        <!-- 경력 채용 섹션 -->
+        <div class="section-card section-career">
+          <div class="section-hd">
+            <div class="section-hd-l">
+              <span class="section-tag career">경력 채용</span>
+              <div>
+                <div class="section-title">경력 채용 · 1차 면접 일정 조율</div>
+                <div class="section-desc">지원자와 면접관의 가용 시간을 1:1로 조율합니다. 조율 폼 발송 → 응답 수집 → AI 추천 → 확정 메일 순으로 진행됩니다.</div>
+              </div>
+            </div>
+            <div class="section-hd-r">
+              <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r1')">
+                <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 메일·SMS 발송
+              </button>
+            </div>
+          </div>
+          <div class="filter-bar">
+            <div class="search-box">
+              <i class="ti ti-search"></i>
+              <input class="f-inp" id="search-r1" placeholder="이름 검색..." oninput="filterCandidates('r1')">
+            </div>
+            <select class="f-sel" id="filter-status-r1" onchange="filterCandidates('r1')">
+              <option value="">전체 상태</option>
+              <option value="before">조율 전</option>
+              <option value="pending">조율 중</option>
+              <option value="done">조율 완료</option>
+            </select>
+            <select class="f-sel" id="filter-dept-r1" onchange="filterCandidates('r1')">
+              <option value="">전체 직군</option>
+              <option value="보험계리">보험계리</option>
+              <option value="IT개발">IT개발</option>
+              <option value="투자운용">투자운용</option>
+              <option value="리스크관리">리스크관리</option>
+            </select>
+            <span class="tx-muted tx-sm" id="r1-selected-info"></span>
+          </div>
+          <div class="status-cols" id="kanban-r1"></div>
+        </div>
       </div>
 
-      <!-- 2차 -->
+      <!-- 2차 면접 (신입 + 경력) -->
       <div id="round-r2" class="hidden">
-        <div class="filter-bar">
-          <div class="search-box">
-            <i class="ti ti-search"></i>
-            <input class="f-inp" id="search-r2" placeholder="이름 검색..." oninput="filterCandidates('r2')">
+        <!-- 신입 공채 섹션 -->
+        <div class="section-card section-newgrad">
+          <div class="section-hd">
+            <div class="section-hd-l">
+              <span class="section-tag ng">신입 공채</span>
+              <div>
+                <div class="section-title">신입 공채 · 2차 면접 시간 일괄 안내</div>
+                <div class="section-desc">1차 합격자 대상 임원 면접 시간을 일괄 통보합니다. 조율 없이 HR 지정 시간에 진행하며 안내 메일·SMS가 자동 발송됩니다.</div>
+              </div>
+            </div>
+            <div class="section-hd-r">
+              <button class="btn btn-p btn-sm" onclick="openNewgradBulkModal('r2')">
+                <i class="ti ti-send"></i>일괄 일정 배정 · 메일·SMS 발송
+              </button>
+            </div>
           </div>
-          <select class="f-sel" id="filter-status-r2" onchange="filterCandidates('r2')">
-            <option value="">전체 상태</option>
-            <option value="before">조율 전</option>
-            <option value="pending">조율 중</option>
-            <option value="done">조율 완료</option>
-          </select>
-          <select class="f-sel" id="filter-dept-r2" onchange="filterCandidates('r2')">
-            <option value="">전체 직군</option>
-            <option value="보험계리">보험계리</option>
-            <option value="IT개발">IT개발</option>
-            <option value="투자운용">투자운용</option>
-            <option value="리스크관리">리스크관리</option>
-          </select>
-          <span class="tx-muted tx-sm" id="r2-selected-info"></span>
-          <div class="mla">
-            <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r2')">
-              <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 메일·SMS 발송
-            </button>
+          <div class="ng-filter-bar">
+            <div class="search-box">
+              <i class="ti ti-search"></i>
+              <input class="f-inp" id="search-newgrad-r2" placeholder="이름·학교 검색..." oninput="renderNewgradList('r2')">
+            </div>
+            <select class="f-sel" id="filter-track-newgrad-r2" onchange="renderNewgradList('r2')">
+              <option value="">전체 트랙</option>
+              <option value="개발">IT개발</option>
+              <option value="계리">보험계리</option>
+              <option value="영업">영업관리</option>
+              <option value="리스크">리스크관리</option>
+            </select>
+            <span class="tx-muted tx-sm" id="newgrad-r2-selected-info"></span>
           </div>
+          <div id="newgrad-list-r2"></div>
         </div>
-        <div class="status-cols" id="kanban-r2"></div>
+
+        <!-- 경력 채용 섹션 -->
+        <div class="section-card section-career">
+          <div class="section-hd">
+            <div class="section-hd-l">
+              <span class="section-tag career">경력 채용</span>
+              <div>
+                <div class="section-title">경력 채용 · 2차 면접 일정 조율</div>
+                <div class="section-desc">임원진 최종 면접 일정을 조율합니다. 1차 합격자 대상으로 임원 가용 시간 및 지원자 응답을 매칭합니다.</div>
+              </div>
+            </div>
+            <div class="section-hd-r">
+              <button class="btn btn-o btn-sm" onclick="doOpenBulkCoord('r2')">
+                <i class="ti ti-mail"></i>선택 지원자 일괄 조율 요청 메일·SMS 발송
+              </button>
+            </div>
+          </div>
+          <div class="filter-bar">
+            <div class="search-box">
+              <i class="ti ti-search"></i>
+              <input class="f-inp" id="search-r2" placeholder="이름 검색..." oninput="filterCandidates('r2')">
+            </div>
+            <select class="f-sel" id="filter-status-r2" onchange="filterCandidates('r2')">
+              <option value="">전체 상태</option>
+              <option value="before">조율 전</option>
+              <option value="pending">조율 중</option>
+              <option value="done">조율 완료</option>
+            </select>
+            <select class="f-sel" id="filter-dept-r2" onchange="filterCandidates('r2')">
+              <option value="">전체 직군</option>
+              <option value="보험계리">보험계리</option>
+              <option value="IT개발">IT개발</option>
+              <option value="투자운용">투자운용</option>
+              <option value="리스크관리">리스크관리</option>
+            </select>
+            <span class="tx-muted tx-sm" id="r2-selected-info"></span>
+          </div>
+          <div class="status-cols" id="kanban-r2"></div>
+        </div>
       </div>
 
       <!-- 재조율 -->
@@ -679,7 +753,7 @@ function markAllRead() {
 }
 
 // ===== Data (JSON에서 로드) =====
-var CANDIDATES = { r1: [], r2: [], newgrad: [] };
+var CANDIDATES = { r1: [], r2: [], newgrad_r1: [], newgrad_r2: [] };
 var INTERVIEWERS = [];
 var TEMPLATES = [];
 var NOTIFICATIONS = [];
@@ -868,15 +942,13 @@ function renderDashboardSummary(round) {
 function switchRound(name, el) {
   document.querySelectorAll('.rt').forEach(x => x.classList.remove('active'));
   if (el) el.classList.add('active');
-  ['newgrad', 'r1', 'r2', 'recoord'].forEach(r => {
+  ['r1', 'r2', 'recoord'].forEach(r => {
     document.getElementById('round-' + r).classList.toggle('hidden', r !== name);
   });
   if (name === 'r1' || name === 'r2') {
     renderKanban(name);
+    renderNewgradList(name);
     renderDashboardSummary(name);
-  } else if (name === 'newgrad') {
-    renderNewgradList();
-    renderDashboardSummary('newgrad');
   } else {
     renderRecoord();
     renderDashboardSummary('recoord');
@@ -901,11 +973,18 @@ function renderRecoord() {
   document.getElementById('recoord-list').innerHTML = html;
 }
 
-// ===== Newgrad (신입 공채) =====
-function renderNewgradList() {
-  var search = (document.getElementById('search-newgrad')?.value || '').trim().toLowerCase();
-  var track = document.getElementById('filter-track-newgrad')?.value || '';
-  var list = (CANDIDATES.newgrad || []).filter(c => {
+// ===== Newgrad (신입 공채) — round 파라미터로 r1/r2 구분 =====
+function ngKey(round) { return 'newgrad_' + round; }
+function ngListId(round) { return 'newgrad-list-' + round; }
+function ngSearchId(round) { return 'search-newgrad-' + round; }
+function ngTrackId(round) { return 'filter-track-newgrad-' + round; }
+function ngSelInfoId(round) { return 'newgrad-' + round + '-selected-info'; }
+
+function renderNewgradList(round) {
+  if (!round) return;
+  var search = (document.getElementById(ngSearchId(round))?.value || '').trim().toLowerCase();
+  var track = document.getElementById(ngTrackId(round))?.value || '';
+  var list = (CANDIDATES[ngKey(round)] || []).filter(c => {
     if (search && !(c.name.toLowerCase().includes(search) || (c.univ || '').toLowerCase().includes(search))) return false;
     if (track && c.track !== track) return false;
     return true;
@@ -920,53 +999,54 @@ function renderNewgradList() {
         ? '<span class="ng-status sent"><i class="ti ti-check"></i> 발송 완료' + (c.assignedTime ? ' · ' + c.assignedTime : '') + '</span>'
         : '<span class="ng-status before">발송 전</span>';
       html += '<div class="ng-card' + (isSent ? ' is-sent' : '') + '">';
-      html += '<input type="checkbox" class="ng-check" data-id="' + c.id + '" ' + (isSent ? 'disabled' : '') + ' onchange="updateNewgradSelectedInfo()">';
+      html += '<input type="checkbox" class="ng-check ng-check-' + round + '" data-id="' + c.id + '" ' + (isSent ? 'disabled' : '') + ' onchange="updateNewgradSelectedInfo(\'' + round + '\')">';
       html += '<div class="ng-info">';
       html += '<div class="ng-name">' + c.name + '</div>';
       html += '<div class="ng-meta"><span><b>지원 트랙</b> ' + c.dept + '</span><span><b>학교</b> ' + (c.univ || '-') + '</span><span><b>이메일</b> ' + c.email + '</span><span><b>지원일</b> ' + c.applied + '</span></div>';
       html += '</div>';
       html += '<div style="display:flex;align-items:center;gap:10px;">';
       html += statusBadge;
-      html += '<button class="btn btn-o btn-sm" style="color:var(--err);border-color:#FCA5A5;padding:0 10px;height:30px;" onclick="dropNewgradCandidate(\'' + c.id + '\')" title="지원자 드롭 (중도 이탈/면접 취소)"><i class="ti ti-user-x"></i></button>';
+      html += '<button class="btn btn-o btn-sm" style="color:var(--err);border-color:#FCA5A5;padding:0 10px;height:30px;" onclick="dropCandidate(\'' + c.id + '\',\'' + ngKey(round) + '\')" title="지원자 드롭 (중도 이탈/면접 취소)"><i class="ti ti-user-x"></i></button>';
       html += '</div>';
       html += '</div>';
     });
   }
-  document.getElementById('newgrad-list').innerHTML = html;
-  updateNewgradSelectedInfo();
+  document.getElementById(ngListId(round)).innerHTML = html;
+  updateNewgradSelectedInfo(round);
 }
 
-function updateNewgradSelectedInfo() {
-  var n = document.querySelectorAll('.ng-check:checked').length;
-  var el = document.getElementById('newgrad-selected-info');
+function updateNewgradSelectedInfo(round) {
+  var n = document.querySelectorAll('.ng-check-' + round + ':checked').length;
+  var el = document.getElementById(ngSelInfoId(round));
   if (el) el.textContent = n > 0 ? n + '명 선택됨' : '';
 }
 
-function openNewgradBulkModal() {
-  var checks = document.querySelectorAll('.ng-check:checked');
+function openNewgradBulkModal(round) {
+  var checks = document.querySelectorAll('.ng-check-' + round + ':checked');
   if (checks.length === 0) {
     showToast('warn', '선택된 지원자가 없습니다', '먼저 일괄 발송할 신입 지원자를 체크해 주세요.');
     return;
   }
   var ids = Array.from(checks).map(c => c.dataset.id);
+  window._newgradBulkRound = round;
   window._newgradBulkIds = ids;
-  // 기본 설정값
-  var defaults = {
-    date: '2026-06-02',
-    startTime: '09:00',
-    duration: 30,
-    location: '본사 12층 면접실 A',
-    interviewer: 'HR 실무진 + 현업 팀장'
-  };
+  var defaults = round === 'r1'
+    ? { date: '2026-06-02', startTime: '09:00', duration: 30, location: '본사 12층 면접실 A', interviewer: 'HR 실무진 + 현업 팀장' }
+    : { date: '2026-06-18', startTime: '10:00', duration: 30, location: '본사 임원회의실', interviewer: '임원진 (상무 이상)' };
   window._newgradBulkSettings = defaults;
   renderNewgradBulkForm();
   openModal('modal-newgrad-bulk');
 }
 
 function renderNewgradBulkForm() {
+  var round = window._newgradBulkRound;
   var ids = window._newgradBulkIds || [];
   var s = window._newgradBulkSettings || {};
-  var cands = ids.map(id => (CANDIDATES.newgrad || []).find(c => c.id === id)).filter(Boolean);
+  var cands = ids.map(id => (CANDIDATES[ngKey(round)] || []).find(c => c.id === id)).filter(Boolean);
+  var stageLabel = round === 'r1' ? '1차 면접' : '2차 면접';
+  // 모달 제목 동적 갱신
+  var titleEl = document.querySelector('#modal-newgrad-bulk .m-title');
+  if (titleEl) titleEl.textContent = '신입 공채 ' + stageLabel + ' 일괄 일정 배정';
   var html = '<div class="ng-bulk-form">';
   html += '<div class="ng-bulk-summary"><i class="ti ti-users" style="vertical-align:-2px;margin-right:4px;"></i> 선택된 지원자 ' + cands.length + '명: ' + cands.map(c => c.name).join(', ') + '</div>';
   html += '<div class="ng-bulk-row"><label>면접 일자</label><input type="date" id="ng-bulk-date" value="' + s.date + '" onchange="onNewgradBulkChange()"></div>';
@@ -976,7 +1056,6 @@ function renderNewgradBulkForm() {
   html += '</select></div>';
   html += '<div class="ng-bulk-row"><label>면접 장소</label><input type="text" id="ng-bulk-loc" value="' + s.location + '" onchange="onNewgradBulkChange()"></div>';
   html += '<div class="ng-bulk-row"><label>면접관</label><input type="text" id="ng-bulk-int" value="' + s.interviewer + '" onchange="onNewgradBulkChange()"></div>';
-  // 시간 자동 분배 미리보기
   var slots = computeNewgradSlots(cands, s.startTime, s.duration);
   html += '<div class="ng-bulk-preview">';
   html += '<div class="ng-bulk-preview-title">시간 슬롯 자동 분배 미리보기</div>';
@@ -989,7 +1068,6 @@ function renderNewgradBulkForm() {
 }
 
 function computeNewgradSlots(cands, startTime, duration) {
-  // startTime: "HH:MM", duration: minutes
   var parts = (startTime || '09:00').split(':');
   var startMin = parseInt(parts[0]) * 60 + parseInt(parts[1]);
   return cands.map((c, i) => {
@@ -1012,12 +1090,12 @@ function onNewgradBulkChange() {
 }
 
 function doSendNewgradBulk() {
+  var round = window._newgradBulkRound;
   var ids = window._newgradBulkIds || [];
   var s = window._newgradBulkSettings || {};
-  var cands = ids.map(id => (CANDIDATES.newgrad || []).find(c => c.id === id)).filter(Boolean);
+  var cands = ids.map(id => (CANDIDATES[ngKey(round)] || []).find(c => c.id === id)).filter(Boolean);
   if (cands.length === 0) { closeModal('modal-newgrad-bulk'); return; }
   var slots = computeNewgradSlots(cands, s.startTime, s.duration);
-  // 각 지원자에게 발송 처리: status 변경 + 할당 시간 기록
   cands.forEach((c, i) => {
     c.status = 'sent';
     c.assignedDate = s.date;
@@ -1025,11 +1103,12 @@ function doSendNewgradBulk() {
     c.assignedLocation = s.location;
     c.sentAt = new Date().toISOString().slice(0, 16).replace('T', ' ');
   });
-  showToast('ok', '메일·SMS 일괄 발송 완료', cands.length + '명에게 ' + s.date + ' 면접 시간이 자동 분배되어 메일과 SMS가 발송되었습니다.');
+  var stageLabel = round === 'r1' ? '1차 면접' : '2차 면접';
+  showToast('ok', '메일·SMS 일괄 발송 완료', cands.length + '명 신입 지원자에게 ' + s.date + ' ' + stageLabel + ' 시간이 자동 분배되어 메일과 SMS가 발송되었습니다.');
   closeModal('modal-newgrad-bulk');
-  renderNewgradList();
+  renderNewgradList(round);
   updateBadges();
-  renderDashboardSummary('newgrad');
+  renderDashboardSummary(round);
 }
 
 // ===== Reply modal (메일 회신) =====
