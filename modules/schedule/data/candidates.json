@@ -2,6 +2,17 @@
   "candidates": {
     "r1": [
       {
+        "id": "c-cho-r1",
+        "name": "조현근",
+        "dept": "상품기획",
+        "career": "6년 5개월",
+        "email": "hyungeun.cho@email.com",
+        "status": "done",
+        "applied": "2026.05.30",
+        "reminded": true,
+        "isRecoorded": false
+      },
+      {
         "id": "c1",
         "name": "이정민",
         "dept": "계리분석",
@@ -121,6 +132,18 @@
       }
     ],
     "r2": [
+      {
+        "id": "c-cho-r2",
+        "name": "조현근",
+        "dept": "상품기획",
+        "career": "6년 5개월",
+        "email": "hyungeun.cho@email.com",
+        "status": "pending",
+        "applied": "2026.05.30",
+        "passedR1": "2026.06.02",
+        "reminded": true,
+        "isRecoorded": false
+      },
       {
         "id": "c8",
         "name": "서지원",
