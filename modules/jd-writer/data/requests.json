@@ -2,15 +2,15 @@
   "requests": [
     {
       "id": "req-001",
-      "dept": "마케팅팀",
-      "position": "디지털 마케팅 매니저",
+      "dept": "상품기획팀",
+      "position": "상품기획 시니어 매니저",
       "type": "경력",
-      "level": "과장",
+      "level": "차장",
       "headcount": 1,
       "status": "요청서 도착 · JD 대기",
       "status_color": "amber",
       "created_at": "2026-05-22",
-      "creator": "마케팅팀 김부장",
+      "creator": "상품본부 상품기획팀 이부장",
       "assignee_hr": "최병현 책임",
       "current_step": 1
     },
