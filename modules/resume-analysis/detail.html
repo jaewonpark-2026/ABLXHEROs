@@ -355,7 +355,6 @@ a { color: inherit; text-decoration: none; }
       </nav>
       <div class="candidate-header">
         <div class="candidate-title">
-          <div class="avatar" id="candAvatar">-</div>
           <div>
             <strong id="candName">지원자 상세</strong>
             <span id="candMeta">로딩 중...</span>
@@ -1151,7 +1150,6 @@ fetch('data/applicants.json')
     const candidate = allCandidates.find(c => c.id === targetId) || allCandidates[0];
     activeCandidate = candidate;
     activeProfile = getProfile(candidate);
-    document.getElementById('candAvatar').textContent = candidate.name.charAt(0);
     document.getElementById('candName').textContent = candidate.name + ' 상세 검토';
     document.getElementById('candMeta').textContent = candidate.id + ' · ' + candidate.role + ' · ' + candidate.type + ' · ' + candidate.exp + (candidate.channel ? ' · 지원 채널: ' + candidate.channel : '');
     document.getElementById('breadcrumbName').textContent = candidate.name;

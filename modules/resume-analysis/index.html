@@ -91,6 +91,12 @@ a { color: inherit; text-decoration: none; }
 
 /* Job header + Process */
 .job-panel { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 16px; margin-bottom: 18px; align-items: start; }
+.postings-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.posting-card { background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 3px rgba(15,35,65,.04); font: inherit; color: inherit; cursor: pointer; padding: 18px; width: 100%; text-align: left; transition: all 0.15s; box-sizing: border-box; }
+.posting-card:hover { border-color: #B6D8F0; }
+.posting-card.active { border-color: var(--main-1); box-shadow: 0 2px 8px rgba(0,103,172,0.15); background: linear-gradient(135deg, #F8FBFE, white); }
+.posting-card .job-title { font-size: 15px; }
+.posting-card .job-card-head { margin-bottom: 0; }
 .card { background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 3px rgba(15,35,65,.04); }
 .job-card, .process-card { padding: 20px; }
 .job-card-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
@@ -137,8 +143,7 @@ td { padding: 14px 18px; border-bottom: 1px solid var(--border); color: var(--te
 tbody tr { transition: background 0.15s; }
 tbody tr:hover { background: #fbfdff; }
 tbody tr:last-child td { border-bottom: 0; }
-.candidate-cell { display: flex; align-items: center; gap: 12px; min-width: 160px; }
-.candidate-avatar { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: white; font-weight: 700; font-size: 14px; background: var(--grad-blue); }
+.candidate-cell { display: flex; align-items: center; min-width: 160px; }
 .candidate-name { color: var(--text-1); font-size: 13px; font-weight: 700; }
 .candidate-id { color: var(--text-3); font-size: 11px; margin-top: 2px; }
 .channel-tag { display: inline-flex; align-items: center; gap: 2px; padding: 1px 7px; border-radius: 999px; background: #F1F5F9; color: var(--text-2); font-size: 10.5px; font-weight: 600; }
@@ -243,26 +248,38 @@ tbody tr:last-child td { border-bottom: 0; }
       </div>
 
       <section class="job-panel">
-        <div class="card job-card">
-          <div class="job-card-head">
-            <div>
-              <div class="job-title">2026 상반기 신입/경력 채용</div>
-              <div class="job-meta">
-                <span>접수기간 2026.05.01 - 2026.05.24</span><span>·</span>
-                <span>서류전형 2026.05.25 - 2026.05.30</span>
+        <div class="postings-wrap">
+          <button class="card job-card posting-card active" type="button" data-posting="newgrad" onclick="selectPosting('newgrad')">
+            <div class="job-card-head">
+              <div>
+                <div class="job-title" id="postingNewgradTitle">2026 상반기 신입 채용</div>
+                <div class="job-meta">
+                  <span id="postingNewgradPeriod">접수기간 - · 서류전형 -</span>
+                </div>
               </div>
+              <span class="job-status">진행 중</span>
             </div>
-            <span class="job-status">진행 중</span>
-          </div>
+          </button>
+          <button class="card job-card posting-card" type="button" data-posting="career" onclick="selectPosting('career')">
+            <div class="job-card-head">
+              <div>
+                <div class="job-title" id="postingCareerTitle">2026 상반기 경력 채용</div>
+                <div class="job-meta">
+                  <span id="postingCareerPeriod">접수기간 - · 서류전형 -</span>
+                </div>
+              </div>
+              <span class="job-status">진행 중</span>
+            </div>
+          </button>
         </div>
 
         <div class="card process-card">
           <h3>전형 현황</h3>
           <div class="process-steps">
-            <div class="process-step"><span>지원 완료</span><span>142명</span></div>
-            <div class="process-step"><span>자동심사 통과</span><span>118명</span></div>
-            <div class="process-step active"><span>서류 검토 중</span><span id="stageReviewCount">94명</span></div>
-            <div class="process-step"><span>해당 부서 전달</span><span id="stageDoneCount">24명</span></div>
+            <div class="process-step"><span>지원 완료</span><span id="stageAppliedCount">-</span></div>
+            <div class="process-step"><span>자동심사 통과</span><span id="stageAutoCount">-</span></div>
+            <div class="process-step active"><span>서류 검토 중</span><span id="stageReviewCount">-</span></div>
+            <div class="process-step"><span>해당 부서 전달</span><span id="stageDoneCount">-</span></div>
           </div>
         </div>
       </section>
@@ -272,7 +289,7 @@ tbody tr:last-child td { border-bottom: 0; }
           <div class="toolbar-top">
             <div>
               <div class="section-title">지원자 목록</div>
-              <p class="section-desc">자동심사 통과 118명</p>
+              <p class="section-desc" id="listSubDesc">자동심사 통과 -</p>
             </div>
             <div class="search-wrap">
               <i class="ti ti-search search-icon"></i>
@@ -281,12 +298,6 @@ tbody tr:last-child td { border-bottom: 0; }
           </div>
 
           <div class="filters">
-            <div class="filter-group" aria-label="지원 유형 필터">
-              <button class="chip active" type="button" data-type="전체">전체</button>
-              <button class="chip" type="button" data-type="신입">신입</button>
-              <button class="chip" type="button" data-type="경력">경력</button>
-            </div>
-
             <div class="filter-group" aria-label="전형 상태 필터">
               <button class="chip active" type="button" data-phase="전체">전체 상태</button>
               <button class="chip" type="button" data-phase="서류 검토 대기">서류 검토 대기</button>
@@ -318,7 +329,6 @@ tbody tr:last-child td { border-bottom: 0; }
             <thead>
               <tr>
                 <th>지원자</th>
-                <th>지원 유형</th>
                 <th>지원 직무</th>
                 <th>경력</th>
                 <th>AI 서류 점수</th>
@@ -355,8 +365,9 @@ function logout() { sessionStorage.clear(); window.location.href = '../../index.
 
 // ===== Data & state =====
 let candidates = [];
-let stageCounts = { review: 94, done: 24 };
-const state = { type: '전체', phase: '전체', role: '전체', sort: 'scoreDesc', search: '' };
+let stageCountsByPosting = { newgrad: { applied:0, auto_passed:0, in_review:0, delivered:0 }, career: { applied:0, auto_passed:0, in_review:0, delivered:0 } };
+let postings = [];
+const state = { posting: 'newgrad', phase: '전체', role: '전체', sort: 'scoreDesc', search: '' };
 const statusClassMap = {
   '우수': 'status-excellent',
   '적합': 'status-good',
@@ -368,13 +379,14 @@ function getPhaseClass(p) { return p === '해당 부서 전달 완료' ? 'phase-
 
 function getFilteredCandidates() {
   const keyword = state.search.trim().toLowerCase();
+  const postingKor = state.posting === 'newgrad' ? '신입공채' : '경력공채';
   let result = candidates.filter(c => {
-    const matchType = state.type === '전체' || c.type === state.type;
+    const matchPosting = c.posting === postingKor;
     const matchRole = state.role === '전체' || c.role === state.role;
     const matchPhase = state.phase === '전체' || c.phase === state.phase;
-    const searchable = [c.name, c.type, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
+    const searchable = [c.name, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
     const matchSearch = !keyword || searchable.indexOf(keyword) !== -1;
-    return matchType && matchRole && matchPhase && matchSearch;
+    return matchPosting && matchRole && matchPhase && matchSearch;
   });
   result.sort((a, b) => {
     if (state.sort === 'scoreDesc') return b.score - a.score;
@@ -386,8 +398,39 @@ function getFilteredCandidates() {
 }
 
 function renderStageCounts() {
-  document.getElementById('stageReviewCount').textContent = stageCounts.review + '명';
-  document.getElementById('stageDoneCount').textContent = stageCounts.done + '명';
+  const sc = stageCountsByPosting[state.posting] || { applied:0, auto_passed:0, in_review:0, delivered:0 };
+  document.getElementById('stageAppliedCount').textContent = sc.applied + '명';
+  document.getElementById('stageAutoCount').textContent = sc.auto_passed + '명';
+  document.getElementById('stageReviewCount').textContent = sc.in_review + '명';
+  document.getElementById('stageDoneCount').textContent = sc.delivered + '명';
+  document.getElementById('listSubDesc').textContent = '자동심사 통과 ' + sc.auto_passed + '명';
+}
+
+function renderPostingCards() {
+  postings.forEach(p => {
+    const titleEl = document.getElementById('posting' + (p.id === 'newgrad' ? 'Newgrad' : 'Career') + 'Title');
+    const periodEl = document.getElementById('posting' + (p.id === 'newgrad' ? 'Newgrad' : 'Career') + 'Period');
+    if (titleEl) titleEl.textContent = p.name;
+    if (periodEl) periodEl.textContent = '접수기간 ' + p.period_apply + ' · 서류전형 ' + p.period_review;
+  });
+  document.querySelectorAll('.posting-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-posting') === state.posting);
+  });
+}
+
+function selectPosting(id) {
+  if (state.posting === id) return;
+  state.posting = id;
+  state.phase = '전체';
+  state.role = '전체';
+  state.search = '';
+  // 필터 chip 초기화
+  document.querySelectorAll('[data-phase]').forEach(c => c.classList.toggle('active', c.dataset.phase === '전체'));
+  const rf = document.getElementById('roleFilter'); if (rf) rf.value = '전체';
+  const si = document.getElementById('searchInput'); if (si) si.value = '';
+  renderPostingCards();
+  renderStageCounts();
+  renderTable();
 }
 
 function renderTable() {
@@ -400,14 +443,12 @@ function renderTable() {
 
   filtered.forEach(c => {
     const tr = document.createElement('tr');
-    const typeClass = c.type === '신입' ? 'new' : 'career';
     const statusClass = statusClassMap[c.status] || 'status-good';
     const phaseClass = getPhaseClass(c.phase);
     const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
     const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
     tr.innerHTML = `
-      <td><div class="candidate-cell"><div class="candidate-avatar">${c.name.charAt(0)}</div><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
-      <td><span class="type-pill ${typeClass}">${c.type}</span></td>
+      <td><div class="candidate-cell"><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
       <td><strong style="color:var(--text-1)">${c.role}</strong></td>
       <td>${c.exp}</td>
       <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
@@ -427,13 +468,15 @@ fetch('data/applicants.json')
   .then(r => r.json())
   .then(data => {
     candidates = data.candidates;
-    stageCounts = { review: data.stage_counts.in_review, done: data.stage_counts.delivered };
+    stageCountsByPosting = data.stage_counts || stageCountsByPosting;
+    postings = data.postings || [];
     const deliveredIds = data.initial_delivered_ids || [];
     candidates.forEach(c => {
       c.phase = deliveredIds.indexOf(c.id) !== -1 ? '해당 부서 전달 완료' : '서류 검토 대기';
       // 시연용 sessionStorage 핸드오프 반영
       if (sessionStorage.getItem('handoff_' + c.id) === '1') c.phase = '해당 부서 전달 완료';
     });
+    renderPostingCards();
     renderStageCounts();
     renderTable();
   })
@@ -443,14 +486,6 @@ fetch('data/applicants.json')
   });
 
 // Filter events
-document.querySelectorAll('.chip[data-type]').forEach(chip => {
-  chip.addEventListener('click', () => {
-    document.querySelectorAll('.chip[data-type]').forEach(x => x.classList.remove('active'));
-    chip.classList.add('active');
-    state.type = chip.getAttribute('data-type');
-    renderTable();
-  });
-});
 document.querySelectorAll('.chip[data-phase]').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.chip[data-phase]').forEach(x => x.classList.remove('active'));
