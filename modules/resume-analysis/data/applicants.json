@@ -1,9 +1,17 @@
 {
   "stage_counts": {
-    "applied": 142,
-    "auto_passed": 118,
-    "in_review": 94,
-    "delivered": 24
+    "newgrad": {
+      "applied": 95,
+      "auto_passed": 80,
+      "in_review": 60,
+      "delivered": 15
+    },
+    "career": {
+      "applied": 47,
+      "auto_passed": 38,
+      "in_review": 34,
+      "delivered": 9
+    }
   },
   "initial_delivered_ids": [
     "ABL-2026-0178",
@@ -50,7 +58,8 @@
         ]
       ],
       "is_demo": true,
-      "channel": "원티드"
+      "channel": "원티드",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0142",
@@ -91,7 +100,8 @@
           "일부 확인"
         ]
       ],
-      "channel": "캠퍼스 리크루팅"
+      "channel": "캠퍼스 리크루팅",
+      "posting": "신입공채"
     },
     {
       "id": "ABL-2026-0178",
@@ -132,7 +142,8 @@
           "일부 확인"
         ]
       ],
-      "channel": "잡코리아"
+      "channel": "잡코리아",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0211",
@@ -173,7 +184,8 @@
           "추가 확인"
         ]
       ],
-      "channel": "링커리어"
+      "channel": "링커리어",
+      "posting": "신입공채"
     },
     {
       "id": "ABL-2026-0096",
@@ -214,7 +226,8 @@
           "일부 확인"
         ]
       ],
-      "channel": "자사 채용홈"
+      "channel": "자사 채용홈",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0235",
@@ -255,7 +268,8 @@
           "추가 확인"
         ]
       ],
-      "channel": "자사 채용홈"
+      "channel": "자사 채용홈",
+      "posting": "신입공채"
     },
     {
       "id": "ABL-2026-0189",
@@ -296,7 +310,8 @@
           "추가 확인"
         ]
       ],
-      "channel": "헤드헌터"
+      "channel": "헤드헌터",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0164",
@@ -337,7 +352,8 @@
           "일부 확인"
         ]
       ],
-      "channel": "잡코리아"
+      "channel": "잡코리아",
+      "posting": "신입공채"
     },
     {
       "id": "ABL-2026-0127",
@@ -378,7 +394,8 @@
           "일부 확인"
         ]
       ],
-      "channel": "사람인"
+      "channel": "사람인",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0254",
@@ -419,7 +436,8 @@
           "확인됨"
         ]
       ],
-      "channel": "잡다(JOBDA)"
+      "channel": "잡다(JOBDA)",
+      "posting": "신입공채"
     },
     {
       "id": "ABL-2026-0268",
@@ -460,7 +478,8 @@
           "확인됨"
         ]
       ],
-      "channel": "원티드"
+      "channel": "원티드",
+      "posting": "경력공채"
     },
     {
       "id": "ABL-2026-0281",
@@ -501,7 +520,291 @@
           "확인됨"
         ]
       ],
+      "channel": "캠퍼스 리크루팅",
+      "posting": "신입공채"
+    },
+    {
+      "id": "ABL-2026-0301",
+      "name": "노수아",
+      "type": "신입",
+      "role": "영업관리",
+      "exp": "신입",
+      "score": 84,
+      "status": "적합",
+      "tags": [
+        "대외활동 리더십",
+        "고객 응대",
+        "팀 프로젝트"
+      ],
+      "summary": "학부 시절 학생회 활동을 통해 사람들과의 소통과 협업 경험을 쌓았으며, 보험 영업의 핵심인 신뢰 관계 형성에 강한 관심을 보입니다.",
+      "fit": {
+        "culture": 83,
+        "job": 85,
+        "industry": 82
+      },
+      "requirements": {
+        "essential": [
+          "대학 졸업 (예정)",
+          "원만한 대인관계"
+        ],
+        "preferred": [
+          "영업 관련 인턴 경험",
+          "보험·금융 자격증"
+        ]
+      },
+      "is_demo": false,
+      "posting": "신입공채",
+      "channel": "잡코리아"
+    },
+    {
+      "id": "ABL-2026-0302",
+      "name": "임도현",
+      "type": "신입",
+      "role": "디지털/IT",
+      "exp": "신입",
+      "score": 91,
+      "status": "우수",
+      "tags": [
+        "Python",
+        "머신러닝",
+        "데이터 분석",
+        "서비스 기획"
+      ],
+      "summary": "대학에서 머신러닝 프로젝트와 핀테크 해커톤 입상 경험을 보유. 보험 데이터 분석을 통한 고객 인사이트 도출에 관심.",
+      "fit": {
+        "culture": 88,
+        "job": 93,
+        "industry": 85
+      },
+      "requirements": {
+        "essential": [
+          "대학 졸업 (예정)",
+          "프로그래밍 능력"
+        ],
+        "preferred": [
+          "AI/ML 경험",
+          "공모전 입상"
+        ]
+      },
+      "is_demo": false,
+      "posting": "신입공채",
+      "channel": "링커리어"
+    },
+    {
+      "id": "ABL-2026-0303",
+      "name": "백시연",
+      "type": "신입",
+      "role": "상품기획",
+      "exp": "신입",
+      "score": 78,
+      "status": "미흡",
+      "tags": [
+        "시장조사",
+        "경영학",
+        "마케팅 분석"
+      ],
+      "summary": "경영학 전공 과정에서 보험 상품 사례 연구를 진행하며 상품 설계 영역에 관심을 갖게 되었습니다.",
+      "fit": {
+        "culture": 76,
+        "job": 78,
+        "industry": 77
+      },
+      "requirements": {
+        "essential": [
+          "대학 졸업 (예정)",
+          "논리적 사고력"
+        ],
+        "preferred": [
+          "경영·경제 전공",
+          "상품 기획 인턴"
+        ]
+      },
+      "is_demo": false,
+      "posting": "신입공채",
+      "channel": "자사 채용홈"
+    },
+    {
+      "id": "ABL-2026-0304",
+      "name": "조유진",
+      "type": "신입",
+      "role": "재무/회계",
+      "exp": "신입",
+      "score": 87,
+      "status": "적합",
+      "tags": [
+        "회계원리",
+        "재무관리",
+        "엑셀 모델링"
+      ],
+      "summary": "회계학 전공으로 재무제표 분석 경험과 CPA 1차 합격 보유. 보험사 재무 운영에 깊은 관심을 보입니다.",
+      "fit": {
+        "culture": 85,
+        "job": 89,
+        "industry": 86
+      },
+      "requirements": {
+        "essential": [
+          "대학 졸업 (예정)",
+          "회계 기초"
+        ],
+        "preferred": [
+          "회계사·세무사 자격",
+          "CFA Level 1"
+        ]
+      },
+      "is_demo": false,
+      "posting": "신입공채",
       "channel": "캠퍼스 리크루팅"
+    },
+    {
+      "id": "ABL-2026-0401",
+      "name": "송재훈",
+      "type": "경력",
+      "role": "디지털/IT",
+      "exp": "6년 3개월",
+      "score": 88,
+      "status": "적합",
+      "tags": [
+        "MSA 설계",
+        "Kubernetes",
+        "DevOps",
+        "Java/Spring"
+      ],
+      "summary": "이커머스·핀테크에서 MSA 전환 프로젝트를 주도. 트래픽 분산과 안정성 확보 경험 풍부.",
+      "fit": {
+        "culture": 86,
+        "job": 90,
+        "industry": 85
+      },
+      "requirements": {
+        "essential": [
+          "3년 이상 백엔드 경험",
+          "클라우드 운영"
+        ],
+        "preferred": [
+          "금융권 시스템 경험",
+          "리더 경험"
+        ]
+      },
+      "is_demo": false,
+      "posting": "경력공채",
+      "channel": "원티드"
+    },
+    {
+      "id": "ABL-2026-0402",
+      "name": "황지영",
+      "type": "경력",
+      "role": "계리분석",
+      "exp": "8년 2개월",
+      "score": 93,
+      "status": "우수",
+      "tags": [
+        "IFRS17",
+        "책임준비금",
+        "경제적가치 평가",
+        "FIAK"
+      ],
+      "summary": "국내 대형 생보사에서 IFRS17 전환을 실무 리드. 책임준비금 산출 모델 개선으로 결산 정확도 향상에 기여.",
+      "fit": {
+        "culture": 91,
+        "job": 95,
+        "industry": 92
+      },
+      "requirements": {
+        "essential": [
+          "계리 실무 5년 이상",
+          "IFRS17 경험"
+        ],
+        "preferred": [
+          "FIAK 자격",
+          "리더 경험"
+        ]
+      },
+      "is_demo": false,
+      "posting": "경력공채",
+      "channel": "헤드헌터"
+    },
+    {
+      "id": "ABL-2026-0403",
+      "name": "차민호",
+      "type": "경력",
+      "role": "재무/회계",
+      "exp": "4년 8개월",
+      "score": 71,
+      "status": "미흡",
+      "tags": [
+        "결산 업무",
+        "SAP",
+        "세무 신고"
+      ],
+      "summary": "중소기업에서 일반 결산 업무 담당. 보험·금융 산업 경험은 부족하나 학습 의지가 강함.",
+      "fit": {
+        "culture": 72,
+        "job": 70,
+        "industry": 68
+      },
+      "requirements": {
+        "essential": [
+          "3년 이상 재무 경력",
+          "결산 경험"
+        ],
+        "preferred": [
+          "금융권 경험",
+          "K-IFRS 이해"
+        ]
+      },
+      "is_demo": false,
+      "posting": "경력공채",
+      "channel": "사람인"
+    },
+    {
+      "id": "ABL-2026-0404",
+      "name": "박서연",
+      "type": "경력",
+      "role": "영업관리",
+      "exp": "5년 6개월",
+      "score": 85,
+      "status": "적합",
+      "tags": [
+        "B2B 영업",
+        "채널 관리",
+        "KPI 설계"
+      ],
+      "summary": "보험 대리점 채널 관리 경험. 영업 KPI 설계와 채널 만족도 개선 프로젝트 주도.",
+      "fit": {
+        "culture": 84,
+        "job": 86,
+        "industry": 85
+      },
+      "requirements": {
+        "essential": [
+          "3년 이상 영업·채널 경력",
+          "대인 관계 역량"
+        ],
+        "preferred": [
+          "보험·금융 영업 경험",
+          "채널 관리 자격"
+        ]
+      },
+      "is_demo": false,
+      "posting": "경력공채",
+      "channel": "잡코리아"
+    }
+  ],
+  "postings": [
+    {
+      "id": "newgrad",
+      "name": "2026 상반기 신입 채용",
+      "period_apply": "2026.05.01 - 2026.05.24",
+      "period_review": "2026.05.25 - 2026.05.30",
+      "status": "진행 중"
+    },
+    {
+      "id": "career",
+      "name": "2026 상반기 경력 채용",
+      "period_apply": "2026.04.15 - 2026.05.31 (상시)",
+      "period_review": "2026.05.20 - 2026.06.05",
+      "status": "진행 중"
     }
   ]
 }
