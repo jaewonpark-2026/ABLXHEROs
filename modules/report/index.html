@@ -6414,9 +6414,10 @@ function showToast(message, type) {
             const data = INTERNAL_DB[job][level];
             
             const slider = document.getElementById('offer-slider');
-            // 밴드가 넓어졌으므로 시각적 여백도 충분히 확보
-            currentVisualMin = data.min - 1000;
-            currentVisualMax = data.max + 1000;
+            // 좌우 여백을 밴드 폭의 10%로 잡아 MIN~MAX 막대가 화면의 약 83%를 차지하도록
+            const bandRange = data.max - data.min;
+            currentVisualMin = data.min - bandRange * 0.1;
+            currentVisualMax = data.max + bandRange * 0.1;
             slider.min = currentVisualMin; 
             slider.max = currentVisualMax;
             slider.value = initValue || data.mid; 
