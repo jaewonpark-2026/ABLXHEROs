@@ -206,6 +206,68 @@
         "sentAt": "2026.06.10",
         "confirmedAt": "2026.06.19"
       }
+    ],
+    "newgrad": [
+      {
+        "id": "ng1",
+        "name": "강민서",
+        "dept": "IT개발",
+        "email": "kang.minseo@email.com",
+        "status": "before",
+        "applied": "2026.05.26",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "서강대 컴퓨터공학",
+        "track": "개발"
+      },
+      {
+        "id": "ng2",
+        "name": "박지호",
+        "dept": "보험계리",
+        "email": "park.jiho@email.com",
+        "status": "before",
+        "applied": "2026.05.26",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "연세대 응용통계",
+        "track": "계리"
+      },
+      {
+        "id": "ng3",
+        "name": "이서윤",
+        "dept": "영업관리",
+        "email": "lee.seoyoon@email.com",
+        "status": "before",
+        "applied": "2026.05.27",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "고려대 경영",
+        "track": "영업"
+      },
+      {
+        "id": "ng4",
+        "name": "정태우",
+        "dept": "IT개발",
+        "email": "jung.taewoo@email.com",
+        "status": "before",
+        "applied": "2026.05.27",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "한양대 컴퓨터공학",
+        "track": "개발"
+      },
+      {
+        "id": "ng5",
+        "name": "한소율",
+        "dept": "리스크관리",
+        "email": "han.soyul@email.com",
+        "status": "before",
+        "applied": "2026.05.28",
+        "reminded": false,
+        "isRecoorded": false,
+        "univ": "성균관대 경제",
+        "track": "리스크"
+      }
     ]
   },
   "interviewers": [
