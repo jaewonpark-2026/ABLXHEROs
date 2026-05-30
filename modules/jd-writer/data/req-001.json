@@ -9,7 +9,7 @@
     "headcount": 1,
     "desired_date": "2026-07-15",
     "employment_type": "정규직",
-    "creator": "상품본부 상품기획팀 이부장",
+    "creator": "상품본부 상품기획팀 박채희 부장",
     "created_at": "2026-05-22",
     "reason_category": "사업 확장",
     "reason_detail": "IFRS17·K-ICS 도입 환경 정착 이후 상품 포트폴리오 재편이 핵심 과제로 부상하면서, 변액·종신·정기보험 등 다양한 상품군의 Pricing과 수익성 시뮬레이션을 직접 수행할 시니어급 인력 충원이 시급합니다. 우리금융그룹 편입 이후 그룹사 시너지를 활용한 상품 전략 수립 필요성도 증가하고 있어, 도메인 깊이와 cross-functional 협업 역량을 갖춘 시니어 매니저급 인재가 필요합니다.",
@@ -39,7 +39,7 @@
   "jd_draft": null,
   "review_history": [
     {
-      "actor": "상품본부 상품기획팀 이부장",
+      "actor": "상품본부 상품기획팀 박채희 부장",
       "actor_role": "manager",
       "timestamp": "2026-05-22 11:20",
       "action": "충원요청서 제출",
@@ -49,7 +49,7 @@
   "manager_comments": [],
   "approval_status": {
     "requester": {
-      "by": "상품본부 상품기획팀 이부장",
+      "by": "상품본부 상품기획팀 박채희 부장",
       "at": "2026-05-22 11:20",
       "approved": true
     },
