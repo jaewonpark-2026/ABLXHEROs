@@ -79,7 +79,7 @@
       "detail": "상품기획 시니어 매니저 경력직 1명 충원 요청. 인사팀 검토 요청."
     },
     {
-      "actor": "최병현 책임",
+      "actor": "하유림 책임",
       "actor_role": "hr",
       "timestamp": "2026-05-22 14:05",
       "action": "HR Consent 승인",
@@ -93,7 +93,7 @@
       "detail": "충원요청서의 요구자격 항목과 ABL 5대 핵심가치(선진, 전문성)를 반영하여 v1 초안 자동 생성. ABL 표준 JD 양식 적용."
     },
     {
-      "actor": "최병현 책임",
+      "actor": "하유림 책임",
       "actor_role": "hr",
       "timestamp": "2026-05-23 14:32",
       "action": "JD 초안 보완",
@@ -108,7 +108,7 @@
       "approved": true
     },
     "hr_consent": {
-      "by": "최병현 책임",
+      "by": "하유림 책임",
       "at": "2026-05-22 14:05",
       "approved": true
     },
