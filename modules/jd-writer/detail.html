@@ -725,7 +725,7 @@ function renderHRFeedbackArea(data) {
     area.innerHTML = `
       <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
         <div class="action-title" style="color:#9A6D00;"><i class="ti ti-clock"></i> 해당 부서 검토 대기 중</div>
-        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(상품본부 상품기획팀 이부장)에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
+        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(상품본부 상품기획팀 박채희 부장)에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
       </div>`;
     return;
   }
@@ -737,7 +737,7 @@ function renderHRFeedbackArea(data) {
     <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
       <div class="action-title" style="color:#9A6D00;"><i class="ti ti-message-report"></i> 해당 부서 수정 의견이 도착했습니다</div>
       <div style="background:white; border-radius:8px; padding:14px 16px; margin:10px 0 16px; border:1px solid #F0D9A8;">
-        <div style="font-size:11px; font-weight:700; color:#9A6D00; margin-bottom:6px;">상품본부 상품기획팀 이부장 · ${fb.at}</div>
+        <div style="font-size:11px; font-weight:700; color:#9A6D00; margin-bottom:6px;">상품본부 상품기획팀 박채희 부장 · ${fb.at}</div>
         <div style="font-size:13px; color:var(--text-1); line-height:1.7; white-space:pre-wrap;">${fb.refined || fb.raw}</div>
       </div>
       <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="startAIRewrite()">
@@ -789,7 +789,7 @@ function startAIGenerate() {
 
 function requestReview() {
   localStorage.setItem('req-001-jd-sent', 'true');
-  alert('해당 부서 리더(상품본부 상품기획팀 이부장)에게 JD 검토 요청을 보냈습니다.\n\n해당 부서가 의견을 회신하면 알림이 도착합니다. (시연용)');
+  alert('해당 부서 리더(상품본부 상품기획팀 박채희 부장)에게 JD 검토 요청을 보냈습니다.\n\n해당 부서가 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
   saveReqState(currentData.id, { current_step: 3, status: 'JD 작성·검토 요청', status_color: 'blue' });
@@ -893,7 +893,7 @@ JD 검토 후 아래와 같이 수정 의견 전달드립니다:
 
 ${points.join('\n\n')}
 
-상품본부 상품기획팀 이부장 드림`;
+상품본부 상품기획팀 박채희 부장 드림`;
 }
 
 function sendRefinedComment() {
@@ -902,7 +902,7 @@ function sendRefinedComment() {
   const refined = document.getElementById('refinedContent').textContent;
   const rawComment = document.getElementById('commentInput').value.trim();
   currentData.review_history.push({
-    actor: "상품본부 상품기획팀 이부장",
+    actor: "상품본부 상품기획팀 박채희 부장",
     actor_role: "manager",
     timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
     action: "수정 의견 전송",
@@ -977,7 +977,7 @@ function rewriteJD() {
       }
 
       currentData.review_history.push({
-        actor: "상품본부 상품기획팀 이부장",
+        actor: "상품본부 상품기획팀 박채희 부장",
         actor_role: "manager",
         timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
         action: "검토 의견 제출",
@@ -1186,7 +1186,7 @@ function approveJD() {
     currentData.status = '공고 등재 대기';
     saveReqState(currentData.id, { current_step: 4, status: '공고 등재 대기', status_color: 'teal' });
     currentData.review_history.push({
-      actor: "상품본부 상품기획팀 이부장",
+      actor: "상품본부 상품기획팀 박채희 부장",
       actor_role: "manager",
       timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
       action: "공고 등재 요청",
@@ -1250,7 +1250,7 @@ async function loadData() {
           actor_role: "hr",
           timestamp: "2026-05-23 14:32",
           action: "해당 부서 검토 요청",
-          detail: "상품본부 상품기획팀 이부장에게 JD 검토 요청 발송."
+          detail: "상품본부 상품기획팀 박채희 부장에게 JD 검토 요청 발송."
         }
       ];
     }
