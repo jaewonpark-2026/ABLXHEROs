@@ -1202,7 +1202,7 @@ function publishPosting() {
     currentData.status = '공고 등재 완료';
     saveReqState(currentData.id, { current_step: 4, status: '공고 등재 완료', status_color: 'green' });
     currentData.review_history.push({
-      actor: "최병현 책임",
+      actor: "하유림 책임",
       actor_role: "hr",
       timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
       action: "채용공고 등재 완료",
@@ -1246,7 +1246,7 @@ async function loadData() {
           detail: "충원요청서 분석 완료. ABL 표준 JD 양식으로 v1 초안 자동 생성."
         },
         {
-          actor: "최병현 책임",
+          actor: "하유림 책임",
           actor_role: "hr",
           timestamp: "2026-05-23 14:32",
           action: "해당 부서 검토 요청",
