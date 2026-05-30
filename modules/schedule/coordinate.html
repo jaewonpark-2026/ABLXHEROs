@@ -454,7 +454,7 @@ a { color: inherit; text-decoration: none; }
           2차 면접 <span class="badge bdg-b" id="badge-r2">5</span>
         </div>
         <div class="rt" id="rt-recoord" onclick="switchRound('recoord', this)">
-          재조율 요청 <span class="badge bdg-r" id="badge-recoord">3</span>
+          재조율 요청 <span class="badge bdg-r" id="badge-recoord">4</span>
         </div>
       </div>
 
@@ -762,6 +762,7 @@ var systemToday = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate(
 
 // 재조율 더미 데이터 (팀원 코드 그대로)
 var RECOORD = [
+  { id: 're4', candId: 'c-cho-r1', candName: '조현근', round: 'r1', from: '지원자 본인', reason: '현 직장 업무 일정상 평일 오후 1시 슬롯만 가능합니다. 해당 시간으로 재조율 부탁드립니다. ※ 시스템 감지: 동일 시간대(6/2 13:00)에 김수연 후보가 이미 배정되어 있어 면접관 일정 충돌이 발생했습니다.', when: '방금 전' },
   { id: 're1', candId: 'c5', candName: '최현우', round: 'r1', from: '박성준 상무', reason: '6월 9일 외부 미팅으로 면접 시간 변경 요청드립니다. 가능한 시간 다시 조정 부탁드립니다.', when: '10분 전' },
   { id: 're2', candId: 'c4', candName: '김수연', round: 'r1', from: '지원자 본인', reason: '회사 일정상 6월 10일 면접 진행이 어렵게 되었습니다. 다른 시간으로 재조율 부탁드립니다.', when: '1시간 전' },
   { id: 're3', candId: 'c10', candName: '이선아', round: 'r2', from: '이혜진 팀장', reason: '6월 17일 컨퍼런스 일정과 겹쳐 면접 참여가 어렵습니다.', when: '3시간 전' }
@@ -847,7 +848,10 @@ function renderKanban(round) {
       } else if (c.status === 'confirm-wait') {
         html += '<div class="pill pl-yellow" style="margin-top:6px;"><span class="dot6" style="background:#92400E"></span>AI 추천 완료 · 조율 대기</div>';
       } else if (c.status === 'done') {
-        html += '<div class="pill pl-green" style="margin-top:6px;"><span class="dot6" style="background:var(--ok)"></span>조율 완료</div>';
+        html += '<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">';
+        html += '<div class="pill pl-green"><span class="dot6" style="background:var(--ok)"></span>조율 완료</div>';
+        if (c.isRecoorded) html += '<div class="pill pl-red">재조율 후 확정</div>';
+        html += '</div>';
         if (c.confirmedTime) html += '<div class="cc-meta" style="margin-top:4px;">' + c.confirmedTime + '</div>';
         if (c.place) html += '<div class="cc-meta">장소: ' + c.place + '</div>';
       } else {
