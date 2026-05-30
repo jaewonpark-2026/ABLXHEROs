@@ -724,7 +724,7 @@ function renderHRFeedbackArea(data) {
     area.innerHTML = `
       <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
         <div class="action-title" style="color:#9A6D00;"><i class="ti ti-clock"></i> 해당 부서 검토 대기 중</div>
-        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(마케팅팀 김부장)에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
+        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(상품본부 상품기획팀 이부장)에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
       </div>`;
     return;
   }
@@ -736,7 +736,7 @@ function renderHRFeedbackArea(data) {
     <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
       <div class="action-title" style="color:#9A6D00;"><i class="ti ti-message-report"></i> 해당 부서 수정 의견이 도착했습니다</div>
       <div style="background:white; border-radius:8px; padding:14px 16px; margin:10px 0 16px; border:1px solid #F0D9A8;">
-        <div style="font-size:11px; font-weight:700; color:#9A6D00; margin-bottom:6px;">마케팅팀 김부장 · ${fb.at}</div>
+        <div style="font-size:11px; font-weight:700; color:#9A6D00; margin-bottom:6px;">상품본부 상품기획팀 이부장 · ${fb.at}</div>
         <div style="font-size:13px; color:var(--text-1); line-height:1.7; white-space:pre-wrap;">${fb.refined || fb.raw}</div>
       </div>
       <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="startAIRewrite()">
@@ -788,7 +788,7 @@ function startAIGenerate() {
 
 function requestReview() {
   localStorage.setItem('req-001-jd-sent', 'true');
-  alert('해당 부서 리더(마케팅팀 김부장)에게 JD 검토 요청을 보냈습니다.\n\n해당 부서가 의견을 회신하면 알림이 도착합니다. (시연용)');
+  alert('해당 부서 리더(상품본부 상품기획팀 이부장)에게 JD 검토 요청을 보냈습니다.\n\n해당 부서가 의견을 회신하면 알림이 도착합니다. (시연용)');
   currentData.current_step = 3;
   currentData.status = "JD 검토 대기";
   saveReqState(currentData.id, { current_step: 3, status: 'JD 작성·검토 요청', status_color: 'blue' });
@@ -892,7 +892,7 @@ JD 검토 후 아래와 같이 수정 의견 전달드립니다:
 
 ${points.join('\n\n')}
 
-마케팅팀 김부장 드림`;
+상품본부 상품기획팀 이부장 드림`;
 }
 
 function sendRefinedComment() {
@@ -901,7 +901,7 @@ function sendRefinedComment() {
   const refined = document.getElementById('refinedContent').textContent;
   const rawComment = document.getElementById('commentInput').value.trim();
   currentData.review_history.push({
-    actor: "마케팅팀 김부장",
+    actor: "상품본부 상품기획팀 이부장",
     actor_role: "manager",
     timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
     action: "수정 의견 전송",
@@ -950,33 +950,33 @@ function rewriteJD() {
     if (currentData.jd_draft) {
       currentData.jd_draft.version = (currentData.jd_draft.version || 1) + 1;
       currentData.jd_draft.last_updated = new Date().toISOString().slice(0, 16).replace('T', ' ');
-      if (comment.includes('스마트')) {
-        currentData.jd_draft.talent_profile = "특히 '스마트' 가치를 중요시합니다. 빠른 학습력과 실험적 사고를 가진 분, 가설을 세우고 데이터로 검증하는 과정을 즐기는 분, 기존의 마케팅 방식에 도전적으로 접근하는 분을 찾습니다.";
+      if (comment.includes('스마트') || comment.includes('선진')) {
+        currentData.jd_draft.talent_profile = "특히 '선진'과 '전문성' 가치를 중요시합니다. IFRS17·K-ICS라는 규제 환경 전환점에서 가정을 시나리오로 검증하는 도메인 통찰을 가진 분, 데이터 기반 의사결정으로 상품 포트폴리오의 새로운 방향을 그려갈 분, 기존 상품 기획 방식에 도전적으로 접근하는 분을 찾습니다.";
       } else if (comment.includes('구체화') || comment.includes('업무')) {
         currentData.jd_draft.main_duties = [
-          "디지털 마케팅 캠페인 통합 운영 (검색·디스플레이·SNS·CRM 전 채널)",
-          "GA4 및 Tableau 기반 사용자 행동 분석 및 LTV/CAC 모니터링",
-          "주 단위 A/B 테스트 설계·실행 (월 4건 이상 목표)",
-          "Braze 기반 마케팅 자동화 시나리오 설계 및 30+ 트리거 운영",
-          "신규 디지털 채널 발굴 및 PoC 추진 (분기 1건 이상)",
-          "예산 관리 및 ROI 리포팅 (월간 경영진 보고)",
-          "주니어 마케터 1~2명 멘토링 및 코칭"
+          "변액·종신·정기보험 신상품 기획 및 Pricing 가정 설정 (분기 1건 이상)",
+          "IFRS17 CSM 기반 상품별 수익성 시뮬레이션 (월 단위 본부장 보고)",
+          "K-ICS 도입에 따른 위험률·할인율 가정 재검토 프로젝트 수행",
+          "Python·Excel 기반 손익 영향도 시뮬레이션 모델 구축·운영",
+          "계리·마케팅·영업본부 cross-functional 협업 PM (시나리오 매트릭스 작성)",
+          "그룹사(우리은행·우리투자증권) 연계 상품 전략 수립 지원",
+          "주니어 매니저 1~2명 멘토링 및 코칭"
         ];
       } else if (comment.includes('엄격') || comment.includes('자격')) {
         currentData.jd_draft.required = [
-          "디지털 마케팅 직무 5년 이상의 실무 경력 (B2C 우대)",
-          "Google Analytics 4 (GA4) 전문가 수준 활용",
-          "A/B 테스트 설계·실행 50건 이상 경험",
-          "SQL 중급 이상 (조인, 윈도우 함수 활용 가능)",
+          "상품기획·계리 직무 5년 이상의 실무 경력 (보험 도메인 우대)",
+          "신상품 1건 이상 출시 직접 수행 경험 (Pricing 가정 설정 포함)",
+          "IFRS17 CSM 산정 또는 K-ICS 대응 프로젝트 직접 참여 경험",
+          "Python 또는 R 기반 손익 시뮬레이션 모델 활용 가능",
           "정량적 성과 입증 가능한 프로젝트 3건 이상",
-          "마케팅 자동화 툴 1년 이상 실무 운영 경험"
+          "영어 비즈니스 커뮤니케이션 가능 (재보험사·그룹 본사 협업)"
         ];
       } else {
-        currentData.jd_draft.role_summary = "마케팅팀 소속 디지털 마케팅 매니저로서, 신규 사업 확장과 기존 고객 활성화를 동시에 추진할 핵심 인재입니다. 데이터에 기반한 의사결정으로 마케팅 ROI를 혁신해 나갈 분을 찾습니다. (의견 반영: " + comment.substring(0, 30) + "...)";
+        currentData.jd_draft.role_summary = "상품본부 상품기획팀 소속 시니어 매니저로서, 변액·종신·정기보험 등 신상품 기획과 Pricing 가정 설계를 주도합니다. IFRS17 CSM 기반 수익성 산정과 K-ICS 가정 재검토를 직접 수행하며, ABL의 다음 5년 상품 포트폴리오 재편을 이끌어 갈 핵심 인재입니다. (의견 반영: " + comment.substring(0, 30) + "...)";
       }
 
       currentData.review_history.push({
-        actor: "마케팅팀 김부장",
+        actor: "상품본부 상품기획팀 이부장",
         actor_role: "manager",
         timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
         action: "검토 의견 제출",
@@ -1185,7 +1185,7 @@ function approveJD() {
     currentData.status = '공고 등재 대기';
     saveReqState(currentData.id, { current_step: 4, status: '공고 등재 대기', status_color: 'teal' });
     currentData.review_history.push({
-      actor: "마케팅팀 김부장",
+      actor: "상품본부 상품기획팀 이부장",
       actor_role: "manager",
       timestamp: new Date().toISOString().slice(0, 16).replace('T', ' '),
       action: "공고 등재 요청",
@@ -1249,7 +1249,7 @@ async function loadData() {
           actor_role: "hr",
           timestamp: "2026-05-23 14:32",
           action: "해당 부서 검토 요청",
-          detail: "마케팅팀 김부장에게 JD 검토 요청 발송."
+          detail: "상품본부 상품기획팀 이부장에게 JD 검토 요청 발송."
         }
       ];
     }
@@ -1466,9 +1466,9 @@ function openPostingPreview() {
   // 채용 형태 / 근무 형태
   const recruitType = req ? req.type : '경력';
   const empType = jd.employment_type || (req && req.employment_type) || '정규직';
-  const office = req ? (req.office || req.dept) : '마케팅본부';
-  const dept = req ? req.dept : '마케팅팀';
-  const position = jd.title || (req && req.position) || '디지털 마케팅 매니저';
+  const office = req ? (req.office || req.dept) : '상품본부';
+  const dept = req ? req.dept : '상품기획팀';
+  const position = jd.title || (req && req.position) || '상품기획 시니어 매니저';
 
   // 히어로 타이틀 (회사명 + 팀 + 채용)
   const heroTitle = `에이비엘생명보험<br>${dept} ${recruitType}직 채용`;
