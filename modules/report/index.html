@@ -4824,15 +4824,20 @@ a { color: inherit; text-decoration: none; }
                         <div class="p-4 border-b border-slate-100">
                             <div class="flex items-center">
                                 <div class="w-1.5 h-4 bg-slate-800 rounded-full mr-2"></div>
-                                <h2 class="text-sm font-bold text-slate-800">보상 패키지 리포트 및 협상 시나리오</h2>
+                                <h2 class="text-sm font-bold text-slate-800">총보상 협상 가이드 (Total Rewards)</h2>
                             </div>
                         </div>
                         <div class="p-5 flex-1 flex flex-col">
-                            <div class="mb-4">
-                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">분석된 총보상 레버리지</h4>
-                                <div id="rewards-analysis" class="space-y-1"></div>
+                            <!-- AI 맞춤 추천 박스 (슬라이더 위치에 따라 변경) -->
+                            <div id="rewards-ai-recommendation" class="mb-3 p-2.5 bg-blue-50 border border-blue-200 rounded text-[11px] text-slate-700 leading-relaxed"></div>
+
+                            <!-- 카드 그리드 (8개 — 적합도순 정렬) -->
+                            <div class="mb-3">
+                                <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">맞춤 추천 보상 카탈로그 (★ 적합도순)</h4>
+                                <div id="rewards-grid" class="grid grid-cols-2 gap-1.5"></div>
                             </div>
 
+                            <!-- 최종 협상 전략 (기존 유지) -->
                             <div class="flex flex-col flex-1 relative mt-2">
                                 <div class="flex justify-between items-end mb-2">
                                     <h4 class="text-[10px] font-bold text-slate-600 uppercase tracking-wider">최종 협상 전략 및 기안 메모</h4>
@@ -4840,7 +4845,7 @@ a { color: inherit; text-decoration: none; }
                                         <i class="ti ti-sparkles text-corp-DEFAULT mr-1.5"></i> AI 기안 초안 생성
                                     </button>
                                 </div>
-                                <textarea id="proposal-draft" class="w-full h-full min-h-[120px] p-3 bg-slate-50 border border-slate-200 rounded text-xs outline-none focus:border-corp-DEFAULT transition-colors resize-none text-slate-700 leading-relaxed font-mono" placeholder="데이터를 바탕으로 담당자의 최종 판단과 협상 전략을 이곳에 기록하세요. (예: 시장 대비 인상률이 낮으나, 후보자의 성장 니즈를 반영하여 자격증 취득 지원 제도를 적극 어필할 계획임.)"></textarea>
+                                <textarea id="proposal-draft" class="w-full h-full min-h-[100px] p-3 bg-slate-50 border border-slate-200 rounded text-xs outline-none focus:border-corp-DEFAULT transition-colors resize-none text-slate-700 leading-relaxed font-mono" placeholder="데이터를 바탕으로 담당자의 최종 판단과 협상 전략을 이곳에 기록하세요. (예: 시장 대비 인상률이 낮으나, 후보자의 성장 니즈를 반영하여 자격증 취득 지원 제도를 적극 어필할 계획임.)"></textarea>
                             </div>
                         </div>
                     </section>
@@ -6582,7 +6587,7 @@ function showToast(message, type) {
             const internalData = INTERNAL_DB[cand.job][cand.level];
             const startOffer = Math.min(cand.hope, internalData.max); 
             runSimulation(startOffer);
-            renderTotalRewards(cand.tags.join(' '));
+            renderTotalRewards(cand);
         }
 
         function runSimulation(initValue = null) {
@@ -6716,43 +6721,73 @@ function showToast(message, type) {
                 </div>`;
             }
             document.getElementById('hr-script').innerHTML = script;
+
+            // 슬라이더 변경 시 총보상 카드 + AI 추천 메시지 갱신
+            renderTotalRewards(cand);
         }
 
-        function renderTotalRewards(tagsStr) {
-            const container = document.getElementById('rewards-analysis');
-            let html = "";
+        function renderTotalRewards(cand) {
+            // 8개 카드 (4 금전 + 4 비금전) 카탈로그
+            const cards = [
+                { type: 'cash', icon: 'ti-gift',          name: '사이닝 보너스',         desc: '합류 일시금 200~500만원',                match: ['보상 중시'] },
+                { type: 'cash', icon: 'ti-trending-up',   name: '성과 인센티브',         desc: '신상품 출시 시 기본급 +10~15%',            match: ['Pricing', '보상 중시', '포트폴리오'] },
+                { type: 'cash', icon: 'ti-luggage',       name: '이주비·정착 지원금',    desc: '차장급 합류 시 100~150만원',              match: [] },
+                { type: 'cash', icon: 'ti-school',        name: '자기계발 지원금',       desc: '자격증·교육비 연 200만원',                match: ['도메인', '전문성', '성장'] },
+                { type: 'soft', icon: 'ti-users-group',   name: '직무 권한 확장',        desc: 'Cross-functional PM + 본부 분기 발표',     match: ['Cross-functional', '도메인'] },
+                { type: 'soft', icon: 'ti-presentation',  name: '사내 학습 세션 강사',   desc: 'IFRS17·K-ICS 도메인 강사 권한',           match: ['IFRS17', 'K-ICS', '도메인'] },
+                { type: 'soft', icon: 'ti-target-arrow',  name: '신상품 Pricing 풀 오너십', desc: '분기 내 신상품 1건 오너 지정',          match: ['Pricing', 'IFRS17', '도메인'] },
+                { type: 'soft', icon: 'ti-home',          name: '유연근무·재택',         desc: '월 8일 재택, 코어타임 자율',              match: ['유연성', '안정', '육아'] }
+            ];
 
-            if (tagsStr.includes('성장') || tagsStr.includes('전문성')) {
-                html += `
-                <div class="flex items-start py-1.5">
-                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-700">커리어 성장</p>
-                        <p class="text-[10px] text-slate-500">계리사/CFA 자격 취득 지원 및 직무 컨퍼런스 참여 보장 어필</p>
-                    </div>
-                </div>`;
+            // 후보 태그 기반 적합도(별점) 계산
+            const candTagsStr = cand.tags.join(' ');
+            cards.forEach(card => {
+                let matchCount = 0;
+                card.match.forEach(m => { if (candTagsStr.includes(m)) matchCount++; });
+                if (matchCount >= 2) card.stars = 5;
+                else if (matchCount >= 1) card.stars = 4;
+                else if (card.type === 'soft') card.stars = 3;
+                else card.stars = 2;
+            });
+
+            // 적합도순 정렬 (높은 별점이 먼저)
+            cards.sort((a, b) => b.stars - a.stars);
+
+            // AI 추천 메시지 — 슬라이더가 q3 이상이면 강조 alert
+            const aiBox = document.getElementById('rewards-ai-recommendation');
+            const offer = parseInt(document.getElementById('offer-slider').value);
+            const job = document.getElementById('job-select').value;
+            const level = document.getElementById('level-select').value;
+            const internalData = INTERNAL_DB[job][level];
+            const top5Names = cards.filter(c => c.stars === 5).slice(0, 3).map(c => c.name);
+            const topNames = top5Names.length > 0 ? top5Names.join(' · ') : cards.slice(0, 3).map(c => c.name).join(' · ');
+
+            if (offer >= internalData.q3) {
+                aiBox.className = 'mb-3 p-2.5 bg-amber-50 border border-amber-300 rounded text-[11px] text-slate-700 leading-relaxed';
+                aiBox.innerHTML = '<div class="flex items-start"><i class="ti ti-alert-triangle text-amber-600 text-sm mt-0.5 mr-2"></i><div><b class="text-amber-700">회사 정책 상위 25% 진입 — 추가 인상 여력 제한적</b><br/>' + cand.name + ' 님의 동기 프로파일에 매칭된 <b>비금전 패키지</b>로 협상을 풀어가시기를 권장합니다. 우선 어필 카드: <b>' + topNames + '</b></div></div>';
+            } else {
+                aiBox.className = 'mb-3 p-2.5 bg-blue-50 border border-blue-200 rounded text-[11px] text-slate-700 leading-relaxed';
+                aiBox.innerHTML = '<div class="flex items-start"><i class="ti ti-bulb text-corp-DEFAULT text-sm mt-0.5 mr-2"></i><div><b class="text-corp-DEFAULT">AI 맞춤 추천</b><br/>' + cand.name + ' 님의 인사이트 태그에 따라 아래 카드를 적합도순으로 정렬했습니다. 핵심 협상 카드: <b>' + topNames + '</b></div></div>';
             }
-            if (tagsStr.includes('육아') || tagsStr.includes('안정') || tagsStr.includes('유연성')) {
-                html += `
-                <div class="flex items-start py-1.5">
-                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-700">근무 유연성 및 복지</p>
-                        <p class="text-[10px] text-slate-500">패밀리데이(수요일 조기퇴근) 및 종합검진(배우자 포함) 어필</p>
-                    </div>
-                </div>`;
-            }
-            if (html === "") {
-                html = `
-                <div class="flex items-start py-1.5">
-                    <i class="ti ti-minus mt-1 text-slate-300 text-[10px] mr-2"></i>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-700">인정 체계</p>
-                        <p class="text-[10px] text-slate-500">명확한 성과 기반 인센티브(PS/PI) 구조 및 장기근속 포상 어필</p>
-                    </div>
-                </div>`;
-            }
-            container.innerHTML = html;
+
+            // 카드 그리드 렌더링
+            const grid = document.getElementById('rewards-grid');
+            grid.innerHTML = cards.map(c => {
+                const starsHtml = '★'.repeat(c.stars) + '<span class="text-slate-200">' + '★'.repeat(5 - c.stars) + '</span>';
+                const typeBadge = c.type === 'cash'
+                    ? '<span class="text-[8px] font-bold text-blue-600 bg-blue-50 px-1 py-0.5 rounded leading-none">금전</span>'
+                    : '<span class="text-[8px] font-bold text-purple-600 bg-purple-50 px-1 py-0.5 rounded leading-none">비금전</span>';
+                const bgClass = c.stars >= 5 ? 'bg-amber-50 border-amber-200' : 'bg-white border-slate-200';
+                return '<div class="p-2 ' + bgClass + ' border rounded">'
+                    + '<div class="flex items-start justify-between mb-1">'
+                    + '<i class="ti ' + c.icon + ' text-slate-500 text-sm"></i>'
+                    + typeBadge
+                    + '</div>'
+                    + '<p class="text-[10px] font-bold text-slate-800 leading-tight mb-0.5">' + c.name + '</p>'
+                    + '<p class="text-[9px] text-slate-500 leading-tight mb-1">' + c.desc + '</p>'
+                    + '<p class="text-[10px] text-amber-500 leading-none tracking-wide">' + starsHtml + '</p>'
+                    + '</div>';
+            }).join('');
         }
 
         function generateAIDraft() {
