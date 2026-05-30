@@ -10,7 +10,9 @@
         "status": "done",
         "applied": "2026.05.30",
         "reminded": true,
-        "isRecoorded": false
+        "isRecoorded": true,
+        "confirmedTime": "2026.06.02 15:00",
+        "place": "본사 7층 면접실 B"
       },
       {
         "id": "c1",
