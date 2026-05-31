@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RECRUIT AI · 처우 협의 v2</title>
+<title>ABL Orbit · 처우 협의 v2</title>
 <link rel="icon" href="../../assets/logos/favicon.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
@@ -210,15 +210,18 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .alt-note { font-size: 10.5px; color: var(--text-3); margin-top: 8px; padding: 7px 10px; background: rgba(16,185,129,0.05); border-radius: 6px; }
 
 .scripts-list { display: flex; flex-direction: column; gap: 10px; }
-.script-card { padding: 12px 14px; border-radius: 9px; border: 1px solid var(--border); background: white; position: relative; }
-.script-card .sc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.script-card .sc-tone { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
-.script-card .sc-tone.firm { background: var(--err-bg); color: #B91C1C; }
-.script-card .sc-tone.flex { background: var(--info-bg); color: var(--main-1); }
-.script-card .sc-tone.propose { background: var(--ok-bg); color: #047857; }
-.script-card .sc-text { font-size: 12px; color: var(--text-1); line-height: 1.65; font-weight: 600; }
-.script-card .sc-copy { padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-2); font-size: 10.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-.script-card .sc-copy:hover { border-color: var(--main-1); color: var(--main-1); }
+.whatif-box.checklist-box { background: linear-gradient(to right, #FAFCFE, #FFFFFF); border-color: #BCD9F0; }
+.check-list { display: flex; flex-direction: column; gap: 14px; }
+.check-group { padding: 12px 14px; background: white; border-radius: 9px; border: 1px solid var(--border); }
+.check-group .cg-label { display: flex; align-items: center; gap: 7px; font-size: 11.5px; font-weight: 700; color: var(--main-1); padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px solid #F0F4F8; letter-spacing: 0.02em; }
+.check-group .cg-label i { font-size: 14px; }
+.check-item { display: flex; gap: 10px; padding: 6px 0; cursor: pointer; align-items: flex-start; font-size: 12px; color: var(--text-1); line-height: 1.55; transition: color 0.15s; }
+.check-item:hover { color: var(--main-1); }
+.check-item input[type=checkbox] { margin-top: 3px; accent-color: var(--main-1); width: 13px; height: 13px; cursor: pointer; flex-shrink: 0; }
+.check-item input[type=checkbox]:checked + span { color: var(--text-3); text-decoration: line-through; text-decoration-color: var(--text-3); text-decoration-thickness: 1px; }
+.check-item span { flex: 1; }
+.check-item span strong { color: var(--main-1); font-weight: 700; }
+.check-item input[type=checkbox]:checked + span strong { color: var(--text-3); }
 
 /* ===== 7. AI 메모 ===== */
 .memo-area { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: #FAFBFD; font-family: inherit; font-size: 12px; line-height: 1.7; color: var(--text-1); resize: vertical; min-height: 120px; outline: none; }
@@ -241,6 +244,40 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .toast.success { background: var(--ok); }
 .toast i { font-size: 14px; }
 
+/* ===== Modal (이력서 / 면접 평가) ===== */
+.modal-backdrop { position: fixed; inset: 0; z-index: 2500; background: rgba(15,35,65,0.5); display: none; align-items: center; justify-content: center; padding: 24px; opacity: 0; transition: opacity 0.22s; }
+.modal-backdrop.open { display: flex; opacity: 1; }
+.modal-card { width: min(640px, 100%); max-height: 88vh; background: white; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 24px 60px rgba(15,35,65,0.24); transform: translateY(10px); transition: transform 0.22s; }
+.modal-backdrop.open .modal-card { transform: translateY(0); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.modal-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--text-1); }
+.modal-title i { color: var(--main-1); }
+.modal-close { width: 30px; height: 30px; border-radius: 8px; background: var(--bg-page); color: var(--text-2); display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
+.modal-close:hover { background: #EEF3F8; color: var(--text-1); }
+.modal-close i { font-size: 16px; }
+.modal-body { padding: 20px 22px; overflow-y: auto; flex: 1; }
+.modal-ft { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; background: #fbfdff; border-radius: 0 0 16px 16px; }
+.resume-block { margin-bottom: 18px; }
+.resume-block:last-child { margin-bottom: 0; }
+.resume-block-title { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.resume-block-title::before { content: ''; width: 3px; height: 11px; background: var(--main-1); border-radius: 1px; }
+.resume-block .row { display: grid; grid-template-columns: 100px 1fr; gap: 8px; padding: 6px 0; font-size: 12px; }
+.resume-block .row .k { color: var(--text-3); font-weight: 700; }
+.resume-block .row .v { color: var(--text-1); }
+.resume-block ul { padding-left: 18px; }
+.resume-block li { font-size: 12px; line-height: 1.7; color: var(--text-1); }
+.resume-block li strong { color: var(--main-1); font-weight: 700; }
+.eval-score-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.eval-score-card { padding: 12px; background: linear-gradient(135deg, #F0F7FD, #E6F1FB); border-radius: 10px; text-align: center; }
+.eval-score-card .esc-label { font-size: 10.5px; color: var(--text-3); font-weight: 700; margin-bottom: 4px; }
+.eval-score-card .esc-value { font-size: 22px; font-weight: 700; color: var(--main-1); font-variant-numeric: tabular-nums; }
+.eval-interview { padding: 12px 14px; background: var(--bg-page); border-radius: 10px; margin-bottom: 10px; }
+.eval-interview .ei-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.eval-interview .ei-stage { font-size: 11.5px; font-weight: 700; color: var(--main-1); }
+.eval-interview .ei-when { font-size: 11px; color: var(--text-3); }
+.eval-interview .ei-who { font-size: 11.5px; color: var(--text-2); font-weight: 700; margin-bottom: 6px; }
+.eval-interview .ei-text { font-size: 11.5px; color: var(--text-1); line-height: 1.65; }
+
 @media (max-width: 1100px) {
   .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
   .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
@@ -260,7 +297,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
   <div class="sidebar">
     <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
     <a class="brand" href="../../dashboard-hr.html">
-      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-name">ABL Orbit</div>
       <div class="brand-sub">ABL × HEROs</div>
     </a>
     <div class="nav">
@@ -314,8 +351,8 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             </div>
           </div>
           <div class="profile-actions">
-            <button class="btn-secondary"><i class="ti ti-file-type-pdf"></i> 이력서</button>
-            <button class="btn-secondary"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
+            <button class="btn-secondary" onclick="openModal('modal-resume')"><i class="ti ti-file-type-pdf"></i> 이력서</button>
+            <button class="btn-secondary" onclick="openModal('modal-eval')"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
           </div>
         </div>
       </section>
@@ -553,30 +590,43 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <div class="alt-note">※ 차액 분산 비율: 사이닝 보너스 50% · 자기계발 지원금 30% · 비금전 옵션 20%</div>
           </div>
 
-          <!-- ③ 대응 멘트 3가지 -->
-          <div class="whatif-box script">
-            <div class="wb-head"><span class="wb-num">3</span> 추천 대응 멘트 (3가지 톤)</div>
-            <div class="scripts-list">
-              <div class="script-card">
-                <div class="sc-head">
-                  <span class="sc-tone firm"><i class="ti ti-shield" style="font-size:10px;"></i> 단호</span>
-                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
-                </div>
-                <div class="sc-text" data-script="firm">현재 회사 정책상 동일 직급 밴드 상단을 초과하는 인상은 어렵습니다. 다만 본 오퍼는 시장 Q3 기준으로 산정된 최선의 조건이며, 사이닝 보너스와 비금전 패키지를 통해 격차를 좁힐 수 있도록 준비해 두었습니다.</div>
+          <!-- ③ HR 협상 숙지 체크리스트 -->
+          <div class="whatif-box checklist-box">
+            <div class="wb-head"><span class="wb-num">3</span> HR 담당자 협상 시 숙지 항목</div>
+            <div style="font-size:11.5px;color:var(--text-3);font-weight:600;margin-bottom:10px;">
+              협상 자리에서 잊지 말아야 할 핵심 근거·옵션·리스크입니다. 체크해가며 사용하세요.
+            </div>
+            <div class="check-list">
+              <div class="check-group">
+                <div class="cg-label"><i class="ti ti-building-bank"></i> 회사 정책 · 한도</div>
+                <label class="check-item"><input type="checkbox"> <span><strong>회사 max는 5,900만원</strong> (Q3 기준). 그 이상은 본부장 결재 + 차상위 직급 비교 필요</span></label>
+                <label class="check-item"><input type="checkbox"> <span>밴드 상단 초과 시 차기 정기인상 여력 -5% 이내로 제한됨</span></label>
+                <label class="check-item"><input type="checkbox"> <span>오퍼 확정 후 처우 변경은 합류 6개월차 점검 1회만 가능</span></label>
               </div>
-              <div class="script-card">
-                <div class="sc-head">
-                  <span class="sc-tone flex"><i class="ti ti-balloon" style="font-size:10px;"></i> 유연</span>
-                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
-                </div>
-                <div class="sc-text" data-script="flex">금액 외에 다른 옵션을 함께 검토해볼 수 있을까요? 사이닝 보너스나 자기계발 지원, 그리고 본부 내 Cross-functional PM 권한처럼 단기 금전 + 중장기 커리어 가치를 포함한 패키지를 함께 제안드리고 싶습니다.</div>
+              <div class="check-group">
+                <div class="cg-label"><i class="ti ti-chart-bar"></i> 시장 · 외부 데이터 근거</div>
+                <label class="check-item"><input type="checkbox"> <span>시장 중앙값 <strong>5,800만원</strong> (Mercer 2025 H2, 생보 4사 차장급)</span></label>
+                <label class="check-item"><input type="checkbox"> <span>본 오퍼는 시장 <strong>Q3 진입</strong> — 상위 25% 수준임을 후보에게 명시</span></label>
+                <label class="check-item"><input type="checkbox"> <span>표준 환산 연봉 <strong>6,100만원</strong>은 현 직장 자료 기반 (원천징수+상여+복리후생)</span></label>
               </div>
-              <div class="script-card">
-                <div class="sc-head">
-                  <span class="sc-tone propose"><i class="ti ti-bulb" style="font-size:10px;"></i> 제안형</span>
-                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
-                </div>
-                <div class="sc-text" data-script="propose">사이닝 보너스 <strong><span class="wi-sc-signing">200</span>만원</strong> + 자기계발 지원금 <strong><span class="wi-sc-edu">150</span>만원</strong>으로 격차를 좁히고, 추가로 Pricing 풀 오너십과 사내 강사 권한까지 포함된 패키지를 제안드립니다. 변액·종신 도메인 전문성을 본부 차원에서 확장할 수 있는 구조입니다.</div>
+              <div class="check-group">
+                <div class="cg-label"><i class="ti ti-gift"></i> 비금전 대체 옵션</div>
+                <label class="check-item"><input type="checkbox"> <span><strong>Cross-functional PM 권한</strong> — 본부 신상품 사이클 단독 리드 가능</span></label>
+                <label class="check-item"><input type="checkbox"> <span><strong>사내 도메인 강사 권한</strong> — IFRS17/K-ICS 사내 교육 진행</span></label>
+                <label class="check-item"><input type="checkbox"> <span><strong>Pricing 풀 오너십</strong> (변액·종신) — 신상품 가격 결정 권한</span></label>
+                <label class="check-item"><input type="checkbox"> <span>유연근무 · 재택 주 2회 (본부 표준 기준 1회 → 2회로 +1일)</span></label>
+              </div>
+              <div class="check-group">
+                <div class="cg-label"><i class="ti ti-alert-triangle"></i> 후보자 강점 · 협상 카드</div>
+                <label class="check-item"><input type="checkbox"> <span>IFRS17 CSM 산정 + K-ICS 가정 설계 <strong>직접 경험자</strong> — 시장에 드뭄</span></label>
+                <label class="check-item"><input type="checkbox"> <span>정량 성과 검증됨: <strong>CSM 5.8%·사업비 12% 절감</strong> (자소서·면접 일관)</span></label>
+                <label class="check-item"><input type="checkbox"> <span>경쟁 후보(임유진) 존재 — 협상 결렬 대비 차순위 보존 후보로 즉시 전환 가능</span></label>
+              </div>
+              <div class="check-group">
+                <div class="cg-label"><i class="ti ti-shield-check"></i> 내부 리스크 · 주의 사항</div>
+                <label class="check-item"><input type="checkbox"> <span>밴드 상단 진입 시 <strong>재직자 5명 역전</strong> — 정기인상 시 추가 조정 필요</span></label>
+                <label class="check-item"><input type="checkbox"> <span>본부장(상품본부) 의사결정 사전 정렬 필수 — 최종 합의 전 1회 보고</span></label>
+                <label class="check-item"><input type="checkbox"> <span>처우 협의 결렬 시 합류 지연 영향: 신상품 출시 일정 약 2개월 지연 가능</span></label>
               </div>
             </div>
           </div>
@@ -593,15 +643,6 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         </div>
       </section>
 
-      <!-- ============ [8] 미래 비전 푸터 (NEW) ============ -->
-      <div class="vision-footer">
-        <i class="ti ti-bulb-filled"></i>
-        <div class="vf-text">
-          모든 처우협의 결과는 <strong>의사결정 로그</strong>로 축적되어, 시간이 갈수록 추천 정확도가 자동으로 향상됩니다.
-        </div>
-        <div class="vf-counter"><i class="ti ti-database" style="font-size:11px;vertical-align:-1px;"></i> 축적된 케이스 247건</div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -609,12 +650,153 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 <!-- Toast container -->
 <div class="toast-wrap" id="toast-wrap"></div>
 
+<!-- ========== 이력서 모달 ========== -->
+<div class="modal-backdrop" id="modal-resume" onclick="if(event.target===this) closeModal('modal-resume')">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title"><i class="ti ti-file-type-pdf"></i> 조현근 지원자 이력서</div>
+      <button class="modal-close" onclick="closeModal('modal-resume')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="resume-block">
+        <div class="resume-block-title">기본 정보</div>
+        <div class="row"><span class="k">이름</span><span class="v">조현근 (1993년생, 만 32세)</span></div>
+        <div class="row"><span class="k">학력</span><span class="v">서강대학교 경영학과 (2014~2018 졸업)</span></div>
+        <div class="row"><span class="k">현 직장</span><span class="v">서강생명 상품개발팀 책임 · 2019.07 ~ 재직 중 (6년 5개월)</span></div>
+        <div class="row"><span class="k">연락처</span><span class="v">hyungeun.cho@email.com / 010-****-1234</span></div>
+        <div class="row"><span class="k">지원 채널</span><span class="v">원티드 · 2026 상반기 경력 채용 (상품기획 시니어 매니저)</span></div>
+      </div>
+      <div class="resume-block">
+        <div class="resume-block-title">핵심 역량</div>
+        <ul>
+          <li><strong>IFRS17</strong> CSM 산정 · 신계약 가치 시뮬레이션 · 결산 보조 (3년)</li>
+          <li><strong>K-ICS</strong> 가정 설계 · 자본 적정성 분석 (2년)</li>
+          <li><strong>변액·종신 Pricing</strong> — 신상품 3건 단독 리드</li>
+          <li><strong>Cross-functional PM</strong> — 영업·계리·리스크 부서 협업 경험 다수</li>
+        </ul>
+      </div>
+      <div class="resume-block">
+        <div class="resume-block-title">정량 성과</div>
+        <ul>
+          <li>변액유니버셜 신상품 — <strong>CSM 5.8% 개선</strong> (회사 동일 기간 평균 3.1% 대비 +2.7%p)</li>
+          <li>무배당 종신 리뉴얼 — <strong>CSM 18% 감소 → 사업비 12% 절감</strong> 달성</li>
+          <li>GA 채널 정기보험 — <strong>출시 6개월 매출 1위</strong> 채널 점유 달성</li>
+          <li>본부 IFRS17 대응 TF — 12개월 자발 참여, 본부 결산 가이드라인 작성 기여</li>
+        </ul>
+      </div>
+      <div class="resume-block">
+        <div class="resume-block-title">자격 · 기타</div>
+        <div class="row"><span class="k">자격</span><span class="v">보험계리사 1차 / AICPA 일부 과목 / 한국사 1급</span></div>
+        <div class="row"><span class="k">언어</span><span class="v">영어 — 비즈니스 회화 / 전문 자료 독해 가능</span></div>
+        <div class="row"><span class="k">자소서 분석</span><span class="v">종합 91점 · 직무 fit 93 · 조직 fit 88 · 산업 fit 94</span></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-secondary" onclick="closeModal('modal-resume')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 면접 평가 모달 ========== -->
+<div class="modal-backdrop" id="modal-eval" onclick="if(event.target===this) closeModal('modal-eval')">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div class="modal-title"><i class="ti ti-clipboard-check"></i> 조현근 지원자 면접 평가</div>
+      <button class="modal-close" onclick="closeModal('modal-eval')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="resume-block">
+        <div class="resume-block-title">종합 점수</div>
+        <div class="eval-score-row">
+          <div class="eval-score-card">
+            <div class="esc-label">답변 정확도</div>
+            <div class="esc-value">92</div>
+          </div>
+          <div class="eval-score-card">
+            <div class="esc-label">직무 적합성</div>
+            <div class="esc-value">94</div>
+          </div>
+          <div class="eval-score-card">
+            <div class="esc-label">조직 fit</div>
+            <div class="esc-value">89</div>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:var(--text-3);font-weight:700;text-align:center;padding:8px;background:var(--bg-page);border-radius:8px;">
+          종합 91점 · 자소서 89 · 역량검사 89
+        </div>
+      </div>
+
+      <div class="resume-block">
+        <div class="resume-block-title">1차 실무 면접 (2026.06.02 15:00 · 본사 7층 면접실 B)</div>
+        <div class="eval-interview">
+          <div class="ei-head">
+            <span class="ei-stage">1차 실무 · 윤미경 팀장</span>
+            <span class="ei-when">상품기획팀</span>
+          </div>
+          <div class="ei-text">변액·종신 Pricing 경험과 KPI 단위 설계 능력이 매우 우수. IFRS17 CSM·K-ICS 가정 설계 직접 수행 경험 확인. 면접 답변 일관성 ★★★★★ — 자소서 내용과 답변 정확도 일치.</div>
+        </div>
+        <div class="eval-interview">
+          <div class="ei-head">
+            <span class="ei-stage">1차 실무 · 김도훈 본부장</span>
+            <span class="ei-when">상품본부</span>
+          </div>
+          <div class="ei-text">Cross-functional PM 경험이 본부 시니어 매니저급에 부합. 신상품 개발 사이클 단축 기대됨. CSM 5.8%·사업비 12% 절감 정량 성과 구체적이며 검증 가능. 2차 임원 면접 강력 추천.</div>
+        </div>
+      </div>
+
+      <div class="resume-block">
+        <div class="resume-block-title">2차 임원 면접 (2026.06.03 15:00 · 본사 12층 임원실)</div>
+        <div class="eval-interview">
+          <div class="ei-head">
+            <span class="ei-stage">2차 임원 · 박성준 상무</span>
+            <span class="ei-when">예정</span>
+          </div>
+          <div class="ei-text">2차 임원 면접 예정 — 본부 향후 3년 상품 전략(CSM 안정 보장성 상품) 견해, ABL 합류 후 첫 6개월 마일스톤, 조직 문화 적합성 중심으로 검토 예정.</div>
+        </div>
+      </div>
+
+      <div class="resume-block">
+        <div class="resume-block-title">HR 메모</div>
+        <div class="eval-interview" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);">
+          <div class="ei-who"><i class="ti ti-pin" style="font-size:12px;vertical-align:-1px;"></i> 하유림 책임 (HR)</div>
+          <div class="ei-text">포트폴리오 자료 사전 제출 — 신상품 3건 런칭 자료 매우 정돈됨. 현 직장 처우 약 4,900만원 (본인 구두 확인) — 처우협의 시 참고.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-secondary" onclick="closeModal('modal-eval')">닫기</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ===== 인증 가벼운 처리 =====
 const empId = sessionStorage.getItem('empId');
 if (!empId) { sessionStorage.setItem('empId', '10234'); sessionStorage.setItem('role', 'hr'); }
 document.getElementById('userId').textContent = '사번 ' + (sessionStorage.getItem('empId') || '10234');
 function logout() { sessionStorage.clear(); location.href = '../../index.html'; }
+
+// ===== Modal =====
+function openModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => {
+      m.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+});
 
 // ===== Toast =====
 function showToast(msg, type = 'info') {
@@ -702,9 +884,6 @@ function updateWhatIf(val) {
   document.getElementById('wi-diff').textContent = diff.toLocaleString();
   document.getElementById('wi-signing').textContent = (signing >= 0 ? '+' : '') + signing + '만원';
   document.getElementById('wi-edu').textContent = (edu >= 0 ? '+' : '') + edu + '만원';
-  // 제안형 멘트에도 반영
-  document.querySelectorAll('.wi-sc-signing').forEach(el => el.textContent = signing);
-  document.querySelectorAll('.wi-sc-edu').forEach(el => el.textContent = edu);
 }
 
 counterNum.addEventListener('input', e => {
@@ -718,30 +897,6 @@ counterSlider.addEventListener('input', e => {
   updateWhatIf(parseInt(e.target.value));
 });
 updateWhatIf(parseInt(counterSlider.value));
-
-// ===== 멘트 복사 =====
-function copyScript(btn) {
-  const card = btn.closest('.script-card');
-  const text = card.querySelector('.sc-text').innerText.trim();
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(
-      () => showToast('멘트가 복사되었습니다.', 'success'),
-      () => fallbackCopy(text)
-    );
-  } else {
-    fallbackCopy(text);
-  }
-}
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.position = 'fixed'; ta.style.top = '-1000px';
-  document.body.appendChild(ta);
-  ta.select();
-  try { document.execCommand('copy'); showToast('멘트가 복사되었습니다.', 'success'); }
-  catch (e) { showToast('복사에 실패했습니다.', 'info'); }
-  ta.remove();
-}
 </script>
 
 </body>
