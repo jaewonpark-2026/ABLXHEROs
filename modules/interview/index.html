@@ -100,6 +100,33 @@ a { color: inherit; text-decoration: none; }
 .subnav-item:hover { border-color: var(--main-1); color: var(--main-1); }
 .subnav-item.active { background: var(--grad-blue); color: white; border-color: transparent; }
 
+/* 2단계 네비게이션: 공고 선택 → 라운드 선택 */
+.posting-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.posting-tab { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border: 1px solid var(--border); border-radius: 14px; background: white; cursor: pointer; transition: all 0.18s; text-align: left; font-family: inherit; position: relative; overflow: hidden; }
+.posting-tab::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: transparent; transition: background 0.18s; }
+.posting-tab:hover { border-color: var(--main-1); box-shadow: 0 4px 12px rgba(0,103,172,0.08); }
+.posting-tab .pt-ic { width: 42px; height: 42px; border-radius: 10px; background: var(--info-bg); color: var(--main-1); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; transition: all 0.18s; }
+.posting-tab .pt-name { font-size: 14.5px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+.posting-tab .pt-sub { font-size: 11.5px; color: var(--text-3); font-weight: 600; }
+.posting-tab .pt-count { margin-left: auto; padding: 4px 10px; border-radius: 999px; background: var(--bg-page); color: var(--text-2); font-size: 11px; font-weight: 700; }
+.posting-tab.active { border-color: transparent; background: linear-gradient(135deg, #F0F7FD 0%, #E6F1FB 100%); box-shadow: 0 4px 14px rgba(0,103,172,0.12); }
+.posting-tab.active::before { background: var(--grad-blue); }
+.posting-tab.active .pt-ic { background: var(--grad-blue); color: white; }
+.posting-tab.active .pt-name { color: var(--main-1); }
+.posting-tab.active .pt-count { background: var(--main-1); color: white; }
+
+.round-segmented { display: inline-flex; gap: 0; margin-bottom: 18px; background: white; border: 1px solid var(--border); border-radius: 10px; padding: 4px; }
+.seg-item { padding: 8px 18px; border-radius: 8px; border: none; background: transparent; color: var(--text-2); font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; }
+.seg-item:hover { color: var(--main-1); }
+.seg-item.active { background: var(--grad-blue); color: white; }
+.seg-item .seg-count { padding: 1px 7px; border-radius: 999px; background: rgba(255,255,255,0.25); font-size: 10.5px; font-weight: 700; }
+.seg-item:not(.active) .seg-count { background: var(--bg-page); color: var(--text-3); }
+
+/* 카드에 단계 표시 배지 (전체 뷰에서) */
+.cc-stage-badge { position: absolute; top: 8px; left: 8px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; }
+.cc-stage-badge.s1 { background: var(--info-bg); color: var(--main-1); }
+.cc-stage-badge.s2 { background: var(--purple-bg); color: var(--purple); }
+
 /* Buttons */
 .btn { height: 36px; border-radius: 8px; padding: 0 16px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; cursor: pointer; transition: all 0.15s; }
 .btn i { font-size: 14px; }
@@ -557,11 +584,31 @@ a { color: inherit; text-decoration: none; }
         <p class="page-subtitle" id="page-subtitle">모든 지원자의 현재 전형 단계 및 최종 합불 여부를 한눈에 관리합니다.</p>
       </div>
 
-      <nav class="subnav">
-        <div class="subnav-item active" id="nav-newgrad-r1" onclick="switchMainView('newgrad-r1')"><i class="ti ti-school"></i> 신입 채용 · 1차 면접</div>
-        <div class="subnav-item" id="nav-newgrad-r2" onclick="switchMainView('newgrad-r2')"><i class="ti ti-school"></i> 신입 채용 · 2차 면접</div>
-        <div class="subnav-item" id="nav-career-r1" onclick="switchMainView('career-r1')"><i class="ti ti-briefcase"></i> 경력 채용 · 1차 면접</div>
-        <div class="subnav-item" id="nav-career-r2" onclick="switchMainView('career-r2')"><i class="ti ti-briefcase"></i> 경력 채용 · 2차 면접</div>
+      <!-- 1단계: 공고 선택 -->
+      <nav class="posting-tabs">
+        <button type="button" class="posting-tab active" id="posting-tab-newgrad" onclick="switchPosting('newgrad')">
+          <span class="pt-ic"><i class="ti ti-school"></i></span>
+          <div>
+            <div class="pt-name">2026 상반기 신입 채용</div>
+            <div class="pt-sub">신입 공채 · 면접 진행 중인 지원자</div>
+          </div>
+          <span class="pt-count" id="posting-count-newgrad">0명</span>
+        </button>
+        <button type="button" class="posting-tab" id="posting-tab-career" onclick="switchPosting('career')">
+          <span class="pt-ic"><i class="ti ti-briefcase"></i></span>
+          <div>
+            <div class="pt-name">2026 상반기 경력 채용</div>
+            <div class="pt-sub">경력 공채 · 면접 진행 중인 지원자</div>
+          </div>
+          <span class="pt-count" id="posting-count-career">0명</span>
+        </button>
+      </nav>
+
+      <!-- 2단계: 라운드 선택 -->
+      <nav class="round-segmented">
+        <button type="button" class="seg-item active" id="seg-all" onclick="switchRound('all')"><i class="ti ti-layout-grid"></i> 전체 <span class="seg-count" id="seg-count-all">0</span></button>
+        <button type="button" class="seg-item" id="seg-r1" onclick="switchRound('r1')"><i class="ti ti-number-1"></i> 1차 면접 <span class="seg-count" id="seg-count-r1">0</span></button>
+        <button type="button" class="seg-item" id="seg-r2" onclick="switchRound('r2')"><i class="ti ti-number-2"></i> 2차 면접 <span class="seg-count" id="seg-count-r2">0</span></button>
       </nav>
 
       <!-- SCREEN 0: 전체 지원자 테이블 -->
@@ -1075,29 +1122,86 @@ function updateSidebarCounts() {
 /* ===== 화면 전환 ===== */
 function switchMainView(viewType) {
   currentMainView = viewType;
+  // 기존 subnav-item (있다면) 처리 + 신규 posting-tab/seg-item 처리
   document.querySelectorAll('.subnav-item').forEach(el => el.classList.remove('active'));
-  const nav = document.getElementById('nav-' + viewType);
-  if (nav) nav.classList.add('active');
+  const legacyNav = document.getElementById('nav-' + viewType);
+  if (legacyNav) legacyNav.classList.add('active');
 
   const titleEl = document.getElementById('page-title');
   const subEl = document.getElementById('page-subtitle');
 
-  // viewType 파싱: 'newgrad-r1' / 'newgrad-r2' / 'career-r1' / 'career-r2'
-  // 하위 호환: 'all' → 'newgrad-r1', 'stage1' → 'career-r1', 'stage2' → 'career-r2'
-  if (viewType === 'all') viewType = 'newgrad-r1';
+  // viewType 파싱: 'newgrad-all' / 'newgrad-r1' / 'newgrad-r2' / 'career-all' / 'career-r1' / 'career-r2'
+  // 하위 호환: 'all' → 'newgrad-all', 'stage1' → 'career-r1', 'stage2' → 'career-r2'
+  if (viewType === 'all') viewType = 'newgrad-all';
   else if (viewType === 'stage1') viewType = 'career-r1';
   else if (viewType === 'stage2') viewType = 'career-r2';
   const [posting, round] = viewType.split('-');
   currentPosting = posting;
-  currentStageFilter = round === 'r2' ? 2 : 1;
+  currentStageFilter = round === 'r1' ? 1 : (round === 'r2' ? 2 : 'all');
+
+  // 2단계 nav active 표시
+  document.querySelectorAll('.posting-tab').forEach(el => el.classList.remove('active'));
+  const ptab = document.getElementById('posting-tab-' + posting);
+  if (ptab) ptab.classList.add('active');
+  document.querySelectorAll('.seg-item').forEach(el => el.classList.remove('active'));
+  const seg = document.getElementById('seg-' + round);
+  if (seg) seg.classList.add('active');
+
+  // 라운드 카운트 갱신
+  updatePostingAndRoundCounts();
 
   const postingLabel = posting === 'newgrad' ? '2026 상반기 신입 채용' : '2026 상반기 경력 채용';
-  const roundLabel = currentStageFilter === 1 ? '1차 면접 관리 대시보드' : '2차 면접 관리 대시보드';
+  let roundLabel, subLabel;
+  if (currentStageFilter === 'all') {
+    roundLabel = '면접 진행 지원자 전체';
+    subLabel = '서류 통과 후 면접 진행 중인 모든 지원자입니다. 카드를 눌러 세부 서류를 확인하세요.';
+  } else if (currentStageFilter === 1) {
+    roundLabel = '1차 면접 관리 대시보드';
+    subLabel = '1차 면접 대상자 리스트입니다. 카드를 눌러 세부 서류를 확인하세요.';
+  } else {
+    roundLabel = '2차 면접 관리 대시보드';
+    subLabel = '최종 면접 대상자 리스트입니다. 1차 합격 코멘트와 함께 확인하세요.';
+  }
   showView('dashboard');
   titleEl.textContent = postingLabel + ' · ' + roundLabel;
-  subEl.textContent = currentStageFilter === 1
-    ? '1차 면접 대상자 리스트입니다. 카드를 눌러 세부 서류를 확인하세요.'
-    : '최종 면접 대상자 리스트입니다. 1차 합격 코멘트와 함께 확인하세요.';
+  subEl.textContent = subLabel;
+}
+
+// 공고만 변경 (라운드는 유지)
+function switchPosting(posting) {
+  let round = 'all';
+  if (currentStageFilter === 1) round = 'r1';
+  else if (currentStageFilter === 2) round = 'r2';
+  switchMainView(posting + '-' + round);
+}
+
+// 라운드만 변경 (공고는 유지)
+function switchRound(round) {
+  switchMainView(currentPosting + '-' + round);
+}
+
+// 공고별 / 라운드별 카운트 표시 갱신
+function updatePostingAndRoundCounts() {
+  if (!candidates || candidates.length === 0) return;
+  // 공고별 전체 카운트
+  const ngCount = candidates.filter(c => c.posting === 'newgrad' && c.finalResult === null).length;
+  const caCount = candidates.filter(c => c.posting === 'career' && c.finalResult === null).length;
+  const ngEl = document.getElementById('posting-count-newgrad');
+  const caEl = document.getElementById('posting-count-career');
+  if (ngEl) ngEl.textContent = ngCount + '명';
+  if (caEl) caEl.textContent = caCount + '명';
+
+  // 현재 공고의 라운드별 카운트
+  const cur = candidates.filter(c => c.posting === currentPosting && c.finalResult === null);
+  const all = cur.length;
+  const r1 = cur.filter(c => c.stage === 1).length;
+  const r2 = cur.filter(c => c.stage === 2).length;
+  const eAll = document.getElementById('seg-count-all');
+  const e1 = document.getElementById('seg-count-r1');
+  const e2 = document.getElementById('seg-count-r2');
+  if (eAll) eAll.textContent = all;
+  if (e1) e1.textContent = r1;
+  if (e2) e2.textContent = r2;
 }
 
 function showView(viewId) {
@@ -1238,7 +1342,12 @@ function renderDashboardCandidates() {
   const filterDept = document.getElementById('filter-dept').value;
   const filterRole = document.getElementById('filter-role').value;
 
-  let filtered = candidates.filter(c => c.stage === currentStageFilter && c.finalResult === null && c.posting === currentPosting);
+  // 'all'이면 stage 무시, 1/2이면 해당 stage만
+  let filtered = candidates.filter(c =>
+    c.finalResult === null &&
+    c.posting === currentPosting &&
+    (currentStageFilter === 'all' || c.stage === currentStageFilter)
+  );
   filtered = filtered.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchVal) || c.role.toLowerCase().includes(searchVal) || c.dept.toLowerCase().includes(searchVal);
     const matchesDept = filterDept === 'all' || c.dept === filterDept;
@@ -1252,17 +1361,25 @@ function renderDashboardCandidates() {
     return;
   }
 
+  // 카운트 갱신
+  updatePostingAndRoundCounts();
+
   let html = '';
   filtered.forEach(c => {
     const isChecked = selectedForCompare.includes(c.id);
+    const isStage1 = c.stage === 1;
     let selCls = '';
-    if (isChecked) selCls = currentStageFilter === 1 ? ' sel-1' : ' sel-2';
+    if (isChecked) selCls = isStage1 ? ' sel-1' : ' sel-2';
     const isWait = c.status === '대기';
     const isHold = c.status === '완료' && (c.passFail === 'hold' || c.passFail === null);
-    const avatarDone = c.status === '완료' ? (currentStageFilter === 1 ? ' done-1' : ' done-2') : '';
+    const avatarDone = c.status === '완료' ? (isStage1 ? ' done-1' : ' done-2') : '';
 
     html += '<div class="cand-card' + selCls + '" onclick="handleCandidateCardClick(event,' + c.id + ')">';
     if (compareMode) html += '<input type="checkbox" class="cc-check" ' + (isChecked ? 'checked' : '') + ' onclick="event.stopPropagation();handleCandidateCardClick(event,' + c.id + ')">';
+    // '전체' 뷰일 때 카드 좌상단에 stage 배지 표시 (구분 용이)
+    if (currentStageFilter === 'all') {
+      html += '<span class="cc-stage-badge ' + (isStage1 ? 's1' : 's2') + '">' + (isStage1 ? '1차' : '2차') + '</span>';
+    }
     if (isHold) html += '<span class="cc-hold-badge"><i class="ti ti-hourglass"></i>채점 전</span>';
     html += '<div class="cc-avatar' + avatarDone + '">' + c.name.substring(0, 3) + '</div>';
     html += '<div><div class="cc-name">' + c.name + '</div><div class="cc-role">' + c.role + '</div></div>';
@@ -1491,7 +1608,12 @@ function openReportFromAll(id) {
 function openGroupSetupModal() {
   const grid = document.getElementById('match-candidate-grid');
   grid.innerHTML = '';
-  const list = candidates.filter(c => c.stage === currentStageFilter && c.finalResult === null && c.status === '대기');
+  const list = candidates.filter(c =>
+    (currentStageFilter === 'all' || c.stage === currentStageFilter) &&
+    c.posting === currentPosting &&
+    c.finalResult === null &&
+    c.status === '대기'
+  );
   if (list.length === 0) {
     grid.innerHTML = '<div class="setup-empty">세션을 시작할 대기 상태 지원자가 없습니다.</div>';
     document.getElementById('modal-group-setup').classList.add('show');
@@ -1633,7 +1755,7 @@ function addLiveCoopMemo() {
   const c = candidates.find(item => item.id === activeInterviewSession.currentCandidateId);
   if (c) {
     if (!c.hrMemos) c.hrMemos = [];
-    c.hrMemos.push({ author: currentStageFilter === 1 ? '1차 면접' : '2차 면접', text: val });
+    c.hrMemos.push({ author: c.stage === 1 ? '1차 면접' : '2차 면접', text: val });
     input.value = '';
     loadCandidateInterviewWorkspace(c.id);
   }
@@ -2132,7 +2254,12 @@ function closeReportView() {
 function navigateReport(direction) {
   let list = reportSource === 'all'
     ? candidates.filter(item => item.status === '완료')
-    : candidates.filter(item => item.stage === currentStageFilter && item.status === '완료' && item.finalResult === null);
+    : candidates.filter(item =>
+        (currentStageFilter === 'all' || item.stage === currentStageFilter) &&
+        item.posting === currentPosting &&
+        item.status === '완료' &&
+        item.finalResult === null
+      );
   if (list.length <= 1) return;
   let idx = list.findIndex(item => item.id === activeReportCandidateId);
   idx += direction;
