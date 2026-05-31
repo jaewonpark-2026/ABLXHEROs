@@ -2,19 +2,6 @@
   "candidates": {
     "r1": [
       {
-        "id": "c-cho-r1",
-        "name": "조현근",
-        "dept": "상품기획",
-        "career": "6년 5개월",
-        "email": "hyungeun.cho@email.com",
-        "status": "done",
-        "applied": "2026.05.30",
-        "reminded": true,
-        "isRecoorded": true,
-        "confirmedTime": "2026.06.02 15:00",
-        "place": "본사 7층 면접실 B"
-      },
-      {
         "id": "c1",
         "name": "이정민",
         "dept": "계리분석",
@@ -144,6 +131,27 @@
         "applied": "2026.05.30",
         "passedR1": "2026.06.02",
         "reminded": true,
+        "isRecoorded": false
+      },
+      {
+        "id": "c-yujin-r2",
+        "name": "임유진",
+        "dept": "상품기획",
+        "career": "7년 2개월",
+        "email": "im.yujin@email.com",
+        "status": "pending",
+        "applied": "2026.05.28",
+        "passedR1": "2026.06.02",
+        "interviewers": [
+          "박성준 상무"
+        ],
+        "intResp": true,
+        "candResp": false,
+        "period": "2026.06.16~2026.06.20",
+        "place": "본사 12층 임원실",
+        "duration": "60",
+        "deadline": "2026.06.13 18:00",
+        "reminded": false,
         "isRecoorded": false
       },
       {
