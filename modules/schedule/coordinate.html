@@ -1162,9 +1162,20 @@ function openRecoord(cid) {
   var found = null, round = null;
   if (CANDIDATES.r1.find(c => c.id === cid)) { found = CANDIDATES.r1.find(c => c.id === cid); round = 'r1'; }
   else if (CANDIDATES.r2.find(c => c.id === cid)) { found = CANDIDATES.r2.find(c => c.id === cid); round = 'r2'; }
-  if (!found) { showToast('warn', '지원자를 찾을 수 없습니다', ''); return; }
-  found.status = 'before';
-  found.isRecoorded = true;
+
+  // Fallback: r1/r2 어느 쪽에도 없으면 RECOORD 배열에서 round 정보 가져오기
+  if (!round && typeof RECOORD !== 'undefined') {
+    var rec = RECOORD.find(r => r.candId === cid);
+    if (rec) round = rec.round;
+  }
+
+  if (!round) { showToast('warn', '지원자를 찾을 수 없습니다', ''); return; }
+
+  if (found) {
+    found.status = 'before';
+    found.isRecoorded = true;
+  }
+  // 후보가 r1/r2에 없어도 openCandidateCoord 내부에서 RECOORD fallback으로 dummy 생성됨
   openCandidateCoord(cid, round, true);
 }
 
@@ -1216,6 +1227,26 @@ var coordState = { cid: null, round: null, cand: null, step: 1, settings: {}, se
 function openCandidateCoord(cid, round, isRecoord) {
   var cand = null;
   (CANDIDATES[round] || []).forEach(c => { if (c.id === cid) cand = c; });
+
+  // Fallback: CANDIDATES에 없으면 RECOORD 배열에서 dummy 후보 생성 (재조율 모달에서만 사용)
+  if (!cand && typeof RECOORD !== 'undefined') {
+    var rec = RECOORD.find(r => r.candId === cid);
+    if (rec) {
+      // 조현근(c-cho-r1) 등 r1에서 삭제된 후보를 재조율 모달에서 보여주기 위한 dummy
+      cand = {
+        id: cid,
+        name: rec.candName,
+        dept: '상품기획',
+        career: '6년 5개월',
+        email: 'hyungeun.cho@email.com',
+        status: 'before',
+        applied: '2026.05.30',
+        reminded: true,
+        isRecoorded: true
+      };
+    }
+  }
+
   if (!cand) return;
   cand.round = round.replace('r', '');
   coordState = {
