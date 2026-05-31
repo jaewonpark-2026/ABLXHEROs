@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RECRUIT AI · 처우 협의 v2</title>
+<link rel="icon" href="../../assets/logos/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-1: #253A71; --sub-2: #123F6D;
+  --sub-3: #00AEC6; --sub-4: #00AFAD;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(180deg, #2482C5 0%, #1A8FC9 45%, #00AEC6 100%);
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --info-bg: #E6F1FB; --warn-bg: #FFF7E6; --ok-bg: #DCFCE7; --err-bg: #FEE2E2;
+  --purple-bg: #EDE9FE; --purple: #7C3AED;
+  --ok: #10B981; --warn: #F59E0B; --err: #EF4444;
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); font-size: 13px; line-height: 1.6; }
+button { cursor: pointer; border: 0; background: transparent; font-family: inherit; }
+
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+
+/* ===== Sidebar (다른 모듈과 동일) ===== */
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; line-height: normal; font-size: 16px; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+.sidebar::before { content: ''; position: absolute; top: -40px; left: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(0, 174, 198, 0.12); }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle i { font-size: 16px; }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-size: 19px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 3px; background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.2px; }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.15s; text-decoration: none; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.16); color: white; box-shadow: inset 3px 0 0 #00AEC6; }
+.nav-item i { font-size: 18px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 70px; }
+
+/* ===== Topbar ===== */
+.main-area { display: flex; flex-direction: column; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge i { font-size: 14px; }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.logout-btn:hover { background: var(--bg-page); }
+
+/* ===== Content ===== */
+.content { padding: 28px 32px 60px; max-width: 1280px; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-3); font-weight: 700; margin-bottom: 14px; cursor: pointer; text-decoration: none; }
+.back-link:hover { color: var(--main-1); }
+.page-header { margin-bottom: 28px; }
+.crumb { font-size: 11px; color: var(--text-3); letter-spacing: 0.04em; margin-bottom: 8px; font-weight: 700; }
+.page-title { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.page-title .v2-badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: var(--grad-blue); color: white; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+.page-sub { color: var(--text-2); font-size: 13px; }
+
+/* ===== Section card ===== */
+.section { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; }
+.section-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.section-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--text-1); }
+.section-title::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
+.new-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; background: linear-gradient(135deg, #E6F1FB, #D0E5F5); color: var(--main-1); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+.v2-tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; background: var(--purple-bg); color: var(--purple); font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+
+/* ===== 1. 지원자 정보 ===== */
+.profile-row { display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center; }
+.profile-avatar { width: 56px; height: 56px; border-radius: 14px; background: var(--grad-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+.profile-info .name { font-size: 17px; font-weight: 700; }
+.profile-info .meta { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.profile-info .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+.profile-info .tag { font-size: 10.5px; padding: 3px 9px; border-radius: 999px; background: var(--info-bg); color: var(--main-1); font-weight: 700; }
+.profile-actions { display: flex; gap: 8px; }
+.btn-secondary { padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; color: var(--text-2); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+.btn-secondary:hover { border-color: var(--main-1); color: var(--main-1); }
+
+/* ===== 2. 보상 재구성 엔진 ===== */
+.upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.upload-card { border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; background: #FAFBFD; position: relative; transition: all 0.18s; }
+.upload-card.completed { border-style: solid; border-color: var(--ok); background: #F6FCF9; }
+.upload-card .uc-ic { width: 36px; height: 36px; border-radius: 9px; background: var(--info-bg); color: var(--main-1); display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 9px; }
+.upload-card.completed .uc-ic { background: var(--ok-bg); color: var(--ok); }
+.upload-card .uc-name { font-size: 12.5px; font-weight: 700; margin-bottom: 3px; }
+.upload-card .uc-status { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 4px; }
+.upload-card.completed .uc-status { color: var(--ok); font-weight: 700; }
+.upload-card .uc-extracted { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 10.5px; color: var(--text-3); line-height: 1.5; }
+
+.reconstr-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.reconstr-table th, .reconstr-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); text-align: left; }
+.reconstr-table th { background: var(--bg-page); font-weight: 700; color: var(--text-3); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; }
+.reconstr-table .amount { font-weight: 700; color: var(--text-1); text-align: right; font-variant-numeric: tabular-nums; }
+.reconstr-table tr.total td { font-weight: 700; font-size: 14px; background: linear-gradient(90deg, #FAFCFE, #F0F7FD); border-bottom: 0; }
+.reconstr-table tr.total .amount { color: var(--main-1); font-size: 15px; }
+.conf-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
+.conf-badge.high { background: var(--ok-bg); color: #047857; }
+.conf-badge.mid { background: var(--warn-bg); color: #B45309; }
+.conf-badge.low { background: var(--err-bg); color: #B91C1C; }
+.conf-badge .dot { width: 5px; height: 5px; border-radius: 50%; }
+.conf-badge.high .dot { background: var(--ok); }
+.conf-badge.mid .dot { background: var(--warn); }
+.conf-badge.low .dot { background: var(--err); }
+.info-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--bg-page); color: var(--text-3); cursor: help; font-size: 11px; position: relative; }
+.info-icon:hover { background: var(--info-bg); color: var(--main-1); }
+.info-icon .tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--text-1); color: white; padding: 8px 12px; border-radius: 6px; font-size: 11px; white-space: nowrap; z-index: 100; max-width: 280px; white-space: normal; width: 240px; font-weight: 600; line-height: 1.5; }
+.info-icon .tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--text-1); }
+.info-icon:hover .tooltip { display: block; }
+
+.mismatch-alert { margin-top: 16px; padding: 14px 16px; background: linear-gradient(to right, #FFF8E1, #FFFDF5); border: 1px solid #FCD34D; border-left: 4px solid var(--warn); border-radius: 0 10px 10px 0; display: flex; align-items: flex-start; gap: 10px; }
+.mismatch-alert i { font-size: 18px; color: var(--warn); flex-shrink: 0; }
+.mismatch-alert .ma-body { flex: 1; font-size: 12px; color: var(--text-2); line-height: 1.6; }
+.mismatch-alert .ma-body strong { color: var(--text-1); }
+.mismatch-alert .ma-btn { padding: 6px 12px; border-radius: 7px; background: white; border: 1px solid var(--warn); color: #B45309; font-size: 11px; font-weight: 700; cursor: pointer; }
+.mismatch-alert .ma-btn:hover { background: var(--warn-bg); }
+
+/* ===== 3. 내부 형평성 + 다층 리스크 ===== */
+.slider-row { display: grid; grid-template-columns: 200px 1fr 120px; gap: 16px; align-items: center; padding: 16px; background: var(--bg-page); border-radius: 10px; margin-bottom: 18px; }
+.slider-row .sl-label { font-size: 12px; color: var(--text-2); font-weight: 700; }
+.slider-row input[type=range] { width: 100%; accent-color: var(--main-1); }
+.slider-row .sl-value { text-align: right; font-size: 16px; font-weight: 700; color: var(--main-1); font-variant-numeric: tabular-nums; }
+.slider-row .sl-value small { font-size: 11px; color: var(--text-3); font-weight: 600; margin-left: 3px; }
+
+.payband-bar { position: relative; height: 28px; border-radius: 7px; background: linear-gradient(to right, #DBEAFE 0%, #BAE6FD 30%, #FED7AA 70%, #FCA5A5 100%); margin-bottom: 22px; overflow: visible; }
+.payband-bar .pb-tick { position: absolute; top: 100%; font-size: 10px; color: var(--text-3); transform: translateX(-50%); margin-top: 4px; font-weight: 600; white-space: nowrap; }
+.payband-bar .pb-tick::before { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); width: 1px; height: 6px; background: var(--text-3); }
+.payband-bar .pb-marker { position: absolute; top: -6px; bottom: -6px; width: 3px; background: var(--main-1); transform: translateX(-50%); border-radius: 2px; transition: left 0.2s ease; box-shadow: 0 2px 6px rgba(0,103,172,0.3); }
+.payband-bar .pb-marker::after { content: '오퍼'; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--main-1); color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+
+.risk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.risk-card { padding: 14px; border-radius: 11px; border: 1px solid var(--border); background: white; transition: all 0.18s; }
+.risk-card.high { border-color: #FCA5A5; background: linear-gradient(135deg, #FFFBFB, #FEF2F2); }
+.risk-card.medium { border-color: #FCD34D; background: linear-gradient(135deg, #FFFDF5, #FFFBEB); }
+.risk-card.low { border-color: #6EE7B7; background: linear-gradient(135deg, #F7FCF9, #ECFDF5); }
+.risk-card .rc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.risk-card .rc-title { font-size: 11.5px; font-weight: 700; color: var(--text-2); }
+.risk-level { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; }
+.risk-level.high { background: var(--err); color: white; }
+.risk-level.medium { background: var(--warn); color: white; }
+.risk-level.low { background: var(--ok); color: white; }
+.risk-card .rc-desc { font-size: 12px; color: var(--text-1); line-height: 1.55; font-weight: 600; }
+.risk-card .rc-sub { font-size: 10.5px; color: var(--text-3); margin-top: 4px; font-weight: 600; }
+
+/* ===== 4. 대외 경쟁력 ===== */
+.market-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.market-card { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border); }
+.market-card .mc-label { font-size: 10.5px; color: var(--text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.market-card .mc-value { font-size: 18px; font-weight: 700; color: var(--text-1); }
+.market-card .mc-sub { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+.market-card.highlight { background: linear-gradient(135deg, #F0F7FD, #E6F1FB); border-color: transparent; }
+.market-card.highlight .mc-value { color: var(--main-1); }
+
+/* ===== 5. 총보상 ===== */
+.total-rewards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tr-box { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border); background: #FAFBFD; }
+.tr-box.cash { background: linear-gradient(135deg, #F0F7FD, #E6F1FB); border-color: transparent; }
+.tr-box.non-cash { background: linear-gradient(135deg, #F7FCF9, #ECFDF5); border-color: transparent; }
+.tr-label { font-size: 10.5px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.tr-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 12px; }
+.tr-item .name { color: var(--text-2); }
+.tr-item .val { font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+.tr-total { margin-top: 8px; padding-top: 10px; border-top: 1px solid rgba(0,103,172,0.15); display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; }
+.tr-total .val { color: var(--main-1); font-size: 16px; }
+
+/* ===== 6. What-If ===== */
+.whatif-input { display: flex; align-items: center; gap: 14px; padding: 16px; background: var(--bg-page); border-radius: 10px; margin-bottom: 18px; }
+.whatif-input .wi-label { font-size: 12px; font-weight: 700; color: var(--text-2); min-width: 130px; }
+.whatif-input input[type=number] { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 700; width: 130px; outline: none; color: var(--main-1); }
+.whatif-input input[type=number]:focus { border-color: var(--main-1); }
+.whatif-input input[type=range] { flex: 1; accent-color: var(--main-1); }
+.whatif-input .wi-unit { font-size: 11px; color: var(--text-3); font-weight: 600; }
+
+.whatif-grid { display: flex; flex-direction: column; gap: 12px; }
+.whatif-box { padding: 16px 18px; border-radius: 11px; border: 1px solid var(--border); }
+.whatif-box .wb-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+.whatif-box .wb-head .wb-num { width: 22px; height: 22px; border-radius: 50%; background: var(--main-1); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.whatif-box.impact { background: linear-gradient(to right, #FFFBFB, #FFFFFF); border-color: #FCA5A5; }
+.whatif-box.alternative { background: linear-gradient(to right, #F7FCF9, #FFFFFF); border-color: #6EE7B7; }
+.whatif-box.script { background: linear-gradient(to right, #FAFCFE, #FFFFFF); }
+.impact-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.impact-list .il-item { padding: 10px 12px; background: white; border-radius: 8px; border: 1px solid #FECACA; }
+.impact-list .il-label { font-size: 10.5px; color: var(--text-3); font-weight: 700; margin-bottom: 4px; }
+.impact-list .il-value { font-size: 14px; font-weight: 700; color: var(--err); }
+.impact-list .il-value .delta { font-size: 11px; color: #B91C1C; margin-left: 4px; }
+
+.alt-list { display: flex; flex-direction: column; gap: 6px; padding-left: 4px; }
+.alt-list .al-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border-radius: 8px; border: 1px solid #BBF7D0; font-size: 12px; }
+.alt-list .al-name { color: var(--text-1); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.alt-list .al-name i { color: var(--ok); font-size: 14px; }
+.alt-list .al-val { font-weight: 700; color: #047857; font-variant-numeric: tabular-nums; }
+.alt-list .al-val.non-cash { color: var(--text-3); font-style: italic; font-weight: 600; }
+.alt-note { font-size: 10.5px; color: var(--text-3); margin-top: 8px; padding: 7px 10px; background: rgba(16,185,129,0.05); border-radius: 6px; }
+
+.scripts-list { display: flex; flex-direction: column; gap: 10px; }
+.script-card { padding: 12px 14px; border-radius: 9px; border: 1px solid var(--border); background: white; position: relative; }
+.script-card .sc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.script-card .sc-tone { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 10.5px; font-weight: 700; }
+.script-card .sc-tone.firm { background: var(--err-bg); color: #B91C1C; }
+.script-card .sc-tone.flex { background: var(--info-bg); color: var(--main-1); }
+.script-card .sc-tone.propose { background: var(--ok-bg); color: #047857; }
+.script-card .sc-text { font-size: 12px; color: var(--text-1); line-height: 1.65; font-weight: 600; }
+.script-card .sc-copy { padding: 4px 10px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-2); font-size: 10.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.script-card .sc-copy:hover { border-color: var(--main-1); color: var(--main-1); }
+
+/* ===== 7. AI 메모 ===== */
+.memo-area { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; background: #FAFBFD; font-family: inherit; font-size: 12px; line-height: 1.7; color: var(--text-1); resize: vertical; min-height: 120px; outline: none; }
+.memo-area:focus { border-color: var(--main-1); background: white; }
+.memo-actions { margin-top: 10px; display: flex; justify-content: flex-end; gap: 8px; }
+.btn-p { padding: 8px 14px; background: var(--grad-blue); color: white; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.btn-p:hover { opacity: 0.92; }
+
+/* ===== 8. 미래 비전 푸터 ===== */
+.vision-footer { margin-top: 18px; padding: 16px 20px; background: linear-gradient(to right, #F0F7FD, #E6F1FB, #F0F7FD); border-radius: 12px; display: flex; align-items: center; gap: 14px; border: 1px solid #BAE6FD; }
+.vision-footer i { font-size: 22px; color: var(--main-1); flex-shrink: 0; }
+.vision-footer .vf-text { font-size: 12.5px; color: var(--text-1); line-height: 1.6; flex: 1; }
+.vision-footer .vf-text strong { color: var(--main-1); font-weight: 700; }
+.vision-footer .vf-counter { padding: 6px 14px; background: white; border-radius: 999px; font-size: 11.5px; font-weight: 700; color: var(--main-1); border: 1px solid #BAE6FD; }
+
+/* ===== Toast ===== */
+.toast-wrap { position: fixed; top: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { padding: 11px 16px; border-radius: 9px; background: var(--text-1); color: white; font-size: 12.5px; font-weight: 600; box-shadow: 0 8px 24px rgba(0,0,0,0.16); display: flex; align-items: center; gap: 8px; transform: translateY(-10px); opacity: 0; transition: all 0.25s; pointer-events: auto; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--ok); }
+.toast i { font-size: 14px; }
+
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; }
+  .sidebar-toggle { display: none; }
+  .upload-grid, .risk-grid { grid-template-columns: repeat(2, 1fr); }
+  .impact-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
+    <a class="brand" href="../../dashboard-hr.html">
+      <div class="brand-name">RECRUIT AI</div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav">
+      <div class="nav-section-title">메인</div>
+      <a class="nav-item" href="../../dashboard-hr.html"><i class="ti ti-layout-dashboard"></i> <span class="label">대시보드</span></a>
+      <div class="nav-section-title">채용 업무</div>
+      <a class="nav-item" href="../jd-writer/index.html"><i class="ti ti-clipboard-text"></i> <span class="label">JD 작성</span></a>
+      <a class="nav-item" href="../resume-analysis/index.html"><i class="ti ti-file-search"></i> <span class="label">자소서 분석</span></a>
+      <a class="nav-item" href="../schedule/index.html"><i class="ti ti-calendar-event"></i> <span class="label">면접 일정</span></a>
+      <a class="nav-item" href="../interview/index.html"><i class="ti ti-microphone-2"></i> <span class="label">면접 진행</span></a>
+      <a class="nav-item active" href="./index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" style="display:none;"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명" onerror="this.style.display='none'">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹" onerror="this.style.display='none'">
+      </div>
+      <div class="user-info">
+        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <a class="back-link" href="./index.html"><i class="ti ti-arrow-left"></i> 기존 처우협의로 돌아가기</a>
+
+      <div class="page-header">
+        <div class="crumb">채용 데이터 · 경력직 처우협의</div>
+        <h1 class="page-title">처우 협의 데이터 <span class="v2-badge">v2 · 시연용</span></h1>
+        <p class="page-sub">자료 기반 보상 재구성 · 다층 리스크 · What-If 시뮬레이션을 통한 협상 의사결정 지원</p>
+      </div>
+
+      <!-- ============ [1] 지원자 정보 ============ -->
+      <section class="section">
+        <div class="section-head"><div class="section-title">지원자 정보 및 인사이트</div></div>
+        <div class="profile-row">
+          <div class="profile-avatar">조</div>
+          <div class="profile-info">
+            <div class="name">조현근 <span style="font-size:12px;color:var(--text-3);font-weight:600;">· 상품기획 시니어 매니저(차장)</span></div>
+            <div class="meta">서강생명 상품개발팀 책임 · 경력 6년 5개월 · 자소서 분석 91점 / fit 직무 93·조직 88·산업 94</div>
+            <div class="tags">
+              <span class="tag">IFRS17</span><span class="tag">K-ICS</span>
+              <span class="tag">변액·종신 Pricing</span><span class="tag">Cross-functional</span>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn-secondary"><i class="ti ti-file-type-pdf"></i> 이력서</button>
+            <button class="btn-secondary"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ [2] 보상 재구성 엔진 (NEW) ============ -->
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">보상 재구성 엔진 <span class="new-badge">NEW</span></div>
+          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">자료 기반 표준 환산 연봉 산출</div>
+        </div>
+
+        <div class="upload-grid">
+          <div class="upload-card completed">
+            <div class="uc-ic"><i class="ti ti-file-certificate"></i></div>
+            <div class="uc-name">원천징수영수증</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 추출 완료</div>
+            <div class="uc-extracted">2024년 귀속 · 총지급액 6,100만원 · 비과세 200만원 포함</div>
+          </div>
+          <div class="upload-card completed">
+            <div class="uc-ic"><i class="ti ti-coin"></i></div>
+            <div class="uc-name">상여금 지급 내역서</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 추출 완료</div>
+            <div class="uc-extracted">3년 평균 변동상여 600만원 · 고정상여 800만원 확인</div>
+          </div>
+          <div class="upload-card completed">
+            <div class="uc-ic"><i class="ti ti-target"></i></div>
+            <div class="uc-name">희망 연봉</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 입력 완료</div>
+            <div class="uc-extracted">5,900만원 (본인 진술, 면접 시 확인)</div>
+          </div>
+        </div>
+
+        <table class="reconstr-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th style="text-align:right;">금액</th>
+              <th style="text-align:center;width:110px;">신뢰도</th>
+              <th style="text-align:center;width:36px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>기본급</td>
+              <td class="amount">4,200만원</td>
+              <td style="text-align:center;"><span class="conf-badge high"><span class="dot"></span>95%</span></td>
+              <td style="text-align:center;"><span class="info-icon">i<span class="tooltip">원천징수영수증 1번 항목(근로소득 총급여액) 기준, 비과세 항목 제외하고 산출</span></span></td>
+            </tr>
+            <tr>
+              <td>고정상여</td>
+              <td class="amount">800만원</td>
+              <td style="text-align:center;"><span class="conf-badge high"><span class="dot"></span>90%</span></td>
+              <td style="text-align:center;"><span class="info-icon">i<span class="tooltip">상여내역서 6번 항목 + 명절상여 합산 = 800만원으로 확정</span></span></td>
+            </tr>
+            <tr>
+              <td>고정수당</td>
+              <td class="amount">300만원</td>
+              <td style="text-align:center;"><span class="conf-badge mid"><span class="dot"></span>85%</span></td>
+              <td style="text-align:center;"><span class="info-icon">i<span class="tooltip">직책수당 + 시간외수당 평균값. 변동 가능성 있어 신뢰도 약간 낮음</span></span></td>
+            </tr>
+            <tr>
+              <td>변동상여 (3년 평균)</td>
+              <td class="amount">600만원</td>
+              <td style="text-align:center;"><span class="conf-badge mid"><span class="dot"></span>70%</span></td>
+              <td style="text-align:center;"><span class="info-icon">i<span class="tooltip">최근 3개년 PI/PS 평균. 회사 실적 따라 변동성 큼 (지난 3년: 480·620·700)</span></span></td>
+            </tr>
+            <tr>
+              <td>현금성 복리후생</td>
+              <td class="amount">200만원</td>
+              <td style="text-align:center;"><span class="conf-badge low"><span class="dot"></span>60%</span></td>
+              <td style="text-align:center;"><span class="info-icon">i<span class="tooltip">원천징수 총액과 명시 항목 합계의 차이를 AI가 자동 분류. 검증 필요</span></span></td>
+            </tr>
+            <tr class="total">
+              <td>표준 환산 연봉</td>
+              <td class="amount">6,100만원</td>
+              <td colspan="2"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mismatch-alert">
+          <i class="ti ti-alert-triangle-filled"></i>
+          <div class="ma-body">
+            <strong>자료 간 불일치 알림</strong><br>
+            원천징수 총액 - (기본급 + 상여 합계) = <strong>200만원 차이</strong> → AI가 <strong>'현금성 복리후생'</strong>으로 자동 분류했습니다.
+          </div>
+          <button class="ma-btn"><i class="ti ti-zoom-scan" style="font-size:10px;"></i> 상세 분석 보기</button>
+        </div>
+      </section>
+
+      <!-- ============ [3] 내부 형평성 + 다층 리스크 (v2 강화) ============ -->
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">내부 형평성 시뮬레이션 <span class="v2-tag">v2 강화</span></div>
+          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">오퍼 금액 조정 시 4개 리스크 실시간 분석</div>
+        </div>
+
+        <div class="slider-row">
+          <div class="sl-label">오퍼 금액 (페이밴드)</div>
+          <div>
+            <input type="range" id="offer-slider" min="5000" max="6500" step="100" value="5900">
+            <div class="payband-bar" style="margin-top:14px;">
+              <div class="pb-marker" id="payband-marker" style="left:60%"></div>
+              <div class="pb-tick" style="left:0%;">밴드 하한<br>5,000</div>
+              <div class="pb-tick" style="left:33%;">Q1<br>5,400</div>
+              <div class="pb-tick" style="left:60%;">중간값<br>5,800</div>
+              <div class="pb-tick" style="left:80%;">Q3<br>6,100</div>
+              <div class="pb-tick" style="left:100%;">밴드 상한<br>6,500</div>
+            </div>
+          </div>
+          <div class="sl-value" id="offer-value-display">5,900<small>만원</small></div>
+        </div>
+
+        <div class="risk-grid" style="margin-top:38px;">
+          <div class="risk-card" id="risk-card-1">
+            <div class="rc-head">
+              <div class="rc-title">내부 형평성</div>
+              <span class="risk-level" id="rl-1">HIGH</span>
+            </div>
+            <div class="rc-desc" id="rd-1">동일 직급 12명 중 3명보다 높음</div>
+            <div class="rc-sub" id="rs-1">상품본부 시니어 매니저 기준</div>
+          </div>
+          <div class="risk-card" id="risk-card-2">
+            <div class="rc-head">
+              <div class="rc-title">정기인상 여력</div>
+              <span class="risk-level" id="rl-2">MEDIUM</span>
+            </div>
+            <div class="rc-desc" id="rd-2">밴드 상단까지 +5% 여유</div>
+            <div class="rc-sub" id="rs-2">차기 정기인상 시점 기준</div>
+          </div>
+          <div class="risk-card" id="risk-card-3">
+            <div class="rc-head">
+              <div class="rc-title">연봉 역전 리스크</div>
+              <span class="risk-level" id="rl-3">HIGH</span>
+            </div>
+            <div class="rc-desc" id="rd-3">재직자 5명이 본 오퍼보다 낮음</div>
+            <div class="rc-sub" id="rs-3">→ 정기인상 시 추가 조정 필요</div>
+          </div>
+          <div class="risk-card" id="risk-card-4">
+            <div class="rc-head">
+              <div class="rc-title">1년 내 이탈 확률</div>
+              <span class="risk-level" id="rl-4">LOW</span>
+            </div>
+            <div class="rc-desc" id="rd-4">현재 대비 +20% 인상으로 충분</div>
+            <div class="rc-sub" id="rs-4">시장 평균 대비 경쟁력 확보</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ [4] 대외 경쟁력 ============ -->
+      <section class="section">
+        <div class="section-head"><div class="section-title">대외 경쟁력 및 앵커링 가이드</div></div>
+        <div class="market-row">
+          <div class="market-card">
+            <div class="mc-label">시장 중앙값 (생보·차장급)</div>
+            <div class="mc-value">5,800만원</div>
+            <div class="mc-sub">유사 직무·연차 4사 평균 (Mercer 2025 H2)</div>
+          </div>
+          <div class="market-card highlight">
+            <div class="mc-label">앵커 권장 (Q3 기준)</div>
+            <div class="mc-value">5,900만원</div>
+            <div class="mc-sub">시장 상위 25% 진입 + 회사 max 일치</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ [5] 총보상 협상 가이드 ============ -->
+      <section class="section">
+        <div class="section-head"><div class="section-title">총보상 협상 가이드</div></div>
+        <div class="total-rewards">
+          <div class="tr-box cash">
+            <div class="tr-label">금전 보상</div>
+            <div class="tr-item"><span class="name">기본 연봉</span><span class="val">5,700만원</span></div>
+            <div class="tr-item"><span class="name">사이닝 보너스</span><span class="val">200만원</span></div>
+            <div class="tr-item"><span class="name">자기계발 지원</span><span class="val">150만원</span></div>
+            <div class="tr-item"><span class="name">성과 인센티브 (목표 기준)</span><span class="val">~600만원</span></div>
+            <div class="tr-total"><span>금전 합계</span><span class="val">~6,650만원</span></div>
+          </div>
+          <div class="tr-box non-cash">
+            <div class="tr-label">비금전 패키지</div>
+            <div class="tr-item"><span class="name"><i class="ti ti-users" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> Cross-functional PM 권한</span></div>
+            <div class="tr-item"><span class="name"><i class="ti ti-school" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> 사내 도메인 강사 권한</span></div>
+            <div class="tr-item"><span class="name"><i class="ti ti-target-arrow" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> Pricing 풀 오너십 (변액·종신)</span></div>
+            <div class="tr-item"><span class="name"><i class="ti ti-clock" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> 유연근무 (재택 주 2회)</span></div>
+            <div class="tr-total"><span>총가치 (정성)</span><span class="val" style="color:var(--ok);font-size:13px;">시니어 매니저급 ★★★★</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ [6] What-If 시뮬레이션 (NEW) ============ -->
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">What-If 협상 시나리오 시뮬레이터 <span class="new-badge">NEW</span></div>
+          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">카운터오퍼 금액별 영향·대체안·대응 멘트</div>
+        </div>
+
+        <div class="whatif-input">
+          <div class="wi-label">후보자 카운터오퍼</div>
+          <input type="number" id="counter-num" value="6500" min="5900" max="7500" step="100">
+          <span class="wi-unit">만원</span>
+          <input type="range" id="counter-slider" min="5900" max="7500" step="100" value="6500">
+        </div>
+
+        <div class="whatif-grid">
+          <!-- ① 추가 인상 영향 -->
+          <div class="whatif-box impact">
+            <div class="wb-head"><span class="wb-num">1</span> 추가 인상 시 영향</div>
+            <div class="impact-list">
+              <div class="il-item">
+                <div class="il-label">연봉 역전 인원</div>
+                <div class="il-value"><span id="wi-invert">8</span>명 <span class="delta" id="wi-invert-delta">(+3)</span></div>
+              </div>
+              <div class="il-item">
+                <div class="il-label">밴드 상단 진입</div>
+                <div class="il-value"><span id="wi-band">+400</span>만원</div>
+              </div>
+              <div class="il-item">
+                <div class="il-label">기존 재직자 대비 격차</div>
+                <div class="il-value"><span id="wi-gap">+12</span>%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ② 비금전 대체안 -->
+          <div class="whatif-box alternative">
+            <div class="wb-head"><span class="wb-num">2</span> 비금전 대체안 (차액 분산)</div>
+            <div style="font-size:11.5px;color:var(--text-3);font-weight:700;margin-bottom:8px;">
+              <span id="wi-diff">600</span>만원 차이를 다음으로 분산 가능:
+            </div>
+            <div class="alt-list">
+              <div class="al-item"><span class="al-name"><i class="ti ti-gift"></i> 사이닝 보너스</span><span class="al-val" id="wi-signing">+200만원</span></div>
+              <div class="al-item"><span class="al-name"><i class="ti ti-book"></i> 자기계발 지원금</span><span class="al-val" id="wi-edu">+150만원</span></div>
+              <div class="al-item"><span class="al-name"><i class="ti ti-presentation"></i> 사내 학습 세션 강사 권한</span><span class="al-val non-cash">비금전</span></div>
+            </div>
+            <div class="alt-note">※ 차액 분산 비율: 사이닝 보너스 50% · 자기계발 지원금 30% · 비금전 옵션 20%</div>
+          </div>
+
+          <!-- ③ 대응 멘트 3가지 -->
+          <div class="whatif-box script">
+            <div class="wb-head"><span class="wb-num">3</span> 추천 대응 멘트 (3가지 톤)</div>
+            <div class="scripts-list">
+              <div class="script-card">
+                <div class="sc-head">
+                  <span class="sc-tone firm"><i class="ti ti-shield" style="font-size:10px;"></i> 단호</span>
+                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
+                </div>
+                <div class="sc-text" data-script="firm">현재 회사 정책상 동일 직급 밴드 상단을 초과하는 인상은 어렵습니다. 다만 본 오퍼는 시장 Q3 기준으로 산정된 최선의 조건이며, 사이닝 보너스와 비금전 패키지를 통해 격차를 좁힐 수 있도록 준비해 두었습니다.</div>
+              </div>
+              <div class="script-card">
+                <div class="sc-head">
+                  <span class="sc-tone flex"><i class="ti ti-balloon" style="font-size:10px;"></i> 유연</span>
+                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
+                </div>
+                <div class="sc-text" data-script="flex">금액 외에 다른 옵션을 함께 검토해볼 수 있을까요? 사이닝 보너스나 자기계발 지원, 그리고 본부 내 Cross-functional PM 권한처럼 단기 금전 + 중장기 커리어 가치를 포함한 패키지를 함께 제안드리고 싶습니다.</div>
+              </div>
+              <div class="script-card">
+                <div class="sc-head">
+                  <span class="sc-tone propose"><i class="ti ti-bulb" style="font-size:10px;"></i> 제안형</span>
+                  <button class="sc-copy" onclick="copyScript(this)"><i class="ti ti-copy"></i> 복사</button>
+                </div>
+                <div class="sc-text" data-script="propose">사이닝 보너스 <strong><span class="wi-sc-signing">200</span>만원</strong> + 자기계발 지원금 <strong><span class="wi-sc-edu">150</span>만원</strong>으로 격차를 좁히고, 추가로 Pricing 풀 오너십과 사내 강사 권한까지 포함된 패키지를 제안드립니다. 변액·종신 도메인 전문성을 본부 차원에서 확장할 수 있는 구조입니다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ [7] AI 기안 메모 ============ -->
+      <section class="section">
+        <div class="section-head"><div class="section-title">최종 협상 전략 + AI 기안 메모</div></div>
+        <textarea class="memo-area" id="ai-memo" placeholder="AI 기안 메모를 작성하세요.">시니어 매니저(차장급) 처우 협의 케이스. 표준 환산 연봉 6,100만원 (자료 기반 보상 재구성 결과) 기준으로 본 오퍼 5,900만원은 시장 Q3 + 회사 max 일치. 후보자 카운터오퍼 6,500만원에 대해서는 (1) 사이닝 보너스 200만원 + 자기계발 지원금 150만원으로 차액 일부 흡수, (2) Cross-functional PM 권한 + 사내 강사 권한 + Pricing 풀 오너십으로 비금전 가치 보완 제안. 합류 후 6개월차 처우 점검 1회 예정. 본부장(상품본부) 의사결정 대기.</textarea>
+        <div class="memo-actions">
+          <button class="btn-secondary" onclick="showToast('메모가 저장되었습니다.', 'success')"><i class="ti ti-download"></i> 저장</button>
+          <button class="btn-p" onclick="showToast('승인 요청이 발송되었습니다.', 'success')"><i class="ti ti-send"></i> 본부장 승인 요청</button>
+        </div>
+      </section>
+
+      <!-- ============ [8] 미래 비전 푸터 (NEW) ============ -->
+      <div class="vision-footer">
+        <i class="ti ti-bulb-filled"></i>
+        <div class="vf-text">
+          모든 처우협의 결과는 <strong>의사결정 로그</strong>로 축적되어, 시간이 갈수록 추천 정확도가 자동으로 향상됩니다.
+        </div>
+        <div class="vf-counter"><i class="ti ti-database" style="font-size:11px;vertical-align:-1px;"></i> 축적된 케이스 247건</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ===== 인증 가벼운 처리 =====
+const empId = sessionStorage.getItem('empId');
+if (!empId) { sessionStorage.setItem('empId', '10234'); sessionStorage.setItem('role', 'hr'); }
+document.getElementById('userId').textContent = '사번 ' + (sessionStorage.getItem('empId') || '10234');
+function logout() { sessionStorage.clear(); location.href = '../../index.html'; }
+
+// ===== Toast =====
+function showToast(msg, type = 'info') {
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type === 'success' ? 'success' : '');
+  t.innerHTML = (type === 'success' ? '<i class="ti ti-check"></i>' : '<i class="ti ti-info-circle"></i>') + ' ' + msg;
+  wrap.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 30);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 250); }, 2200);
+}
+
+// ===== 페이밴드 슬라이더 → 다층 리스크 4개 카드 실시간 갱신 =====
+const offerSlider = document.getElementById('offer-slider');
+const offerDisplay = document.getElementById('offer-value-display');
+const paybandMarker = document.getElementById('payband-marker');
+
+function updateRiskCards(val) {
+  // 페이밴드 위치 계산 (5000~6500 → 0~100%)
+  const pct = ((val - 5000) / (6500 - 5000)) * 100;
+  paybandMarker.style.left = pct + '%';
+  offerDisplay.innerHTML = val.toLocaleString() + '<small>만원</small>';
+
+  // 4개 카드 상태 계산 (Mock 로직)
+  let r1, r2, r3, r4;
+  if (val <= 5400) {
+    r1 = { lv: 'low', desc: '동일 직급 평균보다 낮음', sub: '내부 형평성 안전' };
+    r2 = { lv: 'low', desc: '밴드 상단까지 +20% 여유', sub: '향후 인상 폭 충분' };
+    r3 = { lv: 'low', desc: '재직자 대비 낮은 오퍼', sub: '역전 리스크 없음' };
+    r4 = { lv: 'high', desc: '시장 대비 약 -8% 낮음', sub: '★ 이탈 가능성 큼' };
+  } else if (val <= 5800) {
+    r1 = { lv: 'medium', desc: '동일 직급 평균 수준', sub: '균형 잡힌 구간' };
+    r2 = { lv: 'medium', desc: '밴드 상단까지 +12% 여유', sub: '인상 폭 양호' };
+    r3 = { lv: 'medium', desc: '재직자 2명이 본 오퍼 이하', sub: '경미한 역전 가능성' };
+    r4 = { lv: 'medium', desc: '시장 평균 대비 약 +3%', sub: '경쟁력 보통' };
+  } else if (val <= 6100) {
+    r1 = { lv: 'high', desc: '동일 직급 12명 중 3명보다 높음', sub: '상품본부 시니어 매니저 기준' };
+    r2 = { lv: 'medium', desc: '밴드 상단까지 +5% 여유', sub: '차기 정기인상 시점 기준' };
+    r3 = { lv: 'high', desc: '재직자 5명이 본 오퍼보다 낮음', sub: '→ 정기인상 시 추가 조정 필요' };
+    r4 = { lv: 'low', desc: '현재 대비 +20% 인상으로 충분', sub: '시장 평균 대비 경쟁력 확보' };
+  } else {
+    r1 = { lv: 'high', desc: '동일 직급 평균을 크게 상회', sub: '★ 내부 위화감 가능성' };
+    r2 = { lv: 'high', desc: '밴드 상단 진입 또는 초과', sub: '추가 인상 여력 부족' };
+    r3 = { lv: 'high', desc: '재직자 8명 이상 역전', sub: '★ 즉시 조정 권장' };
+    r4 = { lv: 'low', desc: '시장 상위 10% 진입', sub: '경쟁력 매우 우수' };
+  }
+
+  const cards = [
+    { id: 1, ...r1 }, { id: 2, ...r2 }, { id: 3, ...r3 }, { id: 4, ...r4 }
+  ];
+  cards.forEach(c => {
+    const card = document.getElementById('risk-card-' + c.id);
+    const lvl = document.getElementById('rl-' + c.id);
+    card.className = 'risk-card ' + c.lv;
+    lvl.className = 'risk-level ' + c.lv;
+    lvl.textContent = c.lv.toUpperCase();
+    document.getElementById('rd-' + c.id).textContent = c.desc;
+    document.getElementById('rs-' + c.id).textContent = c.sub;
+  });
+}
+
+offerSlider.addEventListener('input', e => updateRiskCards(parseInt(e.target.value)));
+updateRiskCards(parseInt(offerSlider.value));
+
+// ===== What-If 카운터오퍼 → 3개 분석 박스 실시간 갱신 =====
+const counterNum = document.getElementById('counter-num');
+const counterSlider = document.getElementById('counter-slider');
+const OFFER_BASE = 5900;
+
+function updateWhatIf(val) {
+  const diff = Math.max(0, val - OFFER_BASE);
+  // ① 영향: 차액 기반
+  const invertN = Math.min(20, 5 + Math.round(diff / 200));
+  const invertDelta = invertN - 5;
+  const bandOver = val - 6100;
+  const gap = Math.round(((val - 5300) / 5300) * 100);
+  document.getElementById('wi-invert').textContent = invertN;
+  document.getElementById('wi-invert-delta').textContent = invertDelta > 0 ? `(+${invertDelta})` : `(${invertDelta})`;
+  document.getElementById('wi-band').textContent = (bandOver >= 0 ? '+' : '') + bandOver;
+  document.getElementById('wi-gap').textContent = (gap >= 0 ? '+' : '') + gap;
+
+  // ② 대체안: 차액 50%/30%/20% 분산
+  const signing = Math.round(diff * 0.5);
+  const edu = Math.round(diff * 0.3);
+  document.getElementById('wi-diff').textContent = diff.toLocaleString();
+  document.getElementById('wi-signing').textContent = (signing >= 0 ? '+' : '') + signing + '만원';
+  document.getElementById('wi-edu').textContent = (edu >= 0 ? '+' : '') + edu + '만원';
+  // 제안형 멘트에도 반영
+  document.querySelectorAll('.wi-sc-signing').forEach(el => el.textContent = signing);
+  document.querySelectorAll('.wi-sc-edu').forEach(el => el.textContent = edu);
+}
+
+counterNum.addEventListener('input', e => {
+  let v = parseInt(e.target.value || OFFER_BASE);
+  v = Math.max(OFFER_BASE, Math.min(7500, v));
+  counterSlider.value = v;
+  updateWhatIf(v);
+});
+counterSlider.addEventListener('input', e => {
+  counterNum.value = e.target.value;
+  updateWhatIf(parseInt(e.target.value));
+});
+updateWhatIf(parseInt(counterSlider.value));
+
+// ===== 멘트 복사 =====
+function copyScript(btn) {
+  const card = btn.closest('.script-card');
+  const text = card.querySelector('.sc-text').innerText.trim();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(
+      () => showToast('멘트가 복사되었습니다.', 'success'),
+      () => fallbackCopy(text)
+    );
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.top = '-1000px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); showToast('멘트가 복사되었습니다.', 'success'); }
+  catch (e) { showToast('복사에 실패했습니다.', 'info'); }
+  ta.remove();
+}
+</script>
+
+</body>
+</html>
