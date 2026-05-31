@@ -954,6 +954,29 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
+<!-- 인재풀(TRM) 등록 확인 모달 -->
+<div id="modal-trm-confirm" class="mbd">
+  <div class="modal-card" style="width:min(440px,100%);">
+    <div class="m-head" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="m-title"><i class="ti ti-users-plus" style="color:var(--sub-2);vertical-align:-2px;margin-right:4px;"></i> 장기 인재풀(TRM) 등록</div>
+      <button class="icon-x" onclick="closeTrmConfirmModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="m-body">
+      <p style="font-size:13px;color:var(--text-1);line-height:1.6;margin:0 0 10px;font-weight:700;">
+        <span id="trm-confirm-name" style="color:var(--main-1);"></span> 지원자를 장기 인재풀(TRM)에 등록하시겠습니까?
+      </p>
+      <p style="font-size:12px;color:var(--text-3);line-height:1.6;margin:0;background:var(--bg-page);border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
+        <i class="ti ti-info-circle" style="vertical-align:-2px;margin-right:4px;color:var(--main-1);"></i>
+        등록 시 향후 적합한 채용 기회가 있을 때 우선 연락 대상으로 활용됩니다.
+      </p>
+    </div>
+    <div class="m-ft">
+      <button class="btn btn-o" onclick="closeTrmConfirmModal()">취소</button>
+      <button class="btn btn-p mla" onclick="confirmTrmRegistration()"><i class="ti ti-check"></i> 등록</button>
+    </div>
+  </div>
+</div>
+
 <!-- 상세 드로어 -->
 <div id="drawer-details" class="drawer-backdrop">
   <div class="drawer-panel" id="drawer-details-inner">
@@ -2067,20 +2090,38 @@ function saveAndPublishReport() {
     if (c.stage === 1) c.stage1Result = 'fail';
     c.finalResult = '불합격';
     showToast(c.name + ' 지원자가 불합격 처리되었습니다.', 'error');
-    // 불합격 처리 후 인재풀(TRM) 등록 여부 확인
-    setTimeout(() => {
-      const ok = confirm(c.name + ' 지원자를 장기 인재풀(TRM)에 등록하시겠습니까?\n\n등록 시 향후 적합한 채용 기회가 있을 때 우선 연락 대상으로 활용됩니다.');
-      if (ok) {
-        c.trmStatus = true;
-        showToast('[' + c.name + '] 지원자가 TRM 인재 풀에 신규 등록되었습니다.', 'info');
-        updateSidebarCounts();
-        renderReportDetails();
-        renderAllCandidatesTable();
-      }
-    }, 300);
+    // 불합격 처리 후 인재풀(TRM) 등록 여부 확인 (커스텀 모달)
+    setTimeout(() => { showTrmConfirmModal(c); }, 300);
   }
   updateSidebarCounts();
   setTimeout(() => { switchMainView(currentMainView); }, 400);
+}
+
+/* ===== 인재풀(TRM) 등록 확인 모달 ===== */
+let trmPendingCandidateId = null;
+
+function showTrmConfirmModal(candidate) {
+  if (!candidate) return;
+  trmPendingCandidateId = candidate.id;
+  document.getElementById('trm-confirm-name').textContent = candidate.name;
+  document.getElementById('modal-trm-confirm').classList.add('show');
+}
+
+function closeTrmConfirmModal() {
+  document.getElementById('modal-trm-confirm').classList.remove('show');
+  trmPendingCandidateId = null;
+}
+
+function confirmTrmRegistration() {
+  if (trmPendingCandidateId === null) { closeTrmConfirmModal(); return; }
+  const c = candidates.find(item => item.id === trmPendingCandidateId);
+  if (!c) { closeTrmConfirmModal(); return; }
+  c.trmStatus = true;
+  showToast('[' + c.name + '] 지원자가 TRM 인재 풀에 신규 등록되었습니다.', 'info');
+  updateSidebarCounts();
+  renderReportDetails();
+  renderAllCandidatesTable();
+  closeTrmConfirmModal();
 }
 
 function closeReportView() {
