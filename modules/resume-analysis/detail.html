@@ -315,7 +315,7 @@ a { color: inherit; text-decoration: none; }
   <div class="sidebar">
     <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
     <a class="brand" href="../../dashboard-hr.html">
-      <div class="brand-name">ABL Orbit</div>
+      <div class="brand-name">HirABLe</div>
       <div class="brand-sub">ABL × HEROs</div>
     </a>
     <div class="nav">
@@ -1200,7 +1200,7 @@ fetch('data/applicants.json')
     document.getElementById('candName').textContent = candidate.name + ' 상세 검토';
     document.getElementById('candMeta').textContent = candidate.id + ' · ' + candidate.role + ' · ' + candidate.type + ' · ' + candidate.exp + (candidate.channel ? ' · 지원 채널: ' + candidate.channel : '');
     document.getElementById('breadcrumbName').textContent = candidate.name;
-    document.title = candidate.name + ' · 자소서 분석 · ABL Orbit';
+    document.title = candidate.name + ' · 자소서 분석 · HirABLe';
     renderResumePane(candidate, activeProfile);
     renderReviewPane(candidate, activeProfile);
   })
