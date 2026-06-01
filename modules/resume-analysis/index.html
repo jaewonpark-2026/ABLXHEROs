@@ -389,11 +389,13 @@ function getFilteredCandidates() {
 
 function renderStageCounts() {
   const sc = stageCountsByPosting[state.posting] || { applied:0, auto_passed:0, in_review:0, delivered:0 };
-  document.getElementById('stageAppliedCount').textContent = sc.applied + '명';
-  document.getElementById('stageAutoCount').textContent = sc.auto_passed + '명';
-  document.getElementById('stageReviewCount').textContent = sc.in_review + '명';
-  document.getElementById('stageDoneCount').textContent = sc.delivered + '명';
-  document.getElementById('listSubDesc').textContent = '자동심사 통과 ' + sc.auto_passed + '명';
+  // 전형 현황 카드 삭제됨 (3.3) — element가 없을 수 있으니 null guard
+  const setIf = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setIf('stageAppliedCount', sc.applied + '명');
+  setIf('stageAutoCount', sc.auto_passed + '명');
+  setIf('stageReviewCount', sc.in_review + '명');
+  setIf('stageDoneCount', sc.delivered + '명');
+  setIf('listSubDesc', '자동심사 통과 ' + sc.auto_passed + '명');
 }
 
 function renderPostingCards() {
