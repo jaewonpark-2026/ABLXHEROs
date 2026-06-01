@@ -650,9 +650,9 @@
       ],
       "summary": "학부 시절 학생회 활동을 통해 사람들과의 소통과 협업 경험을 쌓았으며, 보험 영업의 핵심인 신뢰 관계 형성에 강한 관심을 보입니다.",
       "fit": {
-        "culture": 83,
         "job": 85,
-        "industry": 82
+        "industry": 82,
+        "org": 83
       },
       "requirements": {
         "essential": [
@@ -684,9 +684,9 @@
       ],
       "summary": "대학에서 머신러닝 프로젝트와 핀테크 해커톤 입상 경험을 보유. 보험 데이터 분석을 통한 고객 인사이트 도출에 관심.",
       "fit": {
-        "culture": 88,
         "job": 93,
-        "industry": 85
+        "industry": 85,
+        "org": 88
       },
       "requirements": {
         "essential": [
@@ -717,9 +717,9 @@
       ],
       "summary": "경영학 전공 과정에서 보험 상품 사례 연구를 진행하며 상품 설계 영역에 관심을 갖게 되었습니다.",
       "fit": {
-        "culture": 76,
         "job": 78,
-        "industry": 77
+        "industry": 77,
+        "org": 76
       },
       "requirements": {
         "essential": [
@@ -750,9 +750,9 @@
       ],
       "summary": "회계학 전공으로 재무제표 분석 경험과 CPA 1차 합격 보유. 보험사 재무 운영에 깊은 관심을 보입니다.",
       "fit": {
-        "culture": 85,
         "job": 89,
-        "industry": 86
+        "industry": 86,
+        "org": 85
       },
       "requirements": {
         "essential": [
@@ -784,9 +784,9 @@
       ],
       "summary": "이커머스·핀테크에서 MSA 전환 프로젝트를 주도. 트래픽 분산과 안정성 확보 경험 풍부.",
       "fit": {
-        "culture": 86,
         "job": 90,
-        "industry": 85
+        "industry": 85,
+        "org": 86
       },
       "requirements": {
         "essential": [
@@ -818,9 +818,9 @@
       ],
       "summary": "국내 대형 생보사에서 IFRS17 전환을 실무 리드. 책임준비금 산출 모델 개선으로 결산 정확도 향상에 기여.",
       "fit": {
-        "culture": 91,
         "job": 95,
-        "industry": 92
+        "industry": 92,
+        "org": 91
       },
       "requirements": {
         "essential": [
@@ -851,9 +851,9 @@
       ],
       "summary": "중소기업에서 일반 결산 업무 담당. 보험·금융 산업 경험은 부족하나 학습 의지가 강함.",
       "fit": {
-        "culture": 72,
         "job": 70,
-        "industry": 68
+        "industry": 68,
+        "org": 72
       },
       "requirements": {
         "essential": [
@@ -884,9 +884,9 @@
       ],
       "summary": "보험 대리점 채널 관리 경험. 영업 KPI 설계와 채널 만족도 개선 프로젝트 주도.",
       "fit": {
-        "culture": 84,
         "job": 86,
-        "industry": 85
+        "industry": 85,
+        "org": 84
       },
       "requirements": {
         "essential": [
