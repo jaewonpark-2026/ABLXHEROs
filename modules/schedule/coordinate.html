@@ -160,6 +160,9 @@ a { color: inherit; text-decoration: none; }
 .ng-filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
 
 /* 신입 공채 리스트 */
+.ng-select-all { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; background: var(--bg-page); border: 1px solid var(--border); cursor: pointer; font-size: 12px; font-weight: 700; color: var(--text-2); user-select: none; }
+.ng-select-all input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--main-1); cursor: pointer; margin: 0; }
+.ng-select-all:hover { background: var(--info-bg); border-color: var(--main-1); color: var(--main-1); }
 .ng-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; background: white; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; transition: all 0.15s; }
 .ng-card:hover { border-color: #4ADE80; box-shadow: 0 2px 8px rgba(74,222,128,0.08); }
 .ng-card input[type="checkbox"] { width: 16px; height: 16px; accent-color: #16A34A; cursor: pointer; }
@@ -393,7 +396,7 @@ a { color: inherit; text-decoration: none; }
   <div class="sidebar">
     <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><i class="ti ti-menu-2"></i></button>
     <a class="brand" href="../../dashboard-hr.html">
-      <div class="brand-name">ABL Orbit</div>
+      <div class="brand-name">HirABLe</div>
       <div class="brand-sub">ABL × HEROs</div>
     </a>
     <div class="nav">
@@ -488,6 +491,7 @@ a { color: inherit; text-decoration: none; }
               <option value="영업">영업관리</option>
               <option value="리스크">계리분석</option>
             </select>
+            <label class="ng-select-all"><input type="checkbox" id="ng-select-all-r1" onchange="toggleNewgradSelectAll('r1', this.checked)"> <span>전체 선택</span></label>
             <span class="tx-muted tx-sm" id="newgrad-r1-selected-info"></span>
           </div>
           <div id="newgrad-list-r1"></div>
@@ -563,6 +567,7 @@ a { color: inherit; text-decoration: none; }
               <option value="영업">영업관리</option>
               <option value="리스크">계리분석</option>
             </select>
+            <label class="ng-select-all"><input type="checkbox" id="ng-select-all-r2" onchange="toggleNewgradSelectAll('r2', this.checked)"> <span>전체 선택</span></label>
             <span class="tx-muted tx-sm" id="newgrad-r2-selected-info"></span>
           </div>
           <div id="newgrad-list-r2"></div>
@@ -1031,6 +1036,20 @@ function updateNewgradSelectedInfo(round) {
   var n = document.querySelectorAll('.ng-check-' + round + ':checked').length;
   var el = document.getElementById(ngSelInfoId(round));
   if (el) el.textContent = n > 0 ? n + '명 선택됨' : '';
+  // 전체 선택 체크박스 상태 동기화
+  var allBox = document.getElementById('ng-select-all-' + round);
+  if (allBox) {
+    var totalActive = document.querySelectorAll('.ng-check-' + round + ':not([disabled])').length;
+    allBox.checked = (n > 0 && n === totalActive);
+    allBox.indeterminate = (n > 0 && n < totalActive);
+  }
+}
+
+// 전체 선택/해제
+function toggleNewgradSelectAll(round, checked) {
+  var boxes = document.querySelectorAll('.ng-check-' + round + ':not([disabled])');
+  boxes.forEach(b => { b.checked = checked; });
+  updateNewgradSelectedInfo(round);
 }
 
 function openNewgradBulkModal(round) {
@@ -1190,6 +1209,8 @@ fetch('data/candidates.json')
     renderNotifications();
     updateBadges();
     renderKanban('r1');
+    renderNewgradList('r1');
+    renderNewgradList('r2');
     renderDashboardSummary('r1');
 
     // URL ?round=r2&id=c4 처리
@@ -1426,7 +1447,10 @@ function handleRemindTarget(val) {
 function renderConfirmWaitBody() {
   var cand = coordState.cand;
   var html = '';
-  html += '<div class="stitle">AI 추천 시간 (조율 가능 시간 분석)</div>';
+  html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+  html += '<div class="stitle" style="margin:0;">AI 추천 시간 (조율 가능 시간 분석)</div>';
+  html += '<button class="btn btn-o btn-sm" onclick="openAltTimeModal()" style="padding:6px 12px;font-size:11.5px;"><i class="ti ti-edit"></i>다른 시간 선택</button>';
+  html += '</div>';
   html += '<div style="background:linear-gradient(135deg, var(--info-bg), #F0F7FF);border:1px solid var(--main-1);border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
   html += '<div style="font-size:11px;color:var(--main-1);font-weight:700;margin-bottom:4px;letter-spacing:0.02em;">AI 1순위 추천</div>';
   html += '<div style="font-size:16px;font-weight:700;color:var(--text-1);margin-bottom:4px;letter-spacing:-0.02em;">' + cand.aiTime + '</div>';
@@ -1581,10 +1605,19 @@ function renderInlinePreview(type) {
   var period = coordState.settings.period || (selPeriodStart && selPeriodEnd ? selPeriodStart.replace(/-/g, '.') + '~' + selPeriodEnd.replace(/-/g, '.') : '미설정');
   var deadline = coordState.settings.deadline || '2026.06.10 18:00';
 
-  // 확정 메일(conf-cand/conf-int)은 고정 템플릿(t5/t6) + 확정일시 사용
+  // 확정 메일(conf-cand/conf-int)은 round에 따라 1차/2차 템플릿 분기
   var tmpl, confTime = '';
-  if (type === 'conf-cand') { tmpl = TEMPLATES.find(t => t.id === 't5'); confTime = coordState.selAltTime || cand.aiTime || ''; }
-  else if (type === 'conf-int') { tmpl = TEMPLATES.find(t => t.id === 't6'); confTime = coordState.selAltTime || cand.aiTime || ''; }
+  var round = (cand && cand.round) ? String(cand.round).replace('r', '') : '1';
+  if (type === 'conf-cand') {
+    var candTmplId = round === '2' ? 't7' : 't3';
+    tmpl = TEMPLATES.find(t => t.id === candTmplId);
+    confTime = coordState.selAltTime || cand.aiTime || '';
+  }
+  else if (type === 'conf-int') {
+    var intTmplId = round === '2' ? 't8' : 't4';
+    tmpl = TEMPLATES.find(t => t.id === intTmplId);
+    confTime = coordState.selAltTime || cand.aiTime || '';
+  }
   else if (type === 'rmd-cand') { tmpl = TEMPLATES.find(t => t.type === 'cand' && t.stage === '리마인드'); }
   else if (type === 'rmd-int') { tmpl = TEMPLATES.find(t => t.type === 'int' && t.stage === '리마인드'); }
   else {
@@ -1894,7 +1927,6 @@ function renderCoordFooter() {
   } else if (status === 'confirm-wait') {
     html += '<button class="btn btn-o" onclick="closeModal(\'modal-coord\')">닫기</button>';
     html += '<div class="mla flex g8">';
-    html += '<button class="btn btn-o" onclick="openAltTimeModal()"><i class="ti ti-edit"></i>다른 시간 선택</button>';
     html += '<button class="btn btn-p" onclick="openConfirmModal()"><i class="ti ti-check"></i>AI 추천시간으로 확정 메일</button>';
     html += '</div>';
   } else {
@@ -2004,8 +2036,9 @@ function renderConfirmModalBody() {
   html += '<option value="int">면접관만</option>';
   html += '</select></div>';
 
-  var candConfTmpl = TEMPLATES.find(t => t.id === 't5');
-  var intConfTmpl = TEMPLATES.find(t => t.id === 't6');
+  var confRound = (cand && cand.round) ? String(cand.round).replace('r', '') : '1';
+  var candConfTmpl = TEMPLATES.find(t => t.id === (confRound === '2' ? 't7' : 't3'));
+  var intConfTmpl = TEMPLATES.find(t => t.id === (confRound === '2' ? 't8' : 't4'));
 
   html += '<div id="conf-tmpl-cand" style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;background:var(--bg-page);">';
   html += '<div style="font-size:11px;font-weight:700;color:var(--main-1);margin-bottom:6px;">지원자 확정 메일</div>';
