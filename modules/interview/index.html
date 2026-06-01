@@ -1482,7 +1482,10 @@ function runCompare() {
   // ===== 면접 진행 여부 판단 =====
   // status === '대기'이면 면접 전 (data에 default 점수가 있어도 표시 안 함)
   const hasEval = (c) => c && c.status !== '대기';
-  const bothInterviewed = hasEval(c1) && hasEval(c2);
+  const interviewedC1 = hasEval(c1);
+  const interviewedC2 = hasEval(c2);
+  const bothInterviewed = interviewedC1 && interviewedC2;
+  const eitherInterviewed = interviewedC1 || interviewedC2;
 
   const overallRow = document.getElementById('comp-overall-row');
   const nameRow = document.getElementById('comp-name-row');
@@ -1490,7 +1493,7 @@ function runCompare() {
   const preNotice = document.getElementById('comp-pre-interview-notice');
 
   if (bothInterviewed) {
-    // 면접 본 경우 — 모든 데이터 표시
+    // 둘 다 면접 봄 — 모든 데이터 표시
     overallRow.style.display = '';
     nameRow.style.display = 'none';
     interviewSection.classList.remove('hidden');
@@ -1508,14 +1511,20 @@ function runCompare() {
     document.getElementById('comp-stat1-val1').textContent = c1.evalScores.qaa + '점';
     document.getElementById('comp-stat1-val2').textContent = c2.evalScores.qaa + '점';
   } else {
-    // 면접 전 — 종합 점수 영역 숨김 + 안내 표시
+    // 한 쪽 이상 면접 전 — 종합 점수 영역(밸런스 bar) 숨김
     overallRow.style.display = 'none';
     nameRow.style.display = '';
-    interviewSection.classList.add('hidden');
     preNotice.classList.remove('hidden');
-
     document.getElementById('comp-name-only-1').textContent = c1.name;
     document.getElementById('comp-name-only-2').textContent = c2.name;
+
+    // 한 쪽이라도 면접 봤으면 면접 평가 섹션 표시 (안 본 사람은 "-")
+    if (eitherInterviewed) {
+      interviewSection.classList.remove('hidden');
+    } else {
+      // 둘 다 면접 전이면 면접 평가 섹션 숨김
+      interviewSection.classList.add('hidden');
+    }
   }
 
   // 서류 모듈 연동 + 역검 점수 (4가지 + 1가지) — 항상 표시
@@ -1536,11 +1545,11 @@ function runCompare() {
   fillCompareRow('industry', c1.fitIndustry, c2.fitIndustry);
   fillCompareRow('apt', c1.aptitudeScore, c2.aptitudeScore);
 
-  // 면접 평가 비교 (면접 본 경우만)
-  if (bothInterviewed) {
-    fillCompareRow('eval-qaa', c1.evalScores.qaa, c2.evalScores.qaa);
-    fillCompareRow('eval-job', c1.evalScores.job, c2.evalScores.job);
-    fillCompareRow('eval-culture', c1.evalScores.culture, c2.evalScores.culture);
+  // 면접 평가 비교 — 면접 본 사람만 점수, 안 본 사람은 null → "-"
+  if (eitherInterviewed) {
+    fillCompareRow('eval-qaa', interviewedC1 ? c1.evalScores.qaa : null, interviewedC2 ? c2.evalScores.qaa : null);
+    fillCompareRow('eval-job', interviewedC1 ? c1.evalScores.job : null, interviewedC2 ? c2.evalScores.job : null);
+    fillCompareRow('eval-culture', interviewedC1 ? c1.evalScores.culture : null, interviewedC2 ? c2.evalScores.culture : null);
   }
 
   document.getElementById('modal-compare').classList.add('show');
