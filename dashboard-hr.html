@@ -454,6 +454,24 @@ function renderTodos() {
     cta: '검토 시작'
   });
 
+  // 항상 표시: 면접 일정 재조율 요청 (시연용)
+  items += todoItem({
+    href: 'modules/schedule/coordinate.html?round=recoord',
+    iconBg: 'linear-gradient(135deg, #FFE9D6, #FCD9B0)', iconColor: '#C76A00', icon: 'ti-calendar-event',
+    title: '면접 일정 재조율 요청 (4건)',
+    desc: '면접관/지원자 요청으로 1·2차 면접 시간 재조율 대기 중',
+    cta: '재조율 시작'
+  });
+
+  // 항상 표시: 면접 일정 조율 대기 (1차/2차 조율 진행 중)
+  items += todoItem({
+    href: 'modules/schedule/coordinate.html',
+    iconBg: 'linear-gradient(135deg, #E0F5F7, #C5EBEF)', iconColor: '#00838F', icon: 'ti-clock',
+    title: '면접 일정 조율 대기 (경력 6건 · 신입 5명)',
+    desc: '경력직 1차 3건 조율 전 · 3건 조율 중 / 신입 공채 1차 면접 시간 일괄 안내 대기',
+    cta: '조율 진행'
+  });
+
   todoList.innerHTML = '<div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue);"></div>' + items;
 }
 
