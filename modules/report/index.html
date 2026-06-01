@@ -3238,6 +3238,14 @@ a { color: inherit; text-decoration: none; }
     padding: 22px 24px;
     box-shadow: 0 12px 32px rgba(18,63,109,0.22);
   }
+  /* 퍼널 패널 안에서 wide로 표시되는 버전 */
+  .lt-insight.lt-insight-wide {
+    position: static;
+    top: auto;
+    margin-top: 20px;
+  }
+  /* 큰 패널에 들어가는 wide 차트 */
+  .lt-chart-wide { height: 320px; margin-top: 8px; margin-bottom: 8px; }
   .lt-insight-head {
     display: flex;
     justify-content: space-between;
@@ -3554,7 +3562,7 @@ a { color: inherit; text-decoration: none; }
             <div class="posting-main">
               <div class="posting-head">
                 <span class="posting-badge closed">접수마감</span>
-                <span class="posting-title">[ABL생명] 디지털IT기획팀 경력직(AA) 채용</span>
+                <span class="posting-title">디지털IT기획팀 경력직(AA) 채용</span>
               </div>
               <span class="posting-date">2026.05.19 ~ 2026.05.26 23:59</span>
             </div>
@@ -3567,7 +3575,7 @@ a { color: inherit; text-decoration: none; }
             <div class="posting-main">
               <div class="posting-head">
                 <span class="posting-badge closed">접수마감</span>
-                <span class="posting-title">[ABL생명] 상품본부 상품기획팀 경력직 채용</span>
+                <span class="posting-title">상품본부 상품기획팀 경력직 채용</span>
               </div>
               <span class="posting-date">2026.05.04 ~ 2026.05.17 23:59</span>
             </div>
@@ -5916,8 +5924,8 @@ let leadtimeInitialized = false;
 
 // 공고 메타 데이터
 var POSTING_META = {
-  'digital-it-aa': { title: '[ABL생명] 디지털IT기획팀 경력직(AA) 채용', crumb: '디지털IT기획팀 경력직(AA)' },
-  'product-planning': { title: '[ABL생명] 상품본부 상품기획팀 경력직 채용', crumb: '상품본부 상품기획팀 경력직' }
+  'digital-it-aa': { title: '디지털IT기획팀 경력직(AA) 채용', crumb: '디지털IT기획팀 경력직(AA)' },
+  'product-planning': { title: '상품본부 상품기획팀 경력직 채용', crumb: '상품본부 상품기획팀 경력직' }
 };
 
 // 공고별 분석 진입
@@ -7564,20 +7572,8 @@ const Leadtime = (function() {
   function buildHTML() {
     return `
 <div class="lt-root">
-  <!-- 경력/신입 토글 -->
-  <div class="lt-toggle-row">
-    <div class="lt-toggle">
-      <button id="lt-btn-experienced" class="lt-toggle-btn active" onclick="Leadtime.toggleType('experienced')">
-        <i class="ti ti-user-check"></i> 경력직 채용
-      </button>
-      <button id="lt-btn-fresh" class="lt-toggle-btn" onclick="Leadtime.toggleType('fresh')">
-        <i class="ti ti-school"></i> 신입 공채
-      </button>
-    </div>
-    <div class="lt-target-text">분석 대상: <b id="lt-target-text">경력직 채용 프로세스</b></div>
-  </div>
 
-  <!-- Funnel History -->
+  <!-- 1. 퍼널 히스토리 + AI 프로세스 진단 분석 -->
   <section class="lt-panel">
     <div class="lt-panel-head">
       <div>
@@ -7589,11 +7585,46 @@ const Leadtime = (function() {
       <div class="lt-funnel-grid" id="lt-funnel-flow"></div>
     </div>
     <div class="lt-panel-foot">
-      <i class="ti ti-info-circle"></i> 각 노드 카드를 클릭하면 우측의 실시간 세부 진단 분석기가 연동되어 전환됩니다.
+      <i class="ti ti-info-circle"></i> 각 노드 카드를 클릭하면 아래의 AI 프로세스 진단 분석이 해당 단계로 갱신됩니다.
+    </div>
+
+    <!-- AI 프로세스 진단 분석 (퍼널 클릭 시 갱신) -->
+    <div class="lt-insight lt-insight-wide">
+      <div class="lt-insight-head">
+        <span id="lt-detail-badge" class="lt-badge red">최대 정체 구간</span>
+        <div class="lt-live"><span class="dot"></span> AI 프로세스 진단 분석</div>
+      </div>
+      <div id="lt-insight-box" class="lt-insight-body">
+        <div class="lt-stage-meta">
+          <span id="lt-detail-stage-num" class="lt-phase">PHASE 06</span>
+          <h3 id="lt-detail-stage-name">처우 협의 및 검토</h3>
+          <p id="lt-detail-stage-desc">경력직 전형의 최종 입사 확정 지연 구간</p>
+        </div>
+        <div class="lt-quote">
+          <i class="ti ti-quote"></i>
+          <div class="lt-quote-label">담당자 인터뷰</div>
+          <p id="lt-detail-painpoint">"거기에 경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에…"</p>
+        </div>
+        <div class="lt-metric">
+          <div class="lt-metric-row">
+            <span>수기 조율 및 서류 검증 지연율</span>
+            <span id="lt-detail-ratio-text" class="lt-ratio red">98% 이상</span>
+          </div>
+          <div class="lt-bar-track"><div id="lt-detail-ratio-bar" class="lt-bar-fill red" style="width: 98%"></div></div>
+        </div>
+        <div class="lt-causes">
+          <p class="lt-causes-title">핵심 병목 요인</p>
+          <ul id="lt-detail-cause-list"></ul>
+        </div>
+        <div class="lt-solution">
+          <div class="lt-solution-head"><i class="ti ti-sparkles"></i> AI 기반 솔루션 처방</div>
+          <p id="lt-detail-ai-solution">처우 데이터 분석 기반 내부 가이드 자동 시뮬레이션…</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- 지원자 체감 여정 타임라인 -->
+  <!-- 2. 지원자 관점 리드타임 -->
   <section class="lt-panel">
     <div class="lt-panel-head">
       <div>
@@ -7605,7 +7636,20 @@ const Leadtime = (function() {
     <div class="lt-journey" id="lt-journey-flow"></div>
   </section>
 
-  <!-- 지원자 유입 추이 분석 (경력직만 표시) -->
+  <!-- 3. 단계별 후보자 이탈 -->
+  <section class="lt-panel">
+    <div class="lt-panel-head">
+      <div>
+        <h2 class="lt-panel-title"><i class="ti ti-user-x"></i> 단계별 후보자 이탈</h2>
+        <p class="lt-panel-sub">전형 진행 도중 이탈한 후보자 분포 — 어느 단계에서 지원자를 놓치고 있는지 진단합니다.</p>
+      </div>
+      <span class="lt-pill gray" id="lt-w4-pill">반기 누적</span>
+    </div>
+    <div class="lt-chart-wide"><canvas id="lt-chart-dropoff"></canvas></div>
+    <p class="lt-widget-cap" id="lt-w4-cap"></p>
+  </section>
+
+  <!-- 4. 지원자 유입 추이 분석 (경력직만) -->
   <section class="lt-panel" id="lt-panel-inflow">
     <div class="lt-panel-head">
       <div>
@@ -7618,110 +7662,17 @@ const Leadtime = (function() {
     <div class="lt-inflow-tablewrap"><table class="lt-inflow-table" id="lt-inflow-table"></table></div>
   </section>
 
-  <!-- Dashboard Grid -->
-  <div class="lt-grid">
-
-    <!-- 왼쪽: BI 위젯 -->
-    <div class="lt-col-main">
-
-      <!-- 페인포인트 위젯 2x2 -->
-      <div class="lt-mini-grid">
-        <div class="lt-widget">
-          <div class="lt-widget-head"><h3 id="lt-w1-title">인사팀 단계별 수기 공수</h3><span class="lt-pill red" id="lt-w1-pill">수작업</span></div>
-          <div class="lt-chart-sm"><canvas id="lt-chart-effort"></canvas></div>
-          <p class="lt-widget-cap" id="lt-w1-cap"></p>
-        </div>
-        <div class="lt-widget">
-          <div class="lt-widget-head"><h3 id="lt-w2-title">처우 협의 소요일 분포</h3><span class="lt-pill gray" id="lt-w2-pill">경력직</span></div>
-          <div class="lt-chart-sm"><canvas id="lt-chart-offer"></canvas></div>
-          <p class="lt-widget-cap" id="lt-w2-cap"></p>
-        </div>
-        <div class="lt-widget">
-          <div class="lt-widget-head"><h3 id="lt-w3-title">면접 일정 재조율률</h3><span class="lt-pill red" id="lt-w3-pill">수기 조율</span></div>
-          <div class="lt-chart-sm lt-donut-wrap lt-donut-center">
-            <div class="lt-donut-inner"><canvas id="lt-chart-recoord"></canvas></div>
-            <div class="lt-donut-val"><b id="lt-w3-val">71%</b><span id="lt-w3-sub">재조율 발생</span></div>
-          </div>
-          <p class="lt-widget-cap" id="lt-w3-cap"></p>
-        </div>
-        <div class="lt-widget">
-          <div class="lt-widget-head"><h3 id="lt-w4-title">단계별 후보자 이탈</h3><span class="lt-pill gray" id="lt-w4-pill">반기 누적</span></div>
-          <div class="lt-chart-sm"><canvas id="lt-chart-dropoff"></canvas></div>
-          <p class="lt-widget-cap" id="lt-w4-cap"></p>
-        </div>
+  <!-- 5. 경로별 지원자 합격률 -->
+  <section class="lt-panel">
+    <div class="lt-panel-head">
+      <div>
+        <h2 class="lt-panel-title"><i class="ti ti-trophy"></i> 경로별 지원자 합격률</h2>
+        <p class="lt-panel-sub">채용 경로별 합격률을 비교하여 어느 채널에서 우수 인재가 유입되는지 파악합니다.</p>
       </div>
-
-      <!-- 중단: 리드타임 / 합격률 / 통계 -->
-      <div class="lt-mid-grid">
-        <div class="lt-col-mid-left">
-          <div class="lt-widget">
-            <h3 class="lt-widget-title">채용 단계별 리드타임 (평균)</h3>
-            <div class="lt-chart-md"><canvas id="lt-chart-leadtime"></canvas></div>
-          </div>
-          <div class="lt-widget">
-            <h3 class="lt-widget-title">경로별 지원자 합격률</h3>
-            <div id="lt-pass-rate-container"></div>
-          </div>
-        </div>
-        <div class="lt-widget lt-stage-stats">
-          <div class="lt-widget-head">
-            <h3>채용 단계별 인원 통계</h3>
-            <span class="lt-pill purple" id="lt-avg-duration">합격까지 평균 80일 소요</span>
-          </div>
-          <div class="lt-chart-lg"><canvas id="lt-chart-stage-stats"></canvas></div>
-          <div class="lt-kpi-row">
-            <div><p class="k">총 지원자</p><p class="v" id="lt-kpi-total">1,593명</p></div>
-            <div><p class="k">진행 중</p><p class="v" id="lt-kpi-progress">634명</p></div>
-            <div><p class="k">합격자</p><p class="v accent" id="lt-kpi-passed">8명</p></div>
-            <div><p class="k">불합격</p><p class="v muted" id="lt-kpi-failed">896명</p></div>
-          </div>
-        </div>
-      </div>
-
     </div>
+    <div id="lt-pass-rate-container"></div>
+  </section>
 
-    <!-- 오른쪽: 진단 패널 -->
-    <aside class="lt-col-aside">
-      <div class="lt-insight">
-        <div class="lt-insight-head">
-          <span id="lt-detail-badge" class="lt-badge red">최대 정체 구간</span>
-          <div class="lt-live"><span class="dot"></span> 실시간 프로세스 진단</div>
-        </div>
-        <div id="lt-insight-box" class="lt-insight-body">
-          <div class="lt-stage-meta">
-            <span id="lt-detail-stage-num" class="lt-phase">PHASE 06</span>
-            <h3 id="lt-detail-stage-name">처우 협의 및 검토</h3>
-            <p id="lt-detail-stage-desc">경력직 전형의 최종 입사 확정 지연 구간</p>
-          </div>
-
-          <div class="lt-quote">
-            <i class="ti ti-quote"></i>
-            <div class="lt-quote-label">담당자 인터뷰</div>
-            <p id="lt-detail-painpoint">"거기에 경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에…"</p>
-          </div>
-
-          <div class="lt-metric">
-            <div class="lt-metric-row">
-              <span>수기 조율 및 서류 검증 지연율</span>
-              <span id="lt-detail-ratio-text" class="lt-ratio red">98% 이상</span>
-            </div>
-            <div class="lt-bar-track"><div id="lt-detail-ratio-bar" class="lt-bar-fill red" style="width: 98%"></div></div>
-          </div>
-
-          <div class="lt-causes">
-            <p class="lt-causes-title">핵심 병목 요인</p>
-            <ul id="lt-detail-cause-list"></ul>
-          </div>
-
-          <div class="lt-solution">
-            <div class="lt-solution-head"><i class="ti ti-sparkles"></i> AI 기반 솔루션 처방</div>
-            <p id="lt-detail-ai-solution">처우 데이터 분석 기반 내부 가이드 자동 시뮬레이션…</p>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-  </div>
 </div>
     `;
   }
@@ -7729,9 +7680,11 @@ const Leadtime = (function() {
   // ===== 렌더링 =====
   function renderFunnel() {
     const data = dataset[currentType];
-    document.getElementById('lt-target-text').textContent = data.targetName;
+    const tgt = document.getElementById('lt-target-text');
+    if (tgt) tgt.textContent = data.targetName;
 
     const container = document.getElementById('lt-funnel-flow');
+    if (!container) return;
     container.innerHTML = '';
     container.style.gridTemplateColumns = `repeat(${data.funnel.length}, 1fr)`;
 
@@ -7804,13 +7757,15 @@ const Leadtime = (function() {
 
   function renderStats() {
     const d = dataset[currentType];
-    document.getElementById('lt-avg-duration').textContent = d.kpis.avgDuration;
-    document.getElementById('lt-kpi-total').textContent = d.kpis.total + '명';
-    document.getElementById('lt-kpi-progress').textContent = d.kpis.progress + '명';
-    document.getElementById('lt-kpi-passed').textContent = d.kpis.passed + '명';
-    document.getElementById('lt-kpi-failed').textContent = d.kpis.failed + '명';
+    const setIf = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setIf('lt-avg-duration', d.kpis.avgDuration);
+    setIf('lt-kpi-total', d.kpis.total + '명');
+    setIf('lt-kpi-progress', d.kpis.progress + '명');
+    setIf('lt-kpi-passed', d.kpis.passed + '명');
+    setIf('lt-kpi-failed', d.kpis.failed + '명');
 
     const wrap = document.getElementById('lt-pass-rate-container');
+    if (!wrap) return;
     wrap.innerHTML = '';
     const maxRate = Math.max(...d.passRates.map(i => i.rate));
     d.passRates.forEach(item => {
@@ -7851,37 +7806,39 @@ const Leadtime = (function() {
     const p = dataset[currentType].pain;
     const RED = '#E5446D', SKY = '#00AEEF', NAVY = '#273A92', SOFT = '#C5DBF5';
 
-    // W1 — 단계별 수기 공수 (가로 막대, 최대값 강조)
-    charts.effort = new Chart(document.getElementById('lt-chart-effort'), {
+    // 제거된 위젯들의 element는 null → 차트 생성 skip
+    const eEffort = document.getElementById('lt-chart-effort');
+    if (eEffort) charts.effort = new Chart(eEffort, {
       type: 'bar',
       data: { labels: p.effort.labels, datasets: [{ data: p.effort.data, backgroundColor: barEmphasis(p.effort.data, RED, SOFT), borderRadius: 3 }] },
       options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + ' 시간' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
     });
 
-    // W2 — 처우 협의 소요일 분포 / (신입) 주차별 유입
-    charts.offer = new Chart(document.getElementById('lt-chart-offer'), {
+    const eOffer = document.getElementById('lt-chart-offer');
+    if (eOffer) charts.offer = new Chart(eOffer, {
       type: 'bar',
       data: { labels: p.offer.labels, datasets: [{ data: p.offer.data, backgroundColor: NAVY, borderRadius: 4 }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 9 } } }, y: { display: false } } }
     });
 
-    // W3 — 면접 재조율률 / (신입) 미응시율 (도넛)
-    charts.recoord = new Chart(document.getElementById('lt-chart-recoord'), {
+    const eRecoord = document.getElementById('lt-chart-recoord');
+    if (eRecoord) charts.recoord = new Chart(eRecoord, {
       type: 'doughnut',
       data: { datasets: [{ data: p.recoord.ratio, backgroundColor: [RED, '#EEF1F7'], borderWidth: 0 }] },
       options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false }, tooltip: { enabled: false } } }
     });
 
-    // W4 — 단계별 후보자 이탈 (가로 막대)
-    charts.dropoff = new Chart(document.getElementById('lt-chart-dropoff'), {
+    const eDropoff = document.getElementById('lt-chart-dropoff');
+    if (eDropoff) charts.dropoff = new Chart(eDropoff, {
       type: 'bar',
       data: { labels: p.dropoff.labels, datasets: [{ data: p.dropoff.data, backgroundColor: SKY, borderRadius: 3 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + '명' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } } }
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + '명' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }
     });
 
     // 유입 추이 — 채널별 멀티라인
     const inf = dataset[currentType].inflow;
-    charts.inflow = new Chart(document.getElementById('lt-chart-inflow'), {
+    const eInflow = document.getElementById('lt-chart-inflow');
+    if (eInflow) charts.inflow = new Chart(eInflow, {
       type: 'line',
       data: {
         labels: inf.months,
@@ -7899,7 +7856,8 @@ const Leadtime = (function() {
       }
     });
 
-    charts.leadtime = new Chart(document.getElementById('lt-chart-leadtime'), {
+    const eLeadtime = document.getElementById('lt-chart-leadtime');
+    if (eLeadtime) charts.leadtime = new Chart(eLeadtime, {
       type: 'bar',
       data: {
         labels: ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격'],
@@ -7908,7 +7866,8 @@ const Leadtime = (function() {
       options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { display: false } } } }
     });
 
-    charts.stageStats = new Chart(document.getElementById('lt-chart-stage-stats'), {
+    const eStageStats = document.getElementById('lt-chart-stage-stats');
+    if (eStageStats) charts.stageStats = new Chart(eStageStats, {
       type: 'bar',
       data: {
         labels: ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격'],
@@ -7941,19 +7900,20 @@ const Leadtime = (function() {
     return arr.map(v => v === max ? hi : lo);
   }
 
-  // 위젯 헤더·캡션 텍스트 동기화 (토글별)
+  // 위젯 헤더·캡션 텍스트 동기화 (제거된 element는 null guard)
   function syncWidgetText() {
     const p = dataset[currentType].pain;
-    document.getElementById('lt-w2-title').textContent = p.offer.title || '처우 협의 소요일 분포';
-    document.getElementById('lt-w2-pill').textContent = p.offer.pill || '경력직';
-    document.getElementById('lt-w3-title').textContent = p.recoord.title || '면접 일정 재조율률';
-    document.getElementById('lt-w3-pill').textContent = p.recoord.pill || '수기 조율';
-    document.getElementById('lt-w3-val').textContent = p.recoord.val + '%';
-    document.getElementById('lt-w3-sub').textContent = p.recoord.sub;
-    document.getElementById('lt-w1-cap').innerHTML = p.effort.cap;
-    document.getElementById('lt-w2-cap').innerHTML = p.offer.cap;
-    document.getElementById('lt-w3-cap').innerHTML = p.recoord.cap;
-    document.getElementById('lt-w4-cap').innerHTML = p.dropoff.cap;
+    const setIf = (id, key, html) => { const el = document.getElementById(id); if (el) { if (html) el.innerHTML = key; else el.textContent = key; } };
+    setIf('lt-w2-title', p.offer.title || '처우 협의 소요일 분포');
+    setIf('lt-w2-pill', p.offer.pill || '경력직');
+    setIf('lt-w3-title', p.recoord.title || '면접 일정 재조율률');
+    setIf('lt-w3-pill', p.recoord.pill || '수기 조율');
+    setIf('lt-w3-val', p.recoord.val + '%');
+    setIf('lt-w3-sub', p.recoord.sub);
+    setIf('lt-w1-cap', p.effort.cap, true);
+    setIf('lt-w2-cap', p.offer.cap, true);
+    setIf('lt-w3-cap', p.recoord.cap, true);
+    setIf('lt-w4-cap', p.dropoff.cap, true);
   }
 
   function updateCharts() {
@@ -7965,49 +7925,59 @@ const Leadtime = (function() {
       ? ['1차서류','2차서류','역량검사','1차면접','2차면접','처우협의','최종합격']
       : ['1차서류','2차서류','역량검사','1차면접','2차면접','최종합격'];
 
-    // 차트 init 전에 호출될 수 있으므로 null guard
-    if (!charts.effort) return;
-
-    charts.effort.data.labels = p.effort.labels;
-    charts.effort.data.datasets[0].data = p.effort.data;
-    charts.effort.data.datasets[0].backgroundColor = barEmphasis(p.effort.data, RED, SOFT);
-    charts.effort.update();
-
-    charts.offer.data.labels = p.offer.labels;
-    charts.offer.data.datasets[0].data = p.offer.data;
-    charts.offer.update();
-
-    charts.recoord.data.datasets[0].data = p.recoord.ratio;
-    charts.recoord.update();
-
-    charts.dropoff.data.labels = p.dropoff.labels;
-    charts.dropoff.data.datasets[0].data = p.dropoff.data;
-    charts.dropoff.update();
+    // 각 차트별 정교한 null guard - 제거된 위젯 / 차트 init 안 된 경우 안전 처리
+    if (charts.effort) {
+      charts.effort.data.labels = p.effort.labels;
+      charts.effort.data.datasets[0].data = p.effort.data;
+      charts.effort.data.datasets[0].backgroundColor = barEmphasis(p.effort.data, RED, SOFT);
+      charts.effort.update();
+    }
+    if (charts.offer) {
+      charts.offer.data.labels = p.offer.labels;
+      charts.offer.data.datasets[0].data = p.offer.data;
+      charts.offer.update();
+    }
+    if (charts.recoord) {
+      charts.recoord.data.datasets[0].data = p.recoord.ratio;
+      charts.recoord.update();
+    }
+    if (charts.dropoff) {
+      charts.dropoff.data.labels = p.dropoff.labels;
+      charts.dropoff.data.datasets[0].data = p.dropoff.data;
+      charts.dropoff.update();
+    }
 
     syncWidgetText();
     renderJourney();
     renderInflow();
-    const inf = dataset[currentType].inflow;
-    charts.inflow.data.labels = inf.months;
-    charts.inflow.data.datasets = inf.channels.map(ch => ({
-      label: ch.name, data: ch.data, borderColor: ch.color, backgroundColor: ch.color,
-      borderWidth: 2, tension: 0.35, pointRadius: 2, pointHoverRadius: 4, fill: false
-    }));
-    charts.inflow.update();
 
-    charts.leadtime.data.labels = labels;
-    charts.leadtime.data.datasets[0].data = c.leadtime;
-    charts.leadtime.data.datasets[0].backgroundColor = isExp
-      ? ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#00AEEF','#C5DBF5']
-      : ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#C5DBF5'];
-    charts.leadtime.update();
+    if (charts.inflow) {
+      const inf = dataset[currentType].inflow;
+      charts.inflow.data.labels = inf.months;
+      charts.inflow.data.datasets = inf.channels.map(ch => ({
+        label: ch.name, data: ch.data, borderColor: ch.color, backgroundColor: ch.color,
+        borderWidth: 2, tension: 0.35, pointRadius: 2, pointHoverRadius: 4, fill: false
+      }));
+      charts.inflow.update();
+    }
 
-    charts.stageStats.data.labels = labels;
-    charts.stageStats.data.datasets[0].data = c.stageStats;
-    charts.stageStats.data.datasets[0].backgroundColor = isExp
-      ? ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#00AEEF','#2DAE7B']
-      : ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#2DAE7B'];
-    charts.stageStats.update();
+    if (charts.leadtime) {
+      charts.leadtime.data.labels = labels;
+      charts.leadtime.data.datasets[0].data = c.leadtime;
+      charts.leadtime.data.datasets[0].backgroundColor = isExp
+        ? ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#00AEEF','#C5DBF5']
+        : ['#C5DBF5','#C5DBF5','#C5DBF5','#7DCFF5','#7DCFF5','#C5DBF5'];
+      charts.leadtime.update();
+    }
+
+    if (charts.stageStats) {
+      charts.stageStats.data.labels = labels;
+      charts.stageStats.data.datasets[0].data = c.stageStats;
+      charts.stageStats.data.datasets[0].backgroundColor = isExp
+        ? ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#00AEEF','#2DAE7B']
+        : ['#94a3b8','#64748b','#2563CC','#273A92','#2563CC','#2DAE7B'];
+      charts.stageStats.update();
+    }
   }
 
   // ===== 공개 API =====
