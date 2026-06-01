@@ -1480,10 +1480,8 @@ function runCompare() {
   if (!c1 || !c2) return;
 
   // ===== 면접 진행 여부 판단 =====
-  // 두 후보 모두 면접 평가 점수가 있어야 면접 데이터 비교 가능
-  const hasEval = (c) => c && c.evalScores && (
-    (c.evalScores.qaa > 0) || (c.evalScores.job > 0) || (c.evalScores.culture > 0)
-  );
+  // status === '대기'이면 면접 전 (data에 default 점수가 있어도 표시 안 함)
+  const hasEval = (c) => c && c.status !== '대기';
   const bothInterviewed = hasEval(c1) && hasEval(c2);
 
   const overallRow = document.getElementById('comp-overall-row');
