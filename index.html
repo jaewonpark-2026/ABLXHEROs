@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 @font-face { font-family: 'Wooridaum'; src: url('assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
 @font-face { font-family: 'Wooridaum'; src: url('assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
@@ -19,13 +19,18 @@
   --main-2: #2482C5;
   --sub-2: #123F6D;
   --sub-3: #00AEC6;
-  --accent: #5A9BD5;
+
+  /* ABL 빨강 액센트 */
+  --abl-red: #D63E3E;
+  --abl-red-soft: #E85555;
+  --abl-coral: #F08080;
+
   --text-1: #1A2233;
   --text-2: #5A6478;
   --text-3: #8A93A6;
   --border: rgba(232, 237, 243, 0.7);
 
-  --display-font: 'Fraunces', 'Wooridaum', serif;
+  --display-font: 'Manrope', 'Wooridaum', sans-serif;
   --body-font: 'Wooridaum', 'Manrope', 'Malgun Gothic', sans-serif;
 }
 
@@ -43,13 +48,13 @@ body {
   padding: 24px;
   position: relative;
   overflow: hidden;
-  /* 풍부한 메쉬 베이스 */
+  /* 풍부한 메쉬 베이스 - blue 메인 + warm 액센트 */
   background:
-    radial-gradient(ellipse at 0% 0%, rgba(0, 174, 198, 0.25) 0%, transparent 50%),
-    radial-gradient(ellipse at 100% 0%, rgba(36, 130, 197, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 0% 0%, rgba(0, 174, 198, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 0%, rgba(214, 62, 62, 0.10) 0%, transparent 50%),
     radial-gradient(ellipse at 100% 100%, rgba(0, 103, 172, 0.22) 0%, transparent 55%),
-    radial-gradient(ellipse at 0% 100%, rgba(0, 174, 198, 0.16) 0%, transparent 55%),
-    linear-gradient(135deg, #F4F9FD 0%, #E1EFF8 40%, #D2E6F3 100%);
+    radial-gradient(ellipse at 0% 100%, rgba(240, 128, 128, 0.10) 0%, transparent 55%),
+    linear-gradient(135deg, #F6F8FC 0%, #E5EEF6 40%, #D9E4EE 100%);
 }
 
 /* Floating gradient blobs */
@@ -76,18 +81,19 @@ body {
   animation-delay: -6s;
 }
 .blob.b3 {
-  width: 380px; height: 380px;
-  top: 40%; right: -100px;
-  background: radial-gradient(circle, #7FB8E2 0%, #5A9BD5 60%, transparent 80%);
+  /* 따뜻한 코랄/레드 - ABL 액센트 */
+  width: 400px; height: 400px;
+  top: 35%; right: -120px;
+  background: radial-gradient(circle, #F08080 0%, #D63E3E 60%, transparent 82%);
   animation-delay: -12s;
-  opacity: 0.4;
+  opacity: 0.22;
 }
 .blob.b4 {
   width: 320px; height: 320px;
-  bottom: 30%; left: -60px;
+  bottom: 25%; left: -60px;
   background: radial-gradient(circle, #B5DCEC 0%, #5A9BD5 65%, transparent 85%);
   animation-delay: -3s;
-  opacity: 0.35;
+  opacity: 0.4;
 }
 
 @keyframes float {
@@ -147,7 +153,7 @@ body::after {
 
 .login-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-radius: 24px;
@@ -161,15 +167,15 @@ body::after {
   overflow: hidden;
 }
 
-/* Top gradient strip */
+/* Top gradient strip - blue → red accent → blue */
 .login-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #0067AC 0%, #2482C5 35%, #00AEC6 70%, #5BC0DE 100%);
+  background: linear-gradient(90deg, #0067AC 0%, #2482C5 25%, #00AEC6 45%, #E85555 65%, #D63E3E 80%, #0067AC 100%);
   background-size: 200% 100%;
-  animation: shimmer 5s ease-in-out infinite;
+  animation: shimmer 6s ease-in-out infinite;
 }
 
 @keyframes shimmer {
@@ -196,15 +202,18 @@ body::after {
 }
 
 .brand-eyebrow {
-  font-family: var(--body-font);
+  font-family: var(--display-font);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 3px;
   color: var(--main-1);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   opacity: 0;
   animation: fade-in 0.6s 0.3s ease-out both;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .brand-eyebrow::before,
@@ -214,29 +223,52 @@ body::after {
   width: 22px;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--main-1), transparent);
-  vertical-align: middle;
-  margin: 0 12px;
+}
+
+.brand-eyebrow .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--abl-red);
+  display: inline-block;
 }
 
 .wordmark {
   font-family: var(--display-font);
-  font-size: clamp(48px, 8vw, 64px);
-  font-weight: 600;
-  font-variation-settings: 'opsz' 144, 'wght' 600;
-  letter-spacing: -0.03em;
+  font-size: clamp(48px, 8vw, 62px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
   line-height: 1;
-  background: linear-gradient(135deg, #0F2F4F 0%, #0067AC 35%, #00AEC6 75%, #5BC0DE 100%);
+  display: inline-block;
+  animation: wordmark-in 0.9s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.wordmark .hir,
+.wordmark .e {
+  background: linear-gradient(135deg, #0F2F4F 0%, #0067AC 50%, #00AEC6 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: inline-block;
-  animation: wordmark-in 0.9s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both, gradient-shift 8s ease-in-out 2s infinite;
+  animation: gradient-shift 8s ease-in-out 2s infinite;
+}
+
+.wordmark .abl {
+  /* ABL 액센트 - 빨강 */
+  background: linear-gradient(135deg, #B83232 0%, #D63E3E 50%, #E85555 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+  font-weight: 800;
+  position: relative;
+  padding: 0 2px;
+  animation: gradient-shift 8s ease-in-out 2s infinite;
 }
 
 @keyframes wordmark-in {
   from { opacity: 0; transform: translateY(8px); letter-spacing: 0; }
-  to { opacity: 1; transform: translateY(0); letter-spacing: -0.03em; }
+  to { opacity: 1; transform: translateY(0); letter-spacing: -0.035em; }
 }
 
 @keyframes gradient-shift {
@@ -244,14 +276,12 @@ body::after {
   50% { background-position: 100% 50%; }
 }
 
-.wordmark .accent { font-style: italic; font-weight: 500; }
-
 .subtitle {
   font-family: var(--body-font);
   font-size: 13px;
   font-weight: 400;
   color: var(--text-2);
-  margin-top: 12px;
+  margin-top: 14px;
   letter-spacing: 0.02em;
   opacity: 0;
   animation: fade-in 0.6s 0.5s ease-out both;
@@ -406,8 +436,8 @@ body::after {
 
 .error-msg {
   background: linear-gradient(135deg, #FEF1F1, #FEE5E5);
-  color: #C72D2D;
-  border: 1px solid rgba(199, 45, 45, 0.15);
+  color: var(--abl-red);
+  border: 1px solid rgba(214, 62, 62, 0.18);
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 13px;
@@ -482,8 +512,8 @@ body::after {
   <div class="login-card">
 
     <div class="brand">
-      <div class="brand-eyebrow">ABL × HEROs</div>
-      <h1 class="wordmark">Hir<span class="accent">ABL</span>e</h1>
+      <div class="brand-eyebrow">ABL <span class="dot"></span> HEROs</div>
+      <h1 class="wordmark"><span class="hir">Hir</span><span class="abl">ABL</span><span class="e">e</span></h1>
       <p class="subtitle"><strong>ABL생명</strong> 채용 AI 솔루션 · 사번을 입력해 로그인하세요</p>
     </div>
 
