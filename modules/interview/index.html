@@ -2007,7 +2007,7 @@ function addRefinedQuestion(text) {
     if (!c.customQuestions) c.customQuestions = [];
     c.customQuestions.push(text);
     loadCandidateInterviewWorkspace(c.id);
-    renderLiveAiRecs();
+    // 모순 감지·추천 질문 영역은 유지 (renderLiveAiRecs 호출 제거 — 질문 추가 시 리셋 방지)
     showToast('AI 정제 질문이 면접 큐에 추가되었습니다.', 'success');
   }
 }
