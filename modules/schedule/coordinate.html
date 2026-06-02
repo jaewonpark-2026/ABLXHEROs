@@ -862,7 +862,10 @@ function renderKanban(round) {
         if (c.deadline) html += '<div class="cc-meta" style="margin-top:4px;">마감 ' + c.deadline + '</div>';
         if (c.reminded) html += '<div class="pill pl-purple" style="margin-top:4px;">리마인드 발송됨</div>';
       } else if (c.status === 'confirm-wait') {
-        html += '<div class="pill pl-yellow" style="margin-top:6px;"><span class="dot6" style="background:#92400E"></span>AI 추천 완료 · 조율 대기</div>';
+        html += '<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">';
+        html += '<div class="pill pl-yellow"><span class="dot6" style="background:#92400E"></span>AI 추천 완료 · 조율 대기</div>';
+        if (c.isRecoorded) html += '<div class="pill pl-red">재조율</div>';
+        html += '</div>';
       } else if (c.status === 'done') {
         html += '<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;">';
         html += '<div class="pill pl-green"><span class="dot6" style="background:var(--ok)"></span>조율 완료</div>';
