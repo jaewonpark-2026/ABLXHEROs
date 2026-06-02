@@ -8,7 +8,7 @@
         "career": "7년",
         "email": "lee.jungmin@email.com",
         "status": "before",
-        "applied": "2026.05.28",
+        "applied": "2026.06.02",
         "reminded": false,
         "isRecoorded": false
       },
@@ -19,7 +19,7 @@
         "career": "5년",
         "email": "han.jisu@email.com",
         "status": "before",
-        "applied": "2026.05.30",
+        "applied": "2026.06.03",
         "reminded": false,
         "isRecoorded": false
       },
@@ -30,7 +30,7 @@
         "career": "9년",
         "email": "oh.minjun@email.com",
         "status": "before",
-        "applied": "2026.06.01",
+        "applied": "2026.06.04",
         "reminded": false,
         "isRecoorded": false
       },
@@ -41,7 +41,7 @@
         "career": "6년",
         "email": "kim.suyeon@email.com",
         "status": "pending",
-        "applied": "2026.05.25",
+        "applied": "2026.06.01",
         "deadline": "2026.06.10 18:00",
         "interviewers": [
           "박성준 상무",
@@ -52,7 +52,7 @@
         "period": "2026.06.09~2026.06.13",
         "place": "본사 7층 면접실 A",
         "duration": "60",
-        "sentAt": "2026.06.04",
+        "sentAt": "2026.06.08",
         "reminded": false,
         "isRecoorded": false
       },
@@ -63,7 +63,7 @@
         "career": "4년",
         "email": "choi.hw@email.com",
         "status": "confirm-wait",
-        "applied": "2026.05.22",
+        "applied": "2026.06.02",
         "interviewers": [
           "박성준 상무",
           "이혜진 팀장"
@@ -85,7 +85,7 @@
         "career": "8년",
         "email": "yoon.sh@email.com",
         "status": "pending",
-        "applied": "2026.05.20",
+        "applied": "2026.06.01",
         "deadline": "2026.06.09 18:00",
         "interviewers": [
           "김도형 부장",
@@ -106,18 +106,18 @@
         "career": "11년",
         "email": "im.cw@email.com",
         "status": "done",
-        "applied": "2026.05.18",
+        "applied": "2026.06.02",
         "interviewers": [
           "박성준 상무",
           "이혜진 팀장"
         ],
-        "confirmedTime": "2026.06.17 14:00",
+        "confirmedTime": "2026.06.12 14:00",
         "place": "본사 7층 면접실 A",
         "duration": "60",
         "reminded": false,
         "isRecoorded": false,
-        "sentAt": "2026.06.05",
-        "confirmedAt": "2026.06.12"
+        "sentAt": "2026.06.08",
+        "confirmedAt": "2026.06.10"
       }
     ],
     "r2": [
@@ -128,8 +128,8 @@
         "career": "6년 5개월",
         "email": "hyungeun.cho@email.com",
         "status": "confirm-wait",
-        "applied": "2026.05.30",
-        "passedR1": "2026.06.02",
+        "applied": "2026.06.03",
+        "passedR1": "2026.06.13",
         "interviewers": [
           "박성준 상무"
         ],
@@ -150,8 +150,8 @@
         "career": "7년 2개월",
         "email": "im.yujin@email.com",
         "status": "pending",
-        "applied": "2026.05.28",
-        "passedR1": "2026.06.02",
+        "applied": "2026.06.02",
+        "passedR1": "2026.06.13",
         "interviewers": [
           "박성준 상무"
         ],
@@ -171,8 +171,8 @@
         "career": "12년",
         "email": "seo.jw@email.com",
         "status": "before",
-        "applied": "2026.05.27",
-        "passedR1": "2026.05.27",
+        "applied": "2026.06.01",
+        "passedR1": "2026.06.13",
         "reminded": false,
         "isRecoorded": false
       },
@@ -183,8 +183,8 @@
         "career": "7년",
         "email": "koo.bw@email.com",
         "status": "before",
-        "applied": "2026.05.29",
-        "passedR1": "2026.05.29",
+        "applied": "2026.06.03",
+        "passedR1": "2026.06.13",
         "reminded": false,
         "isRecoorded": false
       },
@@ -195,7 +195,7 @@
         "career": "9년",
         "email": "lee.sa@email.com",
         "status": "pending",
-        "applied": "2026.05.15",
+        "applied": "2026.06.01",
         "interviewers": [
           "박성준 상무"
         ],
@@ -215,7 +215,7 @@
         "career": "5년",
         "email": "shin.ce@email.com",
         "status": "confirm-wait",
-        "applied": "2026.05.10",
+        "applied": "2026.06.01",
         "interviewers": [
           "박성준 상무",
           "이혜진 팀장"
@@ -237,17 +237,17 @@
         "career": "6년",
         "email": "kwon.nh@email.com",
         "status": "done",
-        "applied": "2026.05.05",
+        "applied": "2026.06.01",
         "interviewers": [
           "김도형 부장"
         ],
-        "confirmedTime": "2026.06.24 10:00",
+        "confirmedTime": "2026.06.19 10:00",
         "place": "본사 12층 임원실",
         "duration": "60",
         "reminded": false,
         "isRecoorded": false,
-        "sentAt": "2026.06.10",
-        "confirmedAt": "2026.06.19"
+        "sentAt": "2026.06.15",
+        "confirmedAt": "2026.06.17"
       }
     ],
     "newgrad_r1": [
@@ -257,7 +257,7 @@
         "dept": "디지털/IT",
         "email": "kang.minseo@email.com",
         "status": "before",
-        "applied": "2026.05.26",
+        "applied": "2026.06.01",
         "reminded": false,
         "isRecoorded": false,
         "univ": "서강대 컴퓨터공학",
@@ -269,7 +269,7 @@
         "dept": "계리분석",
         "email": "park.jiho@email.com",
         "status": "before",
-        "applied": "2026.05.26",
+        "applied": "2026.06.02",
         "reminded": false,
         "isRecoorded": false,
         "univ": "연세대 응용통계",
@@ -281,7 +281,7 @@
         "dept": "영업관리",
         "email": "lee.seoyoon@email.com",
         "status": "before",
-        "applied": "2026.05.27",
+        "applied": "2026.06.03",
         "reminded": false,
         "isRecoorded": false,
         "univ": "고려대 경영",
@@ -293,7 +293,7 @@
         "dept": "디지털/IT",
         "email": "jung.taewoo@email.com",
         "status": "before",
-        "applied": "2026.05.27",
+        "applied": "2026.06.04",
         "reminded": false,
         "isRecoorded": false,
         "univ": "한양대 컴퓨터공학",
@@ -305,7 +305,7 @@
         "dept": "계리분석",
         "email": "han.soyul@email.com",
         "status": "before",
-        "applied": "2026.05.28",
+        "applied": "2026.06.05",
         "reminded": false,
         "isRecoorded": false,
         "univ": "성균관대 경제",
@@ -319,7 +319,7 @@
         "dept": "디지털/IT",
         "email": "kang.minseo@email.com",
         "status": "before",
-        "applied": "2026.05.26",
+        "applied": "2026.06.01",
         "reminded": false,
         "isRecoorded": false,
         "univ": "서강대 컴퓨터공학",
@@ -332,7 +332,7 @@
         "dept": "계리분석",
         "email": "park.jiho@email.com",
         "status": "before",
-        "applied": "2026.05.26",
+        "applied": "2026.06.02",
         "reminded": false,
         "isRecoorded": false,
         "univ": "연세대 응용통계",
@@ -345,7 +345,7 @@
         "dept": "영업관리",
         "email": "lee.seoyoon@email.com",
         "status": "before",
-        "applied": "2026.05.27",
+        "applied": "2026.06.03",
         "reminded": false,
         "isRecoorded": false,
         "univ": "고려대 경영",
@@ -518,7 +518,7 @@
     {
       "y": 2026,
       "m": 6,
-      "d": 2,
+      "d": 10,
       "type": "new",
       "label": "신입 공채 1차(오전)",
       "dept": ""
@@ -526,7 +526,7 @@
     {
       "y": 2026,
       "m": 6,
-      "d": 3,
+      "d": 11,
       "type": "new",
       "label": "신입 공채 1차(종일)",
       "dept": ""
@@ -534,7 +534,7 @@
     {
       "y": 2026,
       "m": 6,
-      "d": 4,
+      "d": 12,
       "type": "new",
       "label": "신입 공채 1차(오후)",
       "dept": ""
