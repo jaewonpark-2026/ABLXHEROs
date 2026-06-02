@@ -106,6 +106,85 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .section-title::before { content: ''; width: 4px; height: 17px; border-radius: 2px; background: var(--grad-accent); }
 
 .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+/* 새 레이아웃: 좌 2x2 + 우 세로 리포트 카드 */
+.module-layout { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; align-items: stretch; }
+.module-grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px; }
+.module-grid-2x2 .module-card { min-height: 0; }
+
+/* 우측 채용 데이터 리포트 세로 카드 */
+.report-card {
+  --accent: #D63E3E; --accent-bg: #FCE8E8;
+  background: white;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.report-card::before {
+  content: '';
+  position: absolute;
+  top: -45px; right: -45px;
+  width: 170px; height: 170px;
+  background: radial-gradient(circle, var(--accent-bg) 0%, transparent 68%);
+  opacity: 0.8;
+  z-index: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.report-card:hover { box-shadow: 0 20px 44px -14px rgba(214,62,62,0.16), 0 6px 14px -6px rgba(15,35,65,0.08); }
+.report-card:hover::before { transform: scale(1.25); opacity: 0.95; }
+
+.report-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 24px 24px 18px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid #F0F4F8;
+}
+.report-card-head .module-icon { margin-bottom: 0; flex-shrink: 0; }
+.report-head-text { flex: 1; min-width: 0; }
+.report-head-text h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 5px; }
+.report-head-text p { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+.report-tag {
+  font-size: 10.5px; padding: 4px 11px 4px 9px; border-radius: 999px;
+  background: var(--accent-bg); color: var(--accent); font-weight: 700;
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; white-space: nowrap;
+}
+.report-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px rgba(255,255,255,0.55); }
+
+.report-sublist { display: flex; flex-direction: column; padding: 10px; gap: 4px; position: relative; z-index: 1; flex: 1; }
+.report-subitem {
+  display: flex; align-items: center; gap: 13px;
+  padding: 13px 14px; border-radius: 12px;
+  text-decoration: none; color: inherit;
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+.report-subitem:hover { background: #FBF6F6; transform: translateX(3px); }
+.rs-ic {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  background: var(--accent-bg); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.report-subitem:hover .rs-ic { background: var(--accent); color: white; transform: scale(1.05); }
+.rs-ic i { font-size: 18px; }
+.rs-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.rs-title { font-size: 13.5px; font-weight: 700; color: var(--text-1); }
+.rs-sub { font-size: 11px; color: var(--text-3); font-weight: 600; }
+.rs-arrow { color: var(--text-3); font-size: 15px; transition: transform 0.2s, color 0.2s; flex-shrink: 0; }
+.report-subitem:hover .rs-arrow { transform: translateX(2px); color: var(--accent); }
+
+@media (max-width: 980px) {
+  .module-layout { grid-template-columns: 1fr; }
+}
 .module-card {
   --accent: var(--main-1);
   --accent-bg: #E6F1FB;
@@ -393,37 +472,61 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 
       <div class="section-title">채용 업무 모듈</div>
 
-      <div class="module-grid">
-        <a href="modules/jd-writer/index.html" class="module-card" style="--accent:#0067AC; --accent-bg:#E6F1FB;">
-          <div class="module-icon"><i class="ti ti-clipboard-text"></i></div>
-          <h3>JD 작성 지원</h3>
-          <p>현업 리더의 채용 니즈를 기반으로 AI가 JD 초안을 자동 생성합니다.</p>
-          <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
-        </a>
-        <a href="modules/resume-analysis/index.html" class="module-card" style="--accent:#00AEC6; --accent-bg:#E0F5F7;">
-          <div class="module-icon"><i class="ti ti-file-search"></i></div>
-          <h3>자소서 분석</h3>
-          <p>5대 핵심가치 기반으로 자소서를 요약·하이라이트하고 검증 포인트를 제시합니다.</p>
-          <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
-        </a>
-        <a href="modules/schedule/index.html" class="module-card" style="--accent:#123F6D; --accent-bg:#E3E8F0;">
-          <div class="module-icon"><i class="ti ti-calendar-event"></i></div>
-          <h3>면접 일정 조율</h3>
-          <p>면접관·지원자의 가능한 시간을 자동 매칭하고 안내 메일까지 발송합니다.</p>
-          <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
-        </a>
-        <a href="modules/interview/index.html" class="module-card" style="--accent:#00AFAD; --accent-bg:#DEF1F0;">
-          <div class="module-icon"><i class="ti ti-microphone-2"></i></div>
-          <h3>면접 진행 지원</h3>
-          <p>서류 핵심 포인트 기반 질문 추천과 실시간 답변 일관성 검증을 제공합니다.</p>
-          <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
-        </a>
-        <a href="modules/report/index.html" class="module-card" style="--accent:#D63E3E; --accent-bg:#FCE8E8;">
-          <div class="module-icon"><i class="ti ti-chart-histogram"></i></div>
-          <h3>채용 데이터 리포트</h3>
-          <p>리드타임·합격률·채널 효과성을 시각화하고 탈락자 인재풀을 관리합니다.</p>
-          <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
-        </a>
+      <div class="module-layout">
+        <div class="module-grid-2x2">
+          <a href="modules/jd-writer/index.html" class="module-card" style="--accent:#0067AC; --accent-bg:#E6F1FB;">
+            <div class="module-icon"><i class="ti ti-clipboard-text"></i></div>
+            <h3>JD 작성 지원</h3>
+            <p>현업 리더의 채용 니즈를 기반으로 AI가 JD 초안을 자동 생성합니다.</p>
+            <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
+          </a>
+          <a href="modules/resume-analysis/index.html" class="module-card" style="--accent:#00AEC6; --accent-bg:#E0F5F7;">
+            <div class="module-icon"><i class="ti ti-file-search"></i></div>
+            <h3>자소서 분석</h3>
+            <p>5대 핵심가치 기반으로 자소서를 요약·하이라이트하고 검증 포인트를 제시합니다.</p>
+            <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
+          </a>
+          <a href="modules/schedule/index.html" class="module-card" style="--accent:#123F6D; --accent-bg:#E3E8F0;">
+            <div class="module-icon"><i class="ti ti-calendar-event"></i></div>
+            <h3>면접 일정 조율</h3>
+            <p>면접관·지원자의 가능한 시간을 자동 매칭하고 안내 메일까지 발송합니다.</p>
+            <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
+          </a>
+          <a href="modules/interview/index.html" class="module-card" style="--accent:#00AFAD; --accent-bg:#DEF1F0;">
+            <div class="module-icon"><i class="ti ti-microphone-2"></i></div>
+            <h3>면접 진행 지원</h3>
+            <p>서류 핵심 포인트 기반 질문 추천과 실시간 답변 일관성 검증을 제공합니다.</p>
+            <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
+          </a>
+        </div>
+
+        <div class="report-card" style="--accent:#D63E3E; --accent-bg:#FCE8E8;">
+          <a href="modules/report/index.html" class="report-card-head">
+            <div class="module-icon"><i class="ti ti-chart-histogram"></i></div>
+            <div class="report-head-text">
+              <h3>채용 데이터 리포트</h3>
+              <p>리드타임·합격률·채널 효과성을 시각화하고 데이터 기반 의사결정을 지원합니다.</p>
+            </div>
+            <span class="report-tag">사용 가능</span>
+          </a>
+          <div class="report-sublist">
+            <a href="modules/report/index.html#postings" class="report-subitem">
+              <span class="rs-ic"><i class="ti ti-chart-line"></i></span>
+              <span class="rs-text"><span class="rs-title">전사 채용 데이터</span><span class="rs-sub">리드타임·전환율·병목 분석</span></span>
+              <i class="ti ti-arrow-right rs-arrow"></i>
+            </a>
+            <a href="modules/report/index.html#negotiation" class="report-subitem">
+              <span class="rs-ic"><i class="ti ti-currency-won"></i></span>
+              <span class="rs-text"><span class="rs-title">처우 협의</span><span class="rs-sub">경력직 시장·내부 보상 데이터</span></span>
+              <i class="ti ti-arrow-right rs-arrow"></i>
+            </a>
+            <a href="modules/report/index.html#pool" class="report-subitem">
+              <span class="rs-ic"><i class="ti ti-users-group"></i></span>
+              <span class="rs-text"><span class="rs-title">인재풀 관리</span><span class="rs-sub">우수 인재 평가·연락처 재활용</span></span>
+              <i class="ti ti-arrow-right rs-arrow"></i>
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- 보조 도구 (시연용) -->
