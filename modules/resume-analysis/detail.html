@@ -237,6 +237,14 @@ a { color: inherit; text-decoration: none; }
 
 .career-deep { display: none; gap: 8px; margin-top: 14px; }
 .career-deep.show { display: grid; }
+.career-summary-card { border: 1px solid var(--border); border-radius: 10px; background: linear-gradient(135deg, #F8FBFE 0%, #FFFFFF 100%); padding: 14px 16px; box-shadow: 0 2px 8px -4px rgba(0,103,172,0.08); }
+.career-summary-intro { display: flex; align-items: flex-start; gap: 8px; color: var(--main-1); font-size: 12px; line-height: 1.6; font-weight: 700; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(0,103,172,0.18); }
+.career-summary-intro svg { color: var(--main-1); margin-top: 2px; flex-shrink: 0; }
+.career-summary-intro span { color: var(--text-1); font-weight: 600; }
+.career-summary-body { display: flex; flex-direction: column; gap: 10px; }
+.career-summary-row { display: grid; grid-template-columns: 86px 1fr; gap: 12px; align-items: start; font-size: 12px; }
+.career-summary-label { color: var(--text-3); font-weight: 700; letter-spacing: -.01em; }
+.career-summary-value { color: var(--text-1); line-height: 1.6; font-weight: 500; word-break: keep-all; }
 .inline-evidence { margin-top: 6px; }
 
 /* ===== Handoff ===== */
@@ -661,18 +669,12 @@ function getScreening(c) {
   };
 
   const career = {
-    history: { label:'경력사항 요약', score:c.type === '경력' ? Math.max(65, c.fit.job - 3) : 0,
-      short:'지원자의 경력기간, 주요 업무, 경험 축을 종합적으로 요약합니다.',
-      evidence:c.exp + " 동안 " + c.tags[0] + ", " + c.tags[1] + " 관련 경험을 중심으로 경력을 설명하고 있습니다.",
-      keywords:[c.exp,c.tags[0],c.tags[1],'주요 경력'], highlight:['career-history'] },
-    task: { label:'수행업무 구체성', score:c.type === '경력' ? Math.max(62, c.fit.job - 5) : 0,
-      short:'담당 업무가 단순 참여인지, 주도적 수행인지 구분해 검토합니다.',
-      evidence:"프로젝트 또는 업무 수행 경험은 확인되지만, 본인이 직접 책임진 범위와 산출물의 수준은 추가 확인이 필요합니다.",
-      keywords:['담당 역할','주도성','산출물'], highlight:['career-task'] },
-    transfer: { label:'직무 연결성', score:c.type === '경력' ? Math.max(60, c.fit.job - 7) : 0,
-      short:'기존 경력사항과 수행업무가 현재 지원 직무와 연결되는지 검토합니다.',
-      evidence:"기존 경력에서 확인되는 " + c.tags[0] + ", " + c.tags[1] + " 경험이 현재 지원한 " + c.role + " 직무의 주요 과업과 얼마나 연결되는지 검토했습니다.",
-      keywords:[c.role,'경력-직무 연결','수행업무 연관성'], highlight:['career-transfer'] }
+    summaryIntro: c.name + ' 지원자의 이력서에 기반한 주요 경력사항을 요약해드립니다.',
+    items: [
+      { label: '경력', value: c.exp + ' · ' + c.role },
+      { label: '핵심 경험', value: (c.tags || []).join(' · ') },
+      { label: '요약', value: c.summary || '제출된 이력서를 기반으로 한 종합 요약입니다.' }
+    ]
   };
 
   return { primary, fit, career };
@@ -863,17 +865,22 @@ function renderScreening(c) {
 
   let careerHtml = '';
   if (c.type === '경력') {
-    let careerBlocks = '';
-    ['history','task','transfer'].forEach(key => {
-      const item = activeScreening.career[key];
-      careerBlocks += `
-        <div class="career-block">
-          <button class="career-card" data-key="${key}" type="button"><div class="career-top"><strong>${item.label}</strong><span id="careerScore-${key}">${item.score}</span></div><p>${item.short}</p></button>
-          <div class="evidence-box inline-evidence career-evidence-slot" id="careerEvidence-${key}" style="display:none"></div>
+    const items = activeScreening.career.items.map(it => `
+      <div class="career-summary-row">
+        <span class="career-summary-label">${it.label}</span>
+        <span class="career-summary-value">${escapeHtml(it.value)}</span>
+      </div>
+    `).join('');
+    careerHtml = `<section class="career-deep show">
+      <div class="section-label">경력직 추가 검토</div>
+      <article class="career-summary-card">
+        <div class="career-summary-intro">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L19.5 10l-4.2 3.6 1.3 5.7L12 16.4l-4.6 2.9 1.3-5.7L4.5 10l5.6-1.2z"/></svg>
+          <span>${escapeHtml(activeScreening.career.summaryIntro)}</span>
         </div>
-      `;
-    });
-    careerHtml = `<section class="career-deep show"><div class="section-label">경력직 추가 검토</div>${careerBlocks}</section>`;
+        <div class="career-summary-body">${items}</div>
+      </article>
+    </section>`;
   }
 
   document.getElementById('stageTwoPanel').innerHTML = `
@@ -946,11 +953,9 @@ function editableEvidenceHtml(item) {
 function clampScore(v) { let n = parseInt(v, 10); if (isNaN(n)) n = 0; return Math.max(0, Math.min(100, n)); }
 function averageScores(list) { if (!list.length) return 0; return Math.round(list.reduce((s, v) => s + Number(v||0), 0) / list.length); }
 function fitGroupFromSubScores(key) { const g = activeScreening.fit[key]; if (!g.subs || !g.subs.length) return g.score; g.score = averageScores(g.subs.map(s => s.score)); return g.score; }
-function careerAverage() { if (!activeCandidate || activeCandidate.type !== '경력') return null; return averageScores(Object.keys(activeScreening.career).map(k => activeScreening.career[k].score)); }
 function calculateFinalScore() {
   const primaryAvg = averageScores(Object.keys(activeScreening.primary).map(k => activeScreening.primary[k].score));
   const o = fitGroupFromSubScores('org'); const j = fitGroupFromSubScores('job'); const i = fitGroupFromSubScores('industry');
-  if (activeCandidate.type === '경력') { const cAvg = careerAverage(); return Math.round(primaryAvg * 0.28 + o * 0.20 + j * 0.27 + i * 0.15 + cAvg * 0.10); }
   return Math.round(primaryAvg * 0.30 + o * 0.24 + j * 0.30 + i * 0.16);
 }
 function updateScoreDisplays() {
@@ -964,7 +969,6 @@ function updateScoreDisplays() {
     if (overall) overall.innerHTML = '종합 ' + total + '<small>점</small>';
     activeScreening.fit[key].subs.forEach(sub => { const subEl = document.getElementById('subScore-' + sub.key); if (subEl) subEl.innerHTML = sub.score + '<small>점</small>'; });
   });
-  Object.keys(activeScreening.career).forEach(key => { const el = document.getElementById('careerScore-' + key); if (el) el.textContent = activeScreening.career[key].score; });
   const radar = document.getElementById('radarPolygon');
   if (radar) radar.setAttribute('points', radarPoints(['accuracy','grammar','specificity'].map(k => activeScreening.primary[k].score)));
   activeCandidate.fit.org = activeScreening.fit.org.score;
