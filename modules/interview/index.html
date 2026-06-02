@@ -548,6 +548,20 @@ a { color: inherit; text-decoration: none; }
 .eval-card-title i { color: var(--main-1); font-size: 16px; }
 .eval-card-sub { font-size: 11.5px; color: var(--text-2); font-weight: 500; line-height: 1.5; margin-top: 4px; }
 .eval-card-sub b { color: var(--text-1); font-weight: 700; }
+.eval-save-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.eval-final-preview { font-size: 13px; font-weight: 700; color: var(--text-2); }
+.eval-final-preview #eval-final-score { font-size: 24px; font-weight: 800; color: var(--main-1); margin: 0 2px; }
+.eval-final-preview small { font-size: 12px; color: var(--text-3); font-weight: 600; }
+.eval-final-note { font-size: 11px; color: var(--text-3); font-weight: 600; margin-left: 6px; }
+.eval-save-actions { display: flex; gap: 8px; }
+.eval-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 9px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); transition: all 0.15s; }
+.eval-btn i { font-size: 15px; }
+.eval-btn-reset { background: white; color: var(--text-2); }
+.eval-btn-reset:hover { border-color: var(--text-3); color: var(--text-1); background: #F8FAFC; }
+.eval-btn-save { background: var(--main-1); color: white; border-color: var(--main-1); }
+.eval-btn-save:hover { background: var(--main-2); box-shadow: 0 4px 12px -2px rgba(0,103,172,0.3); }
+.eval-btn-save.dirty { animation: evalSavePulse 1.4s ease infinite; }
+@keyframes evalSavePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,103,172,0.4); } 50% { box-shadow: 0 0 0 5px rgba(0,103,172,0); } }
 
 .eval-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .eval-table thead th { background: #F8FAFC; color: var(--text-2); font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); }
@@ -974,6 +988,35 @@ a { color: inherit; text-decoration: none; }
           <div id="report-quick-nav-tabs" class="rp-qnav-tabs"></div>
         </div>
 
+        <!-- 면접 평가 입력 · AI 검토 (맨 위) -->
+        <div class="rp-panel eval-card">
+          <div class="eval-card-hd">
+            <div>
+              <div class="eval-card-title"><i class="ti ti-clipboard-check"></i> 면접 평가 입력 · AI 검토</div>
+              <div class="eval-card-sub">각 항목을 100점 만점으로 직접 입력합니다. AI는 내부 참고 점수와의 차이를 분석하여 검토 상태를 안내합니다. <b>점수를 저장해야 최종 점수에 반영됩니다.</b></div>
+            </div>
+          </div>
+          <table class="eval-table">
+            <thead>
+              <tr>
+                <th style="width:42%">평가 항목</th>
+                <th style="width:18%">HR 입력 점수</th>
+                <th style="width:24%">AI 검토 상태</th>
+                <th style="width:16%"></th>
+              </tr>
+            </thead>
+            <tbody id="eval-tbody"></tbody>
+          </table>
+          <div class="eval-save-bar">
+            <div class="eval-final-preview">최종 점수 <span id="eval-final-score">-</span><small>점</small> <span class="eval-final-note">(4개 항목 평균)</span></div>
+            <div class="eval-save-actions">
+              <button class="eval-btn eval-btn-reset" onclick="resetEvalScores()"><i class="ti ti-rotate"></i> 기존 점수 유지</button>
+              <button class="eval-btn eval-btn-save" onclick="saveEvalScores()"><i class="ti ti-device-floppy"></i> 점수 저장</button>
+            </div>
+          </div>
+          <div id="eval-evidence-container"></div>
+        </div>
+
         <!-- 등급 요약 -->
         <div class="rp-grade-row">
           <div class="rp-panel rp-cross-card acc-card">
@@ -1064,27 +1107,7 @@ a { color: inherit; text-decoration: none; }
           </div>
         </div>
 
-        <!-- 면접 평가 입력 · AI 검토 -->
-        <div class="rp-panel eval-card">
-          <div class="eval-card-hd">
-            <div>
-              <div class="eval-card-title"><i class="ti ti-clipboard-check"></i> 면접 평가 입력 · AI 검토</div>
-              <div class="eval-card-sub">각 항목을 100점 만점으로 직접 입력합니다. AI는 내부 참고 점수와의 차이를 분석하여 검토 상태를 안내합니다.</div>
-            </div>
-          </div>
-          <table class="eval-table">
-            <thead>
-              <tr>
-                <th style="width:42%">평가 항목</th>
-                <th style="width:18%">HR 입력 점수</th>
-                <th style="width:24%">AI 검토 상태</th>
-                <th style="width:16%"></th>
-              </tr>
-            </thead>
-            <tbody id="eval-tbody"></tbody>
-          </table>
-          <div id="eval-evidence-container"></div>
-        </div>
+        <!-- 면접 평가 입력 · AI 검토 (맨 위로 이동됨) -->
 
         <!-- 코멘트 -->
         <div class="rp-panel" style="padding:20px;">
@@ -1779,8 +1802,13 @@ function runCompare() {
   if (!c1 || !c2) return;
 
   // ===== 면접 진행 여부 판단 =====
-  // status === '대기'이면 면접 전 (data에 default 점수가 있어도 표시 안 함)
-  const hasEval = (c) => c && c.status !== '대기';
+  // stage 2 = 1차 면접을 통과해 2차 단계로 온 상태이므로 1차 면접 점수가 존재한다.
+  // stage 1 = 1차 진행 단계이므로 '완료' 상태일 때만 점수가 존재한다.
+  const hasEval = (c) => {
+    if (!c) return false;
+    if (c.stage >= 2) return true;
+    return c.status === '완료';
+  };
   const interviewedC1 = hasEval(c1);
   const interviewedC2 = hasEval(c2);
   const bothInterviewed = interviewedC1 && interviewedC2;
@@ -2419,7 +2447,7 @@ function runMiniGemini() {
           '</div>' +
         '</div>' +
         '<div class="gem-deep-footer">' +
-          '<button class="gem-add" onclick="addRefinedQuestion(this.getAttribute(\'data-q\'))" data-q="' + escapeHtmlAttr(tpl.refined) + '">정제된 질문을 면접 큐에 추가</button>' +
+          '<button class="gem-add" onclick="addRefinedQuestion(this.getAttribute(\'data-q\'))" data-q="' + escapeHtmlAttr(tpl.refined) + '">심층 질문 리스트 추가</button>' +
         '</div>' +
       '</div>';
     c.geminiHistory.push(aiHtml);
@@ -2435,7 +2463,7 @@ function addRefinedQuestion(text) {
     c.customQuestions.push(text);
     loadCandidateInterviewWorkspace(c.id);
     // 모순 감지·추천 질문 영역은 유지 (renderLiveAiRecs 호출 제거 — 질문 추가 시 리셋 방지)
-    showToast('AI 정제 질문이 면접 큐에 추가되었습니다.', 'success');
+    showToast('심층 질문 리스트에 추가되었습니다.', 'success');
   }
 }
 
@@ -2721,6 +2749,11 @@ function renderEvalTable(c) {
       c.evalScores[item.key] = item.defaultHr;
     }
   });
+  // 첫 진입 HR 점수(baseline) 저장 — '기존 점수 유지'용
+  if (!c.evalBaseline) {
+    c.evalBaseline = {};
+    EVAL_ITEMS.forEach(item => { c.evalBaseline[item.key] = c.evalScores[item.key]; });
+  }
   const tbody = document.getElementById('eval-tbody');
   if (!tbody) return;
   tbody.innerHTML = EVAL_ITEMS.map(item => {
@@ -2745,29 +2778,92 @@ function renderEvalTable(c) {
       + '</tr>';
   }).join('');
   updateOverallFromEval(c);
+  updateEvalFinalPreview(c);
+  markEvalDirty(false);
   // 근거 패널이 열려 있다면 닫기
   const cont = document.getElementById('eval-evidence-container');
   if (cont) cont.innerHTML = '';
 }
 
-function onEvalInputChange(key) {
-  const c = candidates.find(item => item.id === activeReportCandidateId);
-  if (!c) return;
+function updateEvalFinalPreview(c) {
+  const keys = ['qaa', 'job', 'culture', 'comm'];
+  let sum = 0, n = 0;
+  keys.forEach(k => { if (typeof c.evalScores[k] === 'number') { sum += c.evalScores[k]; n++; } });
+  const overall = n > 0 ? Math.round(sum / n) : 0;
+  const el = document.getElementById('eval-final-score');
+  if (el) el.textContent = overall;
+}
+
+function markEvalDirty(dirty) {
+  const btn = document.querySelector('.eval-btn-save');
+  if (btn) btn.classList.toggle('dirty', dirty);
+}
+
+function readEvalInput(key) {
   const inp = document.getElementById('eval-input-' + key);
+  if (!inp) return null;
   let val = parseInt(inp.value);
   if (isNaN(val)) val = 0;
   if (val > 100) val = 100;
   if (val < 0) val = 0;
-  c.evalScores[key] = val;
+  return val;
+}
+
+function saveEvalScores() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (!c) return;
+  EVAL_ITEMS.forEach(item => {
+    const val = readEvalInput(item.key);
+    if (val === null) return;
+    const inp = document.getElementById('eval-input-' + item.key);
+    if (inp) inp.value = val;
+    c.evalScores[item.key] = val;
+  });
+  updateOverallFromEval(c);
+  updateEvalFinalPreview(c);
+  markEvalDirty(false);
+  if (typeof showToast === 'function') showToast('평가 점수가 최종 점수에 반영되었습니다.');
+}
+
+function resetEvalScores() {
+  const c = candidates.find(item => item.id === activeReportCandidateId);
+  if (!c || !c.evalBaseline) return;
+  EVAL_ITEMS.forEach(item => {
+    const base = c.evalBaseline[item.key];
+    c.evalScores[item.key] = base;
+    const inp = document.getElementById('eval-input-' + item.key);
+    if (inp) inp.value = base;
+    const ai = AI_INTERNAL_SCORES[item.key];
+    const status = getEvalStatus(base - ai);
+    const statusEl = document.getElementById('eval-status-' + item.key);
+    if (statusEl) {
+      statusEl.className = 'eval-status ' + status.cls;
+      statusEl.innerHTML = '<span class="eval-status-dot"></span>' + status.label;
+    }
+  });
+  updateOverallFromEval(c);
+  updateEvalFinalPreview(c);
+  markEvalDirty(false);
+  if (typeof showToast === 'function') showToast('첫 진입 시 점수로 되돌렸습니다.');
+}
+
+// 입력 중에는 확정값(evalScores)·최종 점수를 건드리지 않고, AI 검토 상태만 즉시 갱신.
+// 실제 최종 점수 반영은 '점수 저장' 버튼(saveEvalScores)을 눌러야 이루어진다.
+function onEvalInputChange(key) {
+  const inp = document.getElementById('eval-input-' + key);
+  if (!inp) return;
+  let val = parseInt(inp.value);
+  if (isNaN(val)) val = 0;
+  if (val > 100) val = 100;
+  if (val < 0) val = 0;
   const ai = AI_INTERNAL_SCORES[key];
-  const diff = val - ai;
-  const status = getEvalStatus(diff);
+  const status = getEvalStatus(val - ai);
   const statusEl = document.getElementById('eval-status-' + key);
   if (statusEl) {
     statusEl.className = 'eval-status ' + status.cls;
     statusEl.innerHTML = '<span class="eval-status-dot"></span>' + status.label;
   }
-  updateOverallFromEval(c);
+  markEvalDirty(true);
 }
 
 function updateOverallFromEval(c) {
