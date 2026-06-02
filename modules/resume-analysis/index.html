@@ -263,9 +263,9 @@ tbody tr:last-child td { border-bottom: 0; }
           <button class="card job-card posting-card active" type="button" data-posting="newgrad" onclick="selectPosting('newgrad')">
             <div class="job-card-head">
               <div>
-                <div class="job-title" id="postingNewgradTitle">2026 상반기 신입 채용</div>
+                <div class="job-title" id="postingNewgradTitle">디지털IT기획팀 신입(AA) 채용</div>
                 <div class="job-meta">
-                  <span id="postingNewgradPeriod">접수기간 - · 서류전형 -</span>
+                  <span id="postingNewgradPeriod">접수기간 2026.05.19 ~ 2026.05.26</span>
                 </div>
               </div>
               <span class="job-status">진행 중</span>
@@ -274,9 +274,9 @@ tbody tr:last-child td { border-bottom: 0; }
           <button class="card job-card posting-card" type="button" data-posting="career" onclick="selectPosting('career')">
             <div class="job-card-head">
               <div>
-                <div class="job-title" id="postingCareerTitle">2026 상반기 경력 채용</div>
+                <div class="job-title" id="postingCareerTitle">상품본부 상품기획팀 경력직 채용</div>
                 <div class="job-meta">
-                  <span id="postingCareerPeriod">접수기간 - · 서류전형 -</span>
+                  <span id="postingCareerPeriod">접수기간 2026.05.04 ~ 2026.05.17</span>
                 </div>
               </div>
               <span class="job-status">진행 중</span>
@@ -414,7 +414,10 @@ function renderPostingCards() {
     const titleEl = document.getElementById('posting' + (p.id === 'newgrad' ? 'Newgrad' : 'Career') + 'Title');
     const periodEl = document.getElementById('posting' + (p.id === 'newgrad' ? 'Newgrad' : 'Career') + 'Period');
     if (titleEl) titleEl.textContent = p.name;
-    if (periodEl) periodEl.textContent = '접수기간 ' + p.period_apply + ' · 서류전형 ' + p.period_review;
+    if (periodEl) {
+      const reviewSuffix = p.period_review ? ' · 서류전형 ' + p.period_review : '';
+      periodEl.textContent = '접수기간 ' + p.period_apply + reviewSuffix;
+    }
   });
   document.querySelectorAll('.posting-card').forEach(card => {
     card.classList.toggle('active', card.getAttribute('data-posting') === state.posting);
