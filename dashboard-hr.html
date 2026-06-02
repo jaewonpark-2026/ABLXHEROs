@@ -38,27 +38,35 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
 .layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
 
-.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 4px 0 24px -8px rgba(15, 78, 132, 0.25); }
-.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 174, 198, 0.18) 0%, transparent 70%); pointer-events: none; }
-.sidebar::before { content: ''; position: absolute; top: 40%; left: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(214, 62, 62, 0.14) 0%, transparent 70%); pointer-events: none; }
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; box-shadow: 4px 0 32px -10px rgba(15, 78, 132, 0.32); }
+.sidebar::after { content: ''; position: absolute; bottom: -90px; right: -90px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 174, 198, 0.22) 0%, transparent 70%); pointer-events: none; }
+.sidebar::before { content: ''; position: absolute; top: 36%; left: -70px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(214, 62, 62, 0.16) 0%, transparent 70%); pointer-events: none; }
 
-.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand { padding: 28px 22px 22px; position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand::after { content: ''; position: absolute; left: 22px; right: 22px; bottom: 0; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.22), rgba(255,255,255,0.02)); }
 .brand-name { font-family: 'Manrope', 'Wooridaum', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 3px; line-height: 1; }
 .brand-name .hir, .brand-name .e { background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .brand-name .abl { background: linear-gradient(135deg, #FF8B8B 0%, #F08080 50%, #E85555 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-style: italic; font-weight: 800; padding: 0 1px; }
-.brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.4px; margin-top: 4px; }
+.brand-sub { font-size: 11px; opacity: 0.62; letter-spacing: 0.4px; margin-top: 5px; }
 
-.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
-.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
-.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); cursor: pointer; margin-bottom: 2px; transition: all 0.18s; text-decoration: none; position: relative; }
-.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
-.nav-item.active { background: linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%); color: white; }
-.nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: linear-gradient(180deg, var(--abl-red-soft) 0%, var(--abl-red) 100%); box-shadow: 0 0 8px rgba(232, 85, 85, 0.5); }
-.nav-item i { font-size: 18px; }
+.nav { padding: 20px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.3px; opacity: 0.46; padding: 0 14px 9px; margin-top: 10px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.74); cursor: pointer; margin-bottom: 3px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; position: relative; }
+.nav-item:hover { background: rgba(255,255,255,0.08); color: white; transform: translateX(2px); }
+.nav-item:hover i { transform: scale(1.08); }
+.nav-item.active { background: linear-gradient(95deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%); color: white; box-shadow: 0 4px 14px -4px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.14); }
+.nav-item.active i { color: #ffffff; opacity: 1; }
+.nav-item.active::before { content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3.5px; border-radius: 0 4px 4px 0; background: linear-gradient(180deg, var(--abl-red-soft) 0%, var(--abl-red) 100%); box-shadow: 0 0 12px rgba(232, 85, 85, 0.6); }
+.nav-item i { font-size: 18px; opacity: 0.9; transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), color 0.2s; }
 
 .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.1); position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; }
 .sidebar-footer img { height: 24px; opacity: 0.85; filter: brightness(0) invert(1); }
 .sidebar-footer-text { font-size: 10px; opacity: 0.55; }
+
+.sidebar-mini-footer { padding: 15px 22px; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 5px; border-top: 1px solid rgba(255,255,255,0.1); }
+.smf-status { font-size: 10.5px; opacity: 0.72; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.smf-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 7px rgba(74,222,128,0.75); flex-shrink: 0; }
+.smf-ver { font-size: 9.5px; opacity: 0.42; letter-spacing: 0.3px; }
 
 .main-area { display: flex; flex-direction: column; }
 
@@ -76,23 +84,26 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .content { padding: 32px 32px; max-width: 1200px; }
 
 .welcome { margin-bottom: 32px; }
-.welcome h1 { font-size: clamp(20px, 3vw, 27px); font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; word-break: keep-all; }
+.welcome h1 { font-size: clamp(20px, 3vw, 28px); font-weight: 800; margin-bottom: 8px; letter-spacing: -0.4px; word-break: keep-all; }
+.welcome h1 #greeting { background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .welcome p { color: var(--text-2); font-size: 14px; display: flex; align-items: center; gap: 8px; }
 .welcome p i { font-size: 16px; color: var(--main-1); }
 
 .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 36px; }
-.stat-card { background: white; border-radius: 12px; padding: 20px 22px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: all 0.2s; }
-.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 103, 172, 0.08); }
-.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--grad-accent); }
+.stat-card { background: white; border-radius: 14px; padding: 20px 22px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px -8px rgba(0, 103, 172, 0.16); border-color: #D5E8F5; }
+.stat-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--grad-accent); transition: width 0.25s; }
+.stat-card:hover::before { width: 5px; }
 .stat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
 .stat-label { font-size: 12px; color: var(--text-3); font-weight: 700; }
-.stat-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--grad-card-icon); display: flex; align-items: center; justify-content: center; color: var(--main-1); }
+.stat-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--grad-card-icon); display: flex; align-items: center; justify-content: center; color: var(--main-1); transition: all 0.25s; }
+.stat-card:hover .stat-icon { transform: scale(1.08) rotate(-4deg); }
 .stat-icon i { font-size: 16px; }
-.stat-value { font-size: 30px; font-weight: 700; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+.stat-value { font-size: 30px; font-weight: 800; background: var(--grad-blue); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
 .stat-sub { font-size: 11px; color: var(--text-2); margin-top: 4px; }
 
-.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.section-title::before { content: ''; width: 4px; height: 16px; border-radius: 2px; background: var(--grad-blue); }
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 9px; letter-spacing: -0.2px; }
+.section-title::before { content: ''; width: 4px; height: 17px; border-radius: 2px; background: var(--grad-accent); }
 
 .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .module-card {
@@ -199,6 +210,22 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 }
 .tag-soon { background: #F1F5F9; color: var(--text-3); }
 
+/* 처리해야 할 업무 */
+.todo-list-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 8px; margin-bottom: 36px; position: relative; overflow: hidden; box-shadow: 0 2px 14px -8px rgba(15,35,65,0.08); }
+.todo-top-bar { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-accent); }
+.todo-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 10px; text-decoration: none; color: inherit; transition: all 0.18s cubic-bezier(0.4,0,0.2,1); position: relative; }
+.todo-item::before { content: ''; position: absolute; left: 0; top: 11px; bottom: 11px; width: 3px; border-radius: 0 3px 3px 0; background: var(--grad-accent); opacity: 0; transition: opacity 0.18s; }
+.todo-item:hover { background: #F5F9FD; transform: translateX(3px); }
+.todo-item:hover::before { opacity: 1; }
+.todo-left { display: flex; align-items: center; gap: 14px; }
+.todo-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
+.todo-item:hover .todo-icon { transform: scale(1.06); }
+.todo-icon i { font-size: 18px; }
+.todo-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.todo-desc { font-size: 12px; color: var(--text-3); }
+.todo-cta { font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap; transition: gap 0.2s; }
+.todo-item:hover .todo-cta { gap: 8px; }
+
 /* 보조 도구 (시연용) - 메인 모듈과 분리 */
 .preview-section { margin-top: 28px; }
 .preview-section-label { font-size: 11px; color: var(--text-3); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
@@ -219,6 +246,8 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .sidebar-toggle:active { transform: scale(0.95); }
 .sidebar-toggle i { font-size: 16px; }
 .layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .smf-ver, .layout.collapsed .smf-status .label { display: none; }
+.layout.collapsed .sidebar-mini-footer { align-items: center; padding: 15px 0; }
 .layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
 .layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; min-height: 76px; }
 .layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 22px; }
@@ -292,7 +321,10 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
       <a class="nav-item" href="modules/report/index.html"><i class="ti ti-chart-histogram"></i> <span class="label">채용 리포트</span></a>
     </div>
 
-    
+    <div class="sidebar-mini-footer">
+      <span class="smf-status"><span class="smf-dot"></span> <span class="label">시스템 정상 운영 중</span></span>
+      <span class="smf-ver label">HirABLe · 2026 ABL × HEROs</span>
+    </div>
   </div>
 
   <div class="main-area">
@@ -340,8 +372,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
       </div>
 
       <div class="section-title">처리해야 할 업무</div>
-      <div id="todoList" style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 8px; margin-bottom: 32px; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue);"></div>
+      <div id="todoList" class="todo-list-card">
         <!-- JS로 동적 렌더링 -->
       </div>
 
@@ -372,7 +403,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
           <p>서류 핵심 포인트 기반 질문 추천과 실시간 답변 일관성 검증을 제공합니다.</p>
           <div class="module-footer"><span class="go-link">바로가기 <i class="ti ti-arrow-right"></i></span><span class="tag">사용 가능</span></div>
         </a>
-        <a href="modules/report/index.html" class="module-card" style="--accent:#253A71; --accent-bg:#E5E8F0;">
+        <a href="modules/report/index.html" class="module-card" style="--accent:#D63E3E; --accent-bg:#FCE8E8;">
           <div class="module-icon"><i class="ti ti-chart-histogram"></i></div>
           <h3>채용 데이터 리포트</h3>
           <p>리드타임·합격률·채널 효과성을 시각화하고 탈락자 인재풀을 관리합니다.</p>
@@ -488,22 +519,22 @@ function renderTodos() {
     cta: '조율 진행'
   });
 
-  todoList.innerHTML = '<div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad-blue);"></div>' + items;
+  todoList.innerHTML = '<div class="todo-top-bar"></div>' + items;
 }
 
 function todoItem(o) {
   return `
-    <a href="${o.href}" style="display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 8px; text-decoration: none; color: inherit; transition: all 0.15s;" onmouseover="this.style.background='#F5F9FD'" onmouseout="this.style.background='transparent'">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="width: 36px; height: 36px; border-radius: 8px; background: ${o.iconBg}; display: flex; align-items: center; justify-content: center; color: ${o.iconColor}; flex-shrink: 0;">
-          <i class="ti ${o.icon}" style="font-size: 18px;"></i>
+    <a href="${o.href}" class="todo-item">
+      <div class="todo-left">
+        <div class="todo-icon" style="background: ${o.iconBg}; color: ${o.iconColor};">
+          <i class="ti ${o.icon}"></i>
         </div>
         <div>
-          <div style="font-size: 14px; font-weight: 700; margin-bottom: 3px;">${o.title}</div>
-          <div style="font-size: 12px; color: var(--text-3);">${o.desc}</div>
+          <div class="todo-title">${o.title}</div>
+          <div class="todo-desc">${o.desc}</div>
         </div>
       </div>
-      <div style="font-size: 12px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 4px; white-space: nowrap;">${o.cta} <i class="ti ti-arrow-right"></i></div>
+      <div class="todo-cta">${o.cta} <i class="ti ti-arrow-right"></i></div>
     </a>`;
 }
 
