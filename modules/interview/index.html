@@ -829,9 +829,6 @@ a { color: inherit; text-decoration: none; }
       <!-- SCREEN 1&2: 대시보드 그리드 -->
       <section id="view-dashboard" class="hidden">
         <div class="result-tabs">
-          <button class="result-tab" data-result="all-view" onclick="setDashboardResultTab('all-view')">
-            <i class="ti ti-users"></i><span>전체</span><span class="result-tab-count" id="dash-rt-count-all">0</span>
-          </button>
           <button class="result-tab active" data-result="none" onclick="setDashboardResultTab('none')">
             <i class="ti ti-progress"></i><span>진행중</span><span class="result-tab-count" id="dash-rt-count-none">0</span>
           </button>
@@ -1345,6 +1342,7 @@ let candidates = [];
 let currentMainView = 'newgrad-r1';
 let currentStageFilter = 1;
 let currentPosting = 'newgrad';
+let currentResultFilter = 'none';  // 'none' (진행중) / '최종 합격' / '불합격'
 let activeView = 'dashboard';
 let compareMode = false;
 let selectedForCompare = [];
@@ -1493,18 +1491,13 @@ function setQuickResultFilter(result) {
   renderAllCandidatesTable();
 }
 
-/* 대시보드용: '진행중'은 현 페이지 유지, 그 외는 view-all-candidates로 전환 + 필터 */
+/* 대시보드용: 결과 필터 적용 후 대시보드 카드 재렌더 (페이지 전환 없음) */
 function setDashboardResultTab(result) {
-  if (result === 'none') {
-    document.querySelectorAll('#view-dashboard .result-tab').forEach(t => t.classList.remove('active'));
-    const tab = document.querySelector('#view-dashboard .result-tab[data-result="none"]');
-    if (tab) tab.classList.add('active');
-    return;
-  }
-  // 합격/불합격/전체 → view-all-candidates로 자동 전환 + 필터 적용
-  const filterVal = result === 'all-view' ? 'all' : result;
-  showView('all-candidates');
-  setTimeout(() => setQuickResultFilter(filterVal), 50);
+  currentResultFilter = result;
+  document.querySelectorAll('#view-dashboard .result-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector('#view-dashboard .result-tab[data-result="' + result + '"]');
+  if (tab) tab.classList.add('active');
+  renderDashboardCandidates();
 }
 
 function syncResultTabActive(result) {
@@ -1515,21 +1508,27 @@ function syncResultTabActive(result) {
 
 function updateResultTabCounts() {
   if (typeof candidates === 'undefined' || !candidates) return;
+  // view-all-candidates: 전체 통합 카운트
   const total = candidates.length;
   const pass = candidates.filter(c => c.finalResult === '최종 합격').length;
   const fail = candidates.filter(c => c.finalResult === '불합격').length;
   const inProgress = candidates.filter(c => c.finalResult === null || (c.finalResult !== '최종 합격' && c.finalResult !== '불합격')).length;
   const setCount = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
-  // view-all-candidates 탭
   setCount('rt-count-all', total);
   setCount('rt-count-none', inProgress);
   setCount('rt-count-pass', pass);
   setCount('rt-count-fail', fail);
-  // view-dashboard 탭
-  setCount('dash-rt-count-all', total);
-  setCount('dash-rt-count-none', inProgress);
-  setCount('dash-rt-count-pass', pass);
-  setCount('dash-rt-count-fail', fail);
+
+  // view-dashboard: 현재 선택된 공고(currentPosting) 기준 카운트
+  if (typeof currentPosting !== 'undefined') {
+    const inPosting = candidates.filter(c => c.posting === currentPosting);
+    const dashProgress = inPosting.filter(c => c.finalResult === null).length;
+    const dashPass = inPosting.filter(c => c.finalResult === '최종 합격').length;
+    const dashFail = inPosting.filter(c => c.finalResult === '불합격').length;
+    setCount('dash-rt-count-none', dashProgress);
+    setCount('dash-rt-count-pass', dashPass);
+    setCount('dash-rt-count-fail', dashFail);
+  }
 }
 
 function renderAllCandidatesTable() {
@@ -1646,16 +1645,24 @@ function renderDashboardCandidates() {
   const grid = document.getElementById('candidates-grid');
   if (!grid) return;
   updateResultTabCounts();
+  // 대시보드 result-tab active 동기화
+  document.querySelectorAll('#view-dashboard .result-tab').forEach(t => t.classList.remove('active'));
+  const activeTab = document.querySelector('#view-dashboard .result-tab[data-result="' + currentResultFilter + '"]');
+  if (activeTab) activeTab.classList.add('active');
   const searchVal = document.getElementById('search-input').value.toLowerCase();
   const filterDept = document.getElementById('filter-dept').value;
   const filterRole = document.getElementById('filter-role').value;
 
-  // 'all'이면 stage 무시, 1/2이면 해당 stage만
-  let filtered = candidates.filter(c =>
-    c.finalResult === null &&
-    c.posting === currentPosting &&
-    (currentStageFilter === 'all' || c.stage === currentStageFilter)
-  );
+  // currentResultFilter에 따라 finalResult 조건 결정
+  // 'none' = 진행중 (null), '최종 합격' / '불합격' = 해당 값
+  let filtered = candidates.filter(c => {
+    const matchesResult = currentResultFilter === 'none'
+      ? c.finalResult === null
+      : c.finalResult === currentResultFilter;
+    return matchesResult
+      && c.posting === currentPosting
+      && (currentStageFilter === 'all' || c.stage === currentStageFilter);
+  });
   filtered = filtered.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchVal) || c.role.toLowerCase().includes(searchVal) || c.dept.toLowerCase().includes(searchVal);
     const matchesDept = filterDept === 'all' || c.dept === filterDept;
@@ -1665,7 +1672,10 @@ function renderDashboardCandidates() {
 
   document.getElementById('filter-result-count').textContent = '총 ' + filtered.length + '명 매칭됨';
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="cand-empty">배정된 면접 대상 지원자가 없습니다.</div>';
+    const emptyMsg = currentResultFilter === 'none' ? '배정된 면접 대상 지원자가 없습니다.'
+      : currentResultFilter === '최종 합격' ? '해당 공고에 최종 합격자가 없습니다.'
+      : '해당 공고에 불합격자가 없습니다.';
+    grid.innerHTML = '<div class="cand-empty">' + emptyMsg + '</div>';
     return;
   }
 
