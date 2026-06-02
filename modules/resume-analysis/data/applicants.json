@@ -15,8 +15,7 @@
   },
   "initial_delivered_ids": [
     "ABL-2026-0178",
-    "ABL-2026-0254",
-    "ABL-2026-0500"
+    "ABL-2026-0254"
   ],
   "candidates": [
     {
@@ -906,16 +905,16 @@
   "postings": [
     {
       "id": "newgrad",
-      "name": "2026 상반기 신입 채용",
-      "period_apply": "2026.05.01 - 2026.05.24",
-      "period_review": "2026.05.25 - 2026.05.30",
+      "name": "디지털IT기획팀 신입(AA) 채용",
+      "period_apply": "2026.05.19 ~ 2026.05.26",
+      "period_review": "",
       "status": "진행 중"
     },
     {
       "id": "career",
-      "name": "2026 상반기 경력 채용",
-      "period_apply": "2026.04.15 - 2026.05.31 (상시)",
-      "period_review": "2026.05.20 - 2026.06.05",
+      "name": "상품본부 상품기획팀 경력직 채용",
+      "period_apply": "2026.05.04 ~ 2026.05.17",
+      "period_review": "",
       "status": "진행 중"
     }
   ]
