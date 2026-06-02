@@ -1,549 +1,577 @@
 {
-  "candidates": {
-    "r1": [
-      {
-        "id": "c1",
-        "name": "이정민",
-        "dept": "계리분석",
-        "career": "7년",
-        "email": "lee.jungmin@email.com",
-        "status": "before",
-        "applied": "2026.05.28",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c2",
-        "name": "한지수",
-        "dept": "디지털/IT",
-        "career": "5년",
-        "email": "han.jisu@email.com",
-        "status": "before",
-        "applied": "2026.05.30",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c3",
-        "name": "오민준",
-        "dept": "재무/회계",
-        "career": "9년",
-        "email": "oh.minjun@email.com",
-        "status": "before",
-        "applied": "2026.06.01",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c4",
-        "name": "김수연",
-        "dept": "계리분석",
-        "career": "6년",
-        "email": "kim.suyeon@email.com",
-        "status": "pending",
-        "applied": "2026.05.25",
-        "deadline": "2026.06.10 18:00",
-        "interviewers": [
-          "박성준 상무",
-          "이혜진 팀장"
+    "candidates": {
+        "r1": [
+            {
+                "id": "c1",
+                "name": "이정민",
+                "dept": "계리분석",
+                "career": "7년",
+                "email": "lee.jungmin@email.com",
+                "status": "before",
+                "applied": "2026.05.28",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c2",
+                "name": "한지수",
+                "dept": "디지털/IT",
+                "career": "5년",
+                "email": "han.jisu@email.com",
+                "status": "before",
+                "applied": "2026.05.30",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c3",
+                "name": "오민준",
+                "dept": "재무/회계",
+                "career": "9년",
+                "email": "oh.minjun@email.com",
+                "status": "before",
+                "applied": "2026.06.01",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c4",
+                "name": "김수연",
+                "dept": "계리분석",
+                "career": "6년",
+                "email": "kim.suyeon@email.com",
+                "status": "pending",
+                "applied": "2026.05.25",
+                "deadline": "2026.06.10 18:00",
+                "interviewers": [
+                    "박성준 상무",
+                    "이혜진 팀장"
+                ],
+                "intResp": true,
+                "candResp": false,
+                "period": "2026.06.09~2026.06.13",
+                "place": "본사 7층 면접실 A",
+                "duration": "60",
+                "sentAt": "2026.06.04",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c5",
+                "name": "최현우",
+                "dept": "디지털/IT",
+                "career": "4년",
+                "email": "choi.hw@email.com",
+                "status": "confirm-wait",
+                "applied": "2026.05.22",
+                "interviewers": [
+                    "박성준 상무",
+                    "이혜진 팀장"
+                ],
+                "intResp": true,
+                "candResp": true,
+                "period": "2026.06.09~2026.06.13",
+                "place": "본사 7층 면접실 A",
+                "duration": "60",
+                "aiTime": "2026년 6월 10일 오전 10:00",
+                "aiReason": "면접관 2명 모두 가용 · 인접 회의 없음",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c6",
+                "name": "윤성호",
+                "dept": "계리분석",
+                "career": "8년",
+                "email": "yoon.sh@email.com",
+                "status": "pending",
+                "applied": "2026.05.20",
+                "deadline": "2026.06.09 18:00",
+                "interviewers": [
+                    "김도형 부장",
+                    "최진서 팀장"
+                ],
+                "intResp": true,
+                "candResp": false,
+                "period": "2026.06.09~2026.06.13",
+                "place": "본사 7층 면접실 B",
+                "duration": "60",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c7",
+                "name": "임채원",
+                "dept": "재무/회계",
+                "career": "11년",
+                "email": "im.cw@email.com",
+                "status": "done",
+                "applied": "2026.05.18",
+                "interviewers": [
+                    "박성준 상무",
+                    "이혜진 팀장"
+                ],
+                "confirmedTime": "2026.06.17 14:00",
+                "place": "본사 7층 면접실 A",
+                "duration": "60",
+                "reminded": false,
+                "isRecoorded": false,
+                "sentAt": "2026.06.05",
+                "confirmedAt": "2026.06.12"
+            }
         ],
-        "intResp": true,
-        "candResp": false,
-        "period": "2026.06.09~2026.06.13",
-        "place": "본사 7층 면접실 A",
-        "duration": "60",
-        "sentAt": "2026.06.04",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c5",
-        "name": "최현우",
-        "dept": "디지털/IT",
-        "career": "4년",
-        "email": "choi.hw@email.com",
-        "status": "confirm-wait",
-        "applied": "2026.05.22",
-        "interviewers": [
-          "박성준 상무",
-          "이혜진 팀장"
+        "r2": [
+            {
+                "id": "c-cho-r2",
+                "name": "조현근",
+                "dept": "상품기획",
+                "career": "6년 5개월",
+                "email": "hyungeun.cho@email.com",
+                "status": "confirm-wait",
+                "applied": "2026.05.30",
+                "passedR1": "2026.06.02",
+                "interviewers": [
+                    "박성준 상무"
+                ],
+                "candResp": true,
+                "intResp": true,
+                "aiTime": "2026년 6월 17일 오후 1:00",
+                "aiReason": "지원자 가용 시간 재반영 · 면접관 일정 재배정",
+                "period": "2026.06.16~2026.06.20",
+                "place": "본사 12층 임원실",
+                "duration": "60",
+                "reminded": true,
+                "isRecoorded": true
+            },
+            {
+                "id": "c-yujin-r2",
+                "name": "임유진",
+                "dept": "상품기획",
+                "career": "7년 2개월",
+                "email": "im.yujin@email.com",
+                "status": "pending",
+                "applied": "2026.05.28",
+                "passedR1": "2026.06.02",
+                "interviewers": [
+                    "박성준 상무"
+                ],
+                "intResp": true,
+                "candResp": false,
+                "period": "2026.06.16~2026.06.20",
+                "place": "본사 12층 임원실",
+                "duration": "60",
+                "deadline": "2026.06.13 18:00",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c8",
+                "name": "서지원",
+                "dept": "계리분석",
+                "career": "12년",
+                "email": "seo.jw@email.com",
+                "status": "before",
+                "applied": "2026.05.27",
+                "passedR1": "2026.05.27",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c9",
+                "name": "구본욱",
+                "dept": "디지털/IT",
+                "career": "7년",
+                "email": "koo.bw@email.com",
+                "status": "before",
+                "applied": "2026.05.29",
+                "passedR1": "2026.05.29",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c10",
+                "name": "이선아",
+                "dept": "계리분석",
+                "career": "9년",
+                "email": "lee.sa@email.com",
+                "status": "pending",
+                "applied": "2026.05.15",
+                "interviewers": [
+                    "박성준 상무"
+                ],
+                "intResp": true,
+                "candResp": false,
+                "period": "2026.06.16~2026.06.20",
+                "place": "본사 12층 임원실",
+                "duration": "60",
+                "deadline": "2026.06.13 18:00",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c11",
+                "name": "신채은",
+                "dept": "재무/회계",
+                "career": "5년",
+                "email": "shin.ce@email.com",
+                "status": "confirm-wait",
+                "applied": "2026.05.10",
+                "interviewers": [
+                    "박성준 상무",
+                    "이혜진 팀장"
+                ],
+                "intResp": true,
+                "candResp": true,
+                "period": "2026.06.16~2026.06.20",
+                "place": "본사 12층 임원실",
+                "duration": "60",
+                "aiTime": "2026년 6월 18일 오전 11:00",
+                "aiReason": "면접관 전원 가용",
+                "reminded": false,
+                "isRecoorded": false
+            },
+            {
+                "id": "c12",
+                "name": "권나현",
+                "dept": "디지털/IT",
+                "career": "6년",
+                "email": "kwon.nh@email.com",
+                "status": "done",
+                "applied": "2026.05.05",
+                "interviewers": [
+                    "김도형 부장"
+                ],
+                "confirmedTime": "2026.06.24 10:00",
+                "place": "본사 12층 임원실",
+                "duration": "60",
+                "reminded": false,
+                "isRecoorded": false,
+                "sentAt": "2026.06.10",
+                "confirmedAt": "2026.06.19"
+            }
         ],
-        "intResp": true,
-        "candResp": true,
-        "period": "2026.06.09~2026.06.13",
-        "place": "본사 7층 면접실 A",
-        "duration": "60",
-        "aiTime": "2026년 6월 10일 오전 10:00",
-        "aiReason": "면접관 2명 모두 가용 · 인접 회의 없음",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c6",
-        "name": "윤성호",
-        "dept": "계리분석",
-        "career": "8년",
-        "email": "yoon.sh@email.com",
-        "status": "pending",
-        "applied": "2026.05.20",
-        "deadline": "2026.06.09 18:00",
-        "interviewers": [
-          "김도형 부장",
-          "최진서 팀장"
+        "newgrad_r1": [
+            {
+                "id": "ng1",
+                "name": "강민서",
+                "dept": "디지털/IT",
+                "email": "kang.minseo@email.com",
+                "status": "before",
+                "applied": "2026.05.26",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "서강대 컴퓨터공학",
+                "track": "개발"
+            },
+            {
+                "id": "ng2",
+                "name": "박지호",
+                "dept": "계리분석",
+                "email": "park.jiho@email.com",
+                "status": "before",
+                "applied": "2026.05.26",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "연세대 응용통계",
+                "track": "계리"
+            },
+            {
+                "id": "ng3",
+                "name": "이서윤",
+                "dept": "영업관리",
+                "email": "lee.seoyoon@email.com",
+                "status": "before",
+                "applied": "2026.05.27",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "고려대 경영",
+                "track": "영업"
+            },
+            {
+                "id": "ng4",
+                "name": "정태우",
+                "dept": "디지털/IT",
+                "email": "jung.taewoo@email.com",
+                "status": "before",
+                "applied": "2026.05.27",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "한양대 컴퓨터공학",
+                "track": "개발"
+            },
+            {
+                "id": "ng5",
+                "name": "한소율",
+                "dept": "계리분석",
+                "email": "han.soyul@email.com",
+                "status": "before",
+                "applied": "2026.05.28",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "성균관대 경제",
+                "track": "리스크"
+            }
         ],
-        "intResp": true,
-        "candResp": false,
-        "period": "2026.06.09~2026.06.13",
-        "place": "본사 7층 면접실 B",
-        "duration": "60",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c7",
-        "name": "임채원",
-        "dept": "재무/회계",
-        "career": "11년",
-        "email": "im.cw@email.com",
-        "status": "done",
-        "applied": "2026.05.18",
-        "interviewers": [
-          "박성준 상무",
-          "이혜진 팀장"
-        ],
-        "confirmedTime": "2026.06.17 14:00",
-        "place": "본사 7층 면접실 A",
-        "duration": "60",
-        "reminded": false,
-        "isRecoorded": false,
-        "sentAt": "2026.06.05",
-        "confirmedAt": "2026.06.12"
-      }
+        "newgrad_r2": [
+            {
+                "id": "ng6",
+                "name": "강민서",
+                "dept": "디지털/IT",
+                "email": "kang.minseo@email.com",
+                "status": "before",
+                "applied": "2026.05.26",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "서강대 컴퓨터공학",
+                "track": "개발",
+                "passedR1": "2026.06.03"
+            },
+            {
+                "id": "ng7",
+                "name": "박지호",
+                "dept": "계리분석",
+                "email": "park.jiho@email.com",
+                "status": "before",
+                "applied": "2026.05.26",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "연세대 응용통계",
+                "track": "계리",
+                "passedR1": "2026.06.03"
+            },
+            {
+                "id": "ng8",
+                "name": "이서윤",
+                "dept": "영업관리",
+                "email": "lee.seoyoon@email.com",
+                "status": "before",
+                "applied": "2026.05.27",
+                "reminded": false,
+                "isRecoorded": false,
+                "univ": "고려대 경영",
+                "track": "영업",
+                "passedR1": "2026.06.04"
+            }
+        ]
+    },
+    "interviewers": [
+        {
+            "name": "박성준 상무",
+            "dept": "계리분석본부",
+            "init": "박",
+            "email": "park.sj@abllife.co.kr"
+        },
+        {
+            "name": "이혜진 팀장",
+            "dept": "인사팀",
+            "init": "이",
+            "email": "lee.hj@abllife.co.kr"
+        },
+        {
+            "name": "김도형 부장",
+            "dept": "계리분석본부",
+            "init": "김",
+            "email": "kim.dh@abllife.co.kr"
+        },
+        {
+            "name": "최진서 팀장",
+            "dept": "계리분석",
+            "init": "최",
+            "email": "choi.js@abllife.co.kr"
+        },
+        {
+            "name": "정우성 상무",
+            "dept": "투자본부",
+            "init": "정",
+            "email": "jung.ws@abllife.co.kr"
+        },
+        {
+            "name": "윤미경 팀장",
+            "dept": "상품본부",
+            "init": "윤",
+            "email": "yoon.mk@abllife.co.kr"
+        },
+        {
+            "name": "김도훈 본부장",
+            "dept": "상품본부",
+            "init": "김",
+            "email": "kim.dh.hq@abllife.co.kr"
+        },
+        {
+            "name": "박채희 부장",
+            "dept": "마케팅팀",
+            "init": "박",
+            "email": "park.ch@abllife.co.kr"
+        }
     ],
-    "r2": [
-      {
-        "id": "c-cho-r2",
-        "name": "조현근",
-        "dept": "상품기획",
-        "career": "6년 5개월",
-        "email": "hyungeun.cho@email.com",
-        "status": "before",
-        "applied": "2026.05.30",
-        "passedR1": "2026.06.02",
-        "reminded": true,
-        "isRecoorded": false
-      },
-      {
-        "id": "c-yujin-r2",
-        "name": "임유진",
-        "dept": "상품기획",
-        "career": "7년 2개월",
-        "email": "im.yujin@email.com",
-        "status": "pending",
-        "applied": "2026.05.28",
-        "passedR1": "2026.06.02",
-        "interviewers": [
-          "박성준 상무"
-        ],
-        "intResp": true,
-        "candResp": false,
-        "period": "2026.06.16~2026.06.20",
-        "place": "본사 12층 임원실",
-        "duration": "60",
-        "deadline": "2026.06.13 18:00",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c8",
-        "name": "서지원",
-        "dept": "계리분석",
-        "career": "12년",
-        "email": "seo.jw@email.com",
-        "status": "before",
-        "applied": "2026.05.27",
-        "passedR1": "2026.05.27",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c9",
-        "name": "구본욱",
-        "dept": "디지털/IT",
-        "career": "7년",
-        "email": "koo.bw@email.com",
-        "status": "before",
-        "applied": "2026.05.29",
-        "passedR1": "2026.05.29",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c10",
-        "name": "이선아",
-        "dept": "계리분석",
-        "career": "9년",
-        "email": "lee.sa@email.com",
-        "status": "pending",
-        "applied": "2026.05.15",
-        "interviewers": [
-          "박성준 상무"
-        ],
-        "intResp": true,
-        "candResp": false,
-        "period": "2026.06.16~2026.06.20",
-        "place": "본사 12층 임원실",
-        "duration": "60",
-        "deadline": "2026.06.13 18:00",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c11",
-        "name": "신채은",
-        "dept": "재무/회계",
-        "career": "5년",
-        "email": "shin.ce@email.com",
-        "status": "confirm-wait",
-        "applied": "2026.05.10",
-        "interviewers": [
-          "박성준 상무",
-          "이혜진 팀장"
-        ],
-        "intResp": true,
-        "candResp": true,
-        "period": "2026.06.16~2026.06.20",
-        "place": "본사 12층 임원실",
-        "duration": "60",
-        "aiTime": "2026년 6월 18일 오전 11:00",
-        "aiReason": "면접관 전원 가용",
-        "reminded": false,
-        "isRecoorded": false
-      },
-      {
-        "id": "c12",
-        "name": "권나현",
-        "dept": "디지털/IT",
-        "career": "6년",
-        "email": "kwon.nh@email.com",
-        "status": "done",
-        "applied": "2026.05.05",
-        "interviewers": [
-          "김도형 부장"
-        ],
-        "confirmedTime": "2026.06.24 10:00",
-        "place": "본사 12층 임원실",
-        "duration": "60",
-        "reminded": false,
-        "isRecoorded": false,
-        "sentAt": "2026.06.10",
-        "confirmedAt": "2026.06.19"
-      }
+    "templates": [
+        {
+            "id": "t1",
+            "name": "1차 면접 조율 안내 (지원자)",
+            "type": "cand",
+            "stage": "조율요청",
+            "round": "1차",
+            "subj": "[ABL생명] 1차 면접 일정 조율 안내 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n서류 전형 합격을 진심으로 축하드리며, 1차 면접 일정 조율을 위해 연락드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n▶ 면접 장소: {{면접장소}}\n\n문의사항은 이 메일로 회신해 주세요.\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t2",
+            "name": "1차 면접 조율 안내 (면접관)",
+            "type": "int",
+            "stage": "조율요청",
+            "round": "1차",
+            "subj": "[채용] {{지원자명}} 지원자 1차 면접 가용 시간 확인 요청",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n1차 면접 일정 조율을 위해 가용 시간 확인을 부탁드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n\n협조해 주셔서 감사합니다.\n인사팀 드림"
+        },
+        {
+            "id": "t3",
+            "name": "1차 면접 확정 안내 (지원자)",
+            "type": "cand",
+            "stage": "확정",
+            "round": "1차",
+            "subj": "[ABL생명] 1차 면접 일정 확정 안내 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n1차 면접 일정이 아래와 같이 확정되었음을 안내드립니다.\n\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 소요시간: 약 {{소요시간}}\n▶ 준비물: 신분증, 포트폴리오(해당 시)\n\n일정 변경이 필요하신 경우 이 메일로 회신해 주시기 바랍니다.\n\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t4",
+            "name": "1차 면접 확정 안내 (면접관)",
+            "type": "int",
+            "stage": "확정",
+            "round": "1차",
+            "subj": "[채용] {{지원자명}} 지원자 1차 면접 일정 확정",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n아래와 같이 1차 면접 일정이 확정되었습니다.\n\n▶ 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 전형: 1차 면접 (실무)\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 첨부: 이력서 및 자기소개서\n\n면접 관련 문의는 인사팀 내선 1234로 연락 주세요.\n인사팀 드림"
+        },
+        {
+            "id": "t5",
+            "name": "2차 면접 조율 안내 (지원자)",
+            "type": "cand",
+            "stage": "조율요청",
+            "round": "2차",
+            "subj": "[ABL생명] 2차 면접 일정 조율 안내 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n1차 면접 합격을 진심으로 축하드립니다.\n2차 면접(임원 면접) 일정 조율을 위해 연락드립니다.\n\n▶ 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n▶ 면접 장소: {{면접장소}}\n\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t6",
+            "name": "2차 면접 조율 안내 (면접관)",
+            "type": "int",
+            "stage": "조율요청",
+            "round": "2차",
+            "subj": "[채용] {{지원자명}} 지원자 2차(임원) 면접 가용 시간 확인 요청",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n2차 면접(임원 면접) 일정 조율을 위해 가용 시간 확인을 부탁드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n\n협조해 주셔서 감사합니다.\n인사팀 드림"
+        },
+        {
+            "id": "t7",
+            "name": "2차 면접 확정 안내 (지원자)",
+            "type": "cand",
+            "stage": "확정",
+            "round": "2차",
+            "subj": "[ABL생명] 2차 면접 일정 확정 안내 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n2차 면접(임원 면접) 일정이 아래와 같이 확정되었음을 안내드립니다.\n\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 소요시간: 약 {{소요시간}}\n▶ 준비물: 신분증\n\n일정 변경이 필요하신 경우 이 메일로 회신해 주시기 바랍니다.\n\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t8",
+            "name": "2차 면접 확정 안내 (면접관)",
+            "type": "int",
+            "stage": "확정",
+            "round": "2차",
+            "subj": "[채용] {{지원자명}} 지원자 2차(임원) 면접 일정 확정",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n아래와 같이 2차 면접(임원 면접) 일정이 확정되었습니다.\n\n▶ 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 전형: 2차 면접 (임원)\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 첨부: 이력서 및 자기소개서, 1차 면접 평가표\n\n면접 관련 문의는 인사팀 내선 1234로 연락 주세요.\n인사팀 드림"
+        },
+        {
+            "id": "t9",
+            "name": "면접 재조율 안내 (지원자)",
+            "type": "cand",
+            "stage": "재조율",
+            "round": "",
+            "subj": "[ABL생명] 면접 일정 재조율 안내 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n일정 상 재조율이 필요하게 되었습니다.\n새로운 가능 시간을 선택해 주시기 바랍니다.\n\n▶ 전형: {{전형단계}}\n▶ 새 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t10",
+            "name": "면접 재조율 안내 (면접관)",
+            "type": "int",
+            "stage": "재조율",
+            "round": "",
+            "subj": "[채용] {{지원자명}} 지원자 면접 시간 재조율 요청",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n지원자 또는 면접관님의 불가피한 사유로 {{지원자명}} 님의 면접 일정 재조율이 필요하여 연락드립니다.\n번거로우시겠지만 아래 링크에서 다시 가용 시간을 선택해주시면 감사하겠습니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, {{전형단계}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n\n감사합니다.\n인사팀 드림"
+        },
+        {
+            "id": "t11",
+            "name": "면접 응답 리마인드 (지원자)",
+            "type": "cand",
+            "stage": "리마인드",
+            "round": "",
+            "subj": "[ABL생명] 면접 일정 응답 리마인드 - {{지원자명}} 님",
+            "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n이전에 안내드린 면접 가능 시간 선택이 아직 완료되지 않았습니다.\n응답 마감일이 {{마감일}}까지이오니 조속히 선택해 주시기 바랍니다.\n\n▶ 전형: {{전형단계}}\n▶ 가능 시간 선택: {{폼_링크}}\n\n문의사항은 인사팀으로 연락 주세요.\nABL생명 인사팀 드림"
+        },
+        {
+            "id": "t12",
+            "name": "면접 응답 리마인드 (면접관)",
+            "type": "int",
+            "stage": "리마인드",
+            "round": "",
+            "subj": "[채용] 면접 일정 가용 시간 회신 리마인드 요청",
+            "body": "안녕하세요, ABL생명 인사팀입니다.\n\n{{지원자명}} 지원자의 면접 일정 조율을 위한 가용 시간 확인이 아직 제출되지 않아 리마인드 드립니다.\n응답 마감일({{마감일}}) 전까지 회신을 부탁드립니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, {{전형단계}})\n▶ 가용 시간 선택: {{폼_링크}}\n\n감사합니다.\n인사팀 드림"
+        }
     ],
-    "newgrad_r1": [
-      {
-        "id": "ng1",
-        "name": "강민서",
-        "dept": "디지털/IT",
-        "email": "kang.minseo@email.com",
-        "status": "before",
-        "applied": "2026.05.26",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "서강대 컴퓨터공학",
-        "track": "개발"
-      },
-      {
-        "id": "ng2",
-        "name": "박지호",
-        "dept": "계리분석",
-        "email": "park.jiho@email.com",
-        "status": "before",
-        "applied": "2026.05.26",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "연세대 응용통계",
-        "track": "계리"
-      },
-      {
-        "id": "ng3",
-        "name": "이서윤",
-        "dept": "영업관리",
-        "email": "lee.seoyoon@email.com",
-        "status": "before",
-        "applied": "2026.05.27",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "고려대 경영",
-        "track": "영업"
-      },
-      {
-        "id": "ng4",
-        "name": "정태우",
-        "dept": "디지털/IT",
-        "email": "jung.taewoo@email.com",
-        "status": "before",
-        "applied": "2026.05.27",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "한양대 컴퓨터공학",
-        "track": "개발"
-      },
-      {
-        "id": "ng5",
-        "name": "한소율",
-        "dept": "계리분석",
-        "email": "han.soyul@email.com",
-        "status": "before",
-        "applied": "2026.05.28",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "성균관대 경제",
-        "track": "리스크"
-      }
+    "cal_events_static": [
+        {
+            "y": 2026,
+            "m": 6,
+            "d": 2,
+            "type": "new",
+            "label": "신입 공채 1차(오전)",
+            "dept": ""
+        },
+        {
+            "y": 2026,
+            "m": 6,
+            "d": 3,
+            "type": "new",
+            "label": "신입 공채 1차(종일)",
+            "dept": ""
+        },
+        {
+            "y": 2026,
+            "m": 6,
+            "d": 4,
+            "type": "new",
+            "label": "신입 공채 1차(오후)",
+            "dept": ""
+        },
+        {
+            "y": 2026,
+            "m": 6,
+            "d": 9,
+            "type": "work",
+            "label": "부서 워크숍",
+            "dept": ""
+        },
+        {
+            "y": 2026,
+            "m": 6,
+            "d": 16,
+            "type": "work",
+            "label": "경영진 보고 09:00",
+            "dept": ""
+        }
     ],
-    "newgrad_r2": [
-      {
-        "id": "ng6",
-        "name": "강민서",
-        "dept": "디지털/IT",
-        "email": "kang.minseo@email.com",
-        "status": "before",
-        "applied": "2026.05.26",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "서강대 컴퓨터공학",
-        "track": "개발",
-        "passedR1": "2026.06.03"
-      },
-      {
-        "id": "ng7",
-        "name": "박지호",
-        "dept": "계리분석",
-        "email": "park.jiho@email.com",
-        "status": "before",
-        "applied": "2026.05.26",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "연세대 응용통계",
-        "track": "계리",
-        "passedR1": "2026.06.03"
-      },
-      {
-        "id": "ng8",
-        "name": "이서윤",
-        "dept": "영업관리",
-        "email": "lee.seoyoon@email.com",
-        "status": "before",
-        "applied": "2026.05.27",
-        "reminded": false,
-        "isRecoorded": false,
-        "univ": "고려대 경영",
-        "track": "영업",
-        "passedR1": "2026.06.04"
-      }
+    "notifications": [
+        {
+            "id": "n1",
+            "type": "info",
+            "title": "윤성호 지원자 폼 응답 완료",
+            "desc": "1차 면접 조율 폼 제출 (방금 전)",
+            "target": "schedule",
+            "round": "r1"
+        },
+        {
+            "id": "n2",
+            "type": "warn",
+            "title": "박성준 상무 메일 회신",
+            "desc": "\"6월 9일 외부 미팅으로...\" (10분 전)",
+            "target": "schedule",
+            "round": "recoord"
+        }
     ]
-  },
-  "interviewers": [
-    {
-      "name": "박성준 상무",
-      "dept": "계리분석본부",
-      "init": "박",
-      "email": "park.sj@abllife.co.kr"
-    },
-    {
-      "name": "이혜진 팀장",
-      "dept": "인사팀",
-      "init": "이",
-      "email": "lee.hj@abllife.co.kr"
-    },
-    {
-      "name": "김도형 부장",
-      "dept": "계리분석본부",
-      "init": "김",
-      "email": "kim.dh@abllife.co.kr"
-    },
-    {
-      "name": "최진서 팀장",
-      "dept": "계리분석",
-      "init": "최",
-      "email": "choi.js@abllife.co.kr"
-    },
-    {
-      "name": "정우성 상무",
-      "dept": "투자본부",
-      "init": "정",
-      "email": "jung.ws@abllife.co.kr"
-    }
-  ],
-  "templates": [
-    {
-      "id": "t1",
-      "name": "1차 면접 조율 안내 (지원자)",
-      "type": "cand",
-      "stage": "조율요청",
-      "round": "1차",
-      "subj": "[ABL생명] 1차 면접 일정 조율 안내 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n서류 전형 합격을 진심으로 축하드리며, 1차 면접 일정 조율을 위해 연락드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n▶ 면접 장소: {{면접장소}}\n\n문의사항은 이 메일로 회신해 주세요.\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t2",
-      "name": "1차 면접 조율 안내 (면접관)",
-      "type": "int",
-      "stage": "조율요청",
-      "round": "1차",
-      "subj": "[채용] {{지원자명}} 지원자 1차 면접 가용 시간 확인 요청",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n1차 면접 일정 조율을 위해 가용 시간 확인을 부탁드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n\n협조해 주셔서 감사합니다.\n인사팀 드림"
-    },
-    {
-      "id": "t3",
-      "name": "1차 면접 확정 안내 (지원자)",
-      "type": "cand",
-      "stage": "확정",
-      "round": "1차",
-      "subj": "[ABL생명] 1차 면접 일정 확정 안내 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n1차 면접 일정이 아래와 같이 확정되었음을 안내드립니다.\n\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 소요시간: 약 {{소요시간}}\n▶ 준비물: 신분증, 포트폴리오(해당 시)\n\n일정 변경이 필요하신 경우 이 메일로 회신해 주시기 바랍니다.\n\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t4",
-      "name": "1차 면접 확정 안내 (면접관)",
-      "type": "int",
-      "stage": "확정",
-      "round": "1차",
-      "subj": "[채용] {{지원자명}} 지원자 1차 면접 일정 확정",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n아래와 같이 1차 면접 일정이 확정되었습니다.\n\n▶ 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 전형: 1차 면접 (실무)\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 첨부: 이력서 및 자기소개서\n\n면접 관련 문의는 인사팀 내선 1234로 연락 주세요.\n인사팀 드림"
-    },
-    {
-      "id": "t5",
-      "name": "2차 면접 조율 안내 (지원자)",
-      "type": "cand",
-      "stage": "조율요청",
-      "round": "2차",
-      "subj": "[ABL생명] 2차 면접 일정 조율 안내 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n1차 면접 합격을 진심으로 축하드립니다.\n2차 면접(임원 면접) 일정 조율을 위해 연락드립니다.\n\n▶ 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n▶ 면접 장소: {{면접장소}}\n\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t6",
-      "name": "2차 면접 조율 안내 (면접관)",
-      "type": "int",
-      "stage": "조율요청",
-      "round": "2차",
-      "subj": "[채용] {{지원자명}} 지원자 2차(임원) 면접 가용 시간 확인 요청",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n2차 면접(임원 면접) 일정 조율을 위해 가용 시간 확인을 부탁드립니다.\n아래 링크에서 면접 가능한 시간을 선택해 주시기 바랍니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n▶ 면접 예정 기간: {{면접기간}}\n▶ 소요 시간: {{소요시간}}\n\n협조해 주셔서 감사합니다.\n인사팀 드림"
-    },
-    {
-      "id": "t7",
-      "name": "2차 면접 확정 안내 (지원자)",
-      "type": "cand",
-      "stage": "확정",
-      "round": "2차",
-      "subj": "[ABL생명] 2차 면접 일정 확정 안내 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n2차 면접(임원 면접) 일정이 아래와 같이 확정되었음을 안내드립니다.\n\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 소요시간: 약 {{소요시간}}\n▶ 준비물: 신분증\n\n일정 변경이 필요하신 경우 이 메일로 회신해 주시기 바랍니다.\n\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t8",
-      "name": "2차 면접 확정 안내 (면접관)",
-      "type": "int",
-      "stage": "확정",
-      "round": "2차",
-      "subj": "[채용] {{지원자명}} 지원자 2차(임원) 면접 일정 확정",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n아래와 같이 2차 면접(임원 면접) 일정이 확정되었습니다.\n\n▶ 지원자: {{지원자명}} ({{직군}}, 경력 {{경력}})\n▶ 전형: 2차 면접 (임원)\n▶ 일시: {{확정일시}}\n▶ 장소: {{면접장소}}\n▶ 첨부: 이력서 및 자기소개서, 1차 면접 평가표\n\n면접 관련 문의는 인사팀 내선 1234로 연락 주세요.\n인사팀 드림"
-    },
-    {
-      "id": "t9",
-      "name": "면접 재조율 안내 (지원자)",
-      "type": "cand",
-      "stage": "재조율",
-      "round": "",
-      "subj": "[ABL생명] 면접 일정 재조율 안내 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n일정 상 재조율이 필요하게 되었습니다.\n새로운 가능 시간을 선택해 주시기 바랍니다.\n\n▶ 전형: {{전형단계}}\n▶ 새 가능 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t10",
-      "name": "면접 재조율 안내 (면접관)",
-      "type": "int",
-      "stage": "재조율",
-      "round": "",
-      "subj": "[채용] {{지원자명}} 지원자 면접 시간 재조율 요청",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n지원자 또는 면접관님의 불가피한 사유로 {{지원자명}} 님의 면접 일정 재조율이 필요하여 연락드립니다.\n번거로우시겠지만 아래 링크에서 다시 가용 시간을 선택해주시면 감사하겠습니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, {{전형단계}})\n▶ 가용 시간 선택: {{폼_링크}}\n▶ 응답 마감: {{마감일}}\n\n감사합니다.\n인사팀 드림"
-    },
-    {
-      "id": "t11",
-      "name": "면접 응답 리마인드 (지원자)",
-      "type": "cand",
-      "stage": "리마인드",
-      "round": "",
-      "subj": "[ABL생명] 면접 일정 응답 리마인드 - {{지원자명}} 님",
-      "body": "안녕하세요, {{지원자명}} 님.\nABL생명 인사팀입니다.\n\n이전에 안내드린 면접 가능 시간 선택이 아직 완료되지 않았습니다.\n응답 마감일이 {{마감일}}까지이오니 조속히 선택해 주시기 바랍니다.\n\n▶ 전형: {{전형단계}}\n▶ 가능 시간 선택: {{폼_링크}}\n\n문의사항은 인사팀으로 연락 주세요.\nABL생명 인사팀 드림"
-    },
-    {
-      "id": "t12",
-      "name": "면접 응답 리마인드 (면접관)",
-      "type": "int",
-      "stage": "리마인드",
-      "round": "",
-      "subj": "[채용] 면접 일정 가용 시간 회신 리마인드 요청",
-      "body": "안녕하세요, ABL생명 인사팀입니다.\n\n{{지원자명}} 지원자의 면접 일정 조율을 위한 가용 시간 확인이 아직 제출되지 않아 리마인드 드립니다.\n응답 마감일({{마감일}}) 전까지 회신을 부탁드립니다.\n\n▶ 대상 지원자: {{지원자명}} ({{직군}}, {{전형단계}})\n▶ 가용 시간 선택: {{폼_링크}}\n\n감사합니다.\n인사팀 드림"
-    }
-  ],
-  "cal_events_static": [
-    {
-      "y": 2026,
-      "m": 6,
-      "d": 2,
-      "type": "new",
-      "label": "신입 공채 1차(오전)",
-      "dept": ""
-    },
-    {
-      "y": 2026,
-      "m": 6,
-      "d": 3,
-      "type": "new",
-      "label": "신입 공채 1차(종일)",
-      "dept": ""
-    },
-    {
-      "y": 2026,
-      "m": 6,
-      "d": 4,
-      "type": "new",
-      "label": "신입 공채 1차(오후)",
-      "dept": ""
-    },
-    {
-      "y": 2026,
-      "m": 6,
-      "d": 9,
-      "type": "work",
-      "label": "부서 워크숍",
-      "dept": ""
-    },
-    {
-      "y": 2026,
-      "m": 6,
-      "d": 16,
-      "type": "work",
-      "label": "경영진 보고 09:00",
-      "dept": ""
-    }
-  ],
-  "notifications": [
-    {
-      "id": "n1",
-      "type": "info",
-      "title": "윤성호 지원자 폼 응답 완료",
-      "desc": "1차 면접 조율 폼 제출 (방금 전)",
-      "target": "schedule",
-      "round": "r1"
-    },
-    {
-      "id": "n2",
-      "type": "warn",
-      "title": "박성준 상무 메일 회신",
-      "desc": "\"6월 9일 외부 미팅으로...\" (10분 전)",
-      "target": "schedule",
-      "round": "recoord"
-    }
-  ]
 }
