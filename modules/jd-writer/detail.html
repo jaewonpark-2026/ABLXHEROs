@@ -987,7 +987,7 @@ function rewriteJD() {
           "영어 비즈니스 커뮤니케이션 가능 (재보험사·그룹 본사 협업)"
         ];
       } else {
-        currentData.jd_draft.role_summary = "상품본부 상품기획팀 소속 시니어 매니저로서, 변액·종신·정기보험 등 신상품 기획과 Pricing 가정 설계를 주도합니다. IFRS17 CSM 기반 수익성 산정과 K-ICS 가정 재검토를 직접 수행하며, ABL의 다음 5년 상품 포트폴리오 재편을 이끌어 갈 핵심 인재입니다. (의견 반영: " + comment.substring(0, 30) + "...)";
+        currentData.jd_draft.role_summary = "상품본부 상품기획팀 소속 대리로서, 변액·종신·정기보험 등 신상품 기획과 Pricing 가정 설계를 주도합니다. IFRS17 CSM 기반 수익성 산정과 K-ICS 가정 재검토를 직접 수행하며, ABL의 다음 5년 상품 포트폴리오 재편을 이끌어 갈 핵심 인재입니다. (의견 반영: " + comment.substring(0, 30) + "...)";
       }
 
       currentData.review_history.push({
@@ -1483,7 +1483,7 @@ function openPostingPreview() {
   const empType = jd.employment_type || (req && req.employment_type) || '정규직';
   const office = req ? (req.office || req.dept) : '상품본부';
   const dept = req ? req.dept : '상품기획팀';
-  const position = jd.title || (req && req.position) || '상품기획 시니어 매니저';
+  const position = jd.title || (req && req.position) || '상품기획 대리';
 
   // 히어로 타이틀 (회사명 + 팀 + 채용)
   const heroTitle = `에이비엘생명보험<br>${dept} ${recruitType}직 채용`;
