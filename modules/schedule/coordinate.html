@@ -778,7 +778,7 @@ var systemToday = { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate(
 
 // 재조율 더미 데이터 (팀원 코드 그대로)
 var RECOORD = [
-  { id: 're4', candId: 'c-cho-r1', candName: '조현근', round: 'r1', from: '지원자 본인', reason: '안녕하세요, 현 직장 업무 일정으로 인해 기존에 안내받은 시간대에 면접 참석이 어려울 것 같아 정말 죄송합니다. 평일 오후 1시 시간대만 가능한 상황인데, 해당 시간으로 조정이 가능한지 회신 부탁드립니다.', systemAlert: '동일 시간대(6/2 13:00)에 김수연 후보가 이미 배정되어 있어 면접관 일정 충돌이 발생했습니다.', when: '방금 전' },
+  { id: 're4', candId: 'c-cho-r2', candName: '조현근', round: 'r2', from: '지원자 본인', reason: '안녕하세요, 현 직장 업무 일정으로 인해 기존에 안내받은 시간대에 면접 참석이 어려울 것 같아 정말 죄송합니다. 평일 오후 1시 시간대만 가능한 상황인데, 해당 시간으로 조정이 가능한지 회신 부탁드립니다.', systemAlert: '동일 시간대(6/17 13:00)에 임유진 후보가 이미 배정되어 있어 면접관 일정 충돌이 발생했습니다.', when: '방금 전' },
   { id: 're1', candId: 'c5', candName: '최현우', round: 'r1', from: '박성준 상무', reason: '안녕하세요, 6월 9일에 외부 미팅이 갑작스럽게 잡혀 기존에 말씀드렸던 면접 일정 참석이 어려울 것 같습니다. 정말 죄송한 말씀드리며, 가능한 시간으로 다시 조정이 가능하실지 회신 기다리겠습니다.', when: '10분 전' },
   { id: 're2', candId: 'c4', candName: '김수연', round: 'r1', from: '지원자 본인', reason: '안녕하세요, 회사 일정상 6월 10일 면접 진행이 어렵게 되어 정말 죄송합니다. 가능하시다면 다른 시간으로 재조율 부탁드리며, 조정 가능한 일정 회신 기다리겠습니다.', when: '1시간 전' },
   { id: 're3', candId: 'c10', candName: '이선아', round: 'r2', from: '이혜진 팀장', reason: '안녕하세요, 6월 17일 외부 컨퍼런스 일정과 겹쳐 면접 참여가 어려운 상황입니다. 정말 죄송하지만 다른 시간대로 조정이 가능하실지 회신 부탁드립니다.', when: '3시간 전' }
@@ -993,7 +993,7 @@ function renderRecoord() {
     }
     html += '<div class="flex g8" style="margin-top:12px;justify-content:flex-end;">';
     html += '<button class="btn btn-o btn-sm" onclick="openReplyModal(\'' + r.from + '@abllife.co.kr\', \'' + r.candName + '\')"><i class="ti ti-mail"></i>메일 회신</button>';
-    html += '<button class="btn btn-p btn-sm" onclick="openRecoord(\'' + r.candId + '\')"><i class="ti ti-refresh"></i>재조율 시작</button>';
+    html += '<button class="btn btn-o btn-sm" disabled style="cursor:default;opacity:0.85;"><i class="ti ti-mail-check"></i>재조율 폼 발송 완료</button>';
     html += '</div>';
     html += '</div>';
   });
@@ -1264,7 +1264,7 @@ function openCandidateCoord(cid, round, isRecoord) {
   if (!cand && typeof RECOORD !== 'undefined') {
     var rec = RECOORD.find(r => r.candId === cid);
     if (rec) {
-      // 조현근(c-cho-r1) 등 r1에서 삭제된 후보를 재조율 모달에서 보여주기 위한 dummy
+      // 조현근(c-cho-r2) 등 CANDIDATES에 없는 후보를 재조율 모달에서 보여주기 위한 dummy
       cand = {
         id: cid,
         name: rec.candName,
