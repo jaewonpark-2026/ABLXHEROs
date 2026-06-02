@@ -255,6 +255,9 @@ a { color: inherit; text-decoration: none; }
 /* ===== 대시보드 카드 그리드 (SCREEN 1&2) ===== */
 .compare-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--info-bg); border: 1px solid #BCD9F0; border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
 .comp-section { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.comp-no-interview { display: flex; align-items: center; gap: 7px; padding: 14px 16px; background: #F5F7FA; border: 1px dashed var(--border); border-radius: 10px; font-size: 12.5px; color: var(--text-2); font-weight: 600; }
+.comp-no-interview i { font-size: 16px; color: var(--text-3); }
+.comp-cell-pending { color: var(--text-3) !important; font-size: 11.5px !important; font-weight: 600 !important; }
 .comp-section-title { font-size: 12px; font-weight: 700; color: var(--text-1); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 .comp-section-title i { color: var(--main-1); font-size: 14px; }
 .comp-section-sub { font-size: 10px; font-weight: 600; color: var(--text-3); background: #F1F5F9; padding: 2px 7px; border-radius: 999px; margin-left: 4px; }
@@ -1265,15 +1268,8 @@ a { color: inherit; text-decoration: none; }
         </table>
       </div>
 
-      <!-- 면접 평가 비교 (면접 본 경우만 표시) -->
-      <div class="comp-section" id="comp-interview-section">
-        <div class="comp-section-title"><i class="ti ti-microphone-2"></i> 면접 평가 <span class="comp-section-sub">면접 진행 데이터 연동</span></div>
-        <table class="comp-score-tbl">
-          <tr><td class="comp-score-lbl">답변 정확도</td><td class="comp-score-v" id="comp-eval-qaa-1">-</td><td class="comp-score-v" id="comp-eval-qaa-2">-</td></tr>
-          <tr><td class="comp-score-lbl">직무 적합성 (면접)</td><td class="comp-score-v" id="comp-eval-job-1">-</td><td class="comp-score-v" id="comp-eval-job-2">-</td></tr>
-          <tr><td class="comp-score-lbl">조직 fit (면접)</td><td class="comp-score-v" id="comp-eval-culture-1">-</td><td class="comp-score-v" id="comp-eval-culture-2">-</td></tr>
-        </table>
-      </div>
+      <!-- 면접 평가 비교 (단계별 동적 렌더: 1차/2차/미진행) -->
+      <div id="comp-interview-section"></div>
     </div>
     <div class="m-ft"><button class="btn btn-o mla" onclick="closeCompareModal()">비교 종료</button></div>
   </div>
@@ -1804,26 +1800,22 @@ function runCompare() {
   // ===== 면접 진행 여부 판단 =====
   // stage 2 = 1차 면접을 통과해 2차 단계로 온 상태이므로 1차 면접 점수가 존재한다.
   // stage 1 = 1차 진행 단계이므로 '완료' 상태일 때만 점수가 존재한다.
-  const hasEval = (c) => {
-    if (!c) return false;
-    if (c.stage >= 2) return true;
-    return c.status === '완료';
-  };
-  const interviewedC1 = hasEval(c1);
-  const interviewedC2 = hasEval(c2);
+  // 면접 단계: 0 = 1차 전, 1 = 1차 완료(2차 전), 2 = 2차까지 완료
+  const phaseC1 = getInterviewPhase(c1);
+  const phaseC2 = getInterviewPhase(c2);
+  const interviewedC1 = phaseC1 >= 1;
+  const interviewedC2 = phaseC2 >= 1;
   const bothInterviewed = interviewedC1 && interviewedC2;
   const eitherInterviewed = interviewedC1 || interviewedC2;
 
   const overallRow = document.getElementById('comp-overall-row');
   const nameRow = document.getElementById('comp-name-row');
-  const interviewSection = document.getElementById('comp-interview-section');
   const preNotice = document.getElementById('comp-pre-interview-notice');
 
   if (bothInterviewed) {
     // 둘 다 면접 봄 — 모든 데이터 표시
     overallRow.style.display = '';
     nameRow.style.display = 'none';
-    interviewSection.classList.remove('hidden');
     preNotice.classList.add('hidden');
 
     document.getElementById('comp-name-1').textContent = c1.name;
@@ -1844,14 +1836,6 @@ function runCompare() {
     preNotice.classList.remove('hidden');
     document.getElementById('comp-name-only-1').textContent = c1.name;
     document.getElementById('comp-name-only-2').textContent = c2.name;
-
-    // 한 쪽이라도 면접 봤으면 면접 평가 섹션 표시 (안 본 사람은 "-")
-    if (eitherInterviewed) {
-      interviewSection.classList.remove('hidden');
-    } else {
-      // 둘 다 면접 전이면 면접 평가 섹션 숨김
-      interviewSection.classList.add('hidden');
-    }
   }
 
   // 서류 모듈 연동 + 역검 점수 (4가지 + 1가지) — 항상 표시
@@ -1872,14 +1856,80 @@ function runCompare() {
   fillCompareRow('industry', c1.fitIndustry, c2.fitIndustry);
   fillCompareRow('apt', c1.aptitudeScore, c2.aptitudeScore);
 
-  // 면접 평가 비교 — 면접 본 사람만 점수, 안 본 사람은 null → "-"
-  if (eitherInterviewed) {
-    fillCompareRow('eval-qaa', interviewedC1 ? c1.evalScores.qaa : null, interviewedC2 ? c2.evalScores.qaa : null);
-    fillCompareRow('eval-job', interviewedC1 ? c1.evalScores.job : null, interviewedC2 ? c2.evalScores.job : null);
-    fillCompareRow('eval-culture', interviewedC1 ? c1.evalScores.culture : null, interviewedC2 ? c2.evalScores.culture : null);
-  }
+  // 면접 평가 비교 — 단계별 동적 렌더 (1차 / 2차 / 미진행)
+  renderCompareInterview(c1, c2, phaseC1, phaseC2);
 
   document.getElementById('modal-compare').classList.add('show');
+}
+
+// 면접 단계 판단: 0 = 1차 전, 1 = 1차 완료(2차 전), 2 = 2차까지 완료
+function getInterviewPhase(c) {
+  if (!c) return 0;
+  if (c.stage >= 2 && c.status === '완료') return 2;
+  if (c.stage >= 2) return 1;
+  if (c.stage === 1 && c.status === '완료') return 1;
+  return 0;
+}
+
+function renderCompareInterview(c1, c2, p1, p2) {
+  const sec = document.getElementById('comp-interview-section');
+  if (!sec) return;
+  const maxPhase = Math.max(p1, p2);
+
+  // 비교 우열 클래스
+  const cmpCls = (a, b) => (a == null || b == null) ? '' : (a > b ? 'higher' : (a < b ? 'lower' : ''));
+  // 점수 셀: 해당 단계까지 진행했으면 점수, 아니면 '미진행'
+  const cell = (reached, val, other) =>
+    reached ? '<td class="comp-score-v ' + cmpCls(val, other) + '">' + (val != null ? val + '점' : '-') + '</td>'
+            : '<td class="comp-score-v comp-cell-pending">미진행</td>';
+
+  // 둘 다 1차 면접 전
+  if (maxPhase === 0) {
+    sec.innerHTML =
+      '<div class="comp-section">'
+      + '<div class="comp-section-title"><i class="ti ti-microphone-2"></i> 면접 평가</div>'
+      + '<div class="comp-no-interview"><i class="ti ti-info-circle"></i> 아직 면접이 진행되지 않은 지원자입니다.</div>'
+      + '</div>';
+    return;
+  }
+
+  const rows = [['답변 정확도', 'qaa'], ['직무 적합성 (면접)', 'job'], ['조직 fit (면접)', 'culture']];
+  let html = '';
+
+  // 1차 면접 평가 (면접 본 후보가 한 명이라도 있으면 표시)
+  html += '<div class="comp-section">'
+    + '<div class="comp-section-title"><i class="ti ti-microphone-2"></i> 1차 면접 평가 <span class="comp-section-sub">면접 진행 데이터 연동</span></div>'
+    + '<table class="comp-score-tbl">';
+  rows.forEach(([lbl, key]) => {
+    const v1 = p1 >= 1 ? c1.evalScores[key] : null;
+    const v2 = p2 >= 1 ? c2.evalScores[key] : null;
+    html += '<tr><td class="comp-score-lbl">' + lbl + '</td>' + cell(p1 >= 1, v1, v2) + cell(p2 >= 1, v2, v1) + '</tr>';
+  });
+  html += '</table></div>';
+
+  // 2차 면접 평가 (2차까지 본 후보가 있을 때만 섹션 추가)
+  if (maxPhase === 2) {
+    html += '<div class="comp-section">'
+      + '<div class="comp-section-title"><i class="ti ti-user-star"></i> 2차 면접 평가 <span class="comp-section-sub">임원 면접 데이터 연동</span></div>'
+      + '<table class="comp-score-tbl">';
+    rows.forEach(([lbl, key]) => {
+      const s1 = (p1 === 2 && c1.evalScores2) ? c1.evalScores2[key] : null;
+      const s2 = (p2 === 2 && c2.evalScores2) ? c2.evalScores2[key] : null;
+      html += '<tr><td class="comp-score-lbl">' + lbl + '</td>' + cell(p1 === 2, s1, s2) + cell(p2 === 2, s2, s1) + '</tr>';
+    });
+    html += '</table></div>';
+  }
+
+  // 한쪽만 1차 전인 경우 안내
+  const pending = [];
+  if (p1 === 0) pending.push(c1.name);
+  if (p2 === 0) pending.push(c2.name);
+  if (pending.length) {
+    html += '<div class="comp-no-interview" style="margin-top:8px;"><i class="ti ti-info-circle"></i> '
+      + pending.join(', ') + ' 지원자는 아직 면접이 진행되지 않은 지원자입니다.</div>';
+  }
+
+  sec.innerHTML = html;
 }
 function closeCompareModal() { document.getElementById('modal-compare').classList.remove('show'); }
 
