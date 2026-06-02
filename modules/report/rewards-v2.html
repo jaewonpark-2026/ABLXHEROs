@@ -104,7 +104,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .btn-secondary { padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; color: var(--text-2); font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
 .btn-secondary:hover { border-color: var(--main-1); color: var(--main-1); }
 
-/* ===== 2. 보상 재구성 엔진 ===== */
+/* ===== 2. 처우협의 기초 자료 ===== */
 .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
 .upload-card { border: 1.5px dashed var(--border); border-radius: 12px; padding: 16px; background: #FAFBFD; position: relative; transition: all 0.18s; }
 .upload-card.completed { border-style: solid; border-color: var(--ok); background: #F6FCF9; }
@@ -346,7 +346,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
       <div class="page-header">
         <div class="crumb">채용 데이터 · 경력직 처우협의</div>
         <h1 class="page-title">처우 협의 데이터 <span class="v2-badge">v2 · 시연용</span></h1>
-        <p class="page-sub">자료 기반 보상 재구성 · 다층 리스크 · What-If 시뮬레이션을 통한 협상 의사결정 지원</p>
+        <p class="page-sub">처우협의 기초 자료 · 다층 리스크 · What-If 시뮬레이션을 통한 협상 의사결정 지원</p>
       </div>
 
       <!-- ============ [1] 지원자 정보 ============ -->
@@ -369,51 +369,30 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         </div>
       </section>
 
-      <!-- ============ [2] 보상 재구성 엔진 (NEW) ============ -->
+      <!-- ============ [2] 처우협의 기초 자료 ============ -->
       <section class="section">
         <div class="section-head">
-          <div class="section-title">보상 재구성 엔진 <span class="new-badge">NEW</span></div>
-          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">자료 기반 표준 환산 연봉 산출</div>
+          <div class="section-title">처우협의 기초 자료</div>
+          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">후보자가 제출·검토한 자료</div>
         </div>
 
         <div class="upload-grid">
           <div class="upload-card completed">
+            <div class="uc-ic"><i class="ti ti-file-text"></i></div>
+            <div class="uc-name">직전 3개월 임금명세서</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 검토 완료</div>
+          </div>
+          <div class="upload-card completed">
             <div class="uc-ic"><i class="ti ti-file-certificate"></i></div>
-            <div class="uc-name">원천징수영수증</div>
-            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 추출 완료</div>
-            <div class="uc-extracted">2024년 귀속 · 총지급액 6,500만원</div>
+            <div class="uc-name">직전 2개년도 원천징수영수증</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 검토 완료</div>
           </div>
           <div class="upload-card completed">
             <div class="uc-ic"><i class="ti ti-coin"></i></div>
             <div class="uc-name">상여금 지급 내역서</div>
-            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 추출 완료</div>
-            <div class="uc-extracted">3년 평균 변동상여 + 고정상여 합산 확인</div>
-          </div>
-          <div class="upload-card completed">
-            <div class="uc-ic"><i class="ti ti-target"></i></div>
-            <div class="uc-name">희망 연봉</div>
-            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 입력 완료</div>
-            <div class="uc-extracted">7,500만원 (본인 진술, 면접 시 확인)</div>
+            <div class="uc-status"><i class="ti ti-circle-check-filled"></i> 검토 완료</div>
           </div>
         </div>
-
-        <table class="reconstr-table">
-          <thead>
-            <tr>
-              <th>항목</th>
-              <th style="text-align:right;">금액</th>
-              <th style="text-align:center;width:110px;">신뢰도</th>
-              <th style="text-align:center;width:36px;"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="total">
-              <td>표준 환산 연봉</td>
-              <td class="amount">6,500만원</td>
-              <td colspan="2"></td>
-            </tr>
-          </tbody>
-        </table>
       </section>
 
       <!-- ============ [3] 내부 형평성 + 다층 리스크 (v2 강화) ============ -->
@@ -567,7 +546,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
       <!-- ============ [7] AI 기안 메모 ============ -->
       <section class="section">
         <div class="section-head"><div class="section-title">최종 협상 전략 + AI 기안 메모</div></div>
-        <textarea class="memo-area" id="ai-memo" placeholder="AI 기안 메모를 작성하세요.">대리급 처우 협의 케이스. 후보자 기존 연봉 6,500만원 · 희망 7,500만원 대비 회사 본 오퍼 7,200만원 제안 (앵커링 가이드 7,000~7,200 범위 상단 진입). 표준 환산 연봉 기준 +10.8% 인상. 후보자 희망 7,500만원과의 300만원 차이는 (1) 자기계발 지원금 150만원, (2) Cross-functional PM 권한 + 사내 강사 권한 + Pricing 풀 오너십 등 비금전 가치로 보완 제안. 합류 후 6개월차 처우 점검 1회 예정. 본부장(상품본부) 의사결정 대기.</textarea>
+        <textarea class="memo-area" id="ai-memo" placeholder="AI 기안 메모를 작성하세요.">대리급 처우 협의 케이스. 후보자 기존 연봉 6,500만원 · 희망 7,500만원 대비 회사 본 오퍼 7,200만원 제안 (앵커링 가이드 7,000~7,200 범위 상단 진입). 기존 연봉 6,500만원 기준 +10.8% 인상. 후보자 희망 7,500만원과의 300만원 차이는 (1) 자기계발 지원금 150만원, (2) Cross-functional PM 권한 + 사내 강사 권한 + Pricing 풀 오너십 등 비금전 가치로 보완 제안. 합류 후 6개월차 처우 점검 1회 예정. 본부장(상품본부) 의사결정 대기.</textarea>
         <div class="memo-actions">
           <button class="btn-secondary" onclick="showToast('메모가 저장되었습니다.', 'success')"><i class="ti ti-download"></i> 저장</button>
           <button class="btn-p" onclick="showToast('승인 요청이 발송되었습니다.', 'success')"><i class="ti ti-send"></i> 본부장 승인 요청</button>
@@ -751,41 +730,42 @@ function updateRiskCards(val) {
   paybandMarker.style.left = pct + '%';
   offerDisplay.innerHTML = val.toLocaleString() + '<small>만원</small>';
 
-  // 4개 카드 상태 계산 (Mock 로직)
-  let r1, r2, r3, r4;
-  if (val <= 5400) {
-    r1 = { lv: 'low', desc: '동일 직급 평균보다 낮음', sub: '내부 형평성 안전' };
-    r2 = { lv: 'low', desc: '밴드 상단까지 +20% 여유', sub: '향후 인상 폭 충분' };
-    r3 = { lv: 'low', desc: '재직자 대비 낮은 오퍼', sub: '역전 리스크 없음' };
-    r4 = { lv: 'high', desc: '시장 대비 약 -8% 낮음', sub: '★ 이탈 가능성 큼' };
-  } else if (val <= 5800) {
-    r1 = { lv: 'medium', desc: '동일 직급 평균 수준', sub: '균형 잡힌 구간' };
-    r2 = { lv: 'medium', desc: '밴드 상단까지 +12% 여유', sub: '인상 폭 양호' };
-    r3 = { lv: 'medium', desc: '재직자 2명이 본 오퍼 이하', sub: '경미한 역전 가능성' };
-    r4 = { lv: 'medium', desc: '시장 평균 대비 약 +3%', sub: '경쟁력 보통' };
-  } else if (val <= 6100) {
-    r1 = { lv: 'high', desc: '동일 직급 12명 중 3명보다 높음', sub: '상품본부 대리 기준' };
-    r2 = { lv: 'medium', desc: '밴드 상단까지 +5% 여유', sub: '차기 정기인상 시점 기준' };
-    r3 = { lv: 'high', desc: '재직자 5명이 본 오퍼보다 낮음', sub: '→ 정기인상 시 추가 조정 필요' };
-    r4 = { lv: 'low', desc: '현재 대비 +20% 인상으로 충분', sub: '시장 평균 대비 경쟁력 확보' };
+  // 페이밴드 기준: 하한 6,500 / Q1 7,000 / 중간 7,200 / Q3 7,500 / 상한 8,000
+  let r2, r3;
+
+  // ② 정기인상 여력: 밴드 상한(8,000)까지 남은 여유. 오퍼가 높을수록 여력 적음
+  const headroom = Math.round(((8000 - val) / 8000) * 100); // 상한까지 % 여유
+  if (val <= 7000) {
+    r2 = { lv: 'low', desc: '밴드 상한까지 +' + headroom + '% 여유', sub: '향후 정기인상 여력 충분' };
+  } else if (val <= 7500) {
+    r2 = { lv: 'medium', desc: '밴드 상한까지 +' + headroom + '% 여유', sub: '차기 정기인상 시점 기준' };
   } else {
-    r1 = { lv: 'high', desc: '동일 직급 평균을 크게 상회', sub: '★ 내부 위화감 가능성' };
-    r2 = { lv: 'high', desc: '밴드 상단 진입 또는 초과', sub: '추가 인상 여력 부족' };
-    r3 = { lv: 'high', desc: '재직자 8명 이상 역전', sub: '★ 즉시 조정 권장' };
-    r4 = { lv: 'low', desc: '시장 상위 10% 진입', sub: '경쟁력 매우 우수' };
+    r2 = { lv: 'high', desc: '밴드 상한까지 +' + headroom + '% (상단 진입)', sub: '추가 인상 여력 부족' };
   }
 
-  const cards = [
-    { id: 1, ...r1 }, { id: 2, ...r2 }, { id: 3, ...r3 }, { id: 4, ...r4 }
-  ];
+  // ③ 연봉 역전 리스크: 오퍼가 높을수록 본 오퍼보다 낮은 재직자 수 증가
+  // 6,500→0명, 7,000→2명, 7,200→5명, 7,500→8명, 8,000→12명 (선형 근사)
+  const invertN = Math.max(0, Math.round((val - 6500) / 125));
+  if (val <= 7000) {
+    r3 = { lv: 'low', desc: '재직자 ' + invertN + '명이 본 오퍼보다 낮음', sub: '역전 리스크 낮음' };
+  } else if (val <= 7500) {
+    r3 = { lv: 'medium', desc: '재직자 ' + invertN + '명이 본 오퍼보다 낮음', sub: '경미한 역전 가능성' };
+  } else {
+    r3 = { lv: 'high', desc: '재직자 ' + invertN + '명이 본 오퍼보다 낮음', sub: '→ 정기인상 시 추가 조정 필요' };
+  }
+
+  const cards = [{ id: 2, ...r2 }, { id: 3, ...r3 }];
   cards.forEach(c => {
     const card = document.getElementById('risk-card-' + c.id);
     const lvl = document.getElementById('rl-' + c.id);
+    if (!card || !lvl) return;
     card.className = 'risk-card ' + c.lv;
     lvl.className = 'risk-level ' + c.lv;
     lvl.textContent = c.lv.toUpperCase();
-    document.getElementById('rd-' + c.id).textContent = c.desc;
-    document.getElementById('rs-' + c.id).textContent = c.sub;
+    const rd = document.getElementById('rd-' + c.id);
+    const rs = document.getElementById('rs-' + c.id);
+    if (rd) rd.textContent = c.desc;
+    if (rs) rs.textContent = c.sub;
   });
 }
 
