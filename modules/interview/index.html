@@ -718,16 +718,16 @@ a { color: inherit; text-decoration: none; }
         <button type="button" class="posting-tab active" id="posting-tab-newgrad" onclick="switchPosting('newgrad')">
           <span class="pt-ic"><i class="ti ti-school"></i></span>
           <div>
-            <div class="pt-name">2026 상반기 신입 채용</div>
-            <div class="pt-sub">신입 공채 · 면접 진행 중인 지원자</div>
+            <div class="pt-name">디지털IT기획팀 신입(AA) 채용</div>
+            <div class="pt-sub">접수기간 2026.05.19 ~ 2026.05.26</div>
           </div>
           <span class="pt-count" id="posting-count-newgrad">0명</span>
         </button>
         <button type="button" class="posting-tab" id="posting-tab-career" onclick="switchPosting('career')">
           <span class="pt-ic"><i class="ti ti-briefcase"></i></span>
           <div>
-            <div class="pt-name">2026 상반기 경력 채용</div>
-            <div class="pt-sub">경력 공채 · 면접 진행 중인 지원자</div>
+            <div class="pt-name">상품본부 상품기획팀 경력직 채용</div>
+            <div class="pt-sub">접수기간 2026.05.04 ~ 2026.05.17</div>
           </div>
           <span class="pt-count" id="posting-count-career">0명</span>
         </button>
@@ -1405,7 +1405,7 @@ function switchMainView(viewType) {
   // 라운드 카운트 갱신
   updatePostingAndRoundCounts();
 
-  const postingLabel = posting === 'newgrad' ? '2026 상반기 신입 채용' : '2026 상반기 경력 채용';
+  const postingLabel = posting === 'newgrad' ? '디지털IT기획팀 신입(AA) 채용' : '상품본부 상품기획팀 경력직 채용';
   let roundLabel, subLabel;
   if (currentStageFilter === 'all') {
     roundLabel = '면접 진행 지원자 전체';
