@@ -304,10 +304,11 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 <body>
 
 <div class="layout">
+<script>try{if(localStorage.getItem('sidebarCollapsed')==='true'){document.querySelector('.layout').classList.add('collapsed');}}catch(e){}</script>
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+    <button class="sidebar-toggle" onclick="(function(){var l=document.querySelector('.layout');l.classList.toggle('collapsed');try{localStorage.setItem('sidebarCollapsed',l.classList.contains('collapsed'))}catch(e){}})()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
     <a class="brand" href="../../dashboard-hr.html">
       <div class="brand-name"><span class="hir">Hir</span><span class="abl">ABL</span><span class="e">e</span></div>
       <div class="brand-sub">ABL × HEROs</div>
@@ -334,7 +335,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹" onerror="this.style.display='none'">
       </div>
       <div class="user-info">
-        <span class="user-badge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span class="user-badge"><i class="ti ti-user"></i> 인사팀 하유림</span>
         <span id="userId">사번 -</span>
         <button class="logout-btn" onclick="logout()">로그아웃</button>
       </div>
