@@ -41,8 +41,9 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .brand-name .hir, .brand-name .e { background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .brand-name .abl { background: linear-gradient(135deg, #FF8B8B 0%, #F08080 50%, #E85555 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-style: italic; font-weight: 800; padding: 0 1px; }
 .brand-sub { font-size: 11px; opacity: 0.65; letter-spacing: 0.4px; margin-top: 4px; }
-.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; }
-.sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 32px; height: 32px; border-radius: 9px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 5; transition: all 0.2s; backdrop-filter: blur(10px); box-shadow: 0 4px 12px -2px rgba(0,0,0,0.15); }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.28); border-color: rgba(232, 85, 85, 0.5); color: #FFE0E0; transform: scale(1.08); box-shadow: 0 6px 16px -2px rgba(214, 62, 62, 0.25); }
+.sidebar-toggle:active { transform: scale(0.95); }
 .sidebar-toggle i { font-size: 16px; }
 
 .nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
@@ -150,9 +151,10 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 <body>
 
 <div class="layout">
+<script>try{if(localStorage.getItem('sidebarCollapsed')==='true'){document.querySelector('.layout').classList.add('collapsed');}}catch(e){}</script>
 
   <div class="sidebar">
-    <button class="sidebar-toggle" onclick="document.querySelector('.layout').classList.toggle('collapsed')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+    <button class="sidebar-toggle" onclick="(function(){var l=document.querySelector('.layout');l.classList.toggle('collapsed');try{localStorage.setItem('sidebarCollapsed',l.classList.contains('collapsed'))}catch(e){}})()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
     <a class="brand" id="brandLink" href="../../dashboard-hr.html">
       <div class="brand-name"><span class="hir">Hir</span><span class="abl">ABL</span><span class="e">e</span></div>
       <div class="brand-sub">ABL × HEROs</div>
@@ -169,7 +171,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
         <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
       </div>
       <div class="user-info">
-        <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> HR 담당자</span>
+        <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> 인사팀 하유림</span>
         <span id="userId">사번 -</span>
         <button class="logout-btn" onclick="location.href='demo.html'" style="background:var(--grad-blue); color:white; border:none;" title="좌우 분할 시연 화면으로 이동"><i class="ti ti-presentation" style="font-size:13px; vertical-align:-2px;"></i> 시연 모드</button>
         <button class="logout-btn" onclick="logout()">로그아웃</button>
