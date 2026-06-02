@@ -238,6 +238,13 @@ a { color: inherit; text-decoration: none; }
 .career-deep { display: none; gap: 8px; margin-top: 14px; }
 .career-deep.show { display: grid; }
 .career-summary-card { border: 1px solid var(--border); border-radius: 10px; background: linear-gradient(135deg, #F8FBFE 0%, #FFFFFF 100%); padding: 14px 16px; box-shadow: 0 2px 8px -4px rgba(0,103,172,0.08); }
+.career-review-list { display: grid; gap: 8px; margin-top: 10px; }
+.career-review-block { display: grid; gap: 6px; }
+.career-card { border: 1px solid var(--border); border-radius: 8px; background: white; padding: 11px 13px; text-align: left; display: grid; gap: 5px; cursor: pointer; transition: .15s; width: 100%; }
+.career-card:hover, .career-card.active { border-color: var(--main-1); background: linear-gradient(135deg, #F5F9FD, #ECF4FB); }
+.career-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.career-card-head strong { font-size: 13px; color: var(--text-1); }
+.career-card p { color: var(--text-3); font-size: 11px; line-height: 1.5; }
 .career-summary-intro { display: flex; align-items: flex-start; gap: 8px; color: var(--main-1); font-size: 12px; line-height: 1.6; font-weight: 700; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(0,103,172,0.18); }
 .career-summary-intro svg { color: var(--main-1); margin-top: 2px; flex-shrink: 0; }
 .career-summary-intro span { color: var(--text-1); font-weight: 600; }
@@ -675,7 +682,31 @@ function getScreening(c) {
       { label: '경력', value: c.exp + ' · ' + c.role },
       { label: '핵심 경험', value: (c.tags || []).join(' · ') },
       { label: '요약', value: c.summary || '제출된 이력서를 기반으로 한 종합 요약입니다.' }
-    ]
+    ],
+    reviews: {
+      specificity: {
+        key: 'specificity',
+        label: '수행업무 구체성',
+        short: '수행한 업무가 정량 수치·방법론으로 구체적으로 기술되었는지 검토합니다.',
+        score: 90,
+        evidence: c.id === 'ABL-2026-0500'
+          ? '해약률 가정을 자사 5년 데이터와 업계 공시 데이터를 결합한 시나리오별 매트릭스로 구축했습니다.\n계리부서와 6회 협의를 거쳐 보수·기준·낙관 3종 시나리오로 합의했습니다.\nIFRS17 CSM 기반으로 상품별 수익성을 재산정하여 무배당종신 사업비를 12% 절감했습니다.\nGA채널 정기보험 출시 6개월 만에 매출 1위를 달성했습니다.'
+          : '수행한 업무를 구체적인 수치와 방법론으로 기술하였습니다.',
+        keywords: ['해약률 시나리오 매트릭스', 'CSM 수익성 재산정', '사업비 12% 절감', 'GA채널 매출 1위'],
+        highlight: ['specificity', 'career-task']
+      },
+      relevance: {
+        key: 'relevance',
+        label: '직무 연결성',
+        short: '보유 경력·수행업무가 지원 직무(상품기획)와 얼마나 직접 연결되는지 검토합니다.',
+        score: 93,
+        evidence: c.id === 'ABL-2026-0500'
+          ? '상품기획 직무를 시장·고객 니즈 분석을 통한 상품 구체화 업무로 정확히 이해하고 있습니다.\n변액유니버셜·무배당종신·GA채널 정기보험 등 신상품 3건을 직접 런칭한 경험이 지원 직무와 직접 연결됩니다.\nK-ICS 위험률·할인율 가정 재검토 프로젝트를 리드하고 사내 강사를 맡은 경험으로 직무 전문성의 전이 가능성이 높습니다.'
+          : '보유 경력이 지원 직무와 연결되는 지점을 확인하였습니다.',
+        keywords: ['상품기획 직무 이해', '신상품 3건 런칭', 'K-ICS 프로젝트 리드', '직무 전문성 전이'],
+        highlight: ['job-content', 'career-transfer']
+      }
+    }
   };
 
   return { primary, fit, career };
@@ -881,6 +912,17 @@ function renderScreening(c) {
         </div>
         <div class="career-summary-body">${items}</div>
       </article>
+      <div class="career-review-list">
+        ${Object.values(activeScreening.career.reviews).map(rv => `
+          <div class="career-review-block">
+            <button class="career-card" data-key="${rv.key}" type="button">
+              <div class="career-card-head"><strong>${rv.label}</strong><span class="overall-score">${rv.score}<small>점</small></span></div>
+              <p>${escapeHtml(rv.short)}</p>
+            </button>
+            <div class="evidence-box inline-evidence career-evidence-slot" id="careerEvidence-${rv.key}" style="display:none"></div>
+          </div>
+        `).join('')}
+      </div>
     </section>`;
   }
 
@@ -1078,7 +1120,8 @@ function showSubFitEvidence(groupKey, subKey) {
 
 function showCareerEvidence(key) {
   clearResumeHighlights();
-  const item = activeScreening.career[key];
+  const item = activeScreening.career.reviews[key];
+  if (!item) return;
   document.querySelectorAll('.career-card').forEach(card => card.classList.toggle('active', card.getAttribute('data-key') === key));
   document.querySelectorAll('.career-evidence-slot').forEach(s => { s.style.display = 'none'; s.innerHTML = ''; });
   const target = document.getElementById('careerEvidence-' + key);
