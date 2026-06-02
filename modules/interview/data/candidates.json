@@ -311,7 +311,12 @@
       "fitCulture": 85,
       "fitJob": 87,
       "fitIndustry": 87,
-      "aptitudeScore": 88
+      "aptitudeScore": 88,
+      "evalScores2": {
+        "qaa": 93,
+        "job": 96,
+        "culture": 92
+      }
     },
     {
       "id": 5,
@@ -551,7 +556,12 @@
       "fitCulture": 87,
       "fitJob": 94,
       "fitIndustry": 88,
-      "aptitudeScore": 94
+      "aptitudeScore": 94,
+      "evalScores2": {
+        "qaa": 95,
+        "job": 95,
+        "culture": 94
+      }
     },
     {
       "id": 11,
@@ -1140,7 +1150,12 @@
       "fitCulture": 65,
       "fitJob": 65,
       "fitIndustry": 65,
-      "aptitudeScore": 75
+      "aptitudeScore": 75,
+      "evalScores2": {
+        "qaa": 70,
+        "job": 66,
+        "culture": 72
+      }
     },
     {
       "id": 26,
