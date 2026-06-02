@@ -101,7 +101,12 @@
       "interviewers": [
         "박성준 상무"
       ],
-      "interviewDate": "2026.06.03 15:00 · 본사 12층 임원실"
+      "interviewDate": "2026.06.03 15:00 · 본사 12층 임원실",
+      "evalScores2": {
+        "qaa": 90,
+        "job": 95,
+        "culture": 91
+      }
     },
     {
       "id": 31,
