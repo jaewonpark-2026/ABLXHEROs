@@ -2680,6 +2680,17 @@ a { color: inherit; text-decoration: none; }
     gap: 8px;
   }
 
+  .cp-fit-card { border: 1px solid #E2E8F0; border-radius: 10px; background: #fff; padding: 12px 14px; }
+  .cp-fit-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .cp-fit-label { font-size: 13px; font-weight: 700; color: #1E293B; }
+  .cp-fit-score { font-size: 18px; font-weight: 800; color: #273A92; }
+  .cp-fit-score small { font-size: 11px; font-weight: 600; color: #94A3B8; margin-left: 1px; }
+  .cp-fit-score.high { color: #2DAE7B; } .cp-fit-score.mid { color: #273A92; } .cp-fit-score.low { color: #E5446D; }
+  .cp-fit-bar { height: 6px; border-radius: 99px; background: #EEF2F7; overflow: hidden; }
+  .cp-fit-bar i { display: block; height: 100%; border-radius: 99px; background: #273A92; transition: width .4s ease; }
+  .cp-fit-bar i.high { background: #2DAE7B; } .cp-fit-bar i.mid { background: #273A92; } .cp-fit-bar i.low { background: #E5446D; }
+  .cp-fit-desc { margin: 8px 0 0; font-size: 11px; line-height: 1.55; color: #64748B; }
+
   .cp-interviewer {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -4239,7 +4250,7 @@ a { color: inherit; text-decoration: none; }
       <section class="section">
         <div class="section-head">
           <span class="section-num">4</span>
-          <h2 class="section-title">업무 부여 로드맵 (Onboarding)</h2>
+          <h2 class="section-title">온보딩 가이드</h2>
         </div>
         <p class="section-desc">상품본부 상품기획팀 합류 후 3개월 권장 흐름입니다. 대리 직급 특성상 업무 적응보다 조직·관계 적응과 첫 오너십 부여 시점에 비중을 두었습니다.</p>
 
@@ -4660,7 +4671,7 @@ a { color: inherit; text-decoration: none; }
       <section class="section">
         <div class="section-head">
           <span class="section-num">4</span>
-          <h2 class="section-title">업무 부여 로드맵 (Onboarding)</h2>
+          <h2 class="section-title">온보딩 가이드</h2>
         </div>
         <p class="section-desc">디지털 IT 기획팀 합류 후 6개월 권장 흐름입니다. 신입 입사자 특성상 학습·관계 형성·작은 완결 사이클의 반복에 비중을 두었습니다.</p>
 
@@ -5595,8 +5606,8 @@ a { color: inherit; text-decoration: none; }
               </td>
             </tr>
 
-            <!-- ROW 12 : 상품기획 / 컨택 중 (조현근과 같이 면접 본 경력 후보) -->
-            <tr class="candidate-row" data-order="4" data-status="contact" data-dept="상품기획" data-candidate-id="c012" onclick="openCandidatePanel('c012')">
+            <!-- ROW 12 : 상품기획 / 신규 리드 (최상단 고정) -->
+            <tr class="candidate-row" data-order="0" data-status="new" data-dept="상품기획" data-candidate-id="c012" onclick="openCandidatePanel('c012')">
               <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
               <td>
                 <div class="candidate-cell">
@@ -5608,11 +5619,11 @@ a { color: inherit; text-decoration: none; }
                 </div>
               </td>
               <td>
-                <div class="status-line"><span class="status-dot contact"></span>2차 면접 대기</div>
-                <div class="status-meta">조현근 후보와 동일 자리 경합 중</div>
+                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
+                <div class="status-meta">상품기획 직무 신규 리드</div>
               </td>
-              <td><span class="stage-pill outreach">2차 면접 전</span></td>
-              <td class="task-cell">2차 임원 면접 대기</td>
+              <td><span class="stage-pill new">신규</span></td>
+              <td class="task-cell">신규 리드 — 컨택 검토</td>
               <td class="contact-cell">010-3924-5712</td>
               <td class="career-cell">
                 <div class="role">상품기획 매니저</div>
@@ -5627,7 +5638,7 @@ a { color: inherit; text-decoration: none; }
                 </div>
               </td>
               <td class="note-cell">
-                <span class="note-pin recommend">2순위</span>변액·종신 도메인 기본기 견고. 조현근 후보와 동일 자리 경합 중 — 신상품 직접 리드 경험은 다소 보강 필요.
+                <span class="note-pin recommend">2순위</span>변액·종신 도메인 기본기 견고. 신상품 직접 리드 경험은 다소 보강 필요.
               </td>
             </tr>
 
@@ -5812,14 +5823,6 @@ a { color: inherit; text-decoration: none; }
       <span class="key">지원 포지션</span>
       <span id="cp-applied">2025 상반기 마케팅 시니어</span>
     </div>
-    <div class="cp-ats-actions">
-      <button class="cp-ats-btn" onclick="showToast('ATS 지원서 원본 페이지는 준비 중입니다 (ATS 담당 팀원 개발 중)', 'info')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        지원서 원본 보기
-      </button>
-    </div>
   </header>
 
   <div class="cp-body">
@@ -5859,7 +5862,7 @@ a { color: inherit; text-decoration: none; }
     </section>
 
     <section class="cp-section">
-      <h3 class="cp-section-title">면접관별 평가 점수</h3>
+      <h3 class="cp-section-title">적합도 검토</h3>
       <div class="cp-interviewers" id="cp-interviewers"></div>
     </section>
 
@@ -6143,6 +6146,7 @@ function showToast(message, type) {
         { stage: '2차 실무', name: '강민철 본부장', dept: '상품본부',           score: 92 },
         { stage: '2차 면접', name: '최진영 상무', dept: '상품총괄',            score: 89 }
       ],
+      fitScores: { org: 88, job: 90, industry: 86 },
       comments: [
         { who: '송지호 팀장', dept: '상품기획팀', stage: '1차 실무', text: '변액보험 시장 분석과 채널별 상품 포지셔닝 전략을 구체적인 KPI 단위까지 설명. 즉시 책임급 업무 수행 가능.' },
         { who: '강민철 본부장', dept: '상품본부', stage: '2차 실무', text: '경쟁사 종신·CI 상품 분석이 매우 정밀. 합류 시 신상품 개발 사이클을 2개월 이상 단축시킬 수 있을 것으로 판단.' },
@@ -6374,35 +6378,32 @@ function showToast(message, type) {
     const deltas = [3, -2, -1];
     return labels.map((l, i) => ({ label: l, score: Math.max(45, Math.min(100, score + deltas[i])) }));
   }
-  function renderInterviewers(interviewers, comments) {
-    comments = comments || [];
-    return interviewers.map(iv => {
-      const cm = comments.find(c => c.who === iv.name);
-      const bars = ivDimensions(iv.stage, iv.score).map(d => `
-        <div class="iv-dim">
-          <span class="iv-dim-label">${d.label}</span>
-          <span class="iv-dim-bar"><i style="width:${d.score}%"></i></span>
-          <span class="iv-dim-score">${d.score}</span>
-        </div>`).join('');
-      const opinion = cm
-        ? `<div class="iv-opinion">“${cm.text}”</div>`
-        : '';
+  // 적합도 검토 (조직/직무/산업) — 자소서 분석 2차 적합도 검토와 동일 구성
+  function deriveFitScores(c) {
+    if (c.fitScores) return c.fitScores;
+    const scores = (c.interviewers || []).map(i => i.score).filter(s => s != null);
+    const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 80;
+    const clamp = v => Math.max(0, Math.min(100, v));
+    return { org: clamp(avg - 1), job: clamp(avg + 2), industry: clamp(avg - 3) };
+  }
+
+  function renderInterviewers(interviewers, comments, c) {
+    const fit = deriveFitScores(c || {});
+    const items = [
+      { key: 'org', label: '조직 적합도', score: fit.org, short: 'ABL의 비전·인재상·조직문화 기준과 지원자 맥락의 연결성을 종합 검토합니다.' },
+      { key: 'job', label: '직무 적합도', score: fit.job, short: '채용공고·직무기술서의 수행 내용·태도·필요 지식·기술과 지원자 경험의 연관성을 검토합니다.' },
+      { key: 'industry', label: '산업 적합도', score: fit.industry, short: '보험·금융 산업에 대한 이해도와 도메인 전문성을 검토합니다.' }
+    ];
+    return items.map(it => {
+      const cls = it.score >= 90 ? 'high' : it.score >= 80 ? 'mid' : 'low';
       return `
-      <div class="cp-interviewer" onclick="toggleInterviewer(this)">
-        <div>
-          <div class="iv-stage">${iv.stage}</div>
-          <div class="iv-person">${iv.name}</div>
-          <div class="iv-dept">${iv.dept}</div>
+      <div class="cp-fit-card">
+        <div class="cp-fit-head">
+          <span class="cp-fit-label">${it.label}</span>
+          <span class="cp-fit-score ${cls}">${it.score}<small>/100</small></span>
         </div>
-        <div class="iv-right">
-          <div class="iv-score"><span class="num">${iv.score}</span><span class="denom">/100</span></div>
-          <span class="iv-chevron">⌄</span>
-        </div>
-        <div class="iv-detail">
-          <div class="iv-detail-head">세부 평가 항목</div>
-          ${bars}
-          ${opinion}
-        </div>
+        <div class="cp-fit-bar"><i style="width:${it.score}%" class="${cls}"></i></div>
+        <p class="cp-fit-desc">${it.short}</p>
       </div>`;
     }).join('');
   }
@@ -6438,7 +6439,7 @@ function showToast(message, type) {
     document.getElementById('cp-evaluator-count').textContent = c.interviewers.length + '명';
 
     document.getElementById('cp-funnel').innerHTML = renderFunnel(c.funnel);
-    document.getElementById('cp-interviewers').innerHTML = renderInterviewers(c.interviewers, c.comments);
+    document.getElementById('cp-interviewers').innerHTML = renderInterviewers(c.interviewers, c.comments, c);
     document.getElementById('cp-comments').innerHTML = renderComments(c.comments);
     renderChecklist(id);
 
@@ -7321,8 +7322,8 @@ const Leadtime = (function() {
           painpoint: '"서류 심사 또한 저희가 일일이 다 하나씩 자소서를 읽어서 평가 기준에 부합하는지 순서를 세우고 진행을 하고 있고요."',
           ratio: "85%", ratioVal: 85,
           causes: [
-            "지원서 및 자소서 전체 문항을 인사담당자가 육안으로 수기 평가하여 초기 분류 지연 발생",
-            "기본 결격 사유 및 중복 지원자 전수 수기 체크에 공수가 가중됨"
+            "지원서·자소서 전체 문항을 인사담당자가 육안으로 수기 평가하기 때문으로 예상됩니다",
+            "기본 결격 사유와 중복 지원자를 전수 수기로 점검하기 때문으로 예상됩니다"
           ],
           solution: "AI 서류 스크리닝 보조 솔루션으로 지원 자격 충족 여부 및 키워드 연관성 점수를 실시간 자동 분류하여 검토 부담을 경감합니다."
         },
@@ -7331,8 +7332,8 @@ const Leadtime = (function() {
           painpoint: '"인사팀에서 서류 심사를 한 후에 합격 여부를 확인한 후 2차로 담당 해당 부서에 해당 서류를 전달합니다."',
           ratio: "75%", ratioVal: 75,
           causes: [
-            "인사팀 합격자 명단을 이메일·엑셀 등 비정형 수단으로 해당 부서 부서장에 전달하여 발생하는 병목",
-            "해당 부서 담당자들의 부서 내 고유 업무 우선순위로 이력서 검토·회신 기한 장기화"
+            "인사팀 합격자 명단을 이메일·엑셀 등 비정형 수단으로 해당 부서에 전달하기 때문으로 예상됩니다",
+            "해당 부서 담당자의 고유 업무 우선순위로 이력서 검토·회신이 지연되기 때문으로 예상됩니다"
           ],
           solution: "채용 시스템 내 해당 부서 평가 보조 대시보드 연동 및 검토 기한 타이머 제도를 탑재합니다."
         },
@@ -7341,8 +7342,8 @@ const Leadtime = (function() {
           painpoint: '"서류 합격 안내 후 역량 검사를 진행하고 다시 한번 합격 여부를 판단합니다."',
           ratio: "40%", ratioVal: 40,
           causes: [
-            "합격 통보 후 역량검사 응시를 위한 이메일·알림톡 수동 링크 발송",
-            "미응시자에 대한 주기적인 유선·메일 리마인드 작업 수기 진행"
+            "합격 통보 후 역량검사 링크를 이메일·알림톡으로 수동 발송하기 때문으로 예상됩니다",
+            "미응시자에게 유선·메일 리마인드를 수기로 진행하기 때문으로 예상됩니다"
           ],
           solution: "합격 상태 변경 시 역량검사 링크 자동 발송 및 미응시자 리마인드 톡 스케줄링을 도입합니다."
         },
@@ -7351,8 +7352,8 @@ const Leadtime = (function() {
           painpoint: '"면접관과 면접자 일정 조율 같은 부분도 다 수기로 하나씩 메일을 확인받아서 진행하고 있습니다."',
           ratio: "95%", ratioVal: 95,
           causes: [
-            "면접관들의 부서 캘린더를 수기로 일일이 대조하고 후보자와 통화하여 가용 시간 매칭",
-            "일정 취소·변경 발생 시 처음부터 다시 조율하는 무한 왕복 병목"
+            "면접관 부서 캘린더를 수기로 대조하고 후보자와 통화해 가용 시간을 매칭하기 때문으로 예상됩니다",
+            "일정 취소·변경 시 처음부터 다시 조율하기 때문으로 예상됩니다"
           ],
           solution: "AI 면접 일정 조율 링크를 제공해 면접관 공유 캘린더와 실시간 바인딩 후 빈 슬롯을 자동 확보합니다."
         },
@@ -7361,8 +7362,8 @@ const Leadtime = (function() {
           painpoint: '"단계별로 이제 면접관과 면접자 일정을 별도로 다 수기로 조정해야 되는 상황들이 있습니다."',
           ratio: "90%", ratioVal: 90,
           causes: [
-            "최종 면접관의 갑작스러운 출장·회의로 인한 고정 스케줄 변경 대응 공백",
-            "2차 면접 준비 및 안내 자료의 메일 수기 발송 지연"
+            "임원 면접관의 갑작스러운 출장·회의로 고정 스케줄 변경에 대응하기 어렵기 때문으로 예상됩니다",
+            "2차 면접 준비·안내 자료를 메일로 수기 발송하기 때문으로 예상됩니다"
           ],
           solution: "임원 고정 슬롯 자동 선점 로직 탑재 및 면접 운영 효율화 봇 도입 시 리소스 낭비를 최대 60% 절감합니다."
         },
@@ -7371,8 +7372,8 @@ const Leadtime = (function() {
           painpoint: '"경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에 그 처우 협의 과정이 추가되면서 길게는 두 달 반에서 세 달까지도 소요되는 경우가 있습니다."',
           ratio: "98%", ratioVal: 98,
           causes: [
-            "전 직장 원천징수 등 소득 증빙 서류의 이메일 수동 제출 요청 및 확인 대기 장기화",
-            "내부 연봉 가이드라인 밴드와 후보자 요구 격차에 대한 부서 간 의사결정 수작업 조율 지연"
+            "전 직장 원천징수 등 소득 증빙 서류를 이메일로 수동 제출받고 확인을 기다리기 때문으로 예상됩니다",
+            "내부 연봉 가이드와 후보자 요구 격차를 부서 간 수작업으로 조율하기 때문으로 예상됩니다"
           ],
           solution: "정성·정량 처우 정보 시뮬레이터 및 전자 오퍼 수락 인프라 적용 시 협상 리드타임을 약 15일 이상 단축합니다."
         },
@@ -7381,8 +7382,8 @@ const Leadtime = (function() {
           painpoint: '"이 부분이 완료된 이후에 최종 합격으로 이루어집니다."',
           ratio: "30%", ratioVal: 30,
           causes: [
-            "합격 처우 품의서의 내부 오프라인·수동 결재 대기",
-            "최종 입사 예정 안내 및 온보딩 사전 준비 가이딩 업무 지연"
+            "합격 처우 품의서를 내부 오프라인·수동으로 결재하기 때문으로 예상됩니다",
+            "최종 입사 안내와 온보딩 사전 준비를 수기로 진행하기 때문으로 예상됩니다"
           ],
           solution: "통합 HRM 시스템과의 데이터 다이렉트 이관 연동을 통해 인사팀 최종 기안 프로세스를 즉각 종결합니다."
         }
@@ -7412,7 +7413,7 @@ const Leadtime = (function() {
       journey: [
         { stage: '서류 검토', touch: '지원 접수 → 서류 결과 발표', wait: 22, target: '7~10일', note: '자소서 수기 정독 · 해당 부서 적합성 검토', bad: true },
         { stage: '역량검사',  touch: '검사 안내 → 응시 완료',     wait: 4,  target: '2~3일',  note: '링크 수동 발송 · 미응시 리마인드', bad: true },
-        { stage: '직무 면접', touch: '면접 안내 → 결과 발표',     wait: 16, target: '5~7일',  note: '평가자 일정 수기 조율', bad: true },
+        { stage: '1차 면접', touch: '면접 안내 → 결과 발표',     wait: 16, target: '5~7일',  note: '평가자 일정 수기 조율', bad: true },
         { stage: '2차 면접', touch: '면접 안내 → 결과 발표',     wait: 14, target: '5~7일',  note: '임원 일정 수기 조율', bad: true },
         { stage: '처우 협의', touch: '처우 안내 → 협의 완료',     wait: 28, target: '5~7일',  note: '경력/역량 기반 맞춤 처우 산정', bad: true },
         { stage: '최종 발표', touch: '최종 합격 통보',           wait: 6,  target: '3일',    note: '평가 취합 · 내부 결재 완료', bad: false }
@@ -7451,42 +7452,42 @@ const Leadtime = (function() {
           num: "PHASE 01", name: "1차 서류 (신입)", desc: "대량 유입 자소서 일괄 스크리닝",
           painpoint: '"인사팀에서 서류 심사하여 합격한 자에 한하여 2차로 해당 해당 부서에 서류를 일괄 전달합니다."',
           ratio: "70%", ratioVal: 70,
-          causes: ["공채 오픈에 따라 일시에 수천 건의 자기소개서가 대량 접수되어 처리량 폭증"],
+          causes: ["공채 오픈에 따라 수천 건의 자기소개서가 일시에 대량 접수되어 처리량이 폭증하기 때문으로 예상됩니다"],
           solution: "자소서 핵심 키워드 매칭 스크리닝을 통해 인사담당자의 기초 서류 필터링을 보조합니다."
         },
         document_dept: {
           num: "PHASE 02", name: "2차 서류 (신입)", desc: "해당 부서 부서 서류 일괄 검토",
           painpoint: '"담당 해당 부서에서 해당 서류를 평가하고 합격 여부를 다시 한번 체크합니다."',
           ratio: "65%", ratioVal: 65,
-          causes: ["일괄 배분된 대량 이력서의 해당 부서 평가자 동시 다발 평가 프로세스 정체"],
+          causes: ["일괄 배분된 대량 이력서를 해당 부서 평가자들이 동시다발로 평가하기 때문으로 예상됩니다"],
           solution: "해당 부서 평가용 협업 툴 및 채용 점수 즉시 업로드 알림을 권장합니다."
         },
         assessment: {
           num: "PHASE 03", name: "역량검사 (신입)", desc: "필기시험 및 온라인 평가 통합",
           painpoint: '"신입 전형은 예외 없는 일괄적 일정 관리를 준수합니다."',
           ratio: "20%", ratioVal: 20,
-          causes: ["정형화된 공채 타임라인에 맞춘 전 지원자 동시 온라인 테스트 전송 및 일괄 업로드 관리"],
+          causes: ["정형화된 공채 타임라인에 맞춰 전 지원자에게 동시 온라인 테스트를 전송하고 일괄 관리하기 때문으로 예상됩니다"],
           solution: "응시 모니터링 관리 자동화 및 점수 자동 파싱 시스템을 적용합니다."
         },
         interview1: {
           num: "PHASE 04", name: "1차 면접 (실무)", desc: "다대다 면접장 배정 및 평가표 수동 기입",
           painpoint: '"신입 채용은 일정 조율이 진행되지 않고 일괄 통보로 진행합니다."',
           ratio: "30%", ratioVal: 30,
-          causes: ["수기 일정 조율은 없으나 대규모 현직자 면접관 차출 및 물리 면접 공간 배정 조율 공수"],
+          causes: ["대규모 현직자 면접관을 차출하고 물리 면접 공간을 배정·조율하기 때문으로 예상됩니다"],
           solution: "평가표 점수 자동 집계 패널 적용 및 면접장 로테이션 자동화를 추천합니다."
         },
         interview2: {
           num: "PHASE 05", name: "2차 면접 (임원)", desc: "최종 집단 2차 면접 스케줄링 관리",
           painpoint: '"신입 공채는 수기 조정 실무 부담이 최소화된 전형입니다."',
           ratio: "15%", ratioVal: 15,
-          causes: ["사전에 할당된 지정 면접 시간에 맞춰 순차 입장시키므로 스케줄 정체는 최소화됨"],
+          causes: ["사전 할당된 지정 면접 시간에 맞춰 순차 입장시키므로 스케줄 정체는 최소화되는 것으로 예상됩니다"],
           solution: "임원 실시간 합격 등급 합의용 평가 가이드 자동화를 제안합니다."
         },
         final: {
           num: "PHASE 06", name: "최종합격", desc: "공채 신입 최종 합격 레터 일괄 자동 발송",
           painpoint: '"신입은 2차 면접 완료 이후 바로 최종 합격으로 이어집니다."',
           ratio: "35%", ratioVal: 35,
-          causes: ["동시 합격자 대량 정보 기안 품의 및 입사 전 온보딩 교육 안내 수기 메일 전송"],
+          causes: ["동시 합격자 대량 정보를 기안·품의하고 입사 전 온보딩 안내를 수기 메일로 전송하기 때문으로 예상됩니다"],
           solution: "일괄 합격 메신저 알림 연동 및 프리온보딩 포털 연동을 권장합니다."
         }
       },
@@ -7517,7 +7518,7 @@ const Leadtime = (function() {
       journey: [
         { stage: '서류 검토', touch: '지원 접수 → 서류 결과 발표', wait: 26, target: '10~14일', note: '대량 자소서 일괄 정독', bad: true },
         { stage: '역량검사',  touch: '검사 안내 → 응시 완료',     wait: 6,  target: '3일',     note: '일괄 발송 · 응시 추적', bad: true },
-        { stage: '직무 면접', touch: '면접 안내 → 결과 발표',     wait: 14, target: '5~7일',   note: '면접장 배정 · 일괄 통보', bad: true },
+        { stage: '1차 면접', touch: '면접 안내 → 결과 발표',     wait: 14, target: '5~7일',   note: '면접장 배정 · 일괄 통보', bad: true },
         { stage: '2차 면접', touch: '면접 안내 → 결과 발표',     wait: 10, target: '5일',     note: '집단 면접 운영', bad: false },
         { stage: '최종 발표', touch: '최종 합격 통보',           wait: 6,  target: '3일',     note: '합격 레터 일괄 발송', bad: false }
       ],
@@ -7575,25 +7576,9 @@ const Leadtime = (function() {
           <h3 id="lt-detail-stage-name">처우 협의 및 검토</h3>
           <p id="lt-detail-stage-desc">경력직 전형의 최종 입사 확정 지연 구간</p>
         </div>
-        <div class="lt-quote">
-          <i class="ti ti-quote"></i>
-          <div class="lt-quote-label">담당자 인터뷰</div>
-          <p id="lt-detail-painpoint">"거기에 경력직을 채용하는 경우에는 그분들의 처우 수준까지 고려를 해야 되기 때문에…"</p>
-        </div>
-        <div class="lt-metric">
-          <div class="lt-metric-row">
-            <span>수기 조율 및 서류 검증 지연율</span>
-            <span id="lt-detail-ratio-text" class="lt-ratio red">98% 이상</span>
-          </div>
-          <div class="lt-bar-track"><div id="lt-detail-ratio-bar" class="lt-bar-fill red" style="width: 98%"></div></div>
-        </div>
         <div class="lt-causes">
-          <p class="lt-causes-title">핵심 병목 요인</p>
+          <p class="lt-causes-title">지연 예상 원인</p>
           <ul id="lt-detail-cause-list"></ul>
-        </div>
-        <div class="lt-solution">
-          <div class="lt-solution-head"><i class="ti ti-sparkles"></i> AI 기반 솔루션 처방</div>
-          <p id="lt-detail-ai-solution">처우 데이터 분석 기반 내부 가이드 자동 시뮬레이션…</p>
         </div>
       </div>
     </div>
@@ -7604,7 +7589,6 @@ const Leadtime = (function() {
     <div class="lt-panel-head">
       <div>
         <h2 class="lt-panel-title"><i class="ti ti-route"></i> 지원자 관점 리드타임</h2>
-        <p class="lt-panel-sub">접점 사이의 <b>대기 리드타임</b>이 곧 병목 — 대부분 수기 작업에서 발생하며, AI 도입 후 단축 목표를 함께 표시합니다.</p>
       </div>
       <span class="lt-pill purple" id="lt-journey-total">총 90일 대기</span>
     </div>
@@ -7615,8 +7599,8 @@ const Leadtime = (function() {
   <section class="lt-panel">
     <div class="lt-panel-head">
       <div>
-        <h2 class="lt-panel-title"><i class="ti ti-user-x"></i> 단계별 후보자 이탈</h2>
-        <p class="lt-panel-sub">전형 진행 도중 이탈한 후보자 분포 — 어느 단계에서 지원자를 놓치고 있는지 진단합니다.</p>
+        <h2 class="lt-panel-title"><i class="ti ti-user-x"></i> 단계별 후보자 이탈률</h2>
+        <p class="lt-panel-sub">각 전형 단계에서 다음 단계로 넘어가지 못하고 이탈한 비율 — 어느 단계에서 지원자를 놓치고 있는지 진단합니다.</p>
       </div>
       <span class="lt-pill gray" id="lt-w4-pill">반기 누적</span>
     </div>
@@ -7683,6 +7667,22 @@ const Leadtime = (function() {
     });
   }
 
+  // 단계별 이탈률 = (해당 단계 인원 - 다음 단계 인원) / 해당 단계 인원
+  // 상단 '채용 프로세스 단계별 분석'의 funnel count 데이터를 그대로 사용
+  function computeDropoffRate() {
+    const f = dataset[currentType].funnel || [];
+    const num = s => parseInt(String(s).replace(/[^0-9]/g, '')) || 0;
+    const labels = [], data = [];
+    for (let i = 0; i < f.length - 1; i++) {
+      const cur = num(f[i].count), next = num(f[i + 1].count);
+      if (cur <= 0) continue;
+      const rate = Math.round((cur - next) / cur * 1000) / 10;
+      labels.push(f[i].stage);
+      data.push(rate);
+    }
+    return { labels, data };
+  }
+
   function renderDiagnostics() {
     const d = dataset[currentType].diagnostics[currentSelectedStage];
     if (!d) return;
@@ -7706,14 +7706,6 @@ const Leadtime = (function() {
       document.getElementById('lt-detail-stage-num').textContent = d.num;
       document.getElementById('lt-detail-stage-name').textContent = d.name;
       document.getElementById('lt-detail-stage-desc').textContent = d.desc;
-      document.getElementById('lt-detail-painpoint').textContent = d.painpoint;
-      document.getElementById('lt-detail-ratio-text').textContent = d.ratio + ' 수기/지연';
-      const bar = document.getElementById('lt-detail-ratio-bar');
-      bar.style.width = d.ratioVal + '%';
-
-      const colorClass = d.ratioVal >= 80 ? 'red' : d.ratioVal >= 40 ? 'amber' : 'green';
-      bar.className = 'lt-bar-fill ' + colorClass;
-      document.getElementById('lt-detail-ratio-text').className = 'lt-ratio ' + colorClass;
 
       const list = document.getElementById('lt-detail-cause-list');
       list.innerHTML = '';
@@ -7722,8 +7714,6 @@ const Leadtime = (function() {
         li.innerHTML = `<i class="ti ti-alert-circle"></i><span>${c}</span>`;
         list.appendChild(li);
       });
-
-      document.getElementById('lt-detail-ai-solution').textContent = d.solution;
 
       box.style.opacity = '1';
       box.style.transform = 'translateY(0)';
@@ -7804,10 +7794,11 @@ const Leadtime = (function() {
     });
 
     const eDropoff = document.getElementById('lt-chart-dropoff');
+    const dropRate = computeDropoffRate();
     if (eDropoff) charts.dropoff = new Chart(eDropoff, {
       type: 'bar',
-      data: { labels: p.dropoff.labels, datasets: [{ data: p.dropoff.data, backgroundColor: SKY, borderRadius: 3 }] },
-      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.x + '명' } } }, scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }
+      data: { labels: dropRate.labels, datasets: [{ data: dropRate.data, backgroundColor: SKY, borderRadius: 3 }] },
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '이탈률 ' + ctx.parsed.x + '%' } } }, scales: { x: { display: false, max: 100 }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } }
     });
 
     // 유입 추이 — 채널별 멀티라인
@@ -7863,7 +7854,6 @@ const Leadtime = (function() {
         <div class="lt-jr-wait ${s.bad ? '' : 'ok'}">
           <div class="w-top"><b>${s.wait}</b><span>일 · 대기 리드타임</span></div>
           <div class="w-note">${s.note}</div>
-          ${s.target ? `<div class="w-target"><i class="ti ti-trending-down"></i> AI 도입 후 <b>${s.target}</b></div>` : ''}
         </div>
       </div>`).join('');
     const total = j.reduce((a, b) => a + b.wait, 0);
@@ -7888,7 +7878,12 @@ const Leadtime = (function() {
     setIf('lt-w1-cap', p.effort.cap, true);
     setIf('lt-w2-cap', p.offer.cap, true);
     setIf('lt-w3-cap', p.recoord.cap, true);
-    setIf('lt-w4-cap', p.dropoff.cap, true);
+    const dr = computeDropoffRate();
+    if (dr.data.length) {
+      let maxI = 0;
+      dr.data.forEach((v, i) => { if (v > dr.data[maxI]) maxI = i; });
+      setIf('lt-w4-cap', `이탈률이 가장 높은 구간은 <b>${dr.labels[maxI]}</b> (${dr.data[maxI]}%)`, true);
+    }
   }
 
   function updateCharts() {
@@ -7917,8 +7912,9 @@ const Leadtime = (function() {
       charts.recoord.update();
     }
     if (charts.dropoff) {
-      charts.dropoff.data.labels = p.dropoff.labels;
-      charts.dropoff.data.datasets[0].data = p.dropoff.data;
+      const dr = computeDropoffRate();
+      charts.dropoff.data.labels = dr.labels;
+      charts.dropoff.data.datasets[0].data = dr.data;
       charts.dropoff.update();
     }
 
