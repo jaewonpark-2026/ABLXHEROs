@@ -484,6 +484,51 @@ a { color: inherit; text-decoration: none; }
 .rp-cc-val { font-size: 16px; font-weight: 700; color: var(--dk-text-1); margin-top: 3px; }
 .rp-summary-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; font-size: 12px; color: var(--dk-text-2); line-height: 1.6; }
 
+/* AI Consistency Check */
+.acc-card { padding: 18px; }
+.acc-summary-row { display: grid; grid-template-columns: minmax(240px, 1fr) 1.7fr; gap: 14px; margin: 12px 0 14px; }
+.acc-score-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+.acc-score-lbl { font-size: 10px; color: var(--dk-text-3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.acc-score-big { font-size: 34px; font-weight: 800; color: #5EEAD4; line-height: 1; letter-spacing: -0.02em; margin-top: 2px; }
+.acc-score-unit { font-size: 14px; color: var(--dk-text-3); font-weight: 600; margin-left: 3px; }
+.acc-grade-wrap { margin-top: 6px; }
+.acc-grade-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+.acc-grade-badge.level-1 { background: rgba(34,197,94,0.14); color: #86EFAC; border: 1px solid rgba(34,197,94,0.32); }
+.acc-grade-badge.level-2 { background: rgba(234,179,8,0.14); color: #FDE68A; border: 1px solid rgba(234,179,8,0.32); }
+.acc-grade-badge.level-3 { background: rgba(249,115,22,0.14); color: #FED7AA; border: 1px solid rgba(249,115,22,0.32); }
+.acc-grade-badge.level-4 { background: rgba(220,38,38,0.14); color: #FECACA; border: 1px solid rgba(220,38,38,0.32); }
+.acc-grade-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.acc-grade-scale { font-size: 10px; color: var(--dk-text-3); font-weight: 600; letter-spacing: 0.02em; margin-top: 3px; }
+
+.acc-comment-box { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 13px 15px; border-left: 3px solid #38BDF8; }
+.acc-comment-lbl { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; color: #BAE6FD; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 7px; }
+.acc-comment-text { font-size: 12px; color: var(--dk-text-2); line-height: 1.65; margin: 0; }
+.acc-comment-text b { color: var(--dk-text-1); font-weight: 700; }
+
+.acc-section { margin-top: 16px; }
+.acc-section-lbl { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; color: var(--dk-text-1); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 9px; }
+.acc-section-lbl i { font-size: 13px; }
+
+.acc-table { width: 100%; border-collapse: collapse; font-size: 11.5px; background: var(--dk-1); border-radius: 10px; overflow: hidden; border: 1px solid var(--dk-border); }
+.acc-table thead th { background: rgba(255,255,255,0.04); color: var(--dk-text-2); font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--dk-border); }
+.acc-table tbody td { padding: 10px 12px; color: var(--dk-text-1); line-height: 1.55; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+.acc-table tbody tr:last-child td { border-bottom: none; }
+.acc-table .acc-th { font-weight: 700; color: var(--dk-text-1); white-space: nowrap; min-width: 130px; }
+
+.acc-verdict { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; white-space: nowrap; }
+.acc-verdict.v-match { background: rgba(34,197,94,0.14); color: #86EFAC; }
+.acc-verdict.v-diff { background: rgba(234,179,8,0.14); color: #FDE68A; }
+.acc-verdict.v-review { background: rgba(249,115,22,0.14); color: #FED7AA; }
+.acc-verdict.v-check { background: rgba(99,102,241,0.14); color: #C7D2FE; }
+
+.acc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.acc-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.acc-list li { position: relative; padding: 9px 12px 9px 32px; background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 8px; font-size: 11.5px; color: var(--dk-text-1); line-height: 1.6; }
+.acc-list.good li::before { content: '✓'; position: absolute; left: 11px; top: 9px; color: #86EFAC; font-weight: 800; font-size: 12px; }
+.acc-list.watch li::before { content: '!'; position: absolute; left: 14px; top: 9px; color: #FDE68A; font-weight: 800; font-size: 13px; }
+.acc-list.good li { border-left: 2.5px solid #22C55E; }
+.acc-list.watch li { border-left: 2.5px solid #EAB308; }
+
 .rp-slider-row { background: var(--dk-1); border: 1px solid var(--dk-border); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
 .rp-slider-row:last-child { margin-bottom: 0; }
 .rp-slider-hd { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--dk-text-1); margin-bottom: 8px; }
@@ -546,7 +591,7 @@ a { color: inherit; text-decoration: none; }
 .rp-decide.on { border-width: 2px; }
 .rp-coop-log { max-height: 80px; overflow-y: auto; font-size: 11px; color: var(--dk-text-2); display: flex; flex-direction: column; gap: 3px; }
 .rp-coop-log .author { color: #6BB6E8; font-weight: 700; margin-right: 4px; }
-@media (max-width: 860px) { .rp-grade-row, .rp-action-grid, .rp-lifecycle-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .rp-grade-row, .rp-action-grid, .rp-lifecycle-grid, .acc-summary-row, .acc-grid { grid-template-columns: 1fr; } }
 
 /* ===== 다크 패널 (면접 진행/리포트) — 4·5단계에서 본격 사용 ===== */
 .dk-wrap { background: var(--dk-1); color: var(--dk-text-1); border-radius: 14px; }
@@ -855,14 +900,93 @@ a { color: inherit; text-decoration: none; }
             <div class="rp-grade-badge" id="report-grade-badge">A</div>
             <div class="rp-overall" id="report-overall-score">0점</div>
           </div>
-          <div class="rp-panel rp-cross-card">
-            <div class="rp-card-eyebrow blue">3단계 데이터 교차검증</div>
-            <div class="rp-cross-grid">
-              <div class="rp-cross-cell"><div class="rp-cc-lbl">서류 평가</div><div class="rp-cc-val" id="report-val-resume">90점</div></div>
-              <div class="rp-cross-cell"><div class="rp-cc-lbl">역량 검사</div><div class="rp-cc-val" id="report-val-cognitive">88점</div></div>
-              <div class="rp-cross-cell"><div class="rp-cc-lbl">면접 적합성</div><div class="rp-cc-val" id="report-val-interview">0점</div></div>
+          <div class="rp-panel rp-cross-card acc-card">
+            <div class="rp-card-eyebrow blue">AI Consistency Check</div>
+
+            <div class="acc-summary-row">
+              <div class="acc-score-box">
+                <span class="acc-score-lbl">일관성 종합 점수</span>
+                <div class="acc-score-big">92<span class="acc-score-unit">/100</span></div>
+                <div class="acc-grade-wrap">
+                  <div class="acc-grade-badge level-1"><span class="acc-grade-dot"></span>일관</div>
+                </div>
+                <div class="acc-grade-scale">일관 · 보완적 차이 · 확인 필요 · 주요 불일치</div>
+              </div>
+              <div class="acc-comment-box">
+                <span class="acc-comment-lbl"><i class="ti ti-message-2"></i> HR 참고 코멘트</span>
+                <p class="acc-comment-text">서류·역량검사·면접의 핵심 메시지가 전반적으로 일관되며, 정량 성과 수치가 출처 간 동일하게 유지된 점은 신뢰도를 뒷받침합니다. 본 결과는 AI가 다섯 가지 출처(자소서·지원서, AI 서류 요약, 역량검사, 면접 답변 요약, 면접관 평가 메모) 간 표현의 일관성을 분석한 참고 자료이며, <b>최종 합불 판단은 HR 담당자와 면접관의 종합 평가</b>를 통해 이루어져야 합니다.</p>
+              </div>
             </div>
-            <div class="rp-summary-box"><p id="report-ai-summary"></p></div>
+
+            <div class="acc-section">
+              <div class="acc-section-lbl"><i class="ti ti-table"></i> 항목별 비교</div>
+              <table class="acc-table">
+                <thead>
+                  <tr>
+                    <th>분석 항목</th>
+                    <th>서류·자소서</th>
+                    <th>역량검사</th>
+                    <th>면접 답변</th>
+                    <th>AI 판단</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="acc-th">강점·약점 일관성</td>
+                    <td>도메인 깊이·Cross-functional PM 자기 기술</td>
+                    <td>분석력 88 / 책임감 92 / 협업 82 상위</td>
+                    <td>"가정 한 줄이 30년 손익 결정" 등 도메인 강점 일관 강조</td>
+                    <td><span class="acc-verdict v-match">●일치</span></td>
+                  </tr>
+                  <tr>
+                    <td class="acc-th">주요 경험·성과</td>
+                    <td>신상품 3건 런칭, CSM 5.8%, 사업비 12% 절감</td>
+                    <td>—</td>
+                    <td>동일 수치 일관 제시, GA채널 매출 1위 부연</td>
+                    <td><span class="acc-verdict v-match">●일치</span></td>
+                  </tr>
+                  <tr>
+                    <td class="acc-th">지원동기·직무 관심도</td>
+                    <td>"ABL의 다음 5년 상품 포트폴리오 재편 기여" 명시</td>
+                    <td>—</td>
+                    <td>"우리금융 편입 시너지·GA채널 확대" 등 일관 언급</td>
+                    <td><span class="acc-verdict v-match">●일치</span></td>
+                  </tr>
+                  <tr>
+                    <td class="acc-th">업무성향·조직적합성</td>
+                    <td>"Cross-functional 협업 PM" 자기 기술</td>
+                    <td>협업 82, 책임감 92 상위 분포</td>
+                    <td>마케팅·계리 의견 충돌을 매트릭스로 정리한 구체 사례 제시</td>
+                    <td><span class="acc-verdict v-match">●일치</span></td>
+                  </tr>
+                  <tr>
+                    <td class="acc-th">답변 구체성·근거</td>
+                    <td>정량 수치 다수 (CSM·사업비·매출)</td>
+                    <td>추론·언어 추론 88</td>
+                    <td>정량 수치는 동일, 일부 역할 표현("주도"/"참여") 차이 관찰</td>
+                    <td><span class="acc-verdict v-diff">◐표현 차이</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="acc-grid">
+              <div>
+                <div class="acc-section-lbl"><i class="ti ti-check"></i> 주요 일관성 포인트</div>
+                <ul class="acc-list good">
+                  <li>IFRS17·K-ICS 도메인 깊이가 서류·면접 답변·면접관 평가 메모에서 일관되게 드러납니다.</li>
+                  <li>신상품 3건 런칭과 정량 성과(CSM 5.8%, 사업비 12% 절감, GA채널 매출 1위) 수치가 자소서와 면접 답변에서 동일하게 유지됩니다.</li>
+                  <li>Cross-functional 협업이라는 자기 기술이 면접에서 구체적 사례(가정 충돌 시 매트릭스 정리)로 자연스럽게 뒷받침됩니다.</li>
+                </ul>
+              </div>
+              <div>
+                <div class="acc-section-lbl"><i class="ti ti-alert-circle"></i> 최종 확인 필요 포인트</div>
+                <ul class="acc-list watch">
+                  <li>일부 프로젝트에서 본인의 역할이 "주도"인지 "참여"인지에 대한 표현 차이가 관찰됩니다. 책임 범위에 대한 면접관의 추가 확인을 권장드립니다.</li>
+                  <li>"본부장 결재 자료 정리" 경험에 대해, 본인이 작성한 자료의 비중과 다른 팀원의 기여 구분이 추가 검토되면 평가의 정확도가 높아질 수 있습니다.</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2256,6 +2380,7 @@ function renderReportDetails() {
 
 function renderATS_TRMLifecycleActions(c) {
   const container = document.getElementById('lifecycle-action-container');
+  if (!container) return;
   if (c.finalResult === '최종 합격') {
     container.innerHTML = '<div class="rp-lc-confirm"><span class="rp-lc-confirm-txt"><i class="ti ti-circle-check"></i> 현재 최종 합격으로 확정 승인된 지원자입니다.</span><button class="rp-lc-btn red" style="width:auto;padding:8px 14px;" onclick="changeCandidateFinalResult(' + c.id + ',\'불합격\')"><i class="ti ti-ban"></i> 합격 취소 · 불합격 전환</button></div>';
   } else if (c.finalResult === '불합격') {
@@ -2392,12 +2517,14 @@ function updateReportSliders() {
   document.getElementById('slider-val-lbl-culture').textContent = culture + '점';
   const overall = Math.round(qaa * 0.3 + job * 0.4 + culture * 0.3);
   document.getElementById('report-overall-score').textContent = overall + '점';
-  document.getElementById('report-val-interview').textContent = overall + '점';
+  const valInterviewEl = document.getElementById('report-val-interview');
+  if (valInterviewEl) valInterviewEl.textContent = overall + '점';
   const badge = document.getElementById('report-grade-badge');
   if (overall >= 90) { badge.textContent = 'A'; badge.className = 'rp-grade-badge A'; }
   else if (overall >= 80) { badge.textContent = 'B'; badge.className = 'rp-grade-badge B'; }
   else { badge.textContent = 'C'; badge.className = 'rp-grade-badge C'; }
-  document.getElementById('report-ai-summary').textContent = '종합 검증 일치 스코어가 ' + overall + '점으로 실시간 연동되었습니다. 서류·역량검사 결과와 면접 적합성을 교차 검증한 결과입니다.';
+  const aiSummaryEl = document.getElementById('report-ai-summary');
+  if (aiSummaryEl) aiSummaryEl.textContent = '종합 검증 일치 스코어가 ' + overall + '점으로 실시간 연동되었습니다. 서류·역량검사 결과와 면접 적합성을 교차 검증한 결과입니다.';
   const c = candidates.find(item => item.id === activeReportCandidateId);
   if (c) { c.evalScores.qaa = qaa; c.evalScores.job = job; c.evalScores.culture = culture; c.overallScore = overall; }
 }
