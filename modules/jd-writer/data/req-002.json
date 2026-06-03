@@ -1,53 +1,54 @@
 {
   "id": "req-002",
   "request": {
-    "office": "경영전략본부",
-    "dept": "전략기획팀",
-    "position": "전략기획 담당",
-    "level": "차장",
-    "type": "경력",
+    "office": "자산운용부문",
+    "dept": "자산운용전략부",
+    "position": "자산운용 담당",
+    "level": "사원~대리",
+    "type": "신입/경력",
     "headcount": 1,
     "desired_date": "2026-08-01",
     "employment_type": "정규직",
-    "creator": "전략기획팀 박이사",
+    "creator": "자산운용전략부 박이사",
     "created_at": "2026-05-20",
     "reason_category": "조직 확대",
-    "reason_detail": "디지털 전환과 그룹사 시너지 전략 수립 인력 충원이 필요합니다.",
-    "main_duties": "중장기 경영전략 수립 및 그룹사 시너지 과제 발굴. 디지털 전환 추진 과제 PM 역할 수행.",
-    "qual_technical": "Excel·PPT 고급 활용. 데이터 분석 도구 활용.",
-    "qual_education": "학사 이상",
-    "qual_experience": "전략컨설팅·기획 경험 5년 이상",
+    "reason_detail": "일반계정 투자자산 운용 및 포트폴리오 관리 인력 충원이 필요합니다.",
+    "main_duties": "일반계정 투자자산(주식·채권·수익증권 등) 직간접 운용 및 관리. 운용자산 투자계획 수립·모니터링, 일임운용 관리, 금융시장 데이터 정리, 운용자산 포트폴리오 관리.",
+    "qual_technical": "Excel 중급 이상 활용. 금융시장 데이터 분석.",
+    "qual_education": "4년제 정규대학 이상 졸업 및 졸업예정자",
+    "qual_experience": "은행·증권·보험사·자산운용사 등 금융기관에서 유사업무 0~5년 근무 경험 보유",
     "qual_language": "",
     "qual_certification": "",
-    "qual_competencies": "구조화·분석력, 커뮤니케이션, 추진력",
+    "qual_competencies": "긍정적인 마인드, 적극적인 자세, 협업 능력",
     "core_values": [
       "전문성",
       "선진"
     ],
     "key_skills": [
-      "전략기획",
-      "PM",
-      "데이터 분석"
+      "투자자산 운용",
+      "포트폴리오 관리",
+      "일임운용",
+      "금융시장 분석"
     ],
-    "preferred_qual": "보험·금융업 경험. MBA 우대.",
-    "etc": ""
+    "preferred_qual": "CFA·투자자산운용사 등 우대. 엑셀 사용 능력 중급 이상 보유자 우대. 국가보훈 및 취업보호대상자는 관련법 의거 우대.",
+    "etc": "해외여행 결격 사유가 없는 자"
   },
   "current_step": 1,
   "status": "요청서 도착 · JD 대기",
   "jd_draft": null,
   "review_history": [
     {
-      "actor": "전략기획팀 박이사",
+      "actor": "자산운용전략부 박이사",
       "actor_role": "manager",
       "timestamp": "2026-05-20 09:15",
       "action": "충원요청서 제출",
-      "detail": "전략기획 차장 충원 요청."
+      "detail": "자산운용 담당(신입/경력) 충원 요청."
     }
   ],
   "manager_comments": [],
   "approval_status": {
     "requester": {
-      "by": "전략기획팀 박이사",
+      "by": "자산운용전략부 박이사",
       "at": "2026-05-20 09:15",
       "approved": true
     },
