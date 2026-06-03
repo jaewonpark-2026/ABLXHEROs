@@ -148,7 +148,7 @@ a { color: inherit; text-decoration: none; }
 .leg-dot { width: 12px; height: 12px; border-radius: 3px; }
 
 /* Calendar grid */
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; }
 .cal-dow { padding: 9px 4px; text-align: center; font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: 0.3px; background: var(--bg-page); }
 .cal-cell { background: white; min-height: 92px; padding: 6px; cursor: default; }
 .cal-cell.other { background: #FAFBFD; }
@@ -540,10 +540,9 @@ function renderCalendar() {
       const evs = getEventsForDay(y, m, c.day);
       evs.slice(0, 3).forEach(e => {
         const ec = evTypeMap[e.type] || 'ev-work';
-        let labelStr = e.label;
-        if (e.dept) labelStr += ' (' + e.dept + ')';
+        const labelFull = e.label + (e.dept ? ' (' + e.dept + ')' : '');
         const cIdParam = e.candId ? "'" + e.candId + "'" : 'null';
-        html += '<div class="cal-ev ' + ec + '" title="' + labelStr + '" onclick="showCalEventInfo(\'' + labelStr.replace(/'/g, "\\'") + '\',\'' + e.type + '\',' + cIdParam + ')">' + labelStr + '</div>';
+        html += '<div class="cal-ev ' + ec + '" title="' + labelFull + '" onclick="showCalEventInfo(\'' + labelFull.replace(/'/g, "\\'") + '\',\'' + e.type + '\',' + cIdParam + ')">' + e.label + '</div>';
       });
       if (evs.length > 3) html += '<div class="cal-ev-more">+' + (evs.length - 3) + '건 더보기</div>';
     }
