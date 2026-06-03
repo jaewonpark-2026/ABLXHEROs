@@ -842,7 +842,7 @@ function startAIGenerate() {
     else {
       clearInterval(interval);
       currentData.current_step = 2;
-      fetch('data/req-001-full.json').then(r => r.json()).then(full => {
+      fetch(`data/${currentData.id}-full.json`).then(r => r.json()).then(full => {
         currentData.jd_draft = full.jd_draft;
         currentData.review_history = [
           ...currentData.review_history,
