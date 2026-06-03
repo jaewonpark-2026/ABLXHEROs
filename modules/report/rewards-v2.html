@@ -155,7 +155,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .payband-bar .pb-marker { position: absolute; top: -6px; bottom: -6px; width: 3px; background: var(--main-1); transform: translateX(-50%); border-radius: 2px; transition: left 0.2s ease; box-shadow: 0 2px 6px rgba(0,103,172,0.3); }
 .payband-bar .pb-marker::after { content: '오퍼'; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); background: var(--main-1); color: white; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; white-space: nowrap; }
 
-.risk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.risk-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 360px)); gap: 16px; justify-content: center; }
 .risk-card { padding: 14px; border-radius: 11px; border: 1px solid var(--border); background: white; transition: all 0.18s; }
 .risk-card.high { border-color: #FCA5A5; background: linear-gradient(135deg, #FFFBFB, #FEF2F2); }
 .risk-card.medium { border-color: #FCD34D; background: linear-gradient(135deg, #FFFDF5, #FFFBEB); }
@@ -168,6 +168,39 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .risk-level.low { background: var(--ok); color: white; }
 .risk-card .rc-desc { font-size: 12px; color: var(--text-1); line-height: 1.55; font-weight: 600; }
 .risk-card .rc-sub { font-size: 10.5px; color: var(--text-3); margin-top: 4px; font-weight: 600; }
+
+/* ===== 면접 분석 기반 주요 니즈 (§1) ===== */
+.insight-need { margin-top: 16px; padding: 14px 16px; background: linear-gradient(135deg, #F0F7FD, #F7FBFE); border: 1px solid var(--border); border-left: 3px solid var(--main-1); border-radius: 0 10px 10px 0; }
+.insight-need .in-label { font-size: 10.5px; font-weight: 700; color: var(--main-1); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.insight-need .in-text { font-size: 12.5px; color: var(--text-1); line-height: 1.7; font-weight: 600; }
+
+/* ===== 협상 전략 가이드 하위 (§5) ===== */
+.strat-sub { padding: 18px 0; border-top: 1px solid var(--border); }
+.strat-sub:first-of-type { padding-top: 0; border-top: 0; }
+.strat-sub-title { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+.strat-sub-title .ss-num { width: 22px; height: 22px; border-radius: 50%; background: var(--grad-blue); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.strat-sub .ss-desc { font-size: 11.5px; color: var(--text-3); font-weight: 600; line-height: 1.55; margin: 0 0 12px 31px; }
+.strat-sub .ss-body { padding-left: 31px; }
+
+.motiv-list { display: flex; flex-direction: column; gap: 10px; }
+.motiv-item { display: grid; grid-template-columns: 52px 1fr 110px; gap: 14px; align-items: center; padding: 12px 14px; background: #FAFCFE; border: 1px solid var(--border); border-radius: 10px; }
+.motiv-item .mi-rank { font-size: 10.5px; font-weight: 700; color: var(--main-1); background: var(--info-bg); border-radius: 999px; padding: 3px 0; text-align: center; }
+.motiv-item .mi-name { font-size: 12.5px; font-weight: 700; color: var(--text-1); margin-bottom: 3px; }
+.motiv-item .mi-text { font-size: 11px; color: var(--text-3); line-height: 1.55; font-weight: 600; }
+.motiv-item .mi-bar { height: 7px; background: var(--bg-page); border-radius: 999px; overflow: hidden; }
+.motiv-item .mi-bar span { display: block; height: 100%; background: var(--grad-blue); border-radius: 999px; }
+
+/* 금전/비금전 컴팩트 (§5-2) */
+.total-rewards.compact { gap: 12px; }
+.total-rewards.compact .tr-box { padding: 11px 13px; }
+.total-rewards.compact .tr-label { font-size: 9.5px; margin-bottom: 6px; }
+.total-rewards.compact .tr-item { padding: 3px 0; font-size: 11px; }
+.total-rewards.compact .tr-total { margin-top: 6px; padding-top: 7px; font-size: 11.5px; }
+.total-rewards.compact .tr-total .val { font-size: 13px; }
+
+/* AI 기안 생성 버튼 (§7) */
+.btn-ai { padding: 8px 14px; background: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%); color: white; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.btn-ai:hover { box-shadow: 0 4px 14px rgba(0,103,172,0.28); }
 
 /* ===== 4. 대외 경쟁력 ===== */
 .market-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -342,12 +375,12 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
     </div>
 
     <div class="content">
-      <a class="back-link" href="./index.html"><i class="ti ti-arrow-left"></i> 기존 처우협의로 돌아가기</a>
+      <a class="back-link" href="./index.html"><i class="ti ti-arrow-left"></i> 채용 데이터 허브로</a>
 
       <div class="page-header">
         <div class="crumb">채용 데이터 · 경력직 처우협의</div>
         <h1 class="page-title">처우 협의 데이터 <span class="v2-badge">v2 · 시연용</span></h1>
-        <p class="page-sub">처우협의 기초 자료 · 다층 리스크 · What-If 시뮬레이션을 통한 협상 의사결정 지원</p>
+        <p class="page-sub">처우협의 기초 자료 · 내부 형평성 시뮬레이션 · 협상 전략 가이드를 통한 협상 의사결정 지원</p>
       </div>
 
       <!-- ============ [1] 지원자 정보 ============ -->
@@ -367,6 +400,10 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <button class="btn-secondary" onclick="openModal('modal-resume')"><i class="ti ti-file-type-pdf"></i> 이력서</button>
             <button class="btn-secondary" onclick="openModal('modal-eval')"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
           </div>
+        </div>
+        <div class="insight-need">
+          <div class="in-label"><i class="ti ti-bulb"></i> 면접 분석 기반 주요 니즈</div>
+          <p class="in-text">변액·종신·정기보험 신상품 3건 런칭과 IFRS17 대응 TF 12개월 자발 참여로 도메인 실행력이 검증된 후보입니다. 특히 본인이 설계한 시나리오 매트릭스가 본부장 의사결정에 직접 활용되는, 즉 자신의 분석이 실제 결정으로 이어지는 환경에 강한 동기를 보입니다.</p>
         </div>
       </section>
 
@@ -407,7 +444,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
           <div class="sl-label">오퍼 금액 (페이밴드)</div>
           <div>
             <input type="range" id="offer-slider" min="6500" max="8000" step="100" value="7200">
-            <div class="payband-bar" style="margin-top:14px;">
+            <div class="payband-bar" style="margin-top:34px;">
               <div class="pb-marker" id="payband-marker" style="left:47%"></div>
               <div class="pb-tick" style="left:0%;">밴드 하한<br>6,500</div>
               <div class="pb-tick" style="left:33%;">Q1<br>7,000</div>
@@ -451,81 +488,70 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         </div>
       </section>
 
-      <!-- ============ [5] 총보상 협상 가이드 ============ -->
+      <!-- ============ [5] 협상 전략 가이드 ============ -->
       <section class="section">
-        <div class="section-head"><div class="section-title">총보상 협상 가이드</div></div>
-        <div class="total-rewards">
-          <div class="tr-box cash">
-            <div class="tr-label">금전 보상</div>
-            <div class="tr-item"><span class="name">기본 연봉</span><span class="val">7,200만원</span></div>
-            <div class="tr-item"><span class="name">자기계발 지원</span><span class="val">150만원</span></div>
-            <div class="tr-item"><span class="name">성과 인센티브 (목표 기준)</span><span class="val">~600만원</span></div>
-            <div class="tr-total"><span>금전 합계</span><span class="val">~7,950만원</span></div>
-          </div>
-          <div class="tr-box non-cash">
-            <div class="tr-label">비금전 패키지</div>
-            <div class="tr-item"><span class="name"><i class="ti ti-users" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> Cross-functional PM 권한</span></div>
-            <div class="tr-item"><span class="name"><i class="ti ti-school" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> 사내 도메인 강사 권한</span></div>
-            <div class="tr-item"><span class="name"><i class="ti ti-target-arrow" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> Pricing 풀 오너십 (변액·종신)</span></div>
-            <div class="tr-item"><span class="name"><i class="ti ti-clock" style="color:var(--ok);font-size:12px;vertical-align:-1px;"></i> 유연근무 (재택 주 2회)</span></div>
-            <div class="tr-total"><span>총가치 (정성)</span><span class="val" style="color:var(--ok);font-size:13px;">대리급 ★★★★</span></div>
-          </div>
-        </div>
-      </section>
+        <div class="section-head"><div class="section-title">협상 전략 가이드</div></div>
 
-      <!-- ============ [6] What-If 시뮬레이션 (NEW) ============ -->
-      <section class="section">
-        <div class="section-head">
-          <div class="section-title">What-If 협상 시나리오 시뮬레이터 <span class="new-badge">NEW</span></div>
-          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">카운터오퍼 금액별 영향·대체안·대응 멘트</div>
-        </div>
-
-        <div class="whatif-input">
-          <div class="wi-label">후보자 카운터오퍼</div>
-          <input type="number" id="counter-num" value="7500" min="7200" max="8500" step="100">
-          <span class="wi-unit">만원</span>
-          <input type="range" id="counter-slider" min="7200" max="8500" step="100" value="7500">
-        </div>
-
-        <div class="whatif-grid">
-          <!-- ① 추가 인상 영향 -->
-          <div class="whatif-box impact">
-            <div class="wb-head"><span class="wb-num">1</span> 추가 인상 시 영향</div>
-            <div class="impact-list">
-              <div class="il-item">
-                <div class="il-label">연봉 역전 인원</div>
-                <div class="il-value"><span id="wi-invert">8</span>명 <span class="delta" id="wi-invert-delta">(+3)</span></div>
+        <!-- 5-1. 동기 요인 프로파일 -->
+        <div class="strat-sub">
+          <div class="strat-sub-title"><span class="ss-num">1</span> 동기 요인 프로파일</div>
+          <p class="ss-desc">면접·자소서 분석 기반, 후보자를 실제로 움직이는 핵심 동기입니다. 협상 시 금액만큼이나 이 요인을 자극하는 것이 효과적입니다.</p>
+          <div class="ss-body">
+            <div class="motiv-list">
+              <div class="motiv-item">
+                <div class="mi-rank">1순위</div>
+                <div><div class="mi-name">의사결정 오너십</div><div class="mi-text">본인이 설계한 시나리오·가정이 본부장 의사결정에 직접 반영되는 환경. "내 분석이 실제 결정으로 이어진다"는 점에 가장 강하게 반응.</div></div>
+                <div class="mi-bar"><span style="width:92%"></span></div>
               </div>
-              <div class="il-item">
-                <div class="il-label">밴드 상단 진입</div>
-                <div class="il-value"><span id="wi-band">+400</span>만원</div>
+              <div class="motiv-item">
+                <div class="mi-rank">2순위</div>
+                <div><div class="mi-name">도메인 전문성 확장</div><div class="mi-text">IFRS17·K-ICS 규제 대응 도메인을 깊게 다루고 사내 전문가로 인정받는 것. 사내 강사·교육 권한에 높은 가치를 둠.</div></div>
+                <div class="mi-bar"><span style="width:78%"></span></div>
               </div>
-              <div class="il-item">
-                <div class="il-label">기존 재직자 대비 격차</div>
-                <div class="il-value"><span id="wi-gap">+12</span>%</div>
+              <div class="motiv-item">
+                <div class="mi-rank">3순위</div>
+                <div><div class="mi-name">Cross-functional 영향력</div><div class="mi-text">계리·마케팅·영업을 가로지르는 신상품 사이클을 단독 리드하는 권한. 협업 PM 권한 부여 시 몰입도가 상승.</div></div>
+                <div class="mi-bar"><span style="width:71%"></span></div>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- ② HR 협상 숙지 체크리스트 -->
-          <div class="whatif-box checklist-box">
-            <div class="wb-head"><span class="wb-num">2</span> HR 담당자 협상 시 숙지 항목</div>
-            <div style="font-size:11.5px;color:var(--text-3);font-weight:600;margin-bottom:10px;">
-              협상 자리에서 잊지 말아야 할 핵심 근거·옵션·리스크입니다. 체크해가며 사용하세요.
+        <!-- 5-2. 금전 보상 · 비금전 패키지 -->
+        <div class="strat-sub">
+          <div class="strat-sub-title"><span class="ss-num">2</span> 금전 보상 · 비금전 패키지</div>
+          <div class="ss-body">
+            <div class="total-rewards compact">
+              <div class="tr-box cash">
+                <div class="tr-label">금전 보상</div>
+                <div class="tr-item"><span class="name">기본 연봉</span><span class="val">7,200만원</span></div>
+                <div class="tr-item"><span class="name">자기계발 지원</span><span class="val">150만원</span></div>
+                <div class="tr-item"><span class="name">성과 인센티브 (목표 기준)</span><span class="val">~600만원</span></div>
+                <div class="tr-total"><span>금전 합계</span><span class="val">~7,950만원</span></div>
+              </div>
+              <div class="tr-box non-cash">
+                <div class="tr-label">비금전 패키지</div>
+                <div class="tr-item"><span class="name"><i class="ti ti-users" style="color:var(--ok);font-size:11px;vertical-align:-1px;"></i> Cross-functional PM 권한</span></div>
+                <div class="tr-item"><span class="name"><i class="ti ti-school" style="color:var(--ok);font-size:11px;vertical-align:-1px;"></i> 사내 도메인 강사 권한</span></div>
+                <div class="tr-item"><span class="name"><i class="ti ti-target-arrow" style="color:var(--ok);font-size:11px;vertical-align:-1px;"></i> Pricing 풀 오너십 (변액·종신)</span></div>
+                <div class="tr-item"><span class="name"><i class="ti ti-clock" style="color:var(--ok);font-size:11px;vertical-align:-1px;"></i> 유연근무 (재택 주 2회)</span></div>
+                <div class="tr-total"><span>총가치 (정성)</span><span class="val" style="color:var(--ok);font-size:12px;">대리급 ★★★★</span></div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <!-- 5-3. HR 담당자 협상 시 숙지 항목 -->
+        <div class="strat-sub">
+          <div class="strat-sub-title"><span class="ss-num">3</span> HR 담당자 협상 시 숙지 항목</div>
+          <p class="ss-desc">협상 자리에서 잊지 말아야 할 핵심 근거·리스크입니다. 체크해가며 사용하세요.</p>
+          <div class="ss-body">
             <div class="check-list">
               <div class="check-group">
                 <div class="cg-label"><i class="ti ti-building-bank"></i> 회사 정책 · 한도</div>
                 <label class="check-item"><input type="checkbox"> <span><strong>회사 max는 7,500만원</strong> (Q3 기준). 그 이상은 본부장 결재 + 차상위 직급 비교 필요</span></label>
                 <label class="check-item"><input type="checkbox"> <span>밴드 상단 초과 시 차기 정기인상 여력 -5% 이내로 제한됨</span></label>
                 <label class="check-item"><input type="checkbox"> <span>오퍼 확정 후 처우 변경은 합류 6개월차 점검 1회만 가능</span></label>
-              </div>
-              <div class="check-group">
-                <div class="cg-label"><i class="ti ti-gift"></i> 비금전 대체 옵션</div>
-                <label class="check-item"><input type="checkbox"> <span><strong>Cross-functional PM 권한</strong> — 본부 신상품 사이클 단독 리드 가능</span></label>
-                <label class="check-item"><input type="checkbox"> <span><strong>사내 도메인 강사 권한</strong> — IFRS17/K-ICS 사내 교육 진행</span></label>
-                <label class="check-item"><input type="checkbox"> <span><strong>Pricing 풀 오너십</strong> (변액·종신) — 신상품 가격 결정 권한</span></label>
-                <label class="check-item"><input type="checkbox"> <span>유연근무 · 재택 주 2회 (본부 표준 기준 1회 → 2회로 +1일)</span></label>
               </div>
               <div class="check-group">
                 <div class="cg-label"><i class="ti ti-alert-triangle"></i> 후보자 강점 · 협상 카드</div>
@@ -544,10 +570,13 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         </div>
       </section>
 
-      <!-- ============ [7] AI 기안 메모 ============ -->
+      <!-- ============ [6] 최종 협상 전략 및 메모 ============ -->
       <section class="section">
-        <div class="section-head"><div class="section-title">최종 협상 전략 + AI 기안 메모</div></div>
-        <textarea class="memo-area" id="ai-memo" placeholder="AI 기안 메모를 작성하세요.">대리급 처우 협의 케이스. 후보자 기존 연봉 6,500만원 · 희망 7,500만원 대비 회사 본 오퍼 7,200만원 제안 (앵커링 가이드 7,000~7,200 범위 상단 진입). 기존 연봉 6,500만원 기준 +10.8% 인상. 후보자 희망 7,500만원과의 300만원 차이는 (1) 자기계발 지원금 150만원, (2) Cross-functional PM 권한 + 사내 강사 권한 + Pricing 풀 오너십 등 비금전 가치로 보완 제안. 합류 후 6개월차 처우 점검 1회 예정. 본부장(상품본부) 의사결정 대기.</textarea>
+        <div class="section-head">
+          <div class="section-title">최종 협상 전략 및 메모</div>
+          <button class="btn-ai" onclick="generateMemo()"><i class="ti ti-sparkles"></i> AI 기안 초안 생성</button>
+        </div>
+        <textarea class="memo-area" id="ai-memo" placeholder="‘AI 기안 초안 생성’을 누르면 협의 데이터(제안액·내부 형평성·주요 니즈)를 기반으로 기안 초안이 자동 작성됩니다. 생성 후 자유롭게 수정하세요."></textarea>
         <div class="memo-actions">
           <button class="btn-secondary" onclick="showToast('메모가 저장되었습니다.', 'success')"><i class="ti ti-download"></i> 저장</button>
           <button class="btn-p" onclick="showToast('승인 요청이 발송되었습니다.', 'success')"><i class="ti ti-send"></i> 본부장 승인 요청</button>
@@ -773,42 +802,41 @@ function updateRiskCards(val) {
 offerSlider.addEventListener('input', e => updateRiskCards(parseInt(e.target.value)));
 updateRiskCards(parseInt(offerSlider.value));
 
-// ===== What-If 카운터오퍼 → 3개 분석 박스 실시간 갱신 =====
-const counterNum = document.getElementById('counter-num');
-const counterSlider = document.getElementById('counter-slider');
-const OFFER_BASE = 7200;
+// ===== AI 기안 초안 생성 (v1 기능 이식) =====
+function generateMemo() {
+  const offer = parseInt(document.getElementById('offer-slider').value);
+  const base = 6500; // 직전 직장 연봉
+  const incRate = (((offer - base) / base) * 100).toFixed(1);
+  // 내부 형평성 판단 (밴드 6,500~8,000 / Q1 7,000 / 중간 7,200 / Q3 7,500)
+  let equity;
+  if (offer > 8000) equity = '내부 밴드 상한 초과 (예외 품의 필요)';
+  else if (offer >= 7500) equity = '상위 25% 진입 (향후 인상률 조정 검토)';
+  else if (offer >= 7000) equity = '중위 50% 안정권 (내부 형평성 우수)';
+  else equity = '하위 25% 구간 (시장 경쟁력 보완 필요)';
+  const tags = ['IFRS17', 'K-ICS', '변액·종신 Pricing', 'Cross-functional'];
 
-function updateWhatIf(val) {
-  const diff = Math.max(0, val - OFFER_BASE);
-  // ① 영향: 차액 기반
-  const invertN = Math.min(20, 5 + Math.round(diff / 200));
-  const invertDelta = invertN - 5;
-  const bandOver = val - 6100;
-  const gap = Math.round(((val - 5300) / 5300) * 100);
-  document.getElementById('wi-invert').textContent = invertN;
-  document.getElementById('wi-invert-delta').textContent = invertDelta > 0 ? `(+${invertDelta})` : `(${invertDelta})`;
-  document.getElementById('wi-band').textContent = (bandOver >= 0 ? '+' : '') + bandOver;
-  document.getElementById('wi-gap').textContent = (gap >= 0 ? '+' : '') + gap;
+  const draft = `[처우 협의 기안 초안]
 
-  // ② 대체안: 차액 50%/30%/20% 분산
-  const signing = Math.round(diff * 0.5);
-  const edu = Math.round(diff * 0.3);
-  document.getElementById('wi-diff').textContent = diff.toLocaleString();
-  document.getElementById('wi-signing').textContent = (signing >= 0 ? '+' : '') + signing + '만원';
-  document.getElementById('wi-edu').textContent = (edu >= 0 ? '+' : '') + edu + '만원';
+1. 제안 요약
+- 대상자: 조현근 (상품기획 / 대리)
+- 최종 제안액: ${offer.toLocaleString()}만원 (전 직장 6,500만원 대비 ${incRate > 0 ? '+' : ''}${incRate}%)
+
+2. 데이터 기반 적정성 검토
+- 내부 형평성: ${equity} (밴드: 6,500~8,000만원)
+
+3. 비금전적 레버리지 연계 방안
+- 후보자 주요 니즈(${tags.join(', ')})를 반영하여, ABL 총보상 패키지(Cross-functional PM 권한·사내 도메인 강사 권한·Pricing 풀 오너십)로 어필 예정
+
+4. HR 종합 의견 (Action Plan)
+- [담당자 판단 및 최종 협상 스탠스를 이곳에 작성하세요.]`;
+
+  const ta = document.getElementById('ai-memo');
+  ta.value = draft;
+  ta.style.transition = 'background 0.3s';
+  ta.style.background = '#EFF6FF';
+  setTimeout(() => { ta.style.background = ''; }, 350);
+  showToast('AI 기안 초안이 생성되었습니다.', 'success');
 }
-
-counterNum.addEventListener('input', e => {
-  let v = parseInt(e.target.value || OFFER_BASE);
-  v = Math.max(OFFER_BASE, Math.min(8500, v));
-  counterSlider.value = v;
-  updateWhatIf(v);
-});
-counterSlider.addEventListener('input', e => {
-  counterNum.value = e.target.value;
-  updateWhatIf(parseInt(e.target.value));
-});
-updateWhatIf(parseInt(counterSlider.value));
 </script>
 
 </body>
