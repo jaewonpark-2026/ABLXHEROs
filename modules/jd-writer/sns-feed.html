@@ -197,7 +197,9 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .cr-slogan .r { color: #E84545; }
 .cr-eyebrow { margin-top: 1.8cqw; font-size: 2.9cqw; font-weight: 700; letter-spacing: 2.4cqw; color: var(--accent); opacity: 0.72; }
 
-.cr-tags { display: flex; flex-wrap: wrap; gap: 1.6cqw; margin-top: 5.5cqw; }
+.cr-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 1.8cqw; margin-top: 5.5cqw; }
+.cr-icon-badge { width: 7.4cqw; height: 7.4cqw; border-radius: 2.2cqw; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 4.4cqw; box-shadow: 0 1.5cqw 3.5cqw color-mix(in srgb, var(--accent) 30%, transparent); }
+.cr-watermark { position: absolute; top: 1.5cqw; right: -1cqw; font-size: 26cqw; line-height: 1; color: var(--accent); opacity: 0.07; z-index: 1; }
 .cr-tag { background: color-mix(in srgb, var(--accent) 9%, white); border: 0.3cqw solid color-mix(in srgb, var(--accent) 20%, white); border-radius: 6cqw; padding: 1.4cqw 3.4cqw; font-size: 2.9cqw; font-weight: 700; color: var(--accent); }
 .cr-title { margin-top: 3.2cqw; font-size: 7.6cqw; font-weight: 800; line-height: 1.12; letter-spacing: -0.4cqw; word-break: keep-all; color: #14223A; }
 .cr-sub { margin-top: 2.8cqw; font-size: 3.8cqw; font-weight: 600; line-height: 1.45; color: var(--text-2); word-break: keep-all; }
@@ -411,6 +413,22 @@ const THEME_GRAD = {
   default: 'linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%)'
 };
 const THEME_ACCENT = { product: '#273A92', it: '#0090D0', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
+const THEME_ICON = { product: 'ti-chart-pie', it: 'ti-device-desktop', newgrad: 'ti-seeding', sales: 'ti-trending-up', default: 'ti-briefcase' };
+const THEME_ENG = { product: 'Product', it: 'Engineering', newgrad: 'New Grad', sales: 'Sales · MKT', default: 'Careers' };
+const THEME_HOOK = {
+  product: '보험의 내일을 함께 그릴 동료를 찾아요',
+  it: '기술로 금융을 더 편하게 만들 동료를 찾아요',
+  newgrad: '첫 커리어, ABL에서 시작하세요',
+  sales: '시장을 함께 키워갈 동료를 찾아요',
+  default: 'ABL과 함께 성장할 동료를 찾아요'
+};
+// SNS 피드용으로 격식 직함(시니어/매니저/직급 등) 제거
+function cleanRole(pos) {
+  const r = String(pos || '')
+    .replace(/(시니어|주니어|선임|수석|책임|리드|총괄|그룹장|팀장|파트장|담당|매니저|사원|대리|과장|차장|부장|senior|junior|lead|manager|sr\.?|jr\.?)/gi, '')
+    .replace(/\s+/g, ' ').trim();
+  return r || String(pos || '').trim();
+}
 const MASCOT = '../../assets/mascot/abl-bear.png';
 const LOGO_ABL = '../../assets/logos/abl-logo.png';
 const LOGO_WOORI = '../../assets/logos/woori-logo.png';
@@ -429,8 +447,9 @@ function crSlogan() {
 }
 function crTags() {
   const t = THEME, c = CTX;
-  const tag2 = t.label || c.dept;
-  return `<span class="cr-tag">${esc(c.type)}</span>${tag2 ? `<span class="cr-tag">${esc(tag2)}</span>` : ''}`;
+  return `<span class="cr-icon-badge"><i class="ti ${THEME_ICON[t.key]}"></i></span>
+        <span class="cr-tag">${esc(c.type)}</span>
+        <span class="cr-tag">${esc(THEME_ENG[t.key])}</span>`;
 }
 function creativeBase(variant, centered) {
   const t = THEME, c = CTX;
@@ -439,6 +458,7 @@ function creativeBase(variant, centered) {
     : `<div class="cr-foot"><div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div><div class="cr-cta">지원하기 →</div></div>`;
   return `<div class="creative ${variant}" style="--accent:${THEME_ACCENT[t.key]}">
     <div class="cr-bg"></div><div class="cr-glow"></div><div class="cr-glow b"></div>
+    <i class="cr-watermark ti ${THEME_ICON[t.key]}"></i>
     <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
     <div class="cr-pad">
       <div class="cr-top">
@@ -447,8 +467,8 @@ function creativeBase(variant, centered) {
       </div>
       ${crSlogan()}
       <div class="cr-tags">${crTags()}</div>
-      <div class="cr-title">${esc(c.position)}</div>
-      <div class="cr-sub">${esc(t.tagline)}</div>
+      <div class="cr-title">${esc(cleanRole(c.position))}</div>
+      <div class="cr-sub">${esc(THEME_HOOK[t.key])}</div>
       ${foot}
     </div>
   </div>`;
