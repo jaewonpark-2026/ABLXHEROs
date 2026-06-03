@@ -205,7 +205,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .strat-sub .ss-body { padding-left: 31px; }
 
 .motiv-list { display: flex; flex-direction: column; gap: 10px; }
-.motiv-item { display: grid; grid-template-columns: 52px 1fr 110px; gap: 14px; align-items: center; padding: 12px 14px; background: #FAFCFE; border: 1px solid var(--border); border-radius: 10px; }
+.motiv-item { display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: center; padding: 12px 14px; background: #FAFCFE; border: 1px solid var(--border); border-radius: 10px; }
 .motiv-item .mi-rank { font-size: 10.5px; font-weight: 700; color: var(--main-1); background: var(--info-bg); border-radius: 999px; padding: 3px 0; text-align: center; }
 .motiv-item .mi-name { font-size: 12.5px; font-weight: 700; color: var(--text-1); margin-bottom: 3px; }
 .motiv-item .mi-text { font-size: 11px; color: var(--text-3); line-height: 1.55; font-weight: 600; }
@@ -402,7 +402,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 
       <div class="page-header">
         <div class="crumb">채용 데이터 · 경력직 처우협의</div>
-        <h1 class="page-title">처우 협의 데이터 <span class="v2-badge">v2 · 시연용</span></h1>
+        <h1 class="page-title">처우 협의 데이터</h1>
         <p class="page-sub">처우협의 기초 자료 · 내부 형평성 시뮬레이션 · 협상 전략 가이드를 통한 협상 의사결정 지원</p>
       </div>
 
@@ -465,7 +465,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
       <!-- ============ [3] 내부 형평성 + 다층 리스크 (v2 강화) ============ -->
       <section class="section">
         <div class="section-head">
-          <div class="section-title">내부 형평성 시뮬레이션 <span class="v2-tag">v2 강화</span></div>
+          <div class="section-title">내부 형평성 시뮬레이션</div>
           <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">오퍼 금액 조정 시 앵커 범위·리스크 실시간 분석</div>
         </div>
 
@@ -525,18 +525,15 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <div class="motiv-list">
               <div class="motiv-item">
                 <div class="mi-rank">1순위</div>
-                <div><div class="mi-name">Pricing 가정 설계의 직접 권한</div><div class="mi-text">"가정 설정·CSM 마진" 표현이 답변에 17회 반복될 만큼, 본인이 가정을 설계하고 결재까지 이끄는 권한에서 가장 강한 몰입을 보임. (신호 강도 9.3)</div></div>
-                <div class="mi-bar"><span style="width:93%"></span></div>
+                <div><div class="mi-name">Pricing 가정 설계의 직접 권한</div><div class="mi-text">"가정 설정·CSM 마진" 표현이 답변에 17회 반복될 만큼, 본인이 가정을 설계하고 결재까지 이끄는 권한에서 가장 강한 몰입을 보임.</div></div>
               </div>
               <div class="motiv-item">
                 <div class="mi-rank">2순위</div>
-                <div><div class="mi-name">Cross-functional 합의 도출의 임팩트</div><div class="mi-text">본인이 만든 시나리오 매트릭스가 부서 간 의사결정을 단순화하는 도구로 쓰이는 환경에서 동기가 강하게 작동. (신호 강도 8.8)</div></div>
-                <div class="mi-bar"><span style="width:88%"></span></div>
+                <div><div class="mi-name">Cross-functional 합의 도출의 임팩트</div><div class="mi-text">본인이 만든 시나리오 매트릭스가 부서 간 의사결정을 단순화하는 도구로 쓰이는 환경에서 동기가 강하게 작동.</div></div>
               </div>
               <div class="motiv-item">
                 <div class="mi-rank">3순위</div>
-                <div><div class="mi-name">규제 환경 대응 도메인 확장</div><div class="mi-text">IFRS17 TF 12개월 자발 참여·K-ICS 사내 강사 3회. ABL의 향후 5년 상품 포트폴리오 재편에서 도메인 깊이를 확장하려는 동기가 명확. (신호 강도 8.1)</div></div>
-                <div class="mi-bar"><span style="width:81%"></span></div>
+                <div><div class="mi-name">규제 환경 대응 도메인 확장</div><div class="mi-text">IFRS17 TF 12개월 자발 참여·K-ICS 사내 강사 3회. ABL의 향후 5년 상품 포트폴리오 재편에서 도메인 깊이를 확장하려는 동기가 명확.</div></div>
               </div>
             </div>
             <div class="comm-tips">
@@ -582,7 +579,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <div class="check-list">
               <div class="check-group">
                 <div class="cg-label"><i class="ti ti-building-bank"></i> 회사 정책 · 한도</div>
-                <label class="check-item"><input type="checkbox"> <span><strong>회사 max는 7,500만원</strong> (Q3 기준). 그 이상은 본부장 결재 + 차상위 직급 비교 필요</span></label>
+                <label class="check-item"><input type="checkbox"> <span><strong>회사 max는 7,500만원</strong> (Q3 기준)</span></label>
                 <label class="check-item"><input type="checkbox"> <span>밴드 상단 초과 시 차기 정기인상 여력 -5% 이내로 제한됨</span></label>
                 <label class="check-item"><input type="checkbox"> <span>오퍼 확정 후 처우 변경은 합류 6개월차 점검 1회만 가능</span></label>
               </div>
@@ -611,7 +608,6 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         <textarea class="memo-area" id="ai-memo" placeholder="‘AI 기안 초안 생성’을 누르면 협의 데이터(제안액·내부 형평성·주요 니즈)를 기반으로 기안 초안이 자동 작성됩니다. 생성 후 자유롭게 수정하세요."></textarea>
         <div class="memo-actions">
           <button class="btn-secondary" onclick="showToast('메모가 저장되었습니다.', 'success')"><i class="ti ti-download"></i> 저장</button>
-          <button class="btn-p" onclick="showToast('승인 요청이 발송되었습니다.', 'success')"><i class="ti ti-send"></i> 본부장 승인 요청</button>
         </div>
       </section>
 
