@@ -5620,10 +5620,10 @@ a { color: inherit; text-decoration: none; }
               </td>
               <td>
                 <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
-                <div class="status-meta">상품기획 직무 신규 리드</div>
+                <div class="status-meta">2차 면접 후 인재풀 등록</div>
               </td>
               <td><span class="stage-pill new">신규</span></td>
-              <td class="task-cell">신규 리드 — 컨택 검토</td>
+              <td class="task-cell">포지션 공석 시 우선 컨택</td>
               <td class="contact-cell">010-3924-5712</td>
               <td class="career-cell">
                 <div class="role">상품기획 매니저</div>
@@ -6323,25 +6323,27 @@ function showToast(message, type) {
       appliedFor: '2026 상반기 경력 채용 · 상품기획 대리',
       overall: {
         status: 'priority',
-        statusLabel: '1차 합격 · 2차 면접 진행 중',
-        summary: '변액·종신 Pricing 경험과 ALM 운영 백그라운드가 견고한 7년차 매니저. 신상품 직접 리드 경험은 다소 제한적. 조현근 후보(서강생명 책임)와 동일 자리 경합 중으로 2순위 평가.',
-        lastEvalDate: '2026.06.02'
+        statusLabel: '2차 면접 후 인재풀 등록',
+        summary: '변액·종신 Pricing 경험과 ALM 운영 백그라운드가 견고한 7년차 매니저. 신상품 직접 리드 경험은 다소 제한적. 조현근 후보(서강생명 책임)에 밀려 최종 2순위로 2차 면접 후 인재풀에 보존.',
+        lastEvalDate: '2026.06.20'
       },
       funnel: [
         { label: '서류',     result: 'pass', score: 85 },
         { label: '역량검사',   result: 'pass', score: 82 },
         { label: '1차 면접', result: 'pass', score: 86 },
-        { label: '2차 면접', result: 'hold', score: null }
+        { label: '2차 면접', result: 'fail', score: 84 }
       ],
       interviewers: [
         { stage: '서류 평가', name: '하유림 책임', dept: '인사팀 · 채용파트',     score: 85 },
         { stage: '1차 실무', name: '윤미경 팀장', dept: '상품기획팀',           score: 86 },
-        { stage: '1차 실무', name: '김도훈 본부장', dept: '상품본부',           score: 84 }
+        { stage: '1차 실무', name: '김도훈 본부장', dept: '상품본부',           score: 84 },
+        { stage: '2차 임원', name: '박성준 상무', dept: '상품총괄',            score: 84 }
       ],
       comments: [
         { who: '하유림 책임', dept: '인사팀', stage: '서류 평가', text: '자소서 분석 결과 종합 85점 (직무 fit 87, 조직 fit 82, 산업 fit 89). 변액·종신 Pricing·ALM 운영 경험이 우수하며 IFRS17 보조 업무 경험 보유. 다만 신상품 단독 리드 케이스가 다소 부족.' },
         { who: '윤미경 팀장', dept: '상품기획팀', stage: '1차 실무', text: 'ALM 운영 능력과 변액·종신 Pricing 기본기는 검증됨. 본부 책임급 진입 시 신상품 개발 단독 리드 경험 부족이 부담 — 온보딩 6개월 가량 필요할 것으로 판단.' },
-        { who: '김도훈 본부장', dept: '상품본부', stage: '1차 실무', text: 'IFRS17 보조 경험과 도메인 기본기는 우수하나, 동일 자리 경쟁 후보(조현근) 대비 KPI 단독 책임 경험이 부족. 2순위 평가하되 2차 면접 결과에 따라 차순위 보존 후보로 검토.' }
+        { who: '김도훈 본부장', dept: '상품본부', stage: '1차 실무', text: 'IFRS17 보조 경험과 도메인 기본기는 우수하나, 동일 자리 경쟁 후보(조현근) 대비 KPI 단독 책임 경험이 부족. 2순위로 평가.' },
+        { who: '박성준 상무', dept: '상품총괄', stage: '2차 임원', text: '도메인 기본기와 협업 태도는 우수하나, 동일 포지션 경쟁 후보(조현근) 대비 신상품 단독 리드 경험에서 변별. 금번 채용은 조현근 후보로 확정하되, 향후 상품기획 포지션 공석 시 우선 검토 대상으로 인재풀 보존 권장.' }
       ]
     }
 
