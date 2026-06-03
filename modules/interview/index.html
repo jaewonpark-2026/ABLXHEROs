@@ -733,14 +733,6 @@ a { color: inherit; text-decoration: none; }
 
       <!-- 1단계: 공고 선택 -->
       <nav class="posting-tabs">
-        <button type="button" class="posting-tab active" id="posting-tab-newgrad" onclick="switchPosting('newgrad')">
-          <span class="pt-ic"><i class="ti ti-school"></i></span>
-          <div>
-            <div class="pt-name">2026 신입사원 공채</div>
-            <div class="pt-sub">접수기간 2026.06.08 ~ 2026.06.14</div>
-          </div>
-          <span class="pt-count" id="posting-count-newgrad">0명</span>
-        </button>
         <button type="button" class="posting-tab" id="posting-tab-it-career" onclick="switchPosting('it-career')">
           <span class="pt-ic"><i class="ti ti-device-desktop"></i></span>
           <div>
@@ -749,13 +741,21 @@ a { color: inherit; text-decoration: none; }
           </div>
           <span class="pt-count" id="posting-count-it-career">0명</span>
         </button>
-        <button type="button" class="posting-tab" id="posting-tab-career" onclick="switchPosting('career')">
+        <button type="button" class="posting-tab active" id="posting-tab-career" onclick="switchPosting('career')">
           <span class="pt-ic"><i class="ti ti-briefcase"></i></span>
           <div>
             <div class="pt-name">상품본부 상품기획팀 경력직 채용</div>
             <div class="pt-sub">접수기간 2026.06.03 ~ 2026.06.09</div>
           </div>
           <span class="pt-count" id="posting-count-career">0명</span>
+        </button>
+        <button type="button" class="posting-tab" id="posting-tab-newgrad" onclick="switchPosting('newgrad')">
+          <span class="pt-ic"><i class="ti ti-school"></i></span>
+          <div>
+            <div class="pt-name">2026 신입사원 공채</div>
+            <div class="pt-sub">접수기간 2026.06.08 ~ 2026.06.14</div>
+          </div>
+          <span class="pt-count" id="posting-count-newgrad">0명</span>
         </button>
       </nav>
 
@@ -1356,7 +1356,7 @@ function logout() { sessionStorage.clear(); window.location.href = '../../index.
 let candidates = [];
 let currentMainView = 'newgrad-r1';
 let currentStageFilter = 1;
-let currentPosting = 'newgrad';
+let currentPosting = 'career';
 let currentResultFilter = 'none';  // 'none' (진행중) / '최종 합격' / '불합격'
 let activeView = 'dashboard';
 let compareMode = false;
@@ -1403,7 +1403,7 @@ function switchMainView(viewType) {
   // viewType 파싱: 'newgrad-all' / 'it-career-r1' / 'career-r2' 등
   // posting에 하이픈이 있을 수 있으므로(it-career) 마지막 '-' 기준으로 round 분리
   // 하위 호환: 'all' → 'newgrad-all', 'stage1' → 'career-r1', 'stage2' → 'career-r2'
-  if (viewType === 'all') viewType = 'newgrad-all';
+  if (viewType === 'all') viewType = 'career-all';
   else if (viewType === 'stage1') viewType = 'career-r1';
   else if (viewType === 'stage2') viewType = 'career-r2';
   const lastDash = viewType.lastIndexOf('-');
