@@ -177,69 +177,50 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .creative { container-type: inline-size; width: 100%; height: 100%; position: relative; overflow: hidden; font-family: 'Wooridaum','Malgun Gothic',sans-serif; --accent: #0067AC; --grad: var(--grad-blue); }
 .creative * { box-sizing: border-box; }
 .cr-bg { position: absolute; inset: 0; background: var(--grad); }
-.cr-orb { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.10); }
-.cr-orb.a { width: 55cqw; height: 55cqw; right: -18cqw; top: -16cqw; }
-.cr-orb.b { width: 34cqw; height: 34cqw; left: -12cqw; bottom: 16cqw; background: rgba(255,255,255,0.07); }
-.cr-grain { position: absolute; inset: 0; opacity: 0.5; background:
-  radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 40%),
-  radial-gradient(circle at 85% 75%, rgba(0,0,0,0.10), transparent 45%); }
-.cr-mascot { position: absolute; z-index: 4; filter: drop-shadow(0 6cqw 7cqw rgba(0,0,0,0.22)); animation: crFloat 4.5s ease-in-out infinite; }
-@keyframes crFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-1.6cqw) } }
+.cr-glow { position: absolute; width: 92cqw; height: 92cqw; right: -32cqw; top: -28cqw; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.18), transparent 62%); pointer-events: none; }
+.cr-glow.b { right: auto; left: -36cqw; top: auto; bottom: -34cqw; width: 74cqw; height: 74cqw; background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 62%); }
+.cr-mascot { position: absolute; z-index: 4; filter: drop-shadow(0 5cqw 6cqw rgba(0,0,0,0.20)); }
 
 /* 공통 텍스트 */
-.cr-pad { position: absolute; inset: 0; padding: 7cqw 7cqw; z-index: 3; color: white; display: flex; flex-direction: column; }
-.cr-logo { font-size: 4cqw; font-weight: 800; letter-spacing: -0.2cqw; display: flex; align-items: center; gap: 1.5cqw; }
-.cr-logo .dot { width: 1.1cqw; height: 1.1cqw; border-radius: 50%; background: rgba(255,255,255,0.6); }
-.cr-logo .sm { font-size: 3cqw; font-weight: 600; opacity: 0.8; }
-.cr-handle { font-size: 3.1cqw; font-weight: 700; opacity: 0.82; }
-.cr-eyebrow { font-size: 3.4cqw; font-weight: 800; letter-spacing: 1.4cqw; opacity: 0.92; }
-.cr-title { font-size: 8.6cqw; font-weight: 800; line-height: 1.14; letter-spacing: -0.3cqw; word-break: keep-all; }
-.cr-sub { font-size: 3.9cqw; font-weight: 600; opacity: 0.94; }
-.cr-chips { display: flex; flex-wrap: wrap; gap: 1.8cqw; }
-.cr-chip { background: rgba(255,255,255,0.18); border: 0.3cqw solid rgba(255,255,255,0.32); border-radius: 2cqw; padding: 1.5cqw 2.8cqw; font-size: 3.2cqw; font-weight: 700; backdrop-filter: blur(2px); }
-.cr-foot { display: flex; align-items: center; justify-content: space-between; gap: 2cqw; }
-.cr-deadline { font-size: 3.4cqw; font-weight: 700; opacity: 0.95; }
-.cr-cta { background: white; color: var(--accent); font-size: 3.5cqw; font-weight: 800; padding: 2.2cqw 4.2cqw; border-radius: 2.4cqw; box-shadow: 0 2cqw 5cqw rgba(0,0,0,0.18); }
+.cr-pad { position: absolute; inset: 0; padding: 8cqw 7.5cqw; z-index: 3; color: white; display: flex; flex-direction: column; }
+.cr-top { display: flex; align-items: center; justify-content: space-between; }
+.cr-brand { font-size: 3.3cqw; font-weight: 800; letter-spacing: -0.1cqw; display: flex; align-items: center; gap: 1.4cqw; }
+.cr-brand .sep { opacity: 0.5; }
+.cr-brand .sm { font-weight: 600; opacity: 0.82; }
+.cr-handle { font-size: 3cqw; font-weight: 700; opacity: 0.8; }
 
-/* Variant A — 다이내믹 히어로 */
-.v-a .cr-pad { justify-content: flex-start; gap: 0; }
-.v-a .cr-top { display: flex; align-items: center; justify-content: space-between; }
-.v-a .cr-eyebrow { margin-top: 9cqw; }
-.v-a .cr-title { margin-top: 3.2cqw; max-width: 70cqw; }
-.v-a .cr-sub { margin-top: 2.6cqw; }
-.v-a .cr-chips { margin-top: 4.4cqw; max-width: 62cqw; }
-.v-a .cr-foot { position: absolute; left: 7cqw; right: auto; bottom: 7cqw; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2.6cqw; max-width: 52cqw; }
-.v-a .cr-mascot { width: 49cqw; right: -3cqw; bottom: 9cqw; }
+.cr-slogan { margin-top: 8.5cqw; font-size: 5.1cqw; font-weight: 800; letter-spacing: -0.1cqw; line-height: 1.18; }
+.cr-slogan .r { color: #FF6B6B; }
+.cr-eyebrow { margin-top: 2cqw; font-size: 2.9cqw; font-weight: 700; letter-spacing: 2.4cqw; opacity: 0.78; }
 
-/* Variant B — 키워드 타이포 */
-.v-b .cr-pad { justify-content: flex-start; }
-.v-b .cr-eyebrow { font-size: 3.2cqw; letter-spacing: 1cqw; }
-.v-b .cr-logo { position: absolute; right: 7cqw; top: 7cqw; }
-.v-b .kw-stack { margin-top: 10cqw; display: flex; flex-direction: column; gap: 1cqw; }
-.v-b .kw { font-size: 9.2cqw; font-weight: 800; line-height: 1.05; letter-spacing: -0.3cqw; }
-.v-b .kw.dim { opacity: 0.42; }
-.v-b .kw .amp { font-size: 4cqw; opacity: 0.6; font-weight: 700; }
-.v-b .cr-title { position: absolute; left: 7cqw; bottom: 20cqw; font-size: 5.6cqw; max-width: 60cqw; }
-.v-b .cr-foot { position: absolute; left: 7cqw; right: 7cqw; bottom: 7cqw; }
-.v-b .cr-mascot { width: 40cqw; right: -2cqw; bottom: 13cqw; }
+.cr-tags { display: flex; flex-wrap: wrap; gap: 1.6cqw; margin-top: 6.5cqw; }
+.cr-tag { background: rgba(255,255,255,0.16); border: 0.3cqw solid rgba(255,255,255,0.30); border-radius: 6cqw; padding: 1.4cqw 3.4cqw; font-size: 2.9cqw; font-weight: 700; backdrop-filter: blur(3px); }
+.cr-title { margin-top: 3.4cqw; font-size: 9.4cqw; font-weight: 800; line-height: 1.1; letter-spacing: -0.4cqw; word-break: keep-all; max-width: 66cqw; }
+.cr-sub { margin-top: 3cqw; font-size: 3.9cqw; font-weight: 600; opacity: 0.9; line-height: 1.45; max-width: 56cqw; word-break: keep-all; }
 
-/* Variant C — 화이트 카드 */
-.v-c .cr-bg { background: #FCFDFE; }
-.v-c .cr-band { position: absolute; left: 0; right: 0; top: 0; height: 31cqw; background: var(--grad); border-radius: 0 0 6cqw 6cqw; }
-.v-c .cr-orb, .v-c .cr-grain { display: none; }
-.v-c .cr-pad { padding: 6cqw 7cqw; }
-.v-c .cr-band-in { color: white; }
-.v-c .cr-band-in .cr-logo { font-size: 3.8cqw; }
-.v-c .cr-band-in .cr-eyebrow { margin-top: 5cqw; font-size: 3.6cqw; letter-spacing: 1.2cqw; }
-.v-c .cr-title { color: #1A2233; margin-top: 13cqw; font-size: 8cqw; max-width: 66cqw; }
-.v-c .cr-sub { color: var(--accent); margin-top: 2.4cqw; font-weight: 700; }
-.v-c .cr-chips { margin-top: 4cqw; max-width: 60cqw; }
-.v-c .cr-chip { background: color-mix(in srgb, var(--accent) 10%, white); border-color: color-mix(in srgb, var(--accent) 22%, white); color: var(--accent); backdrop-filter: none; }
-.v-c .cr-foot { position: absolute; left: 7cqw; right: auto; bottom: 6.5cqw; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2.4cqw; max-width: 52cqw; }
-.v-c .cr-deadline { color: var(--text-2); }
-.v-c .cr-cta { background: var(--accent); color: white; }
-.v-c .cr-handle { color: rgba(255,255,255,0.85); }
-.v-c .cr-mascot { width: 42cqw; right: -3cqw; bottom: 8cqw; }
+.cr-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 2cqw; }
+.cr-deadline { font-size: 3.3cqw; font-weight: 700; opacity: 0.92; display: flex; align-items: center; gap: 1.2cqw; }
+.cr-cta { background: white; color: var(--accent); font-size: 3.4cqw; font-weight: 800; padding: 2.2cqw 4.6cqw; border-radius: 6cqw; box-shadow: 0 2cqw 5cqw rgba(0,0,0,0.18); }
+
+/* Variant A — 그라데이션 히어로 (다크) */
+.v-a .cr-mascot { width: 45cqw; right: -4cqw; bottom: 12cqw; }
+
+/* Variant B — 라이트 클린 (화이트 + 블루/레드) */
+.v-b .cr-bg { background: linear-gradient(160deg, #FFFFFF 0%, #EFF6FC 100%); }
+.v-b .cr-glow { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 16%, transparent), transparent 62%); }
+.v-b .cr-glow.b { background: radial-gradient(circle, rgba(232,85,85,0.12), transparent 62%); }
+.v-b .cr-pad { color: #1A2233; }
+.v-b .cr-brand { color: var(--accent); }
+.v-b .cr-handle { color: var(--text-3); opacity: 1; }
+.v-b .cr-slogan { color: #14223A; }
+.v-b .cr-slogan .r { color: #E84545; }
+.v-b .cr-eyebrow { color: var(--accent); opacity: 0.72; }
+.v-b .cr-tag { background: color-mix(in srgb, var(--accent) 10%, white); border-color: color-mix(in srgb, var(--accent) 22%, white); color: var(--accent); backdrop-filter: none; }
+.v-b .cr-title { color: #14223A; }
+.v-b .cr-sub { color: var(--text-2); opacity: 1; }
+.v-b .cr-deadline { color: var(--text-2); opacity: 1; }
+.v-b .cr-cta { background: var(--accent); color: white; }
+.v-b .cr-mascot { width: 43cqw; right: -3cqw; bottom: 11cqw; }
 
 /* ===== 생성 오버레이 ===== */
 .gen-overlay { position: absolute; inset: 0; z-index: 20; background: linear-gradient(160deg, #0F2F52, #0B4C7F 60%, #0A6E86); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
@@ -297,22 +278,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
       <div class="page-head">
         <div>
           <div class="ph-title"><span class="ph-spark"><i class="ti ti-brand-instagram"></i></span> SNS 채용 피드 생성 <span class="ph-new"><i class="ti ti-sparkles"></i> AI</span></div>
-          <div class="ph-sub">확정된 JD를 AI가 분석해, <b style="color:var(--text-1)">인스타그램 채용 피드(4:5)</b>를 자동으로 디자인합니다. 직무 특성에 맞춘 시안 3종과 캡션·해시태그까지 한 번에 생성합니다.</div>
-        </div>
-      </div>
-
-      <div class="why">
-        <div class="why-item">
-          <div class="why-ic blue"><i class="ti ti-brand-instagram"></i></div>
-          <div><div class="why-t">이미 채널은 있습니다</div><div class="why-d">ABL생명은 공식 인스타그램 <span class="ig">@korea.abllife</span>를 운영 중 (팔로워 약 <b>1.3만</b>)</div></div>
-        </div>
-        <div class="why-item">
-          <div class="why-ic pink"><i class="ti ti-alert-triangle"></i></div>
-          <div><div class="why-t">하지만 채용은 잡포털만</div><div class="why-d">채용공고는 구인구직 사이트에만 게시 — <b>SNS 채널에는 따로 올리지 않고 있음</b></div></div>
-        </div>
-        <div class="why-item">
-          <div class="why-ic cyan"><i class="ti ti-bolt"></i></div>
-          <div><div class="why-t">그래서, AI 자동 생성</div><div class="why-d">JD만 있으면 <b style="color:#009BB0">SNS용 피드를 즉시 제작</b> — 잠재 지원자에게 직접 도달</div></div>
+          <div class="ph-sub">JD를 AI가 분석해 <b style="color:var(--text-1)">SNS용 채용 피드</b>를 자동으로 디자인합니다. 직무 특성에 맞춘 시안 2종과 캡션·해시태그까지 한 번에 생성합니다.</div>
         </div>
       </div>
 
@@ -326,7 +292,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
           </div>
 
           <div class="panel">
-            <div class="panel-title"><i class="ti ti-layout-grid"></i> AI 생성 시안 <span class="mini">3종 · 클릭하여 선택</span></div>
+            <div class="panel-title"><i class="ti ti-layout-grid"></i> AI 생성 시안 <span class="mini">2종 · 클릭하여 선택</span></div>
             <div class="variant-row" id="variantRow"></div>
             <div class="regen-row">
               <button class="btn btn-ghost btn-block" onclick="regenerate()"><i class="ti ti-refresh"></i> 다시 생성</button>
@@ -459,20 +425,28 @@ function tagify(t) { return String(t).replace(/[^0-9A-Za-z가-힣]/g, ''); }
 function firstSentence(s) { if (!s) return ''; const m = String(s).split(/(?<=[.!?。])\s/)[0]; return m.replace(/\.$/, ''); }
 
 // ===== 크리에이티브(4:5) 빌더 =====
-function creativeA() {
+function crSlogan() {
+  return `<div class="cr-slogan">Make <span class="r">A</span> <span class="r">B</span>etter <span class="r">L</span>ife With Us</div>
+      <div class="cr-eyebrow">WE'RE HIRING</div>`;
+}
+function crTags() {
   const t = THEME, c = CTX;
-  const chips = c.skills.slice(0, 4).map(s => `<span class="cr-chip">#${esc(tagify(s))}</span>`).join('');
-  return `<div class="creative v-a" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
-    <div class="cr-bg"></div><div class="cr-orb a"></div><div class="cr-orb b"></div><div class="cr-grain"></div>
+  const tag2 = t.label || c.dept;
+  return `<span class="cr-tag">${esc(c.type)}</span>${tag2 ? `<span class="cr-tag">${esc(tag2)}</span>` : ''}`;
+}
+function creativeBase(variant) {
+  const t = THEME, c = CTX;
+  return `<div class="creative ${variant}" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
+    <div class="cr-bg"></div><div class="cr-glow"></div><div class="cr-glow b"></div>
     <div class="cr-pad">
       <div class="cr-top">
-        <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
+        <div class="cr-brand">ABL생명 <span class="sep">·</span> <span class="sm">우리금융그룹</span></div>
         <div class="cr-handle">@korea.abllife</div>
       </div>
-      <div class="cr-eyebrow">WE'RE HIRING</div>
+      ${crSlogan()}
+      <div class="cr-tags">${crTags()}</div>
       <div class="cr-title">${esc(c.position)}</div>
-      <div class="cr-sub">${esc(c.dept)} · ${esc(c.type)}직 채용</div>
-      <div class="cr-chips">${chips}</div>
+      <div class="cr-sub">${esc(t.tagline)}</div>
       <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
       <div class="cr-foot">
         <div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div>
@@ -481,49 +455,10 @@ function creativeA() {
     </div>
   </div>`;
 }
-function creativeB() {
-  const t = THEME, c = CTX;
-  const kws = c.skills.slice(0, 3);
-  const stack = kws.map((k, i) => `<div class="kw ${i === kws.length - 1 ? '' : 'dim'}">${esc(k)}${i < kws.length - 1 ? ' <span class="amp">/</span>' : ''}</div>`).join('');
-  return `<div class="creative v-b" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
-    <div class="cr-bg"></div><div class="cr-orb a"></div><div class="cr-orb b"></div><div class="cr-grain"></div>
-    <div class="cr-pad">
-      <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
-      <div class="cr-eyebrow" style="margin-top:9cqw;">${t.emoji} WE'RE HIRING</div>
-      <div class="kw-stack">${stack}</div>
-      <div class="cr-title">${esc(c.position)}<br><span style="font-size:3.6cqw;font-weight:600;opacity:0.9">${esc(c.dept)} · ${esc(c.type)}직</span></div>
-      <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
-      <div class="cr-foot">
-        <div class="cr-deadline">📅 ~ ${esc(c.deadlineShort)} · 프로필 링크 지원</div>
-        <div class="cr-handle">@korea.abllife</div>
-      </div>
-    </div>
-  </div>`;
-}
-function creativeC() {
-  const t = THEME, c = CTX;
-  const chips = c.skills.slice(0, 4).map(s => `<span class="cr-chip">#${esc(tagify(s))}</span>`).join('');
-  return `<div class="creative v-c" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
-    <div class="cr-bg"></div>
-    <div class="cr-band"></div>
-    <div class="cr-pad">
-      <div class="cr-band-in">
-        <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
-        <div class="cr-eyebrow">WE'RE HIRING <span class="cr-handle">· @korea.abllife</span></div>
-      </div>
-      <div class="cr-title">${esc(c.position)}</div>
-      <div class="cr-sub">${esc(c.dept)} · ${esc(c.type)}직 채용</div>
-      <div class="cr-chips">${chips}</div>
-      <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
-      <div class="cr-foot">
-        <div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div>
-        <div class="cr-cta">지원하기 →</div>
-      </div>
-    </div>
-  </div>`;
-}
-const BUILDERS = { a: creativeA, b: creativeB, c: creativeC };
-const VARIANT_LABELS = { a: '다이내믹 히어로', b: '키워드 타이포', c: '화이트 카드' };
+function creativeA() { return creativeBase('v-a'); }
+function creativeB() { return creativeBase('v-b'); }
+const BUILDERS = { a: creativeA, b: creativeB };
+const VARIANT_LABELS = { a: '그라데이션 히어로', b: '라이트 클린' };
 
 // ===== 캡션 자동 작성 =====
 function buildCaptionParts() {
@@ -552,7 +487,7 @@ function renderStage() {
 }
 function renderVariants() {
   const row = document.getElementById('variantRow');
-  row.innerHTML = ['a', 'b', 'c'].map(k => `
+  row.innerHTML = ['a', 'b'].map(k => `
     <div class="variant ${k === selectedVariant ? 'sel' : ''}" data-v="${k}" onclick="selectVariant('${k}')">
       <div class="variant-thumb">${BUILDERS[k]()}</div>
       <div class="variant-label">시안 ${k.toUpperCase()} · ${VARIANT_LABELS[k]}</div>
