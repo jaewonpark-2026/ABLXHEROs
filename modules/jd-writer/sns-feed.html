@@ -145,9 +145,9 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .phone { width: 100%; max-width: 412px; margin: 0 auto; background: white; border-radius: 26px; border: 1px solid var(--border); box-shadow: 0 24px 60px -18px rgba(20,40,80,0.28); overflow: hidden; }
 .ig-statusbar { height: 18px; background: white; }
 .ig-head { display: flex; align-items: center; gap: 10px; padding: 10px 13px; }
-.ig-avatar { width: 38px; height: 38px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5); flex-shrink: 0; }
-.ig-avatar .inner { width: 100%; height: 100%; border-radius: 50%; background: #E9F3FC; border: 2px solid white; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-.ig-avatar .inner img { width: 150%; height: 150%; object-fit: contain; object-position: center 18%; }
+.ig-avatar { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; }
+.ig-avatar .inner { width: 100%; height: 100%; border-radius: 50%; background: #ED2A24; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.ig-avatar .abl-mark { color: #fff; font-weight: 800; font-size: 14px; letter-spacing: -0.5px; font-family: 'Manrope','Wooridaum',sans-serif; }
 .ig-userblock { flex: 1; min-width: 0; }
 .ig-user { font-size: 13px; font-weight: 700; color: #1A2233; display: flex; align-items: center; gap: 4px; }
 .ig-user .vf { color: #3897F0; font-size: 13px; }
@@ -184,7 +184,11 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 /* 공통 텍스트 (라이트) */
 .cr-pad { position: absolute; inset: 0; padding: 8cqw 7.5cqw; z-index: 3; color: #14223A; display: flex; flex-direction: column; }
 .cr-top { display: flex; align-items: center; justify-content: space-between; }
-.cr-brand { font-size: 3.3cqw; font-weight: 800; letter-spacing: -0.1cqw; display: flex; align-items: center; gap: 1.4cqw; color: var(--accent); }
+.cr-brand { font-size: 3.3cqw; font-weight: 800; letter-spacing: -0.1cqw; display: flex; align-items: center; gap: 2.2cqw; color: var(--accent); }
+.cr-brand img { display: block; width: auto; }
+.cr-brand .cr-logo-abl { height: 5.2cqw; }
+.cr-brand .cr-logo-woori { height: 3.3cqw; opacity: 0.92; }
+.cr-brand .cr-logo-sep { width: 0.25cqw; height: 4.2cqw; background: rgba(20,40,80,0.18); border-radius: 1cqw; }
 .cr-brand .sep { opacity: 0.45; }
 .cr-brand .sm { font-weight: 700; color: var(--text-2); }
 .cr-handle { font-size: 3cqw; font-weight: 700; color: var(--text-3); }
@@ -195,7 +199,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 
 .cr-tags { display: flex; flex-wrap: wrap; gap: 1.6cqw; margin-top: 5.5cqw; }
 .cr-tag { background: color-mix(in srgb, var(--accent) 9%, white); border: 0.3cqw solid color-mix(in srgb, var(--accent) 20%, white); border-radius: 6cqw; padding: 1.4cqw 3.4cqw; font-size: 2.9cqw; font-weight: 700; color: var(--accent); }
-.cr-title { margin-top: 3.2cqw; font-size: 9cqw; font-weight: 800; line-height: 1.1; letter-spacing: -0.4cqw; word-break: keep-all; color: #14223A; }
+.cr-title { margin-top: 3.2cqw; font-size: 7.6cqw; font-weight: 800; line-height: 1.12; letter-spacing: -0.4cqw; word-break: keep-all; color: #14223A; }
 .cr-sub { margin-top: 2.8cqw; font-size: 3.8cqw; font-weight: 600; line-height: 1.45; color: var(--text-2); word-break: keep-all; }
 
 .cr-foot { margin-top: auto; display: flex; align-items: center; gap: 3cqw; }
@@ -308,7 +312,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
           <div class="phone">
             <div class="ig-statusbar"></div>
             <div class="ig-head">
-              <div class="ig-avatar"><div class="inner"><img src="../../assets/mascot/abl-bear.png" alt="ABL"></div></div>
+              <div class="ig-avatar"><div class="inner"><span class="abl-mark">ABL</span></div></div>
               <div class="ig-userblock">
                 <div class="ig-user">korea.abllife <i class="ti ti-rosette-discount-check-filled vf"></i></div>
                 <div class="ig-loc">ABL생명 공식 · 채용</div>
@@ -408,6 +412,8 @@ const THEME_GRAD = {
 };
 const THEME_ACCENT = { product: '#273A92', it: '#0090D0', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
 const MASCOT = '../../assets/mascot/abl-bear.png';
+const LOGO_ABL = '../../assets/logos/abl-logo.png';
+const LOGO_WOORI = '../../assets/logos/woori-logo.png';
 
 // ===== 상태 =====
 let DATA = null, JD = null, REQ = null, THEME = null, CTX = null, selectedVariant = 'a';
@@ -436,7 +442,7 @@ function creativeBase(variant, centered) {
     <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
     <div class="cr-pad">
       <div class="cr-top">
-        <div class="cr-brand">ABL생명 <span class="sep">·</span> <span class="sm">우리금융그룹</span></div>
+        <div class="cr-brand"><img class="cr-logo-abl" src="${LOGO_ABL}" alt="ABL생명"><span class="cr-logo-sep"></span><img class="cr-logo-woori" src="${LOGO_WOORI}" alt="우리금융그룹"></div>
         <div class="cr-handle">@korea.abllife</div>
       </div>
       ${crSlogan()}
