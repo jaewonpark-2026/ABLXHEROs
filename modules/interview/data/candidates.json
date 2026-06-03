@@ -186,48 +186,6 @@
       "aptitudeScore": 84
     },
     {
-      "id": 2,
-      "name": "김지윤",
-      "dept": "마케팅팀",
-      "role": "마케팅",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 88,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "정밀 데이터 타겟팅과 유기적 퍼널 설계를 중시하는 퍼포먼스 마케터 김지윤입니다.\n최종 ROAS 350% 돌파 실적을 보유 중입니다.",
-      "highlightPoints": [
-        "ROAS 350% 상승 곡선의 통제 변수 정합성"
-      ],
-      "aiQuestions": [
-        "ROAS 상승을 견인한 핵심 세그먼트 페르소나 가설 가이드는?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 88,
-        "job": 89,
-        "culture": 87
-      },
-      "evalComments": {
-        "qaa": "수치 지표 뚜렷",
-        "job": "트래킹 툴 우수",
-        "culture": "피드백 수용"
-      },
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 87,
-      "fitCulture": 84,
-      "fitJob": 85,
-      "fitIndustry": 93,
-      "aptitudeScore": 81
-    },
-    {
       "id": 3,
       "name": "이채원",
       "dept": "인사팀",
@@ -272,7 +230,7 @@
     {
       "id": 4,
       "name": "박재원",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 2,
       "status": "완료",
@@ -311,7 +269,7 @@
       "hrMemos": [],
       "finalComment": "개발본부 핵심 인재 영입 추천.",
       "stage1Result": "pass",
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 89,
       "fitCulture": 85,
       "fitJob": 87,
@@ -366,7 +324,7 @@
     {
       "id": 6,
       "name": "김민재",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 1,
       "status": "대기",
@@ -394,7 +352,7 @@
       "hrMemos": [],
       "finalComment": "",
       "stage1Result": null,
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 83,
       "fitCulture": 88,
       "fitJob": 89,
@@ -442,7 +400,7 @@
     {
       "id": 8,
       "name": "최준호",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 2,
       "status": "대기",
@@ -473,7 +431,7 @@
       "hrMemos": [],
       "finalComment": "",
       "stage1Result": "pass",
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 87,
       "fitCulture": 92,
       "fitJob": 94,
@@ -519,56 +477,6 @@
       "aptitudeScore": 80
     },
     {
-      "id": 10,
-      "name": "강동우",
-      "dept": "디지털/IT본부",
-      "role": "계리분석",
-      "stage": 2,
-      "status": "완료",
-      "passFail": "pass",
-      "finalResult": "최종 합격",
-      "overallScore": 93,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "사용자 세그먼트 데이터 모델링 수립",
-      "hrComment1st": "비즈니스 지표 가설 검증 능력 뛰어남.",
-      "execCheckPoints": [
-        "의사결정 프로세스 기여"
-      ],
-      "execAiQuestions": [
-        "데이터 기반 의사결정 체계를 전사에 확산시킨 경험은?"
-      ],
-      "highlightPoints": [],
-      "aiQuestions": [],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 93,
-        "job": 94,
-        "culture": 92
-      },
-      "evalComments": {
-        "qaa": "고도의 데이터 감각",
-        "job": "수학적 지표 수립 탁월",
-        "culture": "조직 내 신뢰 지수 강력"
-      },
-      "hrMemos": [],
-      "finalComment": "전사 데이터 분석 전임자로 강력 추천.",
-      "stage1Result": "pass",
-      "posting": "career",
-      "resumeScore": 93,
-      "fitCulture": 87,
-      "fitJob": 94,
-      "fitIndustry": 88,
-      "aptitudeScore": 94,
-      "evalScores2": {
-        "qaa": 95,
-        "job": 95,
-        "culture": 94
-      }
-    },
-    {
       "id": 11,
       "name": "윤지수",
       "dept": "디지털/IT본부",
@@ -605,44 +513,6 @@
       "fitJob": 80,
       "fitIndustry": 87,
       "aptitudeScore": 72
-    },
-    {
-      "id": 12,
-      "name": "한지훈",
-      "dept": "마케팅팀",
-      "role": "마케팅",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 78,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "오프라인 브랜드 팝업 비주얼 수립",
-      "highlightPoints": [
-        "BX 가이드라인"
-      ],
-      "aiQuestions": [
-        "온/오프라인 통합 브랜딩의 지향점?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 78,
-        "job": 78,
-        "culture": 78
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 73,
-      "fitCulture": 78,
-      "fitJob": 81,
-      "fitIndustry": 73,
-      "aptitudeScore": 80
     },
     {
       "id": 13,
@@ -688,7 +558,7 @@
     {
       "id": 14,
       "name": "신동현",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 1,
       "status": "완료",
@@ -716,7 +586,7 @@
       "hrMemos": [],
       "finalComment": "",
       "stage1Result": null,
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 81,
       "fitCulture": 81,
       "fitJob": 91,
@@ -764,7 +634,7 @@
     {
       "id": 16,
       "name": "고병우",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 1,
       "status": "완료",
@@ -792,7 +662,7 @@
       "hrMemos": [],
       "finalComment": "",
       "stage1Result": null,
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 79,
       "fitCulture": 74,
       "fitJob": 81,
@@ -841,44 +711,6 @@
       "aptitudeScore": 84
     },
     {
-      "id": 18,
-      "name": "권하늘",
-      "dept": "디지털/IT본부",
-      "role": "계리분석",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 82,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "SQL 기반 로그 파이프라인 구성",
-      "highlightPoints": [
-        "정밀 통계 모델 적용"
-      ],
-      "aiQuestions": [
-        "이탈 트래킹을 위한 핵심 잔존율 분석 지표는?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 82,
-        "job": 82,
-        "culture": 82
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 81,
-      "fitCulture": 85,
-      "fitJob": 81,
-      "fitIndustry": 87,
-      "aptitudeScore": 74
-    },
-    {
       "id": 19,
       "name": "배성민",
       "dept": "디지털/IT본부",
@@ -920,44 +752,6 @@
       "aptitudeScore": 81
     },
     {
-      "id": 20,
-      "name": "유현아",
-      "dept": "마케팅팀",
-      "role": "마케팅",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 77,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "브랜드 캐릭터 기획 및 굿즈 에셋 개발",
-      "highlightPoints": [
-        "일관성 관리 시스템"
-      ],
-      "aiQuestions": [
-        "캐릭터 브랜딩의 기업 가치 시너지 기여도는?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 77,
-        "job": 77,
-        "culture": 77
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 76,
-      "fitCulture": 77,
-      "fitJob": 78,
-      "fitIndustry": 75,
-      "aptitudeScore": 84
-    },
-    {
       "id": 21,
       "name": "백승호",
       "dept": "디지털/IT본부",
@@ -996,47 +790,6 @@
       "aptitudeScore": 77
     },
     {
-      "id": 22,
-      "name": "황지민",
-      "dept": "마케팅팀",
-      "role": "마케팅",
-      "stage": 2,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 85,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "검색 광고 키워드 자동화 입찰",
-      "hrComment1st": "스크립트 조작 테크닉 탁월.",
-      "execCheckPoints": [
-        "전사 예산 조율력"
-      ],
-      "execAiQuestions": [
-        "광고 효율 지점 급하강 시 마케팅 예산 재분배 우선순위는?"
-      ],
-      "highlightPoints": [],
-      "aiQuestions": [],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 85,
-        "job": 85,
-        "culture": 85
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": "pass",
-      "posting": "career",
-      "resumeScore": 84,
-      "fitCulture": 78,
-      "fitJob": 92,
-      "fitIndustry": 84,
-      "aptitudeScore": 87
-    },
-    {
       "id": 23,
       "name": "조영우",
       "dept": "디지털/IT본부",
@@ -1073,44 +826,6 @@
       "fitJob": 77,
       "fitIndustry": 82,
       "aptitudeScore": 79
-    },
-    {
-      "id": 24,
-      "name": "오수아",
-      "dept": "인사팀",
-      "role": "인사/경영지원",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 80,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "멘토링 결합형 신입 온보딩 프로그램",
-      "highlightPoints": [
-        "정성 평가 체크리스트"
-      ],
-      "aiQuestions": [
-        "온보딩 프로그램 이탈 방지를 위한 핵심 체크리스트는?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 80,
-        "job": 80,
-        "culture": 80
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 79,
-      "fitCulture": 83,
-      "fitJob": 82,
-      "fitIndustry": 80,
-      "aptitudeScore": 84
     },
     {
       "id": 25,
@@ -1165,7 +880,7 @@
     {
       "id": 26,
       "name": "문소현",
-      "dept": "디지털/IT본부",
+      "dept": "디지털IT본부",
       "role": "디지털/IT",
       "stage": 1,
       "status": "대기",
@@ -1193,7 +908,7 @@
       "hrMemos": [],
       "finalComment": "",
       "stage1Result": null,
-      "posting": "career",
+      "posting": "it-career",
       "resumeScore": 79,
       "fitCulture": 80,
       "fitJob": 89,
@@ -1242,44 +957,6 @@
       "aptitudeScore": 80
     },
     {
-      "id": 28,
-      "name": "차은지",
-      "dept": "인사팀",
-      "role": "인사/경영지원",
-      "stage": 1,
-      "status": "완료",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 82,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "핵심인재 핵심 리더십 육성 프로그램 설계",
-      "highlightPoints": [
-        "교육 이탈 관리 지표"
-      ],
-      "aiQuestions": [
-        "교육 효과의 해당 부서 밀착 평가 방법론은?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 82,
-        "job": 82,
-        "culture": 82
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 78,
-      "fitCulture": 82,
-      "fitJob": 78,
-      "fitIndustry": 88,
-      "aptitudeScore": 73
-    },
-    {
       "id": 29,
       "name": "지우진",
       "dept": "디지털/IT본부",
@@ -1319,44 +996,6 @@
       "fitJob": 93,
       "fitIndustry": 84,
       "aptitudeScore": 91
-    },
-    {
-      "id": 30,
-      "name": "손예원",
-      "dept": "마케팅팀",
-      "role": "마케팅",
-      "stage": 1,
-      "status": "대기",
-      "passFail": null,
-      "finalResult": null,
-      "overallScore": 84,
-      "trmStatus": false,
-      "feedbackSent": false,
-      "resume": "인스타그램 AD 광고 피드 최적화 머신 기획",
-      "highlightPoints": [
-        "LTV 증대 가설"
-      ],
-      "aiQuestions": [
-        "구매 주기를 고려한 마케팅 푸시 믹스 최적화안은?"
-      ],
-      "customQuestions": [],
-      "sttData": {},
-      "realtimeAiRecs": [],
-      "evalScores": {
-        "qaa": 84,
-        "job": 84,
-        "culture": 84
-      },
-      "evalComments": {},
-      "hrMemos": [],
-      "finalComment": "",
-      "stage1Result": null,
-      "posting": "career",
-      "resumeScore": 80,
-      "fitCulture": 78,
-      "fitJob": 85,
-      "fitIndustry": 84,
-      "aptitudeScore": 88
     }
   ]
 }
