@@ -151,6 +151,8 @@ table { width: 100%; border-collapse: collapse; }
 thead { background: var(--bg-page); }
 th { padding: 13px 18px; color: var(--text-2); font-size: 11px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); white-space: nowrap; letter-spacing: .02em; }
 td { padding: 14px 18px; border-bottom: 1px solid var(--border); color: var(--text-2); font-size: 13px; vertical-align: middle; }
+td.td-role { white-space: nowrap; word-break: keep-all; }
+td.td-role .role-org { white-space: normal; word-break: keep-all; }
 tbody tr { transition: background 0.15s; }
 tbody tr:hover { background: #fbfdff; }
 tbody tr:last-child td { border-bottom: 0; }
@@ -485,7 +487,7 @@ function renderTable() {
     const orgLine = showOrg && c.division ? `<div class="role-org">${c.division} · ${c.team || ''}</div>` : '';
     tr.innerHTML = `
       <td><div class="candidate-cell"><span class="rank-badge ${rankClass}">${rank}위</span><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
-      <td><strong style="color:var(--text-1)">${c.role}</strong>${orgLine}</td>
+      <td class="td-role"><strong style="color:var(--text-1)">${c.role}</strong>${orgLine}</td>
       <td>${c.exp}</td>
       <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
       <td><span class="status-pill ${statusClass}">${c.status}</span></td>
