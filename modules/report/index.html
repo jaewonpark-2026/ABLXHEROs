@@ -7458,11 +7458,11 @@ const Leadtime = (function() {
       targetName: "신입 공채 프로세스 (처우 협의 불필요)",
       kpis: { total: "3,420", progress: "120", passed: "42", failed: "3,258", avgDuration: "합격까지 평균 62일 소요" },
       funnel: [
-        { stage: "1차 서류 (인사)", period: "14일 소요", ratio: "100%",  count: "3,420명", passrate: "10.5% →", key: "document_hr" },
-        { stage: "2차 서류 (해당 부서)", period: "12일 소요", ratio: "10.5%", count: "360명",   passrate: "50.0% →", key: "document_dept" },
-        { stage: "역량검사",        period: "6일 소요",  ratio: "5.3%",  count: "180명",   passrate: "44.4% →", key: "assessment" },
-        { stage: "1차 면접", period: "14일 소요", ratio: "2.3%",  count: "80명",    passrate: "52.5% →", key: "interview1" },
-        { stage: "2차 면접", period: "10일 소요", ratio: "1.2%",  count: "42명",    passrate: "100% →",  key: "interview2" },
+        { stage: "1차 서류 (인사)", period: "14일 소요", ratio: "100%",  count: "3,420명", passrate: "32.2% →", key: "document_hr" },
+        { stage: "2차 서류 (해당 부서)", period: "12일 소요", ratio: "32.2%", count: "1,100명", passrate: "47.3% →", key: "document_dept" },
+        { stage: "역량검사",        period: "6일 소요",  ratio: "15.2%", count: "520명",   passrate: "34.6% →", key: "assessment" },
+        { stage: "1차 면접", period: "14일 소요", ratio: "5.3%",  count: "180명",   passrate: "37.8% →", key: "interview1" },
+        { stage: "2차 면접", period: "10일 소요", ratio: "2.0%",  count: "68명",    passrate: "61.8% →", key: "interview2" },
         { stage: "최종합격",        period: "6일 소요",  ratio: "1.2%",  count: "42명",    passrate: "—",       key: "final" }
       ],
       diagnostics: {
@@ -7511,7 +7511,7 @@ const Leadtime = (function() {
       },
       charts: {
         leadtime: [14, 12, 6, 14, 10, 6],
-        stageStats: [3420, 360, 180, 80, 42, 42]
+        stageStats: [3420, 1100, 520, 180, 68, 42]
       },
       pain: {
         effort: {
