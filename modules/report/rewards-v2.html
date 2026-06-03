@@ -175,12 +175,12 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .insight-need .in-text { font-size: 12.5px; color: var(--text-1); line-height: 1.7; font-weight: 600; }
 
 /* 기존/희망 연봉 스트립 (§1) */
-.sal-strip { margin-top: 14px; display: inline-flex; align-items: center; gap: 14px; padding: 10px 16px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 10px; }
-.sal-strip .sal-item { display: flex; flex-direction: column; gap: 2px; }
-.sal-strip .sl-k { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; }
-.sal-strip .sl-v { font-size: 15px; font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
-.sal-strip .sl-v.hope { color: var(--main-1); }
-.sal-strip > i { color: var(--text-3); font-size: 16px; }
+.sal-inline { margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; background: var(--info-bg); border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--text-2); }
+.sal-inline i { font-size: 13px; color: var(--main-1); }
+.sal-inline .sl-k { color: var(--text-3); }
+.sal-inline .sl-v { font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+.sal-inline .sl-v.hope { color: var(--main-1); }
+.sal-inline .arrow { color: var(--text-3); }
 
 /* 내부 형평성 + 앵커링 통합 한 행 (§3) */
 .sim-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 16px; align-items: stretch; }
@@ -414,6 +414,12 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
           <div class="profile-info">
             <div class="name">조현근 <span style="font-size:12px;color:var(--text-3);font-weight:600;">· 상품기획 대리</span></div>
             <div class="meta">서강생명 상품개발팀 책임 · 경력 6년 5개월 · 자소서 분석 91점 / fit 직무 93·조직 88·산업 94</div>
+            <div class="sal-inline">
+              <i class="ti ti-coins"></i>
+              <span class="sl-k">기존 연봉</span> <span class="sl-v">6,500만원</span>
+              <span class="arrow">→</span>
+              <span class="sl-k">희망 연봉</span> <span class="sl-v hope">7,500만원</span>
+            </div>
             <div class="tags">
               <span class="tag">IFRS17</span><span class="tag">K-ICS</span>
               <span class="tag">변액·종신 Pricing</span><span class="tag">Cross-functional</span>
@@ -423,11 +429,6 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <button class="btn-secondary" onclick="openModal('modal-resume')"><i class="ti ti-file-type-pdf"></i> 이력서</button>
             <button class="btn-secondary" onclick="openModal('modal-eval')"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
           </div>
-        </div>
-        <div class="sal-strip">
-          <div class="sal-item"><span class="sl-k">기존 연봉</span><span class="sl-v">6,500만원</span></div>
-          <i class="ti ti-arrow-right"></i>
-          <div class="sal-item"><span class="sl-k">희망 연봉</span><span class="sl-v hope">7,500만원</span></div>
         </div>
         <div class="insight-need">
           <div class="in-label"><i class="ti ti-bulb"></i> 면접 분석 기반 주요 니즈</div>
@@ -589,7 +590,6 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
                 <div class="cg-label"><i class="ti ti-alert-triangle"></i> 후보자 강점 · 협상 카드</div>
                 <label class="check-item"><input type="checkbox"> <span>IFRS17 CSM 산정 + K-ICS 가정 설계 <strong>직접 경험자</strong> — 시장에 드뭄</span></label>
                 <label class="check-item"><input type="checkbox"> <span>정량 성과 검증됨: <strong>CSM 5.8%·사업비 12% 절감</strong> (자소서·면접 일관)</span></label>
-                <label class="check-item"><input type="checkbox"> <span>경쟁 후보(임유진) 존재 — 협상 결렬 대비 차순위 보존 후보로 즉시 전환 가능</span></label>
               </div>
               <div class="check-group">
                 <div class="cg-label"><i class="ti ti-shield-check"></i> 내부 리스크 · 주의 사항</div>
