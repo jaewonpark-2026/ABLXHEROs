@@ -260,12 +260,8 @@ function renderRoleBanner() {
     document.getElementById('newBtnText').textContent = '새 충원요청서 작성';
     if (_asParam) { const nb = document.getElementById('newBtn'); if (nb) nb.href = 'form.html?as=' + _asParam; }
   } else {
-    banner.innerHTML = `
-      <i class="ti ti-bulb"></i>
-      <div class="role-banner-text">
-        <strong>HR 담당자 화면:</strong> 해당 부서가 작성한 충원요청서를 기반으로 AI가 JD 초안을 자동 생성합니다.
-        해당 부서 검토 의견을 받아 AI가 즉시 반영하며, 최종 확정 후 채용공고로 등재됩니다.
-      </div>`;
+    banner.innerHTML = '';
+    banner.style.display = 'none';
     document.getElementById('listTitle').textContent = '진행 중인 요청서';
     // HR은 충원요청서를 작성하지 않으므로 새로 만들기 버튼 숨김 (해당 부서가 작성)
     const newBtn = document.getElementById('newBtn');
