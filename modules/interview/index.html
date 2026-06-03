@@ -269,6 +269,9 @@ a { color: inherit; text-decoration: none; }
 .comp-score-v { text-align: center; font-weight: 700; width: 100px; color: var(--text-2); }
 .comp-score-v.higher { color: var(--main-1); background: rgba(0,103,172,0.06); }
 .comp-score-v.lower { color: var(--text-3); }
+.comp-total-row td { border-top: 2px solid var(--border); font-weight: 800; }
+.comp-total-row .comp-score-lbl { color: var(--text-1); font-weight: 800; }
+.comp-total-row .comp-score-v { font-size: 13px; }
 .cb-info { font-size: 13px; color: var(--main-1); font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .cb-info i { font-size: 16px; }
 .cb-info strong { color: var(--sub-2); }
@@ -325,7 +328,7 @@ a { color: inherit; text-decoration: none; }
 .comp-circle.c2 { background: var(--ok-bg); color: #15803D; border-color: var(--ok); }
 .comp-name { font-weight: 700; font-size: 15px; }
 .comp-mid { flex: 1; }
-.comp-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-3); font-weight: 700; margin-bottom: 6px; }
+.comp-bar-label { display: flex; justify-content: center; font-size: 11px; color: var(--text-3); font-weight: 700; margin-bottom: 6px; }
 .comp-bar { display: flex; height: 12px; background: var(--bg-page); border-radius: 999px; overflow: hidden; }
 .cb-l { background: var(--main-1); transition: width 0.5s; }
 .cb-r { background: var(--ok); transition: width 0.5s; }
@@ -1227,7 +1230,7 @@ a { color: inherit; text-decoration: none; }
           <div class="comp-name" id="comp-name-1"></div>
         </div>
         <div class="comp-mid">
-          <div class="comp-bar-label"><span id="comp-stat1-val1">0</span><span>종합 밸런스</span><span id="comp-stat1-val2">0</span></div>
+          <div class="comp-bar-label"><span>종합 밸런스</span></div>
           <div class="comp-bar">
             <div id="comp-bar-1-left" class="cb-l" style="width:50%"></div>
             <div id="comp-bar-1-right" class="cb-r" style="width:50%"></div>
@@ -1830,8 +1833,6 @@ function runCompare() {
     const total = s1 + s2 || 1;
     document.getElementById('comp-bar-1-left').style.width = (s1 / total * 100) + '%';
     document.getElementById('comp-bar-1-right').style.width = (s2 / total * 100) + '%';
-    document.getElementById('comp-stat1-val1').textContent = c1.evalScores.qaa + '점';
-    document.getElementById('comp-stat1-val2').textContent = c2.evalScores.qaa + '점';
   } else {
     // 한 쪽 이상 면접 전 — 종합 점수 영역(밸런스 bar) 숨김
     overallRow.style.display = 'none';
@@ -1897,6 +1898,11 @@ function renderCompareInterview(c1, c2, p1, p2) {
   }
 
   const rows = [['답변 정확도', 'qaa'], ['직무 적합성 (면접)', 'job'], ['조직 fit (면접)', 'culture']];
+  // 면접 총점 = 3개 평가 항목의 평균
+  const avg3 = (sc) => {
+    const vals = rows.map(([_, k]) => sc ? sc[k] : null).filter(v => typeof v === 'number');
+    return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
+  };
   let html = '';
 
   // 1차 면접 평가 (면접 본 후보가 한 명이라도 있으면 표시)
@@ -1908,6 +1914,11 @@ function renderCompareInterview(c1, c2, p1, p2) {
     const v2 = p2 >= 1 ? c2.evalScores[key] : null;
     html += '<tr><td class="comp-score-lbl">' + lbl + '</td>' + cell(p1 >= 1, v1, v2) + cell(p2 >= 1, v2, v1) + '</tr>';
   });
+  {
+    const t1 = p1 >= 1 ? avg3(c1.evalScores) : null;
+    const t2 = p2 >= 1 ? avg3(c2.evalScores) : null;
+    html += '<tr class="comp-total-row"><td class="comp-score-lbl">면접 총점</td>' + cell(p1 >= 1, t1, t2) + cell(p2 >= 1, t2, t1) + '</tr>';
+  }
   html += '</table></div>';
 
   // 2차 면접 평가 (2차까지 본 후보가 있을 때만 섹션 추가)
@@ -1922,6 +1933,11 @@ function renderCompareInterview(c1, c2, p1, p2) {
       const s2 = (p2 === 2) ? score2(c2)[key] : null;
       html += '<tr><td class="comp-score-lbl">' + lbl + '</td>' + cell(p1 === 2, s1, s2) + cell(p2 === 2, s2, s1) + '</tr>';
     });
+    {
+      const u1 = (p1 === 2) ? avg3(score2(c1)) : null;
+      const u2 = (p2 === 2) ? avg3(score2(c2)) : null;
+      html += '<tr class="comp-total-row"><td class="comp-score-lbl">면접 총점</td>' + cell(p1 === 2, u1, u2) + cell(p2 === 2, u2, u1) + '</tr>';
+    }
     html += '</table></div>';
   }
 
