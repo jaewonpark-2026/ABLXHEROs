@@ -1,16 +1,22 @@
 {
   "stage_counts": {
-    "newgrad": {
-      "applied": 95,
-      "auto_passed": 80,
-      "in_review": 60,
-      "delivered": 15
+    "it-career": {
+      "applied": 2,
+      "auto_passed": 2,
+      "in_review": 2,
+      "delivered": 0
     },
     "career": {
-      "applied": 47,
-      "auto_passed": 38,
-      "in_review": 34,
-      "delivered": 10
+      "applied": 3,
+      "auto_passed": 3,
+      "in_review": 3,
+      "delivered": 0
+    },
+    "newgrad": {
+      "applied": 10,
+      "auto_passed": 10,
+      "in_review": 10,
+      "delivered": 0
     }
   },
   "initial_delivered_ids": [
@@ -72,9 +78,10 @@
       ],
       "is_demo": true,
       "channel": "원티드",
-      "posting": "경력공채",
+      "posting": "career",
       "division": "상품본부",
-      "team": "상품기획팀"
+      "team": "상품기획팀",
+      "sector": "상품기획"
     },
     {
       "id": "ABL-2026-0501",
@@ -129,54 +136,10 @@
       ],
       "is_demo": false,
       "channel": "잡코리아",
-      "posting": "경력공채",
+      "posting": "career",
       "division": "상품본부",
-      "team": "상품기획팀"
-    },
-    {
-      "id": "ABL-2026-0001",
-      "name": "김재원",
-      "type": "경력",
-      "role": "마케팅",
-      "exp": "3년 2개월",
-      "score": 92,
-      "status": "우수",
-      "tags": [
-        "브랜드 캠페인",
-        "콘텐츠 기획",
-        "마케팅"
-      ],
-      "summary": "브랜드 캠페인 기획과 콘텐츠 운영 경험이 풍부하며, 디지털 채널 기반의 마케팅 실행력이 마케팅팀 직무와 직접 연결됩니다.",
-      "fit": {
-        "job": 93,
-        "org": 88,
-        "industry": 84
-      },
-      "requirements": [
-        [
-          "필수",
-          "마케팅 캠페인 기획·운영 경험",
-          "B2C 브랜드 캠페인 3회 주도",
-          "확인됨"
-        ],
-        [
-          "필수",
-          "콘텐츠 기획 및 채널 운영",
-          "콘텐츠 기획·디자인 협업 경험",
-          "확인됨"
-        ],
-        [
-          "우대",
-          "보험·금융 마케팅 경험",
-          "금융 직접 경험은 제한적",
-          "일부 확인"
-        ]
-      ],
-      "is_demo": false,
-      "channel": "원티드",
-      "posting": "경력공채",
-      "division": "영업마케팅부문",
-      "team": "고객마케팅본부"
+      "team": "상품기획팀",
+      "sector": "상품기획"
     },
     {
       "id": "ABL-2026-0142",
@@ -218,9 +181,10 @@
         ]
       ],
       "channel": "캠퍼스 리크루팅",
-      "posting": "신입공채",
+      "posting": "newgrad",
       "division": "영업마케팅부문",
-      "team": "FC영업본부"
+      "team": "FC영업본부",
+      "sector": "영업관리"
     },
     {
       "id": "ABL-2026-0178",
@@ -262,9 +226,10 @@
         ]
       ],
       "channel": "잡코리아",
-      "posting": "경력공채",
+      "posting": "it-career",
       "division": "디지털IT본부",
-      "team": "IT기획팀"
+      "team": "디지털IT기획팀",
+      "sector": "디지털/IT"
     },
     {
       "id": "ABL-2026-0211",
@@ -306,59 +271,16 @@
         ]
       ],
       "channel": "링커리어",
-      "posting": "신입공채",
+      "posting": "newgrad",
       "division": "상품본부",
-      "team": "상품기획팀"
-    },
-    {
-      "id": "ABL-2026-0096",
-      "name": "정도윤",
-      "type": "경력",
-      "role": "재무/회계",
-      "exp": "3년 7개월",
-      "score": 82,
-      "status": "적합",
-      "tags": [
-        "월마감",
-        "관리회계",
-        "리포팅"
-      ],
-      "summary": "재무 데이터 정리와 월별 리포팅 경험이 안정적으로 제시되어 있습니다. 보험업 재무 프로세스 적응 가능성은 면접에서 확인하면 좋습니다.",
-      "fit": {
-        "job": 83,
-        "org": 80,
-        "industry": 76
-      },
-      "requirements": [
-        [
-          "필수",
-          "회계/재무 실무 경험",
-          "월마감 및 비용 관리 경험",
-          "확인됨"
-        ],
-        [
-          "필수",
-          "엑셀 및 리포팅 역량",
-          "정기 보고서 작성 경험",
-          "확인됨"
-        ],
-        [
-          "우대",
-          "금융업 회계 경험",
-          "유관 산업 경험 일부",
-          "일부 확인"
-        ]
-      ],
-      "channel": "자사 채용홈",
-      "posting": "경력공채",
-      "division": "재무부문",
-      "team": "재무회계팀"
+      "team": "상품계리팀",
+      "sector": "상품/계리"
     },
     {
       "id": "ABL-2026-0235",
       "name": "최유진",
       "type": "신입",
-      "role": "인사/경영지원",
+      "role": "경영지원",
       "exp": "신입",
       "score": 79,
       "status": "미흡",
@@ -394,53 +316,10 @@
         ]
       ],
       "channel": "자사 채용홈",
-      "posting": "신입공채",
-      "division": "HR본부",
-      "team": "인사팀"
-    },
-    {
-      "id": "ABL-2026-0189",
-      "name": "한지호",
-      "type": "경력",
-      "role": "영업관리",
-      "exp": "5년 1개월",
-      "score": 76,
-      "status": "미흡",
-      "tags": [
-        "영업 실적",
-        "조직 관리",
-        "직무 전환"
-      ],
-      "summary": "영업 성과와 조직 관리 경험은 강점이나, 보험 업권과 ABL 영업관리 업무와의 직접 연관성은 추가 검토가 필요합니다.",
-      "fit": {
-        "job": 78,
-        "org": 74,
-        "industry": 65
-      },
-      "requirements": [
-        [
-          "필수",
-          "영업관리 경험",
-          "B2B 영업 조직 관리 경험",
-          "확인됨"
-        ],
-        [
-          "필수",
-          "성과 관리 역량",
-          "매출 목표 관리 경험",
-          "확인됨"
-        ],
-        [
-          "우대",
-          "보험/금융 영업 경험",
-          "보험업 직접 경험 미기재",
-          "추가 확인"
-        ]
-      ],
-      "channel": "헤드헌터",
-      "posting": "경력공채",
-      "division": "영업마케팅부문",
-      "team": "FC영업본부"
+      "posting": "newgrad",
+      "division": "경영혁신본부",
+      "team": "경영지원팀",
+      "sector": "경영지원"
     },
     {
       "id": "ABL-2026-0164",
@@ -482,9 +361,10 @@
         ]
       ],
       "channel": "잡코리아",
-      "posting": "신입공채",
+      "posting": "newgrad",
       "division": "디지털IT본부",
-      "team": "IT기획팀"
+      "team": "IT개발팀",
+      "sector": "IT"
     },
     {
       "id": "ABL-2026-0127",
@@ -526,22 +406,23 @@
         ]
       ],
       "channel": "사람인",
-      "posting": "경력공채",
+      "posting": "career",
       "division": "상품본부",
-      "team": "상품기획팀"
+      "team": "상품기획팀",
+      "sector": "상품기획"
     },
     {
       "id": "ABL-2026-0254",
       "name": "서지민",
       "type": "신입",
-      "role": "마케팅",
+      "role": "자산운용",
       "exp": "신입",
       "score": 85,
       "status": "적합",
       "tags": [
-        "브랜드 캠페인",
-        "콘텐츠 기획",
-        "디자인 협업"
+        "경제·금융 분석",
+        "투자 리서치",
+        "데이터 해석"
       ],
       "summary": "브랜드 메시지와 고객 인사이트를 연결한 캠페인 경험이 확인되며, 콘텐츠 기획 및 디자인 협업 경험이 마케팅 직무와 연결됩니다.",
       "fit": {
@@ -570,53 +451,10 @@
         ]
       ],
       "channel": "잡다(JOBDA)",
-      "posting": "신입공채",
-      "division": "영업마케팅부문",
-      "team": "고객마케팅본부"
-    },
-    {
-      "id": "ABL-2026-0268",
-      "name": "윤하늘",
-      "type": "경력",
-      "role": "총무지원",
-      "exp": "3년 4개월",
-      "score": 80,
-      "status": "적합",
-      "tags": [
-        "구매 계약",
-        "자산 관리",
-        "비용 정산"
-      ],
-      "summary": "구매·계약 처리와 자산 관리 경험이 총무지원 직무와 연결되며, 비용 정산과 운영 업무의 꼼꼼함이 확인됩니다.",
-      "fit": {
-        "job": 82,
-        "org": 79,
-        "industry": 70
-      },
-      "requirements": [
-        [
-          "필수",
-          "구매·계약 처리 경험",
-          "견적 비교 및 계약 관리 경험",
-          "확인됨"
-        ],
-        [
-          "필수",
-          "자산·시설 관리 이해",
-          "사내 자산 관리 경험",
-          "확인됨"
-        ],
-        [
-          "우대",
-          "비용 정산 정확성",
-          "비용 처리 및 정산 경험",
-          "확인됨"
-        ]
-      ],
-      "channel": "원티드",
-      "posting": "경력공채",
-      "division": "경영혁신본부",
-      "team": "총무팀"
+      "posting": "newgrad",
+      "division": "자산운용본부",
+      "team": "운용지원팀",
+      "sector": "자산운용"
     },
     {
       "id": "ABL-2026-0281",
@@ -658,9 +496,10 @@
         ]
       ],
       "channel": "캠퍼스 리크루팅",
-      "posting": "신입공채",
-      "division": "재무부문",
-      "team": "계리팀"
+      "posting": "newgrad",
+      "division": "상품본부",
+      "team": "상품계리팀",
+      "sector": "상품/계리"
     },
     {
       "id": "ABL-2026-0301",
@@ -692,10 +531,11 @@
         ]
       },
       "is_demo": false,
-      "posting": "신입공채",
+      "posting": "newgrad",
       "channel": "잡코리아",
       "division": "영업마케팅부문",
-      "team": "FC영업본부"
+      "team": "FC영업본부",
+      "sector": "영업관리"
     },
     {
       "id": "ABL-2026-0302",
@@ -728,10 +568,11 @@
         ]
       },
       "is_demo": false,
-      "posting": "신입공채",
+      "posting": "newgrad",
       "channel": "링커리어",
       "division": "디지털IT본부",
-      "team": "IT기획팀"
+      "team": "IT개발팀",
+      "sector": "IT"
     },
     {
       "id": "ABL-2026-0303",
@@ -763,23 +604,24 @@
         ]
       },
       "is_demo": false,
-      "posting": "신입공채",
+      "posting": "newgrad",
       "channel": "자사 채용홈",
       "division": "상품본부",
-      "team": "상품기획팀"
+      "team": "상품계리팀",
+      "sector": "상품/계리"
     },
     {
       "id": "ABL-2026-0304",
       "name": "조유진",
       "type": "신입",
-      "role": "재무/회계",
+      "role": "보험지원",
       "exp": "신입",
       "score": 87,
       "status": "적합",
       "tags": [
+        "리스크 이해",
         "회계원리",
-        "재무관리",
-        "엑셀 모델링"
+        "데이터 분석"
       ],
       "summary": "회계학 전공으로 재무제표 분석 경험과 CPA 1차 합격 보유. 보험사 재무 운영에 깊은 관심을 보입니다.",
       "fit": {
@@ -798,10 +640,11 @@
         ]
       },
       "is_demo": false,
-      "posting": "신입공채",
+      "posting": "newgrad",
       "channel": "캠퍼스 리크루팅",
-      "division": "재무부문",
-      "team": "재무회계팀"
+      "division": "고객지원본부",
+      "team": "보험지원팀",
+      "sector": "보험지원"
     },
     {
       "id": "ABL-2026-0401",
@@ -834,122 +677,17 @@
         ]
       },
       "is_demo": false,
-      "posting": "경력공채",
+      "posting": "it-career",
       "channel": "원티드",
       "division": "디지털IT본부",
-      "team": "IT기획팀"
-    },
-    {
-      "id": "ABL-2026-0402",
-      "name": "황지영",
-      "type": "경력",
-      "role": "계리분석",
-      "exp": "8년 2개월",
-      "score": 93,
-      "status": "우수",
-      "tags": [
-        "IFRS17",
-        "책임준비금",
-        "경제적가치 평가",
-        "FIAK"
-      ],
-      "summary": "국내 대형 생보사에서 IFRS17 전환을 실무 리드. 책임준비금 산출 모델 개선으로 결산 정확도 향상에 기여.",
-      "fit": {
-        "job": 95,
-        "industry": 92,
-        "org": 91
-      },
-      "requirements": {
-        "essential": [
-          "계리 실무 5년 이상",
-          "IFRS17 경험"
-        ],
-        "preferred": [
-          "FIAK 자격",
-          "리더 경험"
-        ]
-      },
-      "is_demo": false,
-      "posting": "경력공채",
-      "channel": "헤드헌터",
-      "division": "재무부문",
-      "team": "계리팀"
-    },
-    {
-      "id": "ABL-2026-0403",
-      "name": "차민호",
-      "type": "경력",
-      "role": "재무/회계",
-      "exp": "4년 8개월",
-      "score": 71,
-      "status": "미흡",
-      "tags": [
-        "결산 업무",
-        "SAP",
-        "세무 신고"
-      ],
-      "summary": "중소기업에서 일반 결산 업무 담당. 보험·금융 산업 경험은 부족하나 학습 의지가 강함.",
-      "fit": {
-        "job": 70,
-        "industry": 68,
-        "org": 72
-      },
-      "requirements": {
-        "essential": [
-          "3년 이상 재무 경력",
-          "결산 경험"
-        ],
-        "preferred": [
-          "금융권 경험",
-          "K-IFRS 이해"
-        ]
-      },
-      "is_demo": false,
-      "posting": "경력공채",
-      "channel": "사람인",
-      "division": "재무부문",
-      "team": "재무회계팀"
-    },
-    {
-      "id": "ABL-2026-0404",
-      "name": "박서연",
-      "type": "경력",
-      "role": "영업관리",
-      "exp": "5년 6개월",
-      "score": 85,
-      "status": "적합",
-      "tags": [
-        "B2B 영업",
-        "채널 관리",
-        "KPI 설계"
-      ],
-      "summary": "보험 대리점 채널 관리 경험. 영업 KPI 설계와 채널 만족도 개선 프로젝트 주도.",
-      "fit": {
-        "job": 86,
-        "industry": 85,
-        "org": 84
-      },
-      "requirements": {
-        "essential": [
-          "3년 이상 영업·채널 경력",
-          "대인 관계 역량"
-        ],
-        "preferred": [
-          "보험·금융 영업 경험",
-          "채널 관리 자격"
-        ]
-      },
-      "is_demo": false,
-      "posting": "경력공채",
-      "channel": "잡코리아",
-      "division": "영업마케팅부문",
-      "team": "FC영업본부"
+      "team": "디지털IT기획팀",
+      "sector": "디지털/IT"
     }
   ],
   "postings": [
     {
-      "id": "newgrad",
-      "name": "디지털IT기획팀 신입(AA) 채용",
+      "id": "it-career",
+      "name": "디지털IT본부 디지털IT기획팀 경력(AA) 채용",
       "period_apply": "2026.06.01 ~ 2026.06.05",
       "period_review": "",
       "status": "진행 중"
@@ -958,6 +696,13 @@
       "id": "career",
       "name": "상품본부 상품기획팀 경력직 채용",
       "period_apply": "2026.06.03 ~ 2026.06.09",
+      "period_review": "",
+      "status": "진행 중"
+    },
+    {
+      "id": "newgrad",
+      "name": "2026 신입사원 공채",
+      "period_apply": "2026.06.01 ~ 2026.06.07",
       "period_review": "",
       "status": "진행 중"
     }
