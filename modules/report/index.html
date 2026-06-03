@@ -1822,6 +1822,29 @@ a { color: inherit; text-decoration: none; }
   }
   .add-cancel { background: var(--surface); border-color: var(--border-strong); color: var(--text-2); }
   .add-submit { background: var(--grad); color: #fff; }
+  .add-modal-sub { margin: 4px 0 0; font-size: 11.5px; font-weight: 500; color: var(--text-3); line-height: 1.45; max-width: 340px; }
+  .reject-list { display: flex; flex-direction: column; gap: 10px; }
+  .reject-item {
+    display: flex; align-items: flex-start; gap: 12px; cursor: pointer;
+    border: 1.5px solid var(--border-strong); border-radius: 12px; padding: 13px 14px;
+    transition: all 0.15s; position: relative;
+  }
+  .reject-item:hover { border-color: var(--brand); background: rgba(39,58,146,0.03); }
+  .reject-item input[type="radio"] { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--brand); flex-shrink: 0; cursor: pointer; }
+  .reject-item:has(input:checked) { border-color: var(--brand); background: rgba(39,58,146,0.05); box-shadow: 0 4px 14px -6px rgba(39,58,146,0.4); }
+  .reject-item.top { border-color: var(--brand); }
+  .ri-avatar {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    background: var(--grad); color: #fff; font-weight: 800; font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ri-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .ri-name { font-size: 14px; font-weight: 800; color: var(--text-1); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .ri-rec { background: #FFE9D6; color: #C2410C; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+  .ri-meta { font-size: 11.5px; color: var(--text-2); font-weight: 500; }
+  .ri-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+  .ri-tag { background: var(--surface-2, #EEF1F8); color: var(--text-2); font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border); }
+  .ri-stage { flex-shrink: 0; align-self: center; font-size: 10.5px; font-weight: 700; color: #9C9AB4; background: #F1F2F7; border-radius: 6px; padding: 5px 9px; white-space: nowrap; }
 
   /* ============ BULK ACTION BAR ============ */
   .bulk-bar {
@@ -3908,7 +3931,7 @@ a { color: inherit; text-decoration: none; }
           </div>
           <div class="hero-cell">
             <span class="label">면접일자</span>
-            <span class="value">2026년 6월 2일</span>
+            <span class="value">2026년 6월 19일</span>
           </div>
           <div class="hero-cell">
             <span class="label">채용 명</span>
@@ -3916,7 +3939,7 @@ a { color: inherit; text-decoration: none; }
           </div>
           <div class="hero-cell">
             <span class="label">전형</span>
-            <span class="value">상품본부 상품기획팀 (경력 · 차장급)</span>
+            <span class="value">상품본부 상품기획팀 (경력 · 대리급)</span>
           </div>
         </div>
       </section>
@@ -5616,42 +5639,6 @@ a { color: inherit; text-decoration: none; }
               </td>
             </tr>
 
-            <!-- ROW 12 : 상품기획 / 신규 리드 (최상단 고정) -->
-            <tr class="candidate-row" data-order="0" data-status="new" data-dept="상품기획" data-candidate-id="c012" onclick="openCandidatePanel('c012')">
-              <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-              <td>
-                <div class="candidate-cell">
-                  <div class="avatar">임</div>
-                  <div class="candidate-info">
-                    <div class="name">임유진</div>
-                    <div class="sub">im.yujin@email.com</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div>
-                <div class="status-meta">2차 면접 후 인재풀 등록</div>
-              </td>
-              <td><span class="stage-pill new">신규</span></td>
-              <td class="task-cell">포지션 공석 시 우선 컨택</td>
-              <td class="contact-cell">010-3924-5712</td>
-              <td class="career-cell">
-                <div class="role">상품기획 매니저</div>
-                <div class="company">B생명 · 상품팀</div>
-              </td>
-              <td class="years-cell">7년 2개월</td>
-              <td>
-                <div class="tag-group">
-                  <span class="tag skill">변액·종신 Pricing</span>
-                  <span class="tag skill">ALM 운영</span>
-                  <span class="tag skill">IFRS17 보조</span>
-                </div>
-              </td>
-              <td class="note-cell">
-                <span class="note-pin recommend">2순위</span>변액·종신 도메인 기본기 견고. 신상품 직접 리드 경험은 다소 보강 필요.
-              </td>
-            </tr>
-
             <!-- ROW 13 : 인사/경영지원 / 신규 리드 -->
             <tr class="candidate-row" data-order="2" data-status="new" data-dept="인사/경영지원" data-candidate-id="c013" onclick="openCandidatePanel('c013')">
               <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
@@ -5773,34 +5760,16 @@ a { color: inherit; text-decoration: none; }
       <div class="add-modal-backdrop" id="add-modal-backdrop" onclick="closeAddCandidate()"></div>
       <div class="add-modal" id="add-modal">
         <div class="add-modal-head">
-          <h3>후보자 추가</h3>
+          <div>
+            <h3>인재풀에 등록할 후보자 선택</h3>
+            <p class="add-modal-sub">2차 면접에서 탈락했지만 역량이 우수한 후보를 불러왔습니다. 인재풀에 보존할 후보를 선택하세요.</p>
+          </div>
           <button onclick="closeAddCandidate()">✕</button>
         </div>
-        <div class="add-modal-body">
-          <label>이름<input id="add-name" type="text" placeholder="예) 김민수" /></label>
-          <label>이메일<input id="add-email" type="text" placeholder="예) kim@email.com" /></label>
-          <label>연락처<input id="add-phone" type="text" placeholder="예) 010-0000-0000" /></label>
-          <label>최근 경력 (직무)<input id="add-role" type="text" placeholder="예) 상품기획 매니저" /></label>
-          <label>회사<input id="add-company" type="text" placeholder="예) A생명 · 상품기획팀" /></label>
-          <label>총 경력<input id="add-years" type="text" placeholder="예) 5년 2개월 / 신입" /></label>
-          <label>부문
-            <select id="add-dept">
-              <option value="영업관리">영업관리</option>
-              <option value="상품기획">상품기획</option>
-              <option value="디지털/IT">디지털/IT</option>
-              <option value="인사/경영지원">인사/경영지원</option>
-              <option value="재무/회계">재무/회계</option>
-              <option value="마케팅">마케팅</option>
-              <option value="총무지원">총무지원</option>
-              <option value="계리분석">계리분석</option>
-            </select>
-          </label>
-          <label>스킬셋 (쉼표로 구분)<input id="add-skills" type="text" placeholder="예) Pricing, VBA, SQL" /></label>
-          <label>채용담당자 노트<input id="add-note" type="text" placeholder="예) 차기 채용 우선 검토" /></label>
-        </div>
+        <div class="add-modal-body reject-list" id="reject-list"></div>
         <div class="add-modal-foot">
           <button class="add-cancel" onclick="closeAddCandidate()">취소</button>
-          <button class="add-submit" onclick="submitAddCandidate()">추가</button>
+          <button class="add-submit" onclick="submitAddCandidate()">등록 완료</button>
         </div>
       </div>
         </div>
@@ -6516,8 +6485,43 @@ function showToast(message, type) {
   }
   sortPool(); // 로드 시 최신순 정렬 적용
 
-  // 후보자 추가 모달
+  // 후보자 추가 모달 — 2차 면접 탈락자 중 선택하여 인재풀 등록
+  const REJECTED_2ND = [
+    { name: '임유진', email: 'im.yujin@email.com', phone: '010-3924-5712',
+      role: '상품기획 매니저', company: 'B생명 · 상품팀', years: '7년 2개월', dept: '상품기획',
+      skills: ['변액·종신 Pricing', 'ALM 운영', 'IFRS17 보조'],
+      note: '<span class="note-pin recommend">2순위</span>변액·종신 도메인 기본기 견고. 신상품 직접 리드 경험은 다소 보강 필요.',
+      task: '포지션 공석 시 우선 컨택', rec: true },
+    { name: '한도윤', email: 'han.doyun@email.com', phone: '010-2841-9930',
+      role: '데이터 엔지니어', company: 'C핀테크 · 데이터플랫폼팀', years: '6년 1개월', dept: '디지털/IT',
+      skills: ['SQL', 'Python', '데이터 파이프라인'],
+      note: '2차 면접 우수. 동일 포지션 1순위와 근소차로 2순위.', task: '초기 컨택 준비' },
+    { name: '정세아', email: 'jung.sea@email.com', phone: '010-6677-1208',
+      role: '브랜드 마케터', company: 'D사 · 브랜드전략팀', years: '5년 4개월', dept: '마케팅',
+      skills: ['콘텐츠 기획', '퍼포먼스 마케팅', 'CRM'],
+      note: '디지털 캠페인 실행력 우수. 보험 도메인 경험은 보강 필요.', task: '초기 컨택 준비' },
+    { name: '오재현', email: 'oh.jaehyun@email.com', phone: '010-4419-7752',
+      role: '계리 담당', company: 'E생명 · 계리팀', years: '8년', dept: '계리분석',
+      skills: ['K-ICS', '리스크 모델링', 'Excel VBA'],
+      note: '계리 실무 깊이 우수. 커뮤니케이션 스타일에서 변별.', task: '포지션 공석 시 우선 컨택' }
+  ];
+  function renderRejectList() {
+    const box = document.getElementById('reject-list');
+    if (!box) return;
+    box.innerHTML = REJECTED_2ND.map((c, i) => `
+      <label class="reject-item${i === 0 ? ' top' : ''}">
+        <input type="radio" name="reject-pick" value="${i}">
+        <span class="ri-avatar">${c.name.charAt(0)}</span>
+        <span class="ri-main">
+          <span class="ri-name">${c.name}${c.rec ? '<span class="ri-rec">추천 · 2순위</span>' : ''}</span>
+          <span class="ri-meta">${c.role} · ${c.company} · ${c.years}</span>
+          <span class="ri-tags">${c.skills.map(s => `<span class="ri-tag">${s}</span>`).join('')}</span>
+        </span>
+        <span class="ri-stage">2차 면접 탈락</span>
+      </label>`).join('');
+  }
   function openAddCandidate() {
+    renderRejectList();
     document.getElementById('add-modal').classList.add('open');
     document.getElementById('add-modal-backdrop').classList.add('open');
   }
@@ -6526,36 +6530,34 @@ function showToast(message, type) {
     document.getElementById('add-modal-backdrop').classList.remove('open');
   }
   function submitAddCandidate() {
-    const g = id => document.getElementById(id).value.trim();
-    const name = g('add-name');
-    if (!name) { showToast('이름을 입력해 주세요', 'error'); return; }
-    const dept = document.getElementById('add-dept').value;
-    const skills = g('add-skills').split(',').map(s => s.trim()).filter(Boolean);
-    const skillTags = skills.map(s => `<span class="tag skill">${s}</span>`).join('');
+    const picked = document.querySelector('input[name="reject-pick"]:checked');
+    if (!picked) { showToast('등록할 후보자를 선택해 주세요', 'error'); return; }
+    if (!confirm('해당 지원자를 인재풀에 등록하시겠습니까?')) return;
+    const c = REJECTED_2ND[parseInt(picked.value, 10)];
+    const skillTags = c.skills.map(s => `<span class="tag skill">${s}</span>`).join('');
     const tbody = document.querySelector('#view-pool tbody');
     const tr = document.createElement('tr');
     tr.className = 'candidate-row';
     tr.dataset.status = 'new';
-    tr.dataset.dept = dept;
+    tr.dataset.dept = c.dept;
     tr.dataset.order = '0'; // 방금 등록 = 최신
     tr.innerHTML = `
       <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
-      <td><div class="candidate-cell"><div class="avatar">${name.charAt(0)}</div>
-        <div class="candidate-info"><div class="name">${name}</div><div class="sub">${g('add-email')}</div></div></div></td>
-      <td><div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div><div class="status-meta">방금</div></td>
+      <td><div class="candidate-cell"><div class="avatar">${c.name.charAt(0)}</div>
+        <div class="candidate-info"><div class="name">${c.name}</div><div class="sub">${c.email}</div></div></div></td>
+      <td><div class="status-line"><span class="status-dot send"></span>풀 신규 등록</div><div class="status-meta">방금 · 2차 면접 후 등록</div></td>
       <td><span class="stage-pill new">신규</span></td>
-      <td class="task-cell">초기 컨택 준비</td>
-      <td class="contact-cell">${g('add-phone')}</td>
-      <td class="career-cell"><div class="role">${g('add-role')}</div><div class="company">${g('add-company')}</div></td>
-      <td class="years-cell">${g('add-years')}</td>
+      <td class="task-cell">${c.task || '초기 컨택 준비'}</td>
+      <td class="contact-cell">${c.phone}</td>
+      <td class="career-cell"><div class="role">${c.role}</div><div class="company">${c.company}</div></td>
+      <td class="years-cell">${c.years}</td>
       <td><div class="tag-group">${skillTags}</div></td>
-      <td class="note-cell">${g('add-note')}</td>
+      <td class="note-cell">${c.note}</td>
     `;
     tbody.insertBefore(tr, tbody.firstChild);
     sortPool();
     closeAddCandidate();
-    ['add-name','add-email','add-phone','add-role','add-company','add-years','add-skills','add-note'].forEach(id=>document.getElementById(id).value='');
-    showToast(name + ' 님이 인재풀에 추가되었습니다');
+    showToast(c.name + ' 님이 인재풀에 등록되었습니다');
   }
 
   document.querySelectorAll('.pool-chip[data-filter-type]').forEach(chip => {
@@ -7867,19 +7869,36 @@ const Leadtime = (function() {
   }
 
   function renderJourney() {
-    const j = dataset[currentType].journey;
+    const d = dataset[currentType];
+    const j = d.journey;
     const flow = document.getElementById('lt-journey-flow');
     if (!flow) return;
+    // 단계별 분석(funnel)과 동일한 데이터 사용: funnel의 단계별 소요일을 key로 합산
+    const fdays = {};
+    (d.funnel || []).forEach(f => { fdays[f.key] = parseInt(String(f.period).replace(/[^0-9]/g, '')) || 0; });
+    const STAGE_MAP = {
+      '서류 검토': ['document_hr', 'document_dept'],
+      '역량검사': ['assessment'],
+      '1차 면접': ['interview1'],
+      '2차 면접': ['interview2'],
+      '처우 협의': ['offer'],
+      '최종 발표': ['final']
+    };
+    const waitOf = s => {
+      const keys = STAGE_MAP[s.stage];
+      if (keys && keys.length) return keys.reduce((a, k) => a + (fdays[k] || 0), 0);
+      return s.wait;
+    };
     flow.innerHTML = j.map((s, i) => `
       <div class="lt-journey-step">
         <div class="lt-jr-head"><span class="idx">${i + 1}</span>${s.stage}</div>
         <div class="lt-jr-touch">${s.touch}</div>
         <div class="lt-jr-wait ${s.bad ? '' : 'ok'}">
-          <div class="w-top"><b>${s.wait}</b><span>일 · 대기 리드타임</span></div>
+          <div class="w-top"><b>${waitOf(s)}</b><span>일 · 대기 리드타임</span></div>
           <div class="w-note">${s.note}</div>
         </div>
       </div>`).join('');
-    const total = j.reduce((a, b) => a + b.wait, 0);
+    const total = j.reduce((a, b) => a + waitOf(b), 0);
     document.getElementById('lt-journey-total').textContent = '총 ' + total + '일 대기';
   }
 
