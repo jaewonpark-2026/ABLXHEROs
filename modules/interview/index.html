@@ -125,7 +125,7 @@ a { color: inherit; text-decoration: none; }
 .result-tab.fail:not(.active) .result-tab-count { color: var(--abl-red); background: #FEE2E2; }
 
 /* 2단계 네비게이션: 공고 선택 → 라운드 선택 */
-.posting-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.posting-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 .posting-tab { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border: 1px solid var(--border); border-radius: 14px; background: white; cursor: pointer; transition: all 0.18s; text-align: left; font-family: inherit; position: relative; overflow: hidden; }
 .posting-tab::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: transparent; transition: background 0.18s; }
 .posting-tab:hover { border-color: var(--main-1); box-shadow: 0 4px 12px rgba(0,103,172,0.08); }
@@ -740,6 +740,14 @@ a { color: inherit; text-decoration: none; }
             <div class="pt-sub">접수기간 2026.06.08 ~ 2026.06.14</div>
           </div>
           <span class="pt-count" id="posting-count-newgrad">0명</span>
+        </button>
+        <button type="button" class="posting-tab" id="posting-tab-it-career" onclick="switchPosting('it-career')">
+          <span class="pt-ic"><i class="ti ti-device-desktop"></i></span>
+          <div>
+            <div class="pt-name">디지털IT본부 디지털IT기획팀 경력직(AA) 채용</div>
+            <div class="pt-sub">접수기간 2026.06.01 ~ 2026.06.05</div>
+          </div>
+          <span class="pt-count" id="posting-count-it-career">0명</span>
         </button>
         <button type="button" class="posting-tab" id="posting-tab-career" onclick="switchPosting('career')">
           <span class="pt-ic"><i class="ti ti-briefcase"></i></span>
@@ -1392,12 +1400,15 @@ function switchMainView(viewType) {
   const titleEl = document.getElementById('page-title');
   const subEl = document.getElementById('page-subtitle');
 
-  // viewType 파싱: 'newgrad-all' / 'newgrad-r1' / 'newgrad-r2' / 'career-all' / 'career-r1' / 'career-r2'
+  // viewType 파싱: 'newgrad-all' / 'it-career-r1' / 'career-r2' 등
+  // posting에 하이픈이 있을 수 있으므로(it-career) 마지막 '-' 기준으로 round 분리
   // 하위 호환: 'all' → 'newgrad-all', 'stage1' → 'career-r1', 'stage2' → 'career-r2'
   if (viewType === 'all') viewType = 'newgrad-all';
   else if (viewType === 'stage1') viewType = 'career-r1';
   else if (viewType === 'stage2') viewType = 'career-r2';
-  const [posting, round] = viewType.split('-');
+  const lastDash = viewType.lastIndexOf('-');
+  const posting = viewType.slice(0, lastDash);
+  const round = viewType.slice(lastDash + 1);
   currentPosting = posting;
   currentStageFilter = round === 'r1' ? 1 : (round === 'r2' ? 2 : 'all');
 
@@ -1412,7 +1423,9 @@ function switchMainView(viewType) {
   // 라운드 카운트 갱신
   updatePostingAndRoundCounts();
 
-  const postingLabel = posting === 'newgrad' ? '2026 신입사원 공채' : '상품본부 상품기획팀 경력직 채용';
+  const postingLabel = posting === 'newgrad' ? '2026 신입사원 공채'
+    : posting === 'it-career' ? '디지털IT본부 디지털IT기획팀 경력직(AA) 채용'
+    : '상품본부 상품기획팀 경력직 채용';
   let roundLabel, subLabel;
   if (currentStageFilter === 'all') {
     roundLabel = '면접 진행 지원자 전체';
@@ -1447,10 +1460,13 @@ function updatePostingAndRoundCounts() {
   if (!candidates || candidates.length === 0) return;
   // 공고별 전체 카운트
   const ngCount = candidates.filter(c => c.posting === 'newgrad' && c.finalResult === null).length;
+  const itCount = candidates.filter(c => c.posting === 'it-career' && c.finalResult === null).length;
   const caCount = candidates.filter(c => c.posting === 'career' && c.finalResult === null).length;
   const ngEl = document.getElementById('posting-count-newgrad');
+  const itEl = document.getElementById('posting-count-it-career');
   const caEl = document.getElementById('posting-count-career');
   if (ngEl) ngEl.textContent = ngCount + '명';
+  if (itEl) itEl.textContent = itCount + '명';
   if (caEl) caEl.textContent = caCount + '명';
 
   // 현재 공고의 라운드별 카운트
