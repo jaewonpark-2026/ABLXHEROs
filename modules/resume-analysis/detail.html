@@ -126,6 +126,7 @@ a { color: inherit; text-decoration: none; }
 .info-box { padding: 10px 12px; border-radius: 10px; background: var(--bg-page); border: 1px solid var(--border); }
 .info-label { color: var(--text-3); font-size: 10px; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.02em; }
 .info-value { color: var(--text-1); font-size: 12px; font-weight: 700; line-height: 1.45; }
+.info-org { font-size: 10px; font-weight: 600; color: var(--text-3); margin-top: 3px; }
 .type-pill, .status-pill, .phase-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
 .type-pill.new { color: var(--main-1); background: linear-gradient(135deg, #E6F1FB, #D5E8F5); }
 .type-pill.career { color: var(--sub-3); background: linear-gradient(135deg, #E0F5F7, #C5EBEF); }
@@ -528,6 +529,18 @@ const roleCriteriaMap = {
 };
 
 function getJobCriteria(c) { return roleCriteriaMap[c.role] || roleCriteriaMap["인사/경영지원"]; }
+// 같은 공고 + 같은 직무(team/role) 지원자 중 점수 기준 순위
+function getRoleRankText(c) {
+  const peers = allCandidates.filter(x =>
+    x.posting === c.posting &&
+    (x.team ? x.team === c.team : x.role === c.role)
+  );
+  if (peers.length <= 1) return c.role + ' 단독 지원';
+  const ranked = peers.slice().sort((a, b) => b.score - a.score);
+  const rank = ranked.findIndex(x => x.id === c.id) + 1;
+  const pct = Math.round(rank / peers.length * 100);
+  return `${peers.length}명 중 <span style="color:var(--main-1)">${rank}위</span> · 상위 ${pct}%`;
+}
 function getPhaseClass(p) { return p === '해당 부서 전달 완료' ? 'phase-done' : 'phase-pending'; }
 function getValueKeyword(c) {
   if (c.role === "디지털/IT") return "스마트";
@@ -739,7 +752,8 @@ function renderResumePane(c, profile) {
         <div class="info-box"><div class="info-label">지원번호</div><div class="info-value">${c.id}</div></div>
         <div class="info-box"><div class="info-label">지원 유형</div><div class="info-value"><span class="type-pill ${typeClass}">${c.type}</span></div></div>
         <div class="info-box"><div class="info-label">전형 상태</div><div class="info-value"><span class="phase-pill ${getPhaseClass(c.phase)}">${c.phase}</span></div></div>
-        <div class="info-box"><div class="info-label">지원 직무</div><div class="info-value">${c.role}</div></div>
+        <div class="info-box"><div class="info-label">지원 직무</div><div class="info-value">${c.role}<div class="info-org">${c.division ? c.division + ' · ' + (c.team || '') : ''}</div></div></div>
+        <div class="info-box"><div class="info-label">직무 내 순위</div><div class="info-value">${getRoleRankText(c)}</div></div>
         <div class="info-box"><div class="info-label">경력</div><div class="info-value">${c.exp}</div></div>
         <div class="info-box"><div class="info-label">연락처</div><div class="info-value">${profile.phone}</div></div>
         <div class="info-box"><div class="info-label">이메일</div><div class="info-value">${profile.email}</div></div>

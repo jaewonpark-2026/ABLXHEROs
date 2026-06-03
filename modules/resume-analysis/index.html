@@ -154,8 +154,20 @@ td { padding: 14px 18px; border-bottom: 1px solid var(--border); color: var(--te
 tbody tr { transition: background 0.15s; }
 tbody tr:hover { background: #fbfdff; }
 tbody tr:last-child td { border-bottom: 0; }
-.candidate-cell { display: flex; align-items: center; min-width: 160px; }
+.candidate-cell { display: flex; align-items: center; min-width: 160px; gap: 10px; }
 .candidate-name { color: var(--text-1); font-size: 13px; font-weight: 700; }
+/* 직무(본부·팀)별 그룹 헤더 */
+.group-header-row td { padding: 0 !important; background: transparent !important; border: none !important; }
+.group-header { display: flex; align-items: center; gap: 10px; padding: 14px 16px 8px; margin-top: 6px; border-bottom: 2px solid var(--main-1); }
+.group-org { font-size: 13.5px; font-weight: 800; color: var(--main-1); }
+.group-role { font-size: 11px; font-weight: 700; color: var(--text-2); background: #EEF4FB; border-radius: 999px; padding: 3px 9px; }
+.group-count { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--text-3); }
+/* 직무 내 순위 배지 */
+.rank-badge { flex-shrink: 0; min-width: 34px; text-align: center; font-size: 11px; font-weight: 800; color: var(--text-3); background: #F1F5F9; border-radius: 8px; padding: 4px 6px; }
+.rank-badge.rank-1 { color: #fff; background: linear-gradient(135deg, var(--main-1), var(--main-2)); }
+.rank-badge.rank-2 { color: var(--main-1); background: #DCEBF8; }
+.rank-badge.rank-3 { color: var(--main-1); background: #E8F1FA; }
+.role-org { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
 .candidate-id { color: var(--text-3); font-size: 11px; margin-top: 2px; }
 .channel-tag { display: inline-flex; align-items: center; gap: 2px; padding: 1px 7px; border-radius: 999px; background: #F1F5F9; color: var(--text-2); font-size: 10.5px; font-weight: 600; }
 
@@ -441,6 +453,9 @@ function selectPosting(id) {
   renderTable();
 }
 
+// 본부 표시 우선순위 (조직도 순서, 데모 핵심 상품본부 우선)
+const DIV_ORDER = ['상품본부', '디지털IT본부', '영업마케팅부문', '재무부문', 'HR본부', '경영혁신본부', '기타'];
+
 function renderTable() {
   const table = document.getElementById('candidateTable');
   const empty = document.getElementById('emptyState');
@@ -449,23 +464,65 @@ function renderTable() {
   if (visibleCount) visibleCount.textContent = filtered.length;
   table.innerHTML = '';
 
+  // 직무(본부·팀)별 그룹핑 — 경력/신입 모두 팀·본부 단위로 순위 산출
+  const groups = {};
   filtered.forEach(c => {
-    const tr = document.createElement('tr');
-    const statusClass = statusClassMap[c.status] || 'status-good';
-    const phaseClass = getPhaseClass(c.phase);
-    const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
-    const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
-    tr.innerHTML = `
-      <td><div class="candidate-cell"><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
-      <td><strong style="color:var(--text-1)">${c.role}</strong></td>
-      <td>${c.exp}</td>
-      <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
-      <td><span class="status-pill ${statusClass}">${c.status}</span></td>
-      <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
-      <td><div class="tags">${tags}</div></td>
-      <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
-    `;
-    table.appendChild(tr);
+    const key = (c.division || '기타') + '|' + (c.team || c.role) + '|' + c.role;
+    (groups[key] = groups[key] || []).push(c);
+  });
+
+  const groupKeys = Object.keys(groups).sort((a, b) => {
+    const [da, ta] = a.split('|');
+    const [db, tb] = b.split('|');
+    const oa = DIV_ORDER.indexOf(da), ob = DIV_ORDER.indexOf(db);
+    if (oa !== ob) return (oa < 0 ? 99 : oa) - (ob < 0 ? 99 : ob);
+    return ta.localeCompare(tb, 'ko');
+  });
+
+  groupKeys.forEach(key => {
+    const [div, team, role] = key.split('|');
+    const members = groups[key].slice().sort((a, b) => {
+      if (state.sort === 'scoreAsc') return a.score - b.score;
+      if (state.sort === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
+      return b.score - a.score; // 기본: 직무 내 점수 높은 순
+    });
+    // 직무 내 순위는 항상 점수 기준으로 산정
+    const ranked = members.slice().sort((a, b) => b.score - a.score);
+    const rankOf = c => ranked.indexOf(c) + 1;
+
+    // 그룹 헤더 행
+    const ghr = document.createElement('tr');
+    ghr.className = 'group-header-row';
+    ghr.innerHTML = `
+      <td colspan="8">
+        <div class="group-header">
+          <span class="group-org"><i class="ti ti-sitemap" style="font-size:13px;vertical-align:-2px"></i> ${div} · ${team}</span>
+          <span class="group-role">${role}</span>
+          <span class="group-count">지원자 ${members.length}명 · 직무 내 순위</span>
+        </div>
+      </td>`;
+    table.appendChild(ghr);
+
+    members.forEach(c => {
+      const rank = rankOf(c);
+      const tr = document.createElement('tr');
+      const statusClass = statusClassMap[c.status] || 'status-good';
+      const phaseClass = getPhaseClass(c.phase);
+      const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
+      const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
+      const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
+      tr.innerHTML = `
+        <td><div class="candidate-cell"><span class="rank-badge ${rankClass}">${rank}위</span><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
+        <td><strong style="color:var(--text-1)">${c.role}</strong><div class="role-org">${div} · ${team}</div></td>
+        <td>${c.exp}</td>
+        <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
+        <td><span class="status-pill ${statusClass}">${c.status}</span></td>
+        <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
+        <td><div class="tags">${tags}</div></td>
+        <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
+      `;
+      table.appendChild(tr);
+    });
   });
 
   empty.style.display = filtered.length ? 'none' : 'block';
