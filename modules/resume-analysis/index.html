@@ -545,6 +545,12 @@ fetch('data/applicants.json')
   .then(data => {
     candidates = data.candidates;
     stageCountsByPosting = data.stage_counts || stageCountsByPosting;
+    // 실제 후보 수에 맞춰 카운트 자동 보정 (후보 추가/삭제 시 자동 반영)
+    ['it-career', 'career', 'newgrad'].forEach(pid => {
+      const n = candidates.filter(c => c.posting === pid).length;
+      const prev = stageCountsByPosting[pid] || {};
+      stageCountsByPosting[pid] = { applied: n, auto_passed: n, in_review: n, delivered: prev.delivered || 0 };
+    });
     postings = data.postings || [];
     const deliveredIds = data.initial_delivered_ids || [];
     candidates.forEach(c => {
