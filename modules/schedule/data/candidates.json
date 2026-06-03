@@ -214,7 +214,7 @@
         "dept": "재무/회계",
         "career": "5년",
         "email": "shin.ce@email.com",
-        "status": "confirm-wait",
+        "status": "done",
         "applied": "2026.06.01",
         "interviewers": [
           "박성준 상무",
@@ -225,10 +225,13 @@
         "period": "2026.06.16~2026.06.20",
         "place": "본사 12층 임원실",
         "duration": "60",
-        "aiTime": "2026년 6월 18일 오전 11:00",
-        "aiReason": "면접관 전원 가용",
+        "aiTime": "2026년 6월 17일 오후 1:00",
+        "aiReason": "면접관 전원 가용 · 17일 오후 1시 확정",
         "reminded": false,
-        "isRecoorded": false
+        "isRecoorded": false,
+        "confirmedTime": "2026.06.17 13:00",
+        "sentAt": "2026.06.16",
+        "confirmedAt": "2026.06.17"
       },
       {
         "id": "c12",
