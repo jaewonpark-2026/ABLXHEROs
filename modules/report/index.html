@@ -6379,7 +6379,7 @@ function showToast(message, type) {
     const items = [
       { key: 'org', label: '조직 적합도', score: fit.org, short: 'ABL의 비전·인재상·조직문화 기준과 지원자 맥락의 연결성을 종합 검토합니다.' },
       { key: 'job', label: '직무 적합도', score: fit.job, short: '채용공고·직무기술서의 수행 내용·태도·필요 지식·기술과 지원자 경험의 연관성을 검토합니다.' },
-      { key: 'industry', label: '산업 적합도', score: fit.industry, short: '보험·금융 산업에 대한 이해도와 도메인 전문성을 검토합니다.' }
+      { key: 'industry', label: '산업 이해도', score: fit.industry, short: '보험·금융 산업에 대한 이해도와 도메인 전문성을 검토합니다.' }
     ];
     return items.map(it => {
       const cls = it.score >= 90 ? 'high' : it.score >= 80 ? 'mid' : 'low';
