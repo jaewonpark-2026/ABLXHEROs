@@ -6491,19 +6491,19 @@ function showToast(message, type) {
       role: '상품기획 매니저', company: 'B생명 · 상품팀', years: '7년 2개월', dept: '상품기획',
       skills: ['변액·종신 Pricing', 'ALM 운영', 'IFRS17 보조'],
       note: '<span class="note-pin recommend">2순위</span>변액·종신 도메인 기본기 견고. 신상품 직접 리드 경험은 다소 보강 필요.',
-      task: '포지션 공석 시 우선 컨택', rec: true },
+      task: '포지션 공석 시 우선 컨택', rec: true, pid: 'c012' },
     { name: '한도윤', email: 'han.doyun@email.com', phone: '010-2841-9930',
       role: '데이터 엔지니어', company: 'C핀테크 · 데이터플랫폼팀', years: '6년 1개월', dept: '디지털/IT',
       skills: ['SQL', 'Python', '데이터 파이프라인'],
-      note: '2차 면접 우수. 동일 포지션 1순위와 근소차로 2순위.', task: '초기 컨택 준비' },
+      note: '2차 면접 우수. 동일 포지션 1순위와 근소차로 2순위.', task: '초기 컨택 준비', pid: 'radd-han' },
     { name: '정세아', email: 'jung.sea@email.com', phone: '010-6677-1208',
       role: '브랜드 마케터', company: 'D사 · 브랜드전략팀', years: '5년 4개월', dept: '마케팅',
       skills: ['콘텐츠 기획', '퍼포먼스 마케팅', 'CRM'],
-      note: '디지털 캠페인 실행력 우수. 보험 도메인 경험은 보강 필요.', task: '초기 컨택 준비' },
+      note: '디지털 캠페인 실행력 우수. 보험 도메인 경험은 보강 필요.', task: '초기 컨택 준비', pid: 'radd-jung' },
     { name: '오재현', email: 'oh.jaehyun@email.com', phone: '010-4419-7752',
       role: '계리 담당', company: 'E생명 · 계리팀', years: '8년', dept: '계리분석',
       skills: ['K-ICS', '리스크 모델링', 'Excel VBA'],
-      note: '계리 실무 깊이 우수. 커뮤니케이션 스타일에서 변별.', task: '포지션 공석 시 우선 컨택' }
+      note: '계리 실무 깊이 우수. 커뮤니케이션 스타일에서 변별.', task: '포지션 공석 시 우선 컨택', pid: 'radd-oh' }
   ];
   function renderRejectList() {
     const box = document.getElementById('reject-list');
@@ -6529,11 +6529,44 @@ function showToast(message, type) {
     document.getElementById('add-modal').classList.remove('open');
     document.getElementById('add-modal-backdrop').classList.remove('open');
   }
+  // 인재풀 추가 후보의 상세 평가 패널 데이터 생성 (기존 데이터 없을 때)
+  function buildPanelFromReject(c) {
+    const cleanNote = (c.note || '').replace(/<[^>]*>/g, '');
+    return {
+      avatar: c.name.charAt(0), name: c.name,
+      role: c.role + ' · ' + c.years,
+      appliedFor: '2026 상반기 경력 채용 · ' + c.dept,
+      overall: {
+        status: 'priority', statusLabel: '2차 면접 후 인재풀 등록',
+        summary: cleanNote + ' 동일 포지션 경쟁 후보 대비 근소차 2순위로, 향후 동일 직무 공석 시 우선 검토 대상으로 인재풀에 보존.',
+        lastEvalDate: '2026.06.20'
+      },
+      funnel: [
+        { label: '서류',     result: 'pass', score: 84 },
+        { label: '역량검사', result: 'pass', score: 82 },
+        { label: '1차 면접', result: 'pass', score: 83 },
+        { label: '2차 면접', result: 'fail', score: 80 }
+      ],
+      interviewers: [
+        { stage: '서류 평가', name: '하유림 책임', dept: '인사팀 · 채용파트', score: 84 },
+        { stage: '1차', name: '현업 면접관', dept: c.dept, score: 83 },
+        { stage: '2차', name: '현업 임원', dept: c.dept, score: 80 }
+      ],
+      comments: [
+        { who: '하유림 책임', dept: '인사팀', stage: '서류 평가', text: '서류·역량 검토 결과 직무 적합성이 우수하여 면접을 진행했습니다. 인재풀 보존 후보로 적합합니다.' },
+        { who: '현업 면접관', dept: c.dept, stage: '1차', text: (c.skills || []).join(', ') + ' 등 핵심 역량을 보유하여 1차 면접을 통과했습니다.' },
+        { who: '현업 임원', dept: c.dept, stage: '2차', text: '동일 포지션 경쟁 후보 대비 근소차 2순위로 평가했습니다. 향후 동일 직무 공석 시 우선 검토 대상으로 인재풀 보존을 권장합니다.' }
+      ]
+    };
+  }
   function submitAddCandidate() {
     const picked = document.querySelector('input[name="reject-pick"]:checked');
     if (!picked) { showToast('등록할 후보자를 선택해 주세요', 'error'); return; }
     if (!confirm('해당 지원자를 인재풀에 등록하시겠습니까?')) return;
     const c = REJECTED_2ND[parseInt(picked.value, 10)];
+    const pid = c.pid;
+    // 상세 평가 패널 데이터 연결 (기존에 없으면 생성)
+    if (pid && !candidateData[pid]) { candidateData[pid] = buildPanelFromReject(c); }
     const skillTags = c.skills.map(s => `<span class="tag skill">${s}</span>`).join('');
     const tbody = document.querySelector('#view-pool tbody');
     const tr = document.createElement('tr');
@@ -6541,6 +6574,7 @@ function showToast(message, type) {
     tr.dataset.status = 'new';
     tr.dataset.dept = c.dept;
     tr.dataset.order = '0'; // 방금 등록 = 최신
+    if (pid) tr.dataset.candidateId = pid;
     tr.innerHTML = `
       <td class="check-col" onclick="event.stopPropagation()"><input type="checkbox" /></td>
       <td><div class="candidate-cell"><div class="avatar">${c.name.charAt(0)}</div>
@@ -6554,6 +6588,7 @@ function showToast(message, type) {
       <td><div class="tag-group">${skillTags}</div></td>
       <td class="note-cell">${c.note}</td>
     `;
+    if (pid) tr.onclick = () => openCandidatePanel(pid);
     tbody.insertBefore(tr, tbody.firstChild);
     sortPool();
     closeAddCandidate();
