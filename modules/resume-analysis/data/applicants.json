@@ -1135,7 +1135,7 @@
   "postings": [
     {
       "id": "it-career",
-      "name": "디지털IT본부 디지털IT기획팀 경력(AA) 채용",
+      "name": "디지털IT본부 디지털IT기획팀 경력직(AA) 채용",
       "period_apply": "2026.06.01 ~ 2026.06.05",
       "period_review": "",
       "status": "진행 중"
@@ -1150,7 +1150,7 @@
     {
       "id": "newgrad",
       "name": "2026 신입사원 공채",
-      "period_apply": "2026.06.01 ~ 2026.06.07",
+      "period_apply": "2026.06.08 ~ 2026.06.14",
       "period_review": "",
       "status": "진행 중"
     }
