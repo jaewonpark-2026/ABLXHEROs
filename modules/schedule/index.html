@@ -458,18 +458,34 @@ function renderNotifications() {
 function parseCustomDate(str) {
   if (!str) return null;
   const dMatch = str.match(/(\d{4})[\.년]\s*(\d{1,2})[\.월]\s*(\d{1,2})/);
-  const tMatch = str.match(/(\d{2}:\d{2})/);
+  const tMatch = str.match(/(\d{1,2}:\d{2})/);
   if (dMatch) return { y: parseInt(dMatch[1]), m: parseInt(dMatch[2]), d: parseInt(dMatch[3]), time: tMatch ? tMatch[1] : '' };
   return null;
 }
 
+function applyConfirmedSchedule() {
+  // 조율 모듈(coordinate.html)에서 확정 후 localStorage에 저장한 일정을 CANDIDATES에 반영
+  try {
+    const store = JSON.parse(localStorage.getItem('schedule_confirmed') || '{}');
+    Object.keys(store).forEach(k => {
+      const parts = k.split('|'), round = parts[0], cid = parts[1];
+      const c = (CANDIDATES[round] || []).find(x => x.id === cid);
+      if (c) { c.status = 'done'; c.confirmedTime = store[k].confirmedTime; }
+    });
+  } catch (e) {}
+}
+
 function getMergedEvents() {
   let merged = CAL_EVENTS_STATIC.slice();
-  ['r1', 'r2'].forEach(round => {
-    CANDIDATES[round].forEach(c => {
+  ['r1', 'r2', 'newgrad_r1', 'newgrad_r2'].forEach(round => {
+    (CANDIDATES[round] || []).forEach(c => {
+      const isNg = round.indexOf('newgrad') === 0;
+      const isR2 = round.indexOf('r2') >= 0;
+      const evType = isNg ? 'new' : round;   // 신입은 'new', 경력은 r1/r2
+      const roundNum = isR2 ? '2' : '1';
       if (c.status === 'done' && c.confirmedTime) {
         const d = parseCustomDate(c.confirmedTime);
-        if (d) merged.push({ y: d.y, m: d.m, d: d.d, type: round, label: c.name + ' ' + (round === 'r1' ? '1' : '2') + '차 ' + d.time, dept: c.dept, candId: c.id });
+        if (d) merged.push({ y: d.y, m: d.m, d: d.d, type: evType, label: c.name + ' ' + roundNum + '차 ' + d.time, dept: c.dept, candId: c.id });
       } else if ((c.status === 'pending' || c.status === 'confirm-wait') && c.deadline) {
         const d = parseCustomDate(c.deadline);
         if (d) merged.push({ y: d.y, m: d.m, d: d.d, type: 'pending', label: '응답대기-' + c.name, dept: c.dept, candId: c.id });
@@ -671,6 +687,7 @@ fetch('data/candidates.json')
   .then(data => {
     CANDIDATES = data.candidates;
     CAL_EVENTS_STATIC = data.cal_events_static;
+    applyConfirmedSchedule();  // 조율 모듈에서 확정한 일정 반영
     NOTIFICATIONS = data.notifications || [];
     renderNotifications();
     renderCalendar();

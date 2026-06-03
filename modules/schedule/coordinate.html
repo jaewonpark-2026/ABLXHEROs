@@ -2102,9 +2102,17 @@ function updateConfirmFooter() {
 function doConfirmSend() {
   var cand = coordState.cand;
   var time = coordState.selAltTime || cand.aiTime;
-  cand.status = 'done';
-  cand.confirmedAt = coordState.reserveTime ? coordState.reserveTime.split(' ')[0].replace(/-/g, '.') : new Date().toLocaleDateString('ko');
-  cand.confirmedTime = time.replace(/년 /g, '.').replace(/월 /g, '.').replace(/일 /g, ' ').replace(/오전 /g, '').replace(/오후 /g, '');
+  var confAt = coordState.reserveTime ? coordState.reserveTime.split(' ')[0].replace(/-/g, '.') : new Date().toLocaleDateString('ko');
+  var confTime = time.replace(/년 /g, '.').replace(/월 /g, '.').replace(/일 /g, ' ').replace(/오전 /g, '').replace(/오후 /g, '');
+  var round = coordState.round;
+  // 확정 대상: 일괄 조율이면 선택된 전원, 아니면 단일 후보
+  var targetIds = (coordState.isBulk && coordState.bulkIds && coordState.bulkIds.length) ? coordState.bulkIds.slice() : [cand.id];
+  targetIds.forEach(function(cid) {
+    var cc = (CANDIDATES[round] || []).find(function(c) { return c.id === cid; });
+    if (!cc && cid === cand.id) cc = cand;
+    if (cc) { cc.status = 'done'; cc.confirmedAt = confAt; cc.confirmedTime = confTime; }
+    persistConfirmedSchedule(round, cid, confTime);  // 통합 캘린더 반영용 저장
+  });
   if (coordState.reserveTime) {
     showToast('ok', '예약 발송되었습니다', '선택하신 ' + coordState.reserveTime + ' 에 ' + cand.name + ' 지원자 및 면접관에게 확정 메일이 전송됩니다.');
   } else {
@@ -2115,6 +2123,15 @@ function doConfirmSend() {
   renderKanban(coordState.round);
   renderDashboardSummary(coordState.round);
   updateBadges();
+}
+
+// 확정된 면접 일정을 localStorage에 저장 → 통합 캘린더(index.html)에서 읽어 반영
+function persistConfirmedSchedule(round, candId, confirmedTime) {
+  try {
+    var store = JSON.parse(localStorage.getItem('schedule_confirmed') || '{}');
+    store[round + '|' + candId] = { confirmedTime: confirmedTime };
+    localStorage.setItem('schedule_confirmed', JSON.stringify(store));
+  } catch (e) {}
 }
 
 // ===== Alt time modal (다른 시간 선택) =====
