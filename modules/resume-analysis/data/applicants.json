@@ -72,7 +72,9 @@
       ],
       "is_demo": true,
       "channel": "원티드",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "상품본부",
+      "team": "상품기획팀"
     },
     {
       "id": "ABL-2026-0501",
@@ -127,7 +129,9 @@
       ],
       "is_demo": false,
       "channel": "잡코리아",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "상품본부",
+      "team": "상품기획팀"
     },
     {
       "id": "ABL-2026-0001",
@@ -170,7 +174,9 @@
       ],
       "is_demo": false,
       "channel": "원티드",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "영업마케팅부문",
+      "team": "고객마케팅본부"
     },
     {
       "id": "ABL-2026-0142",
@@ -212,7 +218,9 @@
         ]
       ],
       "channel": "캠퍼스 리크루팅",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "영업마케팅부문",
+      "team": "FC영업본부"
     },
     {
       "id": "ABL-2026-0178",
@@ -254,7 +262,9 @@
         ]
       ],
       "channel": "잡코리아",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "디지털IT본부",
+      "team": "IT기획팀"
     },
     {
       "id": "ABL-2026-0211",
@@ -296,7 +306,9 @@
         ]
       ],
       "channel": "링커리어",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "상품본부",
+      "team": "상품기획팀"
     },
     {
       "id": "ABL-2026-0096",
@@ -338,7 +350,9 @@
         ]
       ],
       "channel": "자사 채용홈",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "재무부문",
+      "team": "재무회계팀"
     },
     {
       "id": "ABL-2026-0235",
@@ -380,7 +394,9 @@
         ]
       ],
       "channel": "자사 채용홈",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "HR본부",
+      "team": "인사팀"
     },
     {
       "id": "ABL-2026-0189",
@@ -422,7 +438,9 @@
         ]
       ],
       "channel": "헤드헌터",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "영업마케팅부문",
+      "team": "FC영업본부"
     },
     {
       "id": "ABL-2026-0164",
@@ -464,7 +482,9 @@
         ]
       ],
       "channel": "잡코리아",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "디지털IT본부",
+      "team": "IT기획팀"
     },
     {
       "id": "ABL-2026-0127",
@@ -506,7 +526,9 @@
         ]
       ],
       "channel": "사람인",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "상품본부",
+      "team": "상품기획팀"
     },
     {
       "id": "ABL-2026-0254",
@@ -548,7 +570,9 @@
         ]
       ],
       "channel": "잡다(JOBDA)",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "영업마케팅부문",
+      "team": "고객마케팅본부"
     },
     {
       "id": "ABL-2026-0268",
@@ -590,7 +614,9 @@
         ]
       ],
       "channel": "원티드",
-      "posting": "경력공채"
+      "posting": "경력공채",
+      "division": "경영혁신본부",
+      "team": "총무팀"
     },
     {
       "id": "ABL-2026-0281",
@@ -632,7 +658,9 @@
         ]
       ],
       "channel": "캠퍼스 리크루팅",
-      "posting": "신입공채"
+      "posting": "신입공채",
+      "division": "재무부문",
+      "team": "계리팀"
     },
     {
       "id": "ABL-2026-0301",
@@ -665,7 +693,9 @@
       },
       "is_demo": false,
       "posting": "신입공채",
-      "channel": "잡코리아"
+      "channel": "잡코리아",
+      "division": "영업마케팅부문",
+      "team": "FC영업본부"
     },
     {
       "id": "ABL-2026-0302",
@@ -699,7 +729,9 @@
       },
       "is_demo": false,
       "posting": "신입공채",
-      "channel": "링커리어"
+      "channel": "링커리어",
+      "division": "디지털IT본부",
+      "team": "IT기획팀"
     },
     {
       "id": "ABL-2026-0303",
@@ -732,7 +764,9 @@
       },
       "is_demo": false,
       "posting": "신입공채",
-      "channel": "자사 채용홈"
+      "channel": "자사 채용홈",
+      "division": "상품본부",
+      "team": "상품기획팀"
     },
     {
       "id": "ABL-2026-0304",
@@ -765,7 +799,9 @@
       },
       "is_demo": false,
       "posting": "신입공채",
-      "channel": "캠퍼스 리크루팅"
+      "channel": "캠퍼스 리크루팅",
+      "division": "재무부문",
+      "team": "재무회계팀"
     },
     {
       "id": "ABL-2026-0401",
@@ -799,7 +835,9 @@
       },
       "is_demo": false,
       "posting": "경력공채",
-      "channel": "원티드"
+      "channel": "원티드",
+      "division": "디지털IT본부",
+      "team": "IT기획팀"
     },
     {
       "id": "ABL-2026-0402",
@@ -833,7 +871,9 @@
       },
       "is_demo": false,
       "posting": "경력공채",
-      "channel": "헤드헌터"
+      "channel": "헤드헌터",
+      "division": "재무부문",
+      "team": "계리팀"
     },
     {
       "id": "ABL-2026-0403",
@@ -866,7 +906,9 @@
       },
       "is_demo": false,
       "posting": "경력공채",
-      "channel": "사람인"
+      "channel": "사람인",
+      "division": "재무부문",
+      "team": "재무회계팀"
     },
     {
       "id": "ABL-2026-0404",
@@ -899,7 +941,9 @@
       },
       "is_demo": false,
       "posting": "경력공채",
-      "channel": "잡코리아"
+      "channel": "잡코리아",
+      "division": "영업마케팅부문",
+      "team": "FC영업본부"
     }
   ],
   "postings": [
