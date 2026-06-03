@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이비엘생명보험 채용 | SNS 채용 피드 생성</title>
+  <link rel="icon" href="../../assets/logos/favicon.png" type="image/png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumL.ttf') format('truetype'); font-weight: 300; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumR.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Wooridaum'; src: url('../../assets/fonts/WooridaumB.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --main-1: #0067AC; --main-2: #2482C5; --sub-2: #123F6D; --sub-3: #00AEC6;
+  --bg-page: #F6F9FC; --border: #E8EDF3;
+  --text-1: #1A2233; --text-2: #5A6478; --text-3: #8A93A6;
+  --grad-side: linear-gradient(165deg, #0F4E84 0%, #1971AE 35%, #1E8FC9 70%, #0FA0BD 100%);
+  --abl-red: #D63E3E; --abl-red-soft: #E85555;
+  --grad-blue: linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%);
+  --sidebar-w: 232px; --sidebar-w-collapsed: 68px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--bg-page); color: var(--text-1); }
+
+.layout { display: grid; grid-template-columns: var(--sidebar-w) minmax(0, 1fr); min-height: 100vh; transition: grid-template-columns 0.25s; }
+.layout.collapsed { grid-template-columns: var(--sidebar-w-collapsed) 1fr; }
+.sidebar { background: var(--grad-side); color: white; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.sidebar::after { content: ''; position: absolute; bottom: -80px; right: -80px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(0, 174, 198, 0.18) 0%, transparent 70%); pointer-events: none; }
+.sidebar::before { content: ''; position: absolute; top: 40%; left: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(214, 62, 62, 0.14) 0%, transparent 70%); pointer-events: none; }
+.brand { padding: 26px 24px 24px; border-bottom: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; text-decoration: none; color: inherit; display: block; }
+.brand-name { font-family: 'Manrope', 'Wooridaum', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 3px; line-height: 1; }
+.brand-name .hir, .brand-name .e { background: linear-gradient(135deg, #ffffff 0%, #B5E0F2 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-name .abl { background: linear-gradient(135deg, #FF8B8B 0%, #F08080 50%, #E85555 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-style: italic; font-weight: 800; padding: 0 1px; }
+.brand-sub { font-size: 11px; opacity: 0.65; }
+.sidebar-toggle { position: absolute; top: 22px; right: 12px; width: 32px; height: 32px; border-radius: 9px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 5; transition: all 0.2s; backdrop-filter: blur(10px); box-shadow: 0 4px 12px -2px rgba(0,0,0,0.15); }
+.sidebar-toggle:hover { background: rgba(255,255,255,0.28); border-color: rgba(232, 85, 85, 0.5); color: #FFE0E0; transform: scale(1.08); }
+.sidebar-toggle:active { transform: scale(0.95); }
+.nav { padding: 18px 14px; flex: 1; position: relative; z-index: 1; }
+.nav-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.5; padding: 0 14px 8px; margin-top: 8px; font-weight: 700; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.78); margin-bottom: 2px; text-decoration: none; position: relative; transition: all 0.18s; }
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: linear-gradient(90deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.08) 100%); color: white; }
+.nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: linear-gradient(180deg, var(--abl-red-soft) 0%, var(--abl-red) 100%); box-shadow: 0 0 8px rgba(232, 85, 85, 0.5); }
+.nav-item i { font-size: 18px; }
+.layout.collapsed .brand-name, .layout.collapsed .brand-sub, .layout.collapsed .nav-section-title, .layout.collapsed .nav-item span.label { display: none; }
+.layout.collapsed .nav-item { justify-content: center; padding: 11px 0; }
+.layout.collapsed .brand { padding: 26px 12px 24px; text-align: center; min-height: 76px; }
+.layout.collapsed .sidebar-toggle { right: 50%; transform: translateX(50%); top: 22px; }
+
+@media (max-width: 1200px) {
+  .layout { grid-template-columns: var(--sidebar-w-collapsed) minmax(0, 1fr); }
+  .brand-name, .brand-sub, .nav-section-title, .nav-item span.label { display: none; }
+  .nav-item { justify-content: center; padding: 11px 0; }
+  .brand { padding: 26px 12px 24px; text-align: center; min-height: 76px; }
+  .sidebar-toggle { right: 50%; transform: translateX(50%); top: 22px; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); transform: translateX(-100%); z-index: 100; }
+  .layout.mobile-open .sidebar { transform: translateX(0); }
+  .mobile-menu-btn { display: flex; }
+}
+.mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 6px; align-items: center; justify-content: center; cursor: pointer; color: var(--text-2); }
+
+.main-area { display: flex; flex-direction: column; }
+.topbar { background: white; border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.topbar-left { display: flex; align-items: center; gap: 14px; }
+.divider { width: 1px; height: 22px; background: var(--border); }
+.logo-abl { height: 32px; }
+.logo-woori { height: 22px; opacity: 0.85; }
+.user-info { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 12px; }
+.user-badge { background: linear-gradient(135deg, #E6F1FB, #D5E8F5); color: var(--main-1); padding: 6px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.user-badge.manager-role { background: linear-gradient(135deg, #E0F5F7, #C5EBEF); color: var(--sub-3); }
+.logout-btn { background: none; border: 1px solid var(--border); padding: 7px 14px; border-radius: 6px; font-family: inherit; font-size: 12px; color: var(--text-2); cursor: pointer; font-weight: 700; }
+.back-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-2); text-decoration: none; margin-bottom: 14px; }
+.back-link:hover { color: var(--main-1); }
+.content { padding: 24px 28px 48px; }
+
+/* ===== 페이지 헤더 ===== */
+.page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
+.ph-title { font-size: 23px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; gap: 11px; }
+.ph-spark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #7B61FF, #00AEC6); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 19px; box-shadow: 0 6px 16px -4px rgba(123,97,255,0.5); }
+.ph-sub { font-size: 13.5px; color: var(--text-2); margin-top: 7px; line-height: 1.55; max-width: 560px; }
+.ph-new { display:inline-flex; align-items:center; gap:5px; background: linear-gradient(135deg, #FFEDED, #FFE0E0); color: var(--abl-red); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+
+/* ===== WHY 배너 ===== */
+.why { display: flex; gap: 0; background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 22px; }
+.why-item { flex: 1; padding: 16px 20px; display: flex; gap: 13px; align-items: flex-start; border-right: 1px solid var(--border); }
+.why-item:last-child { border-right: none; }
+.why-ic { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 19px; }
+.why-ic.pink { background: #FFEFEF; color: #E84545; }
+.why-ic.blue { background: #E9F3FC; color: var(--main-1); }
+.why-ic.cyan { background: #E3F6F8; color: #009BB0; }
+.why-t { font-size: 13px; font-weight: 700; color: var(--text-1); margin-bottom: 3px; }
+.why-d { font-size: 11.8px; color: var(--text-2); line-height: 1.5; }
+.why-d b { color: var(--abl-red); font-weight: 700; }
+.why-d .ig { color: var(--main-1); font-weight: 700; }
+
+/* ===== 스튜디오 그리드 ===== */
+.studio { display: grid; grid-template-columns: minmax(0,1fr) 430px; gap: 24px; align-items: start; }
+@media (max-width: 1080px) { .studio { grid-template-columns: 1fr; } }
+
+.panel { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+.panel + .panel { margin-top: 18px; }
+.panel-title { font-size: 13px; font-weight: 700; margin-bottom: 15px; padding-bottom: 11px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.panel-title i { color: var(--main-1); font-size: 17px; }
+.panel-title .mini { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--text-3); }
+
+/* JD 소스 카드 */
+.jd-src { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-bottom: 13px; }
+.jd-src .row { font-size: 12.5px; color: var(--text-2); }
+.jd-src .row b { color: var(--text-1); font-weight: 700; }
+.src-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.src-tag { background: #EEF4FB; color: var(--main-1); font-size: 11.5px; font-weight: 700; padding: 5px 10px; border-radius: 7px; }
+
+/* 시안 썸네일 스위처 */
+.variant-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+.variant { cursor: pointer; border: 2px solid var(--border); border-radius: 12px; padding: 8px; background: white; transition: all 0.16s; text-align: center; }
+.variant:hover { border-color: #Bcd6ee; transform: translateY(-2px); }
+.variant.sel { border-color: var(--main-1); box-shadow: 0 6px 18px -6px rgba(0,103,172,0.35); }
+.variant-thumb { width: 100%; aspect-ratio: 4/5; border-radius: 8px; overflow: hidden; position: relative; }
+.variant-label { font-size: 11px; font-weight: 700; color: var(--text-2); margin-top: 7px; }
+.variant.sel .variant-label { color: var(--main-1); }
+
+/* 캡션 박스 */
+.caption-box { background: #F8FAFC; border: 1px solid var(--border); border-radius: 10px; padding: 14px 15px; font-size: 12.6px; line-height: 1.62; color: var(--text-1); white-space: pre-wrap; word-break: break-word; max-height: 230px; overflow-y: auto; }
+.caption-box .htag { color: var(--main-1); font-weight: 700; }
+.cap-actions { display: flex; gap: 8px; margin-top: 11px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: none; border-radius: 9px; font-family: inherit; font-weight: 700; cursor: pointer; transition: all 0.16s; font-size: 12.5px; padding: 10px 15px; }
+.btn-ghost { background: white; color: var(--text-2); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--main-1); border-color: #Bcd6ee; }
+.btn-primary { background: var(--main-1); color: white; box-shadow: 0 6px 16px -6px rgba(0,103,172,0.5); }
+.btn-primary:hover { background: #015a96; }
+.btn-block { width: 100%; }
+.btn i { font-size: 16px; }
+
+.regen-row { display: flex; gap: 9px; margin-top: 16px; }
+
+/* ===== 인스타그램 프리뷰(폰) ===== */
+.preview-wrap { position: sticky; top: 18px; }
+.phone { width: 100%; max-width: 412px; margin: 0 auto; background: white; border-radius: 26px; border: 1px solid var(--border); box-shadow: 0 24px 60px -18px rgba(20,40,80,0.28); overflow: hidden; }
+.ig-statusbar { height: 18px; background: white; }
+.ig-head { display: flex; align-items: center; gap: 10px; padding: 10px 13px; }
+.ig-avatar { width: 38px; height: 38px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5); flex-shrink: 0; }
+.ig-avatar .inner { width: 100%; height: 100%; border-radius: 50%; background: #E9F3FC; border: 2px solid white; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.ig-avatar .inner img { width: 150%; height: 150%; object-fit: contain; object-position: center 18%; }
+.ig-userblock { flex: 1; min-width: 0; }
+.ig-user { font-size: 13px; font-weight: 700; color: #1A2233; display: flex; align-items: center; gap: 4px; }
+.ig-user .vf { color: #3897F0; font-size: 13px; }
+.ig-loc { font-size: 11px; color: var(--text-2); }
+.ig-more { color: var(--text-1); font-size: 18px; }
+
+.creative-stage { width: 100%; aspect-ratio: 4/5; background: #f0f0f0; overflow: hidden; position: relative; }
+
+.ig-actions { display: flex; align-items: center; gap: 15px; padding: 11px 13px 6px; }
+.ig-actions i { font-size: 23px; color: #1A2233; cursor: pointer; }
+.ig-actions .ti-heart { color: #ED4956; }
+.ig-actions .spacer { flex: 1; }
+.ig-likes { padding: 0 13px; font-size: 13px; font-weight: 700; color: #1A2233; }
+.ig-caption { padding: 5px 13px 2px; font-size: 12.8px; line-height: 1.5; color: #1A2233; }
+.ig-caption .u { font-weight: 700; margin-right: 5px; }
+.ig-caption .body { white-space: pre-wrap; }
+.ig-caption .htag { color: #3D5A99; }
+.ig-caption.clip .body { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ig-more-cap { padding: 1px 13px; font-size: 12.6px; color: var(--text-3); cursor: pointer; }
+.ig-comments { padding: 4px 13px; font-size: 12.6px; color: var(--text-3); }
+.ig-time { padding: 3px 13px 13px; font-size: 10.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.3px; }
+
+.preview-cap { text-align: center; font-size: 11.5px; color: var(--text-3); margin-top: 12px; line-height: 1.5; }
+.preview-cap b { color: var(--main-1); }
+
+/* ===== 4:5 채용 크리에이티브 (컨테이너 쿼리로 스케일) ===== */
+.creative { container-type: inline-size; width: 100%; height: 100%; position: relative; overflow: hidden; font-family: 'Wooridaum','Malgun Gothic',sans-serif; --accent: #0067AC; --grad: var(--grad-blue); }
+.creative * { box-sizing: border-box; }
+.cr-bg { position: absolute; inset: 0; background: var(--grad); }
+.cr-orb { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.10); }
+.cr-orb.a { width: 55cqw; height: 55cqw; right: -18cqw; top: -16cqw; }
+.cr-orb.b { width: 34cqw; height: 34cqw; left: -12cqw; bottom: 16cqw; background: rgba(255,255,255,0.07); }
+.cr-grain { position: absolute; inset: 0; opacity: 0.5; background:
+  radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 40%),
+  radial-gradient(circle at 85% 75%, rgba(0,0,0,0.10), transparent 45%); }
+.cr-mascot { position: absolute; z-index: 4; filter: drop-shadow(0 6cqw 7cqw rgba(0,0,0,0.22)); animation: crFloat 4.5s ease-in-out infinite; }
+@keyframes crFloat { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-1.6cqw) } }
+
+/* 공통 텍스트 */
+.cr-pad { position: absolute; inset: 0; padding: 7cqw 7cqw; z-index: 3; color: white; display: flex; flex-direction: column; }
+.cr-logo { font-size: 4cqw; font-weight: 800; letter-spacing: -0.2cqw; display: flex; align-items: center; gap: 1.5cqw; }
+.cr-logo .dot { width: 1.1cqw; height: 1.1cqw; border-radius: 50%; background: rgba(255,255,255,0.6); }
+.cr-logo .sm { font-size: 3cqw; font-weight: 600; opacity: 0.8; }
+.cr-handle { font-size: 3.1cqw; font-weight: 700; opacity: 0.82; }
+.cr-eyebrow { font-size: 3.4cqw; font-weight: 800; letter-spacing: 1.4cqw; opacity: 0.92; }
+.cr-title { font-size: 8.6cqw; font-weight: 800; line-height: 1.14; letter-spacing: -0.3cqw; word-break: keep-all; }
+.cr-sub { font-size: 3.9cqw; font-weight: 600; opacity: 0.94; }
+.cr-chips { display: flex; flex-wrap: wrap; gap: 1.8cqw; }
+.cr-chip { background: rgba(255,255,255,0.18); border: 0.3cqw solid rgba(255,255,255,0.32); border-radius: 2cqw; padding: 1.5cqw 2.8cqw; font-size: 3.2cqw; font-weight: 700; backdrop-filter: blur(2px); }
+.cr-foot { display: flex; align-items: center; justify-content: space-between; gap: 2cqw; }
+.cr-deadline { font-size: 3.4cqw; font-weight: 700; opacity: 0.95; }
+.cr-cta { background: white; color: var(--accent); font-size: 3.5cqw; font-weight: 800; padding: 2.2cqw 4.2cqw; border-radius: 2.4cqw; box-shadow: 0 2cqw 5cqw rgba(0,0,0,0.18); }
+
+/* Variant A — 다이내믹 히어로 */
+.v-a .cr-pad { justify-content: flex-start; gap: 0; }
+.v-a .cr-top { display: flex; align-items: center; justify-content: space-between; }
+.v-a .cr-eyebrow { margin-top: 9cqw; }
+.v-a .cr-title { margin-top: 3.2cqw; max-width: 70cqw; }
+.v-a .cr-sub { margin-top: 2.6cqw; }
+.v-a .cr-chips { margin-top: 4.4cqw; max-width: 62cqw; }
+.v-a .cr-foot { position: absolute; left: 7cqw; right: auto; bottom: 7cqw; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2.6cqw; max-width: 52cqw; }
+.v-a .cr-mascot { width: 49cqw; right: -3cqw; bottom: 9cqw; }
+
+/* Variant B — 키워드 타이포 */
+.v-b .cr-pad { justify-content: flex-start; }
+.v-b .cr-eyebrow { font-size: 3.2cqw; letter-spacing: 1cqw; }
+.v-b .cr-logo { position: absolute; right: 7cqw; top: 7cqw; }
+.v-b .kw-stack { margin-top: 10cqw; display: flex; flex-direction: column; gap: 1cqw; }
+.v-b .kw { font-size: 9.2cqw; font-weight: 800; line-height: 1.05; letter-spacing: -0.3cqw; }
+.v-b .kw.dim { opacity: 0.42; }
+.v-b .kw .amp { font-size: 4cqw; opacity: 0.6; font-weight: 700; }
+.v-b .cr-title { position: absolute; left: 7cqw; bottom: 20cqw; font-size: 5.6cqw; max-width: 60cqw; }
+.v-b .cr-foot { position: absolute; left: 7cqw; right: 7cqw; bottom: 7cqw; }
+.v-b .cr-mascot { width: 40cqw; right: -2cqw; bottom: 13cqw; }
+
+/* Variant C — 화이트 카드 */
+.v-c .cr-bg { background: #FCFDFE; }
+.v-c .cr-band { position: absolute; left: 0; right: 0; top: 0; height: 31cqw; background: var(--grad); border-radius: 0 0 6cqw 6cqw; }
+.v-c .cr-orb, .v-c .cr-grain { display: none; }
+.v-c .cr-pad { padding: 6cqw 7cqw; }
+.v-c .cr-band-in { color: white; }
+.v-c .cr-band-in .cr-logo { font-size: 3.8cqw; }
+.v-c .cr-band-in .cr-eyebrow { margin-top: 5cqw; font-size: 3.6cqw; letter-spacing: 1.2cqw; }
+.v-c .cr-title { color: #1A2233; margin-top: 13cqw; font-size: 8cqw; max-width: 66cqw; }
+.v-c .cr-sub { color: var(--accent); margin-top: 2.4cqw; font-weight: 700; }
+.v-c .cr-chips { margin-top: 4cqw; max-width: 60cqw; }
+.v-c .cr-chip { background: color-mix(in srgb, var(--accent) 10%, white); border-color: color-mix(in srgb, var(--accent) 22%, white); color: var(--accent); backdrop-filter: none; }
+.v-c .cr-foot { position: absolute; left: 7cqw; right: auto; bottom: 6.5cqw; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 2.4cqw; max-width: 52cqw; }
+.v-c .cr-deadline { color: var(--text-2); }
+.v-c .cr-cta { background: var(--accent); color: white; }
+.v-c .cr-handle { color: rgba(255,255,255,0.85); }
+.v-c .cr-mascot { width: 42cqw; right: -3cqw; bottom: 8cqw; }
+
+/* ===== 생성 오버레이 ===== */
+.gen-overlay { position: absolute; inset: 0; z-index: 20; background: linear-gradient(160deg, #0F2F52, #0B4C7F 60%, #0A6E86); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.gen-overlay.hide { display: none; }
+.gen-spin { width: 58px; height: 58px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); border-top-color: #6FE3F2; animation: spin 0.85s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.gen-steps { display: flex; flex-direction: column; gap: 9px; width: 78%; max-width: 280px; }
+.gen-step { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: rgba(255,255,255,0.5); transition: color 0.3s; }
+.gen-step .gs-ic { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+.gen-step.on { color: white; }
+.gen-step.on .gs-ic { border-color: #6FE3F2; color: #6FE3F2; }
+.gen-step.done { color: rgba(255,255,255,0.85); }
+.gen-step.done .gs-ic { background: #36C68B; border-color: #36C68B; color: white; }
+.gen-title { font-size: 14px; font-weight: 700; }
+.reveal { animation: reveal 0.5s ease; }
+@keyframes reveal { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+.note { font-size: 11px; color: var(--text-3); margin-top: 10px; line-height: 1.5; display: flex; gap: 6px; align-items: flex-start; }
+.note i { color: var(--main-2); font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+<script>try{if(localStorage.getItem('sidebarCollapsed')==='true'){document.querySelector('.layout').classList.add('collapsed');}}catch(e){}</script>
+  <div class="sidebar">
+    <button class="sidebar-toggle" onclick="(function(){var l=document.querySelector('.layout');l.classList.toggle('collapsed');try{localStorage.setItem('sidebarCollapsed',l.classList.contains('collapsed'))}catch(e){}})()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+    <a class="brand" id="brandLink" href="../../dashboard-hr.html">
+      <div class="brand-name"><span class="hir">Hir</span><span class="abl">ABL</span><span class="e">e</span></div>
+      <div class="brand-sub">ABL × HEROs</div>
+    </a>
+    <div class="nav" id="navMenu"></div>
+  </div>
+
+  <div class="main-area">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" onclick="document.querySelector('.layout').classList.toggle('mobile-open')"><i class="ti ti-menu-2"></i></button>
+        <img class="logo-abl" src="../../assets/logos/abl-logo.png" alt="ABL생명">
+        <div class="divider"></div>
+        <img class="logo-woori" src="../../assets/logos/woori-logo.png" alt="우리금융그룹">
+      </div>
+      <div class="user-info">
+        <span class="user-badge" id="userBadge"><i class="ti ti-user"></i> 사용자</span>
+        <span id="userId">사번 -</span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <a href="#" class="back-link" id="backLink" onclick="goBack(event)"><i class="ti ti-arrow-left"></i> JD 상세로 돌아가기</a>
+
+      <div class="page-head">
+        <div>
+          <div class="ph-title"><span class="ph-spark"><i class="ti ti-brand-instagram"></i></span> SNS 채용 피드 생성 <span class="ph-new"><i class="ti ti-sparkles"></i> AI</span></div>
+          <div class="ph-sub">확정된 JD를 AI가 분석해, <b style="color:var(--text-1)">인스타그램 채용 피드(4:5)</b>를 자동으로 디자인합니다. 직무 특성에 맞춘 시안 3종과 캡션·해시태그까지 한 번에 생성합니다.</div>
+        </div>
+      </div>
+
+      <div class="why">
+        <div class="why-item">
+          <div class="why-ic blue"><i class="ti ti-brand-instagram"></i></div>
+          <div><div class="why-t">이미 채널은 있습니다</div><div class="why-d">ABL생명은 공식 인스타그램 <span class="ig">@korea.abllife</span>를 운영 중 (팔로워 약 <b>1.3만</b>)</div></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ic pink"><i class="ti ti-alert-triangle"></i></div>
+          <div><div class="why-t">하지만 채용은 잡포털만</div><div class="why-d">채용공고는 구인구직 사이트에만 게시 — <b>SNS 채널에는 따로 올리지 않고 있음</b></div></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ic cyan"><i class="ti ti-bolt"></i></div>
+          <div><div class="why-t">그래서, AI 자동 생성</div><div class="why-d">JD만 있으면 <b style="color:#009BB0">SNS용 피드를 즉시 제작</b> — 잠재 지원자에게 직접 도달</div></div>
+        </div>
+      </div>
+
+      <div class="studio">
+        <!-- LEFT: 컨트롤 -->
+        <div>
+          <div class="panel">
+            <div class="panel-title"><i class="ti ti-file-text"></i> 생성 기준 JD <span class="mini" id="jdMini">불러오는 중…</span></div>
+            <div class="jd-src" id="jdSrc"></div>
+            <div class="src-tags" id="srcTags"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><i class="ti ti-layout-grid"></i> AI 생성 시안 <span class="mini">3종 · 클릭하여 선택</span></div>
+            <div class="variant-row" id="variantRow"></div>
+            <div class="regen-row">
+              <button class="btn btn-ghost btn-block" onclick="regenerate()"><i class="ti ti-refresh"></i> 다시 생성</button>
+              <button class="btn btn-primary btn-block" onclick="schedulePost()"><i class="ti ti-send"></i> 피드 게시 예약</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-title"><i class="ti ti-message-2"></i> AI 자동 작성 캡션 <span class="mini">@korea.abllife</span></div>
+            <div class="caption-box" id="captionBox"></div>
+            <div class="cap-actions">
+              <button class="btn btn-ghost" onclick="copyCaption()"><i class="ti ti-copy"></i> 캡션 복사</button>
+              <button class="btn btn-ghost" onclick="downloadImg()"><i class="ti ti-download"></i> 이미지 저장</button>
+            </div>
+            <div class="note"><i class="ti ti-info-circle"></i> 캡션·해시태그는 JD의 직무·핵심역량·부서를 기반으로 자동 작성됩니다. 게시 전 담당자가 검토·수정할 수 있습니다.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT: 인스타그램 프리뷰 -->
+        <div class="preview-wrap">
+          <div class="phone">
+            <div class="ig-statusbar"></div>
+            <div class="ig-head">
+              <div class="ig-avatar"><div class="inner"><img src="../../assets/mascot/abl-bear.png" alt="ABL"></div></div>
+              <div class="ig-userblock">
+                <div class="ig-user">korea.abllife <i class="ti ti-rosette-discount-check-filled vf"></i></div>
+                <div class="ig-loc">ABL생명 공식 · 채용</div>
+              </div>
+              <i class="ti ti-dots ig-more"></i>
+            </div>
+
+            <div class="creative-stage" id="creativeStage">
+              <div class="gen-overlay" id="genOverlay">
+                <div class="gen-spin"></div>
+                <div class="gen-title">AI가 채용 피드를 생성하고 있어요</div>
+                <div class="gen-steps" id="genSteps"></div>
+              </div>
+            </div>
+
+            <div class="ig-actions">
+              <i class="ti ti-heart-filled"></i>
+              <i class="ti ti-message-circle"></i>
+              <i class="ti ti-send"></i>
+              <span class="spacer"></span>
+              <i class="ti ti-bookmark"></i>
+            </div>
+            <div class="ig-likes" id="igLikes">좋아요 0개</div>
+            <div class="ig-caption clip" id="igCaption"></div>
+            <div class="ig-more-cap" id="igMoreCap" onclick="toggleCap()">… 더 보기</div>
+            <div class="ig-comments" id="igComments">댓글 0개 모두 보기</div>
+            <div class="ig-time">방금 전</div>
+          </div>
+          <div class="preview-cap">실제 <b>@korea.abllife</b> 피드에 게시되는 형태의 미리보기입니다.<br>인스타그램 권장 채용 게시물 비율 <b>4:5 (1080×1350)</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 로그인/역할 (demo.html iframe: ?as=manager/hr 지원) =====
+const _asParam = new URLSearchParams(window.location.search).get('as');
+const empId = _asParam === 'manager' ? '20567' : _asParam === 'hr' ? '10234' : sessionStorage.getItem('empId');
+const role = _asParam === 'manager' ? 'manager' : _asParam === 'hr' ? 'hr' : (sessionStorage.getItem('role') || (empId && empId.startsWith('2') ? 'manager' : 'hr'));
+if (!empId) window.location.href = '../../index.html';
+document.getElementById('userId').textContent = '사번 ' + (empId || '-');
+
+function renderNav() {
+  const isHR = role === 'hr';
+  const items = isHR ? [
+    { href: '../../dashboard-hr.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: 'JD 작성', section: '채용 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '자소서 분석', section: '채용 업무' },
+    { href: '../schedule/index.html', icon: 'ti-calendar-event', label: '면접 일정', section: '채용 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 진행', section: '채용 업무' },
+    { href: '../report/index.html', icon: 'ti-chart-histogram', label: '채용 리포트', section: '채용 업무' }
+  ] : [
+    { href: '../../dashboard-manager.html', icon: 'ti-layout-dashboard', label: '대시보드', section: '메인' },
+    { href: 'index.html', icon: 'ti-clipboard-text', label: '채용 니즈 입력', section: '참여 업무', active: true },
+    { href: '../resume-analysis/index.html', icon: 'ti-file-search', label: '서류 평가', section: '참여 업무' },
+    { href: '../interview/index.html', icon: 'ti-microphone-2', label: '면접 지원', section: '참여 업무' }
+  ];
+  const nav = document.getElementById('navMenu');
+  let html = ''; let lastSection = '';
+  items.forEach(it => {
+    if (it.section !== lastSection) { html += `<div class="nav-section-title">${it.section}</div>`; lastSection = it.section; }
+    html += `<a class="nav-item ${it.active ? 'active' : ''}" href="${it.href}"><i class="ti ${it.icon}"></i> <span class="label">${it.label}</span></a>`;
+  });
+  nav.innerHTML = html;
+  document.getElementById('brandLink').href = isHR ? '../../dashboard-hr.html' : '../../dashboard-manager.html';
+  const badge = document.getElementById('userBadge');
+  if (isHR) badge.innerHTML = '<i class="ti ti-user"></i> 인사팀 하유림';
+  else { badge.classList.add('manager-role'); badge.innerHTML = '<i class="ti ti-user-check"></i> 해당 부서 리더'; }
+}
+renderNav();
+
+function getParam(name) { return new URLSearchParams(window.location.search).get(name); }
+const reqId = getParam('id') || 'req-001';
+function goBack(e) { e.preventDefault(); window.location.href = 'detail.html?id=' + reqId + (_asParam ? '&as=' + _asParam : ''); }
+function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
+
+// ===== 직무 테마 (detail.html과 동일 로직) =====
+function getJobTheme(office, dept, position, recruitType) {
+  const s = ((office || '') + (dept || '') + (position || '')).toLowerCase();
+  if (recruitType && recruitType.indexOf('신입') !== -1)
+    return { key: 'newgrad', label: '신입', emoji: '🌱', tagline: '함께 성장할 신입 인재를 찾습니다' };
+  if (/it|디지털|개발|아키텍|클라우드|데이터|시스템/.test(s))
+    return { key: 'it', label: '디지털·IT', emoji: '💻', tagline: '디지털 혁신을 이끌 분을 찾습니다' };
+  if (/상품|계리|pricing|보험수리/.test(s))
+    return { key: 'product', label: '상품기획', emoji: '📊', tagline: '보험상품의 미래를 설계할 분을 찾습니다' };
+  if (/영업|마케팅|세일즈|채널/.test(s))
+    return { key: 'sales', label: '영업·마케팅', emoji: '📈', tagline: '시장을 함께 키워갈 분을 찾습니다' };
+  return { key: 'default', label: '', emoji: '🔍', tagline: '유능하고 역량있는 인재를 찾습니다' };
+}
+const THEME_GRAD = {
+  product: 'linear-gradient(150deg, #1A2B6B 0%, #273A92 55%, #2563CC 100%)',
+  it: 'linear-gradient(150deg, #00538C 0%, #0090D0 55%, #00C2D6 100%)',
+  newgrad: 'linear-gradient(150deg, #176C43 0%, #2DAE7B 55%, #4CC99A 100%)',
+  sales: 'linear-gradient(150deg, #B83232 0%, #E84545 55%, #F56A6A 100%)',
+  default: 'linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%)'
+};
+const THEME_ACCENT = { product: '#273A92', it: '#0090D0', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
+const MASCOT = '../../assets/mascot/abl-bear.png';
+
+// ===== 상태 =====
+let DATA = null, JD = null, REQ = null, THEME = null, CTX = null, selectedVariant = 'a';
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+function tagify(t) { return String(t).replace(/[^0-9A-Za-z가-힣]/g, ''); }
+function firstSentence(s) { if (!s) return ''; const m = String(s).split(/(?<=[.!?。])\s/)[0]; return m.replace(/\.$/, ''); }
+
+// ===== 크리에이티브(4:5) 빌더 =====
+function creativeA() {
+  const t = THEME, c = CTX;
+  const chips = c.skills.slice(0, 4).map(s => `<span class="cr-chip">#${esc(tagify(s))}</span>`).join('');
+  return `<div class="creative v-a" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
+    <div class="cr-bg"></div><div class="cr-orb a"></div><div class="cr-orb b"></div><div class="cr-grain"></div>
+    <div class="cr-pad">
+      <div class="cr-top">
+        <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
+        <div class="cr-handle">@korea.abllife</div>
+      </div>
+      <div class="cr-eyebrow">WE'RE HIRING</div>
+      <div class="cr-title">${esc(c.position)}</div>
+      <div class="cr-sub">${esc(c.dept)} · ${esc(c.type)}직 채용</div>
+      <div class="cr-chips">${chips}</div>
+      <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
+      <div class="cr-foot">
+        <div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div>
+        <div class="cr-cta">지원하기 →</div>
+      </div>
+    </div>
+  </div>`;
+}
+function creativeB() {
+  const t = THEME, c = CTX;
+  const kws = c.skills.slice(0, 3);
+  const stack = kws.map((k, i) => `<div class="kw ${i === kws.length - 1 ? '' : 'dim'}">${esc(k)}${i < kws.length - 1 ? ' <span class="amp">/</span>' : ''}</div>`).join('');
+  return `<div class="creative v-b" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
+    <div class="cr-bg"></div><div class="cr-orb a"></div><div class="cr-orb b"></div><div class="cr-grain"></div>
+    <div class="cr-pad">
+      <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
+      <div class="cr-eyebrow" style="margin-top:9cqw;">${t.emoji} WE'RE HIRING</div>
+      <div class="kw-stack">${stack}</div>
+      <div class="cr-title">${esc(c.position)}<br><span style="font-size:3.6cqw;font-weight:600;opacity:0.9">${esc(c.dept)} · ${esc(c.type)}직</span></div>
+      <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
+      <div class="cr-foot">
+        <div class="cr-deadline">📅 ~ ${esc(c.deadlineShort)} · 프로필 링크 지원</div>
+        <div class="cr-handle">@korea.abllife</div>
+      </div>
+    </div>
+  </div>`;
+}
+function creativeC() {
+  const t = THEME, c = CTX;
+  const chips = c.skills.slice(0, 4).map(s => `<span class="cr-chip">#${esc(tagify(s))}</span>`).join('');
+  return `<div class="creative v-c" style="--accent:${THEME_ACCENT[t.key]};--grad:${THEME_GRAD[t.key]}">
+    <div class="cr-bg"></div>
+    <div class="cr-band"></div>
+    <div class="cr-pad">
+      <div class="cr-band-in">
+        <div class="cr-logo">ABL생명 <span class="dot"></span> <span class="sm">우리금융그룹</span></div>
+        <div class="cr-eyebrow">WE'RE HIRING <span class="cr-handle">· @korea.abllife</span></div>
+      </div>
+      <div class="cr-title">${esc(c.position)}</div>
+      <div class="cr-sub">${esc(c.dept)} · ${esc(c.type)}직 채용</div>
+      <div class="cr-chips">${chips}</div>
+      <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
+      <div class="cr-foot">
+        <div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div>
+        <div class="cr-cta">지원하기 →</div>
+      </div>
+    </div>
+  </div>`;
+}
+const BUILDERS = { a: creativeA, b: creativeB, c: creativeC };
+const VARIANT_LABELS = { a: '다이내믹 히어로', b: '키워드 타이포', c: '화이트 카드' };
+
+// ===== 캡션 자동 작성 =====
+function buildCaptionParts() {
+  const c = CTX;
+  const lead = firstSentence(JD && JD.role_summary) || `${c.dept}에서 함께할 ${c.position}를 모십니다.`;
+  const head = `🐻 ABL생명이 함께 성장할 ${c.position}를 찾습니다!`;
+  const lines = [
+    head, '',
+    lead + '.', '',
+    `📌 ${c.dept} · ${c.type}직`,
+    `📅 지원 마감 : ${c.deadlineFull}`,
+    `🔗 지원은 프로필 링크에서!`
+  ];
+  const baseTags = ['ABL생명', '에이비엘생명', '우리금융그룹', '채용', `${tagify(c.type)}채용`, tagify(c.dept)];
+  const skillTags = c.skills.slice(0, 4).map(tagify);
+  const extra = ['보험사채용', 'hiring', '채용공고', 'jobs'];
+  const tags = [...new Set([...baseTags, ...skillTags, ...extra])].filter(Boolean);
+  return { text: lines.join('\n'), tags };
+}
+
+// ===== 렌더 =====
+function renderStage() {
+  const stage = document.getElementById('creativeStage');
+  stage.innerHTML = BUILDERS[selectedVariant]();
+  stage.firstElementChild.classList.add('reveal');
+}
+function renderVariants() {
+  const row = document.getElementById('variantRow');
+  row.innerHTML = ['a', 'b', 'c'].map(k => `
+    <div class="variant ${k === selectedVariant ? 'sel' : ''}" data-v="${k}" onclick="selectVariant('${k}')">
+      <div class="variant-thumb">${BUILDERS[k]()}</div>
+      <div class="variant-label">시안 ${k.toUpperCase()} · ${VARIANT_LABELS[k]}</div>
+    </div>`).join('');
+}
+function selectVariant(k) {
+  selectedVariant = k;
+  document.querySelectorAll('.variant').forEach(v => v.classList.toggle('sel', v.dataset.v === k));
+  renderStage();
+}
+function renderCaption() {
+  const { text, tags } = buildCaptionParts();
+  const tagHtml = tags.map(t => `<span class="htag">#${esc(t)}</span>`).join(' ');
+  // 좌측 캡션 박스
+  document.getElementById('captionBox').innerHTML = esc(text) + '\n\n' + tagHtml;
+  // 인스타 캡션
+  const cap = document.getElementById('igCaption');
+  cap.innerHTML = `<span class="u">korea.abllife</span><span class="body">${esc(text)} ${tagHtml}</span>`;
+  cap.classList.add('clip');
+  document.getElementById('igMoreCap').style.display = '';
+  document.getElementById('igMoreCap').textContent = '… 더 보기';
+}
+function toggleCap() {
+  const cap = document.getElementById('igCaption'); const more = document.getElementById('igMoreCap');
+  if (cap.classList.contains('clip')) { cap.classList.remove('clip'); more.textContent = '접기'; }
+  else { cap.classList.add('clip'); more.textContent = '… 더 보기'; }
+}
+function renderJDPanel() {
+  const c = CTX;
+  document.getElementById('jdMini').textContent = reqId;
+  document.getElementById('jdSrc').innerHTML = `
+    <div class="row"><b>직무</b> &nbsp;${esc(c.position)}</div>
+    <div class="row"><b>부서</b> &nbsp;${esc(c.office ? c.office + ' · ' : '')}${esc(c.dept)}</div>
+    <div class="row"><b>채용형태</b> &nbsp;${esc(c.type)}</div>
+    <div class="row"><b>직무 테마</b> &nbsp;${THEME.emoji} ${esc(THEME.label || '일반')}</div>`;
+  document.getElementById('srcTags').innerHTML = c.skills.map(s => `<span class="src-tag">#${esc(tagify(s))}</span>`).join('');
+}
+function renderMeta() {
+  // 좋아요/댓글 수 (시연용 의사난수 — 직무명 기반 고정)
+  let seed = 0; for (const ch of (CTX.position || 'abl')) seed += ch.charCodeAt(0);
+  const likes = 980 + (seed * 7) % 700;
+  const comments = 18 + (seed % 40);
+  document.getElementById('igLikes').textContent = '좋아요 ' + likes.toLocaleString() + '개';
+  document.getElementById('igComments').textContent = '댓글 ' + comments + '개 모두 보기';
+}
+
+// ===== 생성 애니메이션 =====
+const GEN_STEPS = ['JD 데이터 분석', '직무 특성 매칭', '비주얼 레이아웃 3종 생성', '캡션·해시태그 작성'];
+let genTimers = [];
+function runGeneration(done) {
+  const ov = document.getElementById('genOverlay');
+  ov.classList.remove('hide');
+  const steps = document.getElementById('genSteps');
+  steps.innerHTML = GEN_STEPS.map((s, i) => `<div class="gen-step" id="gs${i}"><span class="gs-ic">${i + 1}</span> ${s}</div>`).join('');
+  genTimers.forEach(clearTimeout); genTimers = [];
+  GEN_STEPS.forEach((s, i) => {
+    genTimers.push(setTimeout(() => {
+      for (let j = 0; j < i; j++) { const e = document.getElementById('gs' + j); if (e) { e.classList.remove('on'); e.classList.add('done'); e.querySelector('.gs-ic').innerHTML = '<i class="ti ti-check"></i>'; } }
+      const cur = document.getElementById('gs' + i); if (cur) cur.classList.add('on');
+    }, 550 + i * 750));
+  });
+  genTimers.push(setTimeout(() => {
+    const last = document.getElementById('gs' + (GEN_STEPS.length - 1));
+    if (last) { last.classList.remove('on'); last.classList.add('done'); last.querySelector('.gs-ic').innerHTML = '<i class="ti ti-check"></i>'; }
+  }, 550 + GEN_STEPS.length * 750));
+  genTimers.push(setTimeout(() => { ov.classList.add('hide'); if (done) done(); }, 550 + GEN_STEPS.length * 750 + 600));
+}
+function regenerate() {
+  document.getElementById('creativeStage').innerHTML = `<div class="gen-overlay" id="genOverlay">
+      <div class="gen-spin"></div><div class="gen-title">AI가 채용 피드를 생성하고 있어요</div>
+      <div class="gen-steps" id="genSteps"></div></div>`;
+  runGeneration(() => { renderStage(); });
+}
+
+// ===== 액션(시연용) =====
+function copyCaption() {
+  const { text, tags } = buildCaptionParts();
+  const full = text + '\n\n' + tags.map(t => '#' + t).join(' ');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(full).then(() => alert('캡션이 복사되었습니다.')).catch(() => alert('캡션이 복사되었습니다. (시연용)'));
+  } else { alert('캡션이 복사되었습니다. (시연용)'); }
+}
+function downloadImg() { alert('선택한 시안(' + selectedVariant.toUpperCase() + ')이 1080×1350 PNG로 저장되었습니다. (시연용)'); }
+function schedulePost() { alert('@korea.abllife 피드 게시가 예약되었습니다. (시연용)\n\n선택 시안 : ' + VARIANT_LABELS[selectedVariant] + '\n게시 채널 : Instagram'); }
+
+// ===== 데이터 로드 =====
+async function fetchJSON(path) { const r = await fetch(path); if (!r.ok) throw new Error('404'); return r.json(); }
+async function loadData() {
+  let data = null;
+  try { data = await fetchJSON(`data/${reqId}-full.json`); }
+  catch (e) { try { data = await fetchJSON(`data/${reqId}.json`); } catch (e2) { data = null; } }
+  if (!data) { try { data = await fetchJSON('data/req-001-full.json'); } catch (e) {} }
+  DATA = data || {};
+  REQ = DATA.request || {};
+  JD = DATA.jd_draft || {};
+  const office = REQ.office || '';
+  const dept = REQ.dept || '상품기획팀';
+  const position = REQ.position || (JD.title || '채용 포지션');
+  const type = REQ.type || '경력';
+  THEME = getJobTheme(office, dept, position, type);
+  let skills = Array.isArray(REQ.key_skills) && REQ.key_skills.length ? REQ.key_skills.slice() : [];
+  if (!skills.length) skills = (JD.required || []).slice(0, 4);
+  if (!skills.length) skills = ['전문성', '성장', '협업'];
+  const deadlineFull = (DATA.posting_deadline) || '2026년 7월 10일(금) 23:59';
+  const deadlineShort = deadlineFull.replace(/^\s*\d{4}년\s*/, '').replace(/\s*23:59$/, '').replace(/\s+/g, ' ').trim();
+  CTX = { office, dept, position, type, skills, deadlineFull, deadlineShort: deadlineShort || '7월 10일(금)' };
+
+  renderJDPanel();
+  renderVariants();
+  renderCaption();
+  renderMeta();
+  runGeneration(() => { renderStage(); });
+}
+loadData();
+</script>
+</body>
+</html>

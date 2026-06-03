@@ -225,6 +225,16 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .btn-preview-posting { background: linear-gradient(135deg, #F56A6A, #E84545); color: white; border: none; padding: 6px 14px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 3px 10px rgba(232, 69, 69, 0.25); transition: all 0.15s; }
 .btn-preview-posting:hover { opacity: 0.92; transform: translateY(-1px); }
 .btn-preview-posting i { font-size: 14px; }
+.btn-sns { background: linear-gradient(135deg, #7B61FF, #2482C5 58%, #00AEC6); color: white; border: none; padding: 6px 14px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 3px 10px rgba(123, 97, 255, 0.3); transition: all 0.15s; }
+.btn-sns:hover { opacity: 0.94; transform: translateY(-1px); }
+.btn-sns i { font-size: 14px; }
+.sns-promo { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #F3EEFB, #EAF4FB); border: 1px solid #DDE7F5; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+.sns-promo .sp-ic { width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(135deg, #7B61FF, #00AEC6); color: white; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.sns-promo .sp-tx { flex: 1; min-width: 0; }
+.sns-promo .sp-t { font-size: 12.5px; font-weight: 700; color: var(--text-1); }
+.sns-promo .sp-d { font-size: 11.3px; color: var(--text-2); margin-top: 2px; line-height: 1.45; }
+.sns-promo .sp-btn { background: linear-gradient(135deg, #7B61FF, #2482C5 58%, #00AEC6); color: white; border: none; padding: 9px 15px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px -3px rgba(123, 97, 255, 0.45); transition: all 0.15s; }
+.sns-promo .sp-btn:hover { transform: translateY(-1px); opacity: 0.95; }
 
 /* ===== 공고 미리보기 모달 ===== */
 .posting-backdrop { position: fixed; inset: 0; background: rgba(15, 35, 65, 0.55); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 32px 20px; overflow-y: auto; }
@@ -332,6 +342,15 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .pt-fmt-tab.active { background: white; color: var(--main-1); box-shadow: 0 2px 8px rgba(0,103,172,0.12); }
 .pt-fmt-tab:not(.active):hover { color: var(--text-2); }
 .pt-image-intro { display: flex; align-items: center; gap: 9px; background: linear-gradient(135deg, #EEF4FC, #F3EEFB); border: 1px solid #DCE6F5; border-radius: 10px; padding: 13px 16px; font-size: 12.5px; color: var(--text-2); margin-bottom: 22px; line-height: 1.5; }
+.pt-sns-banner { display: flex; align-items: center; gap: 13px; background: linear-gradient(135deg, #F3EEFB, #EAF4FB); border: 1px solid #DDE7F5; border-radius: 12px; padding: 14px 16px; margin-bottom: 22px; }
+.pt-sns-banner .ptb-ic { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #7B61FF, #00AEC6); color: white; display: flex; align-items: center; justify-content: center; font-size: 21px; flex-shrink: 0; }
+.pt-sns-banner .ptb-tx { flex: 1; min-width: 0; }
+.pt-sns-banner .ptb-t { font-size: 13px; font-weight: 700; color: var(--text-1); display: flex; align-items: center; gap: 7px; }
+.pt-sns-banner .ptb-new { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #7B61FF, #2482C5); color: white; font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 12px; }
+.pt-sns-banner .ptb-d { font-size: 11.5px; color: var(--text-2); margin-top: 3px; line-height: 1.45; }
+.pt-sns-banner .ptb-btn { background: linear-gradient(135deg, #7B61FF, #2482C5 58%, #00AEC6); color: white; border: none; padding: 10px 16px; font-size: 12.5px; font-weight: 700; border-radius: 9px; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 5px 14px -4px rgba(123, 97, 255, 0.5); transition: all 0.15s; }
+.pt-sns-banner .ptb-btn:hover { transform: translateY(-1px); opacity: 0.95; }
+.pt-sns-banner .ptb-btn i { font-size: 15px; }
 .pt-image-intro i { font-size: 18px; color: #7B61FF; flex-shrink: 0; }
 .pt-image-intro b { color: var(--main-1); }
 
@@ -601,6 +620,7 @@ function renderJDPanel(data) {
         </div>
         <div style="display:flex; gap:6px;">
           <button class="btn-preview-posting" onclick="openPostingPreview()"><i class="ti ti-eye"></i> 최종 공고 미리보기</button>
+          <button class="btn-sns" onclick="goToSnsFeed()"><i class="ti ti-brand-instagram"></i> SNS 채용 피드 생성</button>
           ${isHR ? '<span id="jdEditBtnArea"><button class="btn" id="btnJDEdit" style="background:white; color:var(--text-2); border:1px solid var(--border); padding:6px 12px; font-size:11px; width:auto;" onclick="toggleJDEdit()"><i class="ti ti-edit" style="font-size:13px;"></i> 직접 수정</button></span>' : ''}
         </div>
       </div>
@@ -722,7 +742,10 @@ function renderJDPanel(data) {
               <div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">ABL생명 채용 홈페이지 및 SNS 채널에 이미 게시되었습니다.</div>
             </div>
           </div>
-          <button class="btn btn-primary" onclick="openPostingPreview()" style="margin-top: 14px;"><i class="ti ti-eye"></i> 등재된 공고 보기 (표준형 · 이미지형)</button>
+          <div style="display:flex; gap:8px; margin-top: 14px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="openPostingPreview()" style="width:auto; flex:1; min-width:160px;"><i class="ti ti-eye"></i> 등재된 공고 보기</button>
+            <button class="btn-sns" onclick="goToSnsFeed()" style="padding:10px 16px; font-size:12.5px; flex:1; min-width:160px; justify-content:center;"><i class="ti ti-brand-instagram"></i> SNS 채용 피드 생성</button>
+          </div>
         </div>
       ` : ''}
 
@@ -1582,6 +1605,12 @@ function switchPostingFormat(fmt) {
 }
 
 // ===== 최종 채용공고 미리보기 =====
+function goToSnsFeed() {
+  const id = (currentData && currentData.id) ? currentData.id : (getParam('id') || 'req-001');
+  const as = getParam('as');
+  window.location.href = 'sns-feed.html?id=' + id + (as ? '&as=' + as : '');
+}
+
 function openPostingPreview() {
   const data = currentData;
   const jd = data && data.jd_draft;
@@ -1711,18 +1740,16 @@ function openPostingPreview() {
     </div>
   `;
 
-  const theme = getJobTheme(office, dept, position, recruitType);
-  const posterHtml = buildPosterHtml(jd, req, theme, { office, dept, recruitType, applyDeadline });
   const wrapped = `
-    <div class="pt-format-tabs">
-      <button class="pt-fmt-tab active" data-fmt="standard" onclick="switchPostingFormat('standard')"><i class="ti ti-file-text"></i> 표준형 공고 (자사 채용홈)</button>
-      <button class="pt-fmt-tab" data-fmt="image" onclick="switchPostingFormat('image')"><i class="ti ti-sparkles"></i> 이미지형 시안 (SNS·잡포털)</button>
+    <div class="pt-sns-banner">
+      <div class="ptb-ic"><i class="ti ti-brand-instagram"></i></div>
+      <div class="ptb-tx">
+        <div class="ptb-t">이 공고로 SNS 채용 피드 만들기 <span class="ptb-new"><i class="ti ti-sparkles"></i> AI</span></div>
+        <div class="ptb-d">AI가 JD를 분석해 인스타그램 채용 피드(4:5)를 자동 생성합니다. @korea.abllife 게시용 시안 3종 + 캡션.</div>
+      </div>
+      <button class="ptb-btn" onclick="goToSnsFeed()">피드 생성 <i class="ti ti-arrow-right"></i></button>
     </div>
     <div id="ptStandardView">${html}</div>
-    <div id="ptImageView" style="display:none">
-      <div class="pt-image-intro"><i class="ti ti-sparkles"></i> <span>AI가 <b>${theme.label || '직무'}</b> 특성을 분석해 디자인한 이미지형 공고 시안입니다. 자사 채용홈 외에 <b>SNS·잡포털 게시용</b>으로 바로 활용할 수 있습니다.</span></div>
-      ${posterHtml}
-    </div>
   `;
 
   document.getElementById('postingScroll').innerHTML = wrapped;
