@@ -174,6 +174,28 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 .insight-need .in-label { font-size: 10.5px; font-weight: 700; color: var(--main-1); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
 .insight-need .in-text { font-size: 12.5px; color: var(--text-1); line-height: 1.7; font-weight: 600; }
 
+/* 기존/희망 연봉 스트립 (§1) */
+.sal-strip { margin-top: 14px; display: inline-flex; align-items: center; gap: 14px; padding: 10px 16px; background: var(--bg-page); border: 1px solid var(--border); border-radius: 10px; }
+.sal-strip .sal-item { display: flex; flex-direction: column; gap: 2px; }
+.sal-strip .sl-k { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.sal-strip .sl-v { font-size: 15px; font-weight: 700; color: var(--text-1); font-variant-numeric: tabular-nums; }
+.sal-strip .sl-v.hope { color: var(--main-1); }
+.sal-strip > i { color: var(--text-3); font-size: 16px; }
+
+/* 내부 형평성 + 앵커링 통합 한 행 (§3) */
+.sim-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 16px; align-items: stretch; }
+.market-card.anchor-card { display: flex; flex-direction: column; justify-content: center; }
+
+/* 동기 요약 + 성향 맞춤 커뮤니케이션 (§5-1) */
+.motiv-summary { font-size: 12px; color: var(--text-1); line-height: 1.75; font-weight: 600; padding: 12px 14px; background: #FAFCFE; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
+.motiv-summary strong { color: var(--main-1); }
+.comm-tips { margin-top: 12px; padding: 14px 16px; background: linear-gradient(135deg, #F0F7FD, #F7FBFE); border: 1px solid var(--border); border-left: 3px solid var(--main-1); border-radius: 0 10px 10px 0; }
+.comm-tips .ct-title { font-size: 11.5px; font-weight: 700; color: var(--main-1); display: flex; align-items: center; gap: 6px; margin-bottom: 9px; }
+.comm-tips ul { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.comm-tips li { font-size: 12px; color: var(--text-1); line-height: 1.65; font-weight: 600; padding-left: 16px; position: relative; }
+.comm-tips li::before { content: ''; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--main-1); }
+.comm-tips li strong { color: var(--main-1); font-weight: 700; }
+
 /* ===== 협상 전략 가이드 하위 (§5) ===== */
 .strat-sub { padding: 18px 0; border-top: 1px solid var(--border); }
 .strat-sub:first-of-type { padding-top: 0; border-top: 0; }
@@ -330,6 +352,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
   .sidebar-toggle:hover { transform: translateX(50%) scale(1.05); }
   .sidebar-toggle:active { transform: translateX(50%) scale(0.95); }
   .upload-grid, .risk-grid { grid-template-columns: repeat(2, 1fr); }
+  .sim-grid { grid-template-columns: 1fr; }
   .impact-list { grid-template-columns: 1fr; }
 }
 </style>
@@ -401,6 +424,11 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
             <button class="btn-secondary" onclick="openModal('modal-eval')"><i class="ti ti-clipboard-check"></i> 면접 평가</button>
           </div>
         </div>
+        <div class="sal-strip">
+          <div class="sal-item"><span class="sl-k">기존 연봉</span><span class="sl-v">6,500만원</span></div>
+          <i class="ti ti-arrow-right"></i>
+          <div class="sal-item"><span class="sl-k">희망 연봉</span><span class="sl-v hope">7,500만원</span></div>
+        </div>
         <div class="insight-need">
           <div class="in-label"><i class="ti ti-bulb"></i> 면접 분석 기반 주요 니즈</div>
           <p class="in-text">변액·종신·정기보험 신상품 3건 런칭과 IFRS17 대응 TF 12개월 자발 참여로 도메인 실행력이 검증된 후보입니다. 특히 본인이 설계한 시나리오 매트릭스가 본부장 의사결정에 직접 활용되는, 즉 자신의 분석이 실제 결정으로 이어지는 환경에 강한 동기를 보입니다.</p>
@@ -437,7 +465,7 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
       <section class="section">
         <div class="section-head">
           <div class="section-title">내부 형평성 시뮬레이션 <span class="v2-tag">v2 강화</span></div>
-          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">오퍼 금액 조정 시 4개 리스크 실시간 분석</div>
+          <div style="font-size:11.5px;color:var(--text-3);font-weight:600;">오퍼 금액 조정 시 앵커 범위·리스크 실시간 분석</div>
         </div>
 
         <div class="slider-row">
@@ -456,7 +484,12 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
           <div class="sl-value" id="offer-value-display">7,200<small>만원</small></div>
         </div>
 
-        <div class="risk-grid" style="margin-top:38px;">
+        <div class="sim-grid" style="margin-top:38px;">
+          <div class="market-card highlight anchor-card">
+            <div class="mc-label">앵커 권장 범위</div>
+            <div class="mc-value">7,000 ~ 7,200<small style="font-size:13px;font-weight:600;">만원</small></div>
+            <div class="mc-sub">기존 6,500만원 대비 +8~11% · 회사 본 오퍼 7,200만원 일치</div>
+          </div>
           <div class="risk-card" id="risk-card-2">
             <div class="rc-head">
               <div class="rc-title">정기인상 여력</div>
@@ -476,18 +509,6 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         </div>
       </section>
 
-      <!-- ============ [4] 앵커링 가이드 ============ -->
-      <section class="section">
-        <div class="section-head"><div class="section-title">앵커링 가이드라인</div></div>
-        <div class="market-row">
-          <div class="market-card highlight">
-            <div class="mc-label">앵커 권장 범위</div>
-            <div class="mc-value">7,000 ~ 7,200<small style="font-size:13px;font-weight:600;">만원</small></div>
-            <div class="mc-sub">기존 연봉 6,500만원 대비 +8~11% · 회사 본 오퍼 7,200만원 일치</div>
-          </div>
-        </div>
-      </section>
-
       <!-- ============ [5] 협상 전략 가이드 ============ -->
       <section class="section">
         <div class="section-head"><div class="section-title">협상 전략 가이드</div></div>
@@ -495,24 +516,35 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
         <!-- 5-1. 동기 요인 프로파일 -->
         <div class="strat-sub">
           <div class="strat-sub-title"><span class="ss-num">1</span> 동기 요인 프로파일</div>
-          <p class="ss-desc">면접·자소서 분석 기반, 후보자를 실제로 움직이는 핵심 동기입니다. 협상 시 금액만큼이나 이 요인을 자극하는 것이 효과적입니다.</p>
+          <p class="ss-desc">면접·자소서 분석 기반, 후보자의 관심사·성과·동기와 효과적인 커뮤니케이션 방식입니다. 협상 시 금액만큼이나 이 요인을 자극하는 것이 효과적입니다.</p>
           <div class="ss-body">
+            <div class="motiv-summary">
+              현재 관심은 <strong>IFRS17·K-ICS 규제 환경에서의 상품 Pricing</strong>에 집중되어 있습니다. 변액·종신·정기보험 신상품 3건을 직접 런칭하고 IFRS17 대응 TF에 12개월 자발 참여했으며, 무배당종신 CSM 재산정 과정에서 <strong>사업비 12% 절감</strong>, GA채널 정기보험은 보수·기준·공격 3종 손익 시나리오로 본부장 결재를 단순화해 <strong>출시 6개월 만에 매출 1위</strong>를 만들었습니다. 이 성과들은 면접 답변과 자소서에서 일관되게 검증되었고(답변 일관성 ★★★★★), 본인이 설계한 시나리오 매트릭스가 본부장 의사결정에 직접 반영되는 환경에서 가장 큰 에너지를 얻는다고 면접 전반에 걸쳐 반복 언급했습니다.
+            </div>
             <div class="motiv-list">
               <div class="motiv-item">
                 <div class="mi-rank">1순위</div>
-                <div><div class="mi-name">의사결정 오너십</div><div class="mi-text">본인이 설계한 시나리오·가정이 본부장 의사결정에 직접 반영되는 환경. "내 분석이 실제 결정으로 이어진다"는 점에 가장 강하게 반응.</div></div>
-                <div class="mi-bar"><span style="width:92%"></span></div>
+                <div><div class="mi-name">Pricing 가정 설계의 직접 권한</div><div class="mi-text">"가정 설정·CSM 마진" 표현이 답변에 17회 반복될 만큼, 본인이 가정을 설계하고 결재까지 이끄는 권한에서 가장 강한 몰입을 보임. (신호 강도 9.3)</div></div>
+                <div class="mi-bar"><span style="width:93%"></span></div>
               </div>
               <div class="motiv-item">
                 <div class="mi-rank">2순위</div>
-                <div><div class="mi-name">도메인 전문성 확장</div><div class="mi-text">IFRS17·K-ICS 규제 대응 도메인을 깊게 다루고 사내 전문가로 인정받는 것. 사내 강사·교육 권한에 높은 가치를 둠.</div></div>
-                <div class="mi-bar"><span style="width:78%"></span></div>
+                <div><div class="mi-name">Cross-functional 합의 도출의 임팩트</div><div class="mi-text">본인이 만든 시나리오 매트릭스가 부서 간 의사결정을 단순화하는 도구로 쓰이는 환경에서 동기가 강하게 작동. (신호 강도 8.8)</div></div>
+                <div class="mi-bar"><span style="width:88%"></span></div>
               </div>
               <div class="motiv-item">
                 <div class="mi-rank">3순위</div>
-                <div><div class="mi-name">Cross-functional 영향력</div><div class="mi-text">계리·마케팅·영업을 가로지르는 신상품 사이클을 단독 리드하는 권한. 협업 PM 권한 부여 시 몰입도가 상승.</div></div>
-                <div class="mi-bar"><span style="width:71%"></span></div>
+                <div><div class="mi-name">규제 환경 대응 도메인 확장</div><div class="mi-text">IFRS17 TF 12개월 자발 참여·K-ICS 사내 강사 3회. ABL의 향후 5년 상품 포트폴리오 재편에서 도메인 깊이를 확장하려는 동기가 명확. (신호 강도 8.1)</div></div>
+                <div class="mi-bar"><span style="width:81%"></span></div>
               </div>
+            </div>
+            <div class="comm-tips">
+              <div class="ct-title"><i class="ti ti-message-circle"></i> 성향 맞춤 커뮤니케이션</div>
+              <ul>
+                <li>감각이나 분위기보다 <strong>데이터·근거가 분명할 때 신뢰</strong>합니다. 처우·권한을 제안할 때 밴드·인상률·권한 범위 같은 수치와 판단 기준을 먼저 제시해 보세요.</li>
+                <li>제안에는 <strong>이유와 절차를 함께 설명</strong>할 때 안정감을 느낍니다. "왜 이 금액인지, 어떤 기준으로 산정했는지"를 단계적으로 풀어 주세요.</li>
+                <li>본인의 분석이 <strong>실제 의사결정으로 이어지는 권한</strong>을 강하게 원합니다. 모호한 기대 대신 구체적인 오너십(Pricing 풀 권한 등)을 명확히 제시하면 설득력이 높아집니다.</li>
+              </ul>
             </div>
           </div>
         </div>
