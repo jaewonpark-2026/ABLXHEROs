@@ -575,6 +575,7 @@ function renderRequestPanel(req, approvalStatus) {
 function renderJDPanel(data) {
   const jd = data.jd_draft;
   const isHR = role === 'hr';
+  const isPublished = data.published === true || (data.status && data.status.indexOf('등재 완료') !== -1);
   // 해당 부서가 이미 수정 의견을 보냈는지 여부
   const alreadySent = !!localStorage.getItem('pendingFeedback-' + data.id);
 
@@ -705,10 +706,23 @@ function renderJDPanel(data) {
         <div id="hrFeedbackArea"></div>
       ` : ''}
 
-      ${isHR && data.current_step === 4 ? `
+      ${isHR && data.current_step === 4 && !isPublished ? `
         <div class="action-section">
           <div class="action-title"><i class="ti ti-rocket"></i> 최종 단계</div>
           <button class="btn btn-primary" onclick="publishPosting()"><i class="ti ti-send"></i> 채용공고 등재하기</button>
+        </div>
+      ` : ''}
+
+      ${isPublished ? `
+        <div class="action-section" style="background: linear-gradient(135deg, #E8F5E9, #D6EFD8); border: 1px solid #4CAF50;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="ti ti-check" style="font-size: 24px;"></i></div>
+            <div>
+              <div style="font-size: 15px; font-weight: 700; color: #2E7D32;">공고 등재 완료</div>
+              <div style="font-size: 12px; color: var(--text-2); margin-top: 2px;">ABL생명 채용 홈페이지 및 SNS 채널에 이미 게시되었습니다.</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="openPostingPreview()" style="margin-top: 14px;"><i class="ti ti-eye"></i> 등재된 공고 보기 (표준형 · 이미지형)</button>
         </div>
       ` : ''}
 
