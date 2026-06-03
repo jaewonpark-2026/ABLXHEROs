@@ -102,7 +102,7 @@ a { color: inherit; text-decoration: none; }
 
 /* Job header + Process */
 .job-panel { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 18px; align-items: stretch; }
-.postings-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; grid-auto-rows: 1fr; }
+.postings-wrap { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; grid-auto-rows: 1fr; }
 .posting-card { background: white; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 3px rgba(15,35,65,.04); font: inherit; color: inherit; cursor: pointer; padding: 18px; width: 100%; text-align: left; transition: all 0.15s; box-sizing: border-box; }
 .posting-card:hover { border-color: #B6D8F0; }
 .posting-card.active { border-color: var(--main-1); box-shadow: 0 2px 8px rgba(0,103,172,0.15); background: linear-gradient(135deg, #F8FBFE, white); }
@@ -274,23 +274,34 @@ tbody tr:last-child td { border-bottom: 0; }
 
       <section class="job-panel">
         <div class="postings-wrap">
-          <button class="card job-card posting-card active" type="button" data-posting="newgrad" onclick="selectPosting('newgrad')">
+          <button class="card job-card posting-card" type="button" data-posting="it-career" onclick="selectPosting('it-career')">
             <div class="job-card-head">
               <div>
-                <div class="job-title" id="postingNewgradTitle">디지털IT기획팀 신입(AA) 채용</div>
+                <div class="job-title">디지털IT본부 디지털IT기획팀 경력(AA) 채용</div>
                 <div class="job-meta">
-                  <span id="postingNewgradPeriod">접수기간 2026.06.01 ~ 2026.06.05</span>
+                  <span>접수기간 2026.06.01 ~ 2026.06.05</span>
                 </div>
               </div>
               <span class="job-status">진행 중</span>
             </div>
           </button>
-          <button class="card job-card posting-card" type="button" data-posting="career" onclick="selectPosting('career')">
+          <button class="card job-card posting-card active" type="button" data-posting="career" onclick="selectPosting('career')">
             <div class="job-card-head">
               <div>
-                <div class="job-title" id="postingCareerTitle">상품본부 상품기획팀 경력직 채용</div>
+                <div class="job-title">상품본부 상품기획팀 경력직 채용</div>
                 <div class="job-meta">
-                  <span id="postingCareerPeriod">접수기간 2026.06.03 ~ 2026.06.09</span>
+                  <span>접수기간 2026.06.03 ~ 2026.06.09</span>
+                </div>
+              </div>
+              <span class="job-status">진행 중</span>
+            </div>
+          </button>
+          <button class="card job-card posting-card" type="button" data-posting="newgrad" onclick="selectPosting('newgrad')">
+            <div class="job-card-head">
+              <div>
+                <div class="job-title">2026 신입사원 공채</div>
+                <div class="job-meta">
+                  <span>접수기간 2026.06.01 ~ 2026.06.07</span>
                 </div>
               </div>
               <span class="job-status">진행 중</span>
@@ -380,9 +391,9 @@ function logout() { sessionStorage.clear(); window.location.href = '../../index.
 
 // ===== Data & state =====
 let candidates = [];
-let stageCountsByPosting = { newgrad: { applied:0, auto_passed:0, in_review:0, delivered:0 }, career: { applied:0, auto_passed:0, in_review:0, delivered:0 } };
+let stageCountsByPosting = { 'it-career': { applied:0, auto_passed:0, in_review:0, delivered:0 }, career: { applied:0, auto_passed:0, in_review:0, delivered:0 }, newgrad: { applied:0, auto_passed:0, in_review:0, delivered:0 } };
 let postings = [];
-const state = { posting: 'newgrad', phase: '전체', role: '전체', sort: 'scoreDesc', search: '' };
+const state = { posting: 'career', phase: '전체', role: '전체', sort: 'scoreDesc', search: '' };
 const statusClassMap = {
   '우수': 'status-excellent',
   '적합': 'status-good',
@@ -394,12 +405,11 @@ function getPhaseClass(p) { return p === '해당 부서 전달 완료' ? 'phase-
 
 function getFilteredCandidates() {
   const keyword = state.search.trim().toLowerCase();
-  const postingKor = state.posting === 'newgrad' ? '신입공채' : '경력공채';
   let result = candidates.filter(c => {
-    const matchPosting = c.posting === postingKor;
+    const matchPosting = c.posting === state.posting;
     const matchRole = state.role === '전체' || c.role === state.role;
     const matchPhase = state.phase === '전체' || c.phase === state.phase;
-    const searchable = [c.name, c.role, c.exp, c.status, c.phase].concat(c.tags).join(' ').toLowerCase();
+    const searchable = [c.name, c.role, c.exp, c.status, c.phase, c.sector].concat(c.tags).join(' ').toLowerCase();
     const matchSearch = !keyword || searchable.indexOf(keyword) !== -1;
     return matchPosting && matchRole && matchPhase && matchSearch;
   });
@@ -454,7 +464,7 @@ function selectPosting(id) {
 }
 
 // 본부 표시 우선순위 (조직도 순서, 데모 핵심 상품본부 우선)
-const DIV_ORDER = ['상품본부', '디지털IT본부', '영업마케팅부문', '재무부문', 'HR본부', '경영혁신본부', '기타'];
+const DIV_ORDER = ['상품본부', '고객지원본부', '디지털IT본부', '자산운용본부', '영업마케팅부문', '재무부문', 'HR본부', '경영혁신본부', '기타'];
 
 function renderTable() {
   const table = document.getElementById('candidateTable');
@@ -464,66 +474,67 @@ function renderTable() {
   if (visibleCount) visibleCount.textContent = filtered.length;
   table.innerHTML = '';
 
-  // 직무(본부·팀)별 그룹핑 — 경력/신입 모두 팀·본부 단위로 순위 산출
-  const groups = {};
-  filtered.forEach(c => {
-    const key = (c.division || '기타') + '|' + (c.team || c.role) + '|' + c.role;
-    (groups[key] = groups[key] || []).push(c);
-  });
+  // 후보 행 생성 헬퍼 (직무 내 순위 rank 포함)
+  function appendRow(c, rank, showOrg) {
+    const tr = document.createElement('tr');
+    const statusClass = statusClassMap[c.status] || 'status-good';
+    const phaseClass = getPhaseClass(c.phase);
+    const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
+    const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
+    const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
+    const orgLine = showOrg && c.division ? `<div class="role-org">${c.division} · ${c.team || ''}</div>` : '';
+    tr.innerHTML = `
+      <td><div class="candidate-cell"><span class="rank-badge ${rankClass}">${rank}위</span><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
+      <td><strong style="color:var(--text-1)">${c.role}</strong>${orgLine}</td>
+      <td>${c.exp}</td>
+      <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
+      <td><span class="status-pill ${statusClass}">${c.status}</span></td>
+      <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
+      <td><div class="tags">${tags}</div></td>
+      <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
+    `;
+    table.appendChild(tr);
+  }
 
-  const groupKeys = Object.keys(groups).sort((a, b) => {
-    const [da, ta] = a.split('|');
-    const [db, tb] = b.split('|');
-    const oa = DIV_ORDER.indexOf(da), ob = DIV_ORDER.indexOf(db);
-    if (oa !== ob) return (oa < 0 ? 99 : oa) - (ob < 0 ? 99 : ob);
-    return ta.localeCompare(tb, 'ko');
-  });
-
-  groupKeys.forEach(key => {
-    const [div, team, role] = key.split('|');
-    const members = groups[key].slice().sort((a, b) => {
-      if (state.sort === 'scoreAsc') return a.score - b.score;
-      if (state.sort === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
-      return b.score - a.score; // 기본: 직무 내 점수 높은 순
+  if (state.posting === 'newgrad') {
+    // 신입 공채: 모집부문(본부·팀)별 그룹핑 + 그룹 내 순위
+    const groups = {};
+    filtered.forEach(c => {
+      const key = (c.division || '기타') + '|' + (c.team || c.role) + '|' + (c.sector || c.role);
+      (groups[key] = groups[key] || []).push(c);
     });
-    // 직무 내 순위는 항상 점수 기준으로 산정
-    const ranked = members.slice().sort((a, b) => b.score - a.score);
-    const rankOf = c => ranked.indexOf(c) + 1;
-
-    // 그룹 헤더 행
-    const ghr = document.createElement('tr');
-    ghr.className = 'group-header-row';
-    ghr.innerHTML = `
-      <td colspan="8">
-        <div class="group-header">
-          <span class="group-org"><i class="ti ti-sitemap" style="font-size:13px;vertical-align:-2px"></i> ${div} · ${team}</span>
-          <span class="group-role">${role}</span>
-          <span class="group-count">지원자 ${members.length}명 · 직무 내 순위</span>
-        </div>
-      </td>`;
-    table.appendChild(ghr);
-
-    members.forEach(c => {
-      const rank = rankOf(c);
-      const tr = document.createElement('tr');
-      const statusClass = statusClassMap[c.status] || 'status-good';
-      const phaseClass = getPhaseClass(c.phase);
-      const tags = c.tags.map(t => `<span class="tag">${t}</span>`).join('');
-      const demoBadge = c.is_demo ? '<span class="demo-badge"><i class="ti ti-sparkles" style="font-size:11px"></i>시연용</span>' : '';
-      const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
-      tr.innerHTML = `
-        <td><div class="candidate-cell"><span class="rank-badge ${rankClass}">${rank}위</span><div><div class="candidate-name">${c.name}${demoBadge}</div><div class="candidate-id">${c.id}${c.channel ? ' · <span class="channel-tag"><i class="ti ti-link" style="font-size:10px;vertical-align:-1px"></i> ' + c.channel + '</span>' : ''}</div></div></div></td>
-        <td><strong style="color:var(--text-1)">${c.role}</strong><div class="role-org">${div} · ${team}</div></td>
-        <td>${c.exp}</td>
-        <td><div class="score-wrap"><span class="score-number">${c.score}</span><div class="score-bar"><div class="score-fill" style="width:${c.score}%"></div></div></div></td>
-        <td><span class="status-pill ${statusClass}">${c.status}</span></td>
-        <td><span class="phase-pill ${phaseClass}">${c.phase}</span></td>
-        <td><div class="tags">${tags}</div></td>
-        <td><a class="detail-btn" href="detail.html?id=${encodeURIComponent(c.id)}"><i class="ti ti-arrow-right"></i>상세</a></td>
-      `;
-      table.appendChild(tr);
+    const groupKeys = Object.keys(groups).sort((a, b) => {
+      const [da, ta] = a.split('|'), [db, tb] = b.split('|');
+      const oa = DIV_ORDER.indexOf(da), ob = DIV_ORDER.indexOf(db);
+      if (oa !== ob) return (oa < 0 ? 99 : oa) - (ob < 0 ? 99 : ob);
+      return ta.localeCompare(tb, 'ko');
     });
-  });
+    groupKeys.forEach(key => {
+      const [div, team, sector] = key.split('|');
+      const members = groups[key].slice().sort((a, b) => {
+        if (state.sort === 'scoreAsc') return a.score - b.score;
+        if (state.sort === 'nameAsc') return a.name.localeCompare(b.name, 'ko');
+        return b.score - a.score;
+      });
+      const ranked = groups[key].slice().sort((a, b) => b.score - a.score);
+      const ghr = document.createElement('tr');
+      ghr.className = 'group-header-row';
+      ghr.innerHTML = `
+        <td colspan="8">
+          <div class="group-header">
+            <span class="group-org"><i class="ti ti-sitemap" style="font-size:13px;vertical-align:-2px"></i> ${div} · ${team}</span>
+            <span class="group-role">${sector}</span>
+            <span class="group-count">지원자 ${members.length}명 · 부문 내 순위</span>
+          </div>
+        </td>`;
+      table.appendChild(ghr);
+      members.forEach(c => appendRow(c, ranked.indexOf(c) + 1, true));
+    });
+  } else {
+    // 경력 공고(단일 직무): 그룹 헤더 없이 순위 목록만
+    const ranked = filtered.slice().sort((a, b) => b.score - a.score);
+    filtered.forEach(c => appendRow(c, ranked.indexOf(c) + 1, false));
+  }
 
   empty.style.display = filtered.length ? 'none' : 'block';
 }
