@@ -324,6 +324,51 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
   .diff-cols { grid-template-columns: 1fr; }
   .diff-arrow { transform: rotate(90deg); justify-content: center; padding: 4px 0; }
 }
+
+/* ===== 공고 형식 전환 탭 ===== */
+.pt-format-tabs { display: flex; gap: 8px; margin-bottom: 20px; background: #F1F5FA; padding: 5px; border-radius: 11px; }
+.pt-fmt-tab { flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 11px 14px; font-size: 13px; font-weight: 700; color: var(--text-3); background: transparent; border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+.pt-fmt-tab i { font-size: 16px; }
+.pt-fmt-tab.active { background: white; color: var(--main-1); box-shadow: 0 2px 8px rgba(0,103,172,0.12); }
+.pt-fmt-tab:not(.active):hover { color: var(--text-2); }
+.pt-image-intro { display: flex; align-items: center; gap: 9px; background: linear-gradient(135deg, #EEF4FC, #F3EEFB); border: 1px solid #DCE6F5; border-radius: 10px; padding: 13px 16px; font-size: 12.5px; color: var(--text-2); margin-bottom: 22px; line-height: 1.5; }
+.pt-image-intro i { font-size: 18px; color: #7B61FF; flex-shrink: 0; }
+.pt-image-intro b { color: var(--main-1); }
+
+/* ===== 이미지형 공고 시안 (포스터) ===== */
+.poster { --accent: #0067AC; max-width: 580px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.16); background: white; font-family: 'Pretendard', -apple-system, sans-serif; }
+.poster-hero { position: relative; padding: 38px 34px 30px; color: white; overflow: hidden; }
+.poster-hero::after { content: ''; position: absolute; right: -50px; top: -50px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+.poster-hero::before { content: ''; position: absolute; right: 30px; bottom: -70px; width: 140px; height: 140px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+.poster-badge { position: absolute; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.22); backdrop-filter: blur(4px); color: white; font-size: 10.5px; font-weight: 700; padding: 5px 11px; border-radius: 20px; z-index: 2; }
+.poster-badge i { font-size: 13px; }
+.poster-logo { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; opacity: 0.95; position: relative; z-index: 1; }
+.poster-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; opacity: 0.8; margin-top: 18px; position: relative; z-index: 1; }
+.poster-title { font-size: 27px; font-weight: 800; line-height: 1.28; margin-top: 8px; letter-spacing: -0.6px; position: relative; z-index: 1; }
+.poster-tagline { font-size: 13.5px; font-weight: 600; opacity: 0.92; margin-top: 14px; position: relative; z-index: 1; }
+.poster-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; position: relative; z-index: 1; }
+.poster-tag { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 7px; }
+.poster-body { padding: 28px 34px 8px; }
+.poster-sec { margin-bottom: 22px; }
+.poster-sec-title { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: var(--text-1); margin-bottom: 11px; }
+.poster-sec-title i { font-size: 17px; color: var(--accent); }
+.poster-list { list-style: none; padding: 0; margin: 0; }
+.poster-list li { position: relative; padding-left: 18px; font-size: 12.8px; color: var(--text-2); line-height: 1.55; margin-bottom: 7px; }
+.poster-list li::before { content: ''; position: absolute; left: 2px; top: 7px; width: 6px; height: 6px; border-radius: 2px; background: var(--accent); }
+.poster-process { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.poster-proc { background: color-mix(in srgb, var(--accent) 9%, white); color: var(--accent); font-size: 11.5px; font-weight: 700; padding: 7px 12px; border-radius: 8px; }
+.poster-process i { color: var(--text-3); font-size: 14px; }
+.poster-footer { background: #F8FAFC; padding: 20px 34px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid var(--border); }
+.poster-foot-info { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-2); font-weight: 600; }
+.poster-foot-info div { display: flex; align-items: center; gap: 6px; }
+.poster-foot-info i { font-size: 14px; color: var(--accent); }
+.poster-cta { background: var(--accent); color: white; font-size: 13.5px; font-weight: 800; padding: 13px 30px; border-radius: 10px; box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent); }
+/* 직무별 테마 (헤더 그라데이션) */
+.poster.theme-product .poster-hero { background: linear-gradient(135deg, #1A2B6B 0%, #273A92 55%, #2563CC 100%); }
+.poster.theme-it .poster-hero { background: linear-gradient(135deg, #00538C 0%, #0090D0 55%, #00C2D6 100%); }
+.poster.theme-newgrad .poster-hero { background: linear-gradient(135deg, #176C43 0%, #2DAE7B 55%, #4CC99A 100%); }
+.poster.theme-sales .poster-hero { background: linear-gradient(135deg, #B83232 0%, #E84545 55%, #F56A6A 100%); }
+.poster.theme-default .poster-hero { background: var(--grad-blue); }
 </style>
 </head>
 <body>
@@ -1452,6 +1497,76 @@ function resetDemo() {
   window.location.href = 'index.html';
 }
 
+// ===== 직무별 디자인 테마 판별 (이미지형 시안용) =====
+function getJobTheme(office, dept, position, recruitType) {
+  const s = ((office || '') + (dept || '') + (position || '')).toLowerCase();
+  if (recruitType && recruitType.indexOf('신입') !== -1)
+    return { key: 'newgrad', label: '신입', emoji: '🌱', tagline: '함께 성장할 신입 인재를 찾습니다' };
+  if (/it|디지털|개발|아키텍|클라우드|데이터|시스템/.test(s))
+    return { key: 'it', label: '디지털·IT', emoji: '💻', tagline: '디지털 혁신을 이끌 분을 찾습니다' };
+  if (/상품|계리|pricing|보험수리/.test(s))
+    return { key: 'product', label: '상품기획', emoji: '📊', tagline: '보험상품의 미래를 설계할 분을 찾습니다' };
+  if (/영업|마케팅|세일즈|채널/.test(s))
+    return { key: 'sales', label: '영업·마케팅', emoji: '📈', tagline: '시장을 함께 키워갈 분을 찾습니다' };
+  return { key: 'default', label: '', emoji: '🔍', tagline: '유능하고 역량있는 인재를 찾습니다' };
+}
+
+// ===== 이미지형 공고 시안(포스터) HTML 생성 =====
+function buildPosterHtml(jd, req, theme, v) {
+  const accentMap = { product: '#273A92', it: '#0090D0', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
+  const accent = accentMap[theme.key] || accentMap.default;
+  // 키워드 태그: req.key_skills 우선, 없으면 required 앞부분
+  let tags = (req && Array.isArray(req.key_skills) && req.key_skills.length) ? req.key_skills.slice(0, 5)
+    : (jd.required || []).slice(0, 4).map(r => r.length > 13 ? r.slice(0, 12) + '…' : r);
+  const wants = (jd.required || []).slice(0, 4);
+  const duties = (jd.main_duties || []).slice(0, 3);
+  const proc = ['서류', '역량검사', '1차 면접', '2차 면접', '최종합격'];
+  return `
+    <div class="poster theme-${theme.key}" style="--accent:${accent}">
+      <div class="poster-hero">
+        <div class="poster-badge"><i class="ti ti-sparkles"></i> AI 생성 시안</div>
+        <div class="poster-logo">ABL생명 · 우리금융그룹</div>
+        <div class="poster-eyebrow">WE ARE HIRING</div>
+        <div class="poster-title">${v.office ? v.office + ' ' : ''}${v.dept}<br>${v.recruitType}직 채용</div>
+        <div class="poster-tagline">${theme.emoji} ${theme.tagline}</div>
+        <div class="poster-tags">${tags.map(t => `<span class="poster-tag">#${String(t).replace(/\s+/g, '')}</span>`).join('')}</div>
+      </div>
+      <div class="poster-body">
+        <div class="poster-sec">
+          <div class="poster-sec-title"><i class="ti ti-user-check"></i> 이런 분을 찾습니다</div>
+          <ul class="poster-list">${wants.map(w => `<li>${w}</li>`).join('')}</ul>
+        </div>
+        <div class="poster-sec">
+          <div class="poster-sec-title"><i class="ti ti-briefcase"></i> 주요 업무</div>
+          <ul class="poster-list">${duties.map(d => `<li>${d}</li>`).join('')}</ul>
+        </div>
+        <div class="poster-sec">
+          <div class="poster-sec-title"><i class="ti ti-route"></i> 전형 절차</div>
+          <div class="poster-process">${proc.map((p, i) => `<span class="poster-proc">${p}</span>${i < proc.length - 1 ? '<i class="ti ti-chevron-right"></i>' : ''}`).join('')}</div>
+        </div>
+      </div>
+      <div class="poster-footer">
+        <div class="poster-foot-info">
+          <div><i class="ti ti-calendar"></i> ~ ${v.applyDeadline}</div>
+          <div><i class="ti ti-map-pin"></i> 서울 본사</div>
+        </div>
+        <div class="poster-cta">지원하기 →</div>
+      </div>
+    </div>
+  `;
+}
+
+// ===== 공고 형식 전환 (표준형 / 이미지형) =====
+function switchPostingFormat(fmt) {
+  const sv = document.getElementById('ptStandardView');
+  const iv = document.getElementById('ptImageView');
+  if (sv) sv.style.display = fmt === 'standard' ? '' : 'none';
+  if (iv) iv.style.display = fmt === 'image' ? '' : 'none';
+  document.querySelectorAll('.pt-fmt-tab').forEach(t => t.classList.toggle('active', t.dataset.fmt === fmt));
+  const scroll = document.getElementById('postingScroll');
+  if (scroll) scroll.scrollTop = 0;
+}
+
 // ===== 최종 채용공고 미리보기 =====
 function openPostingPreview() {
   const data = currentData;
@@ -1582,7 +1697,21 @@ function openPostingPreview() {
     </div>
   `;
 
-  document.getElementById('postingScroll').innerHTML = html;
+  const theme = getJobTheme(office, dept, position, recruitType);
+  const posterHtml = buildPosterHtml(jd, req, theme, { office, dept, recruitType, applyDeadline });
+  const wrapped = `
+    <div class="pt-format-tabs">
+      <button class="pt-fmt-tab active" data-fmt="standard" onclick="switchPostingFormat('standard')"><i class="ti ti-file-text"></i> 표준형 공고 (자사 채용홈)</button>
+      <button class="pt-fmt-tab" data-fmt="image" onclick="switchPostingFormat('image')"><i class="ti ti-sparkles"></i> 이미지형 시안 (SNS·잡포털)</button>
+    </div>
+    <div id="ptStandardView">${html}</div>
+    <div id="ptImageView" style="display:none">
+      <div class="pt-image-intro"><i class="ti ti-sparkles"></i> <span>AI가 <b>${theme.label || '직무'}</b> 특성을 분석해 디자인한 이미지형 공고 시안입니다. 자사 채용홈 외에 <b>SNS·잡포털 게시용</b>으로 바로 활용할 수 있습니다.</span></div>
+      ${posterHtml}
+    </div>
+  `;
+
+  document.getElementById('postingScroll').innerHTML = wrapped;
   document.getElementById('postingBackdrop').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
