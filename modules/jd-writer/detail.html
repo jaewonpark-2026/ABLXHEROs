@@ -822,7 +822,7 @@ function renderHRFeedbackArea(data) {
     area.innerHTML = `
       <div class="action-section" style="background:linear-gradient(135deg,#FFF8E8,#FFF1D6); border:1px solid #E8A93C;">
         <div class="action-title" style="color:#9A6D00;"><i class="ti ti-clock"></i> 해당 부서 검토 대기 중</div>
-        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(상품본부 상품기획팀 박채희 부장)에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
+        <p style="font-size:13px; color:var(--text-2); line-height:1.7;">해당 부서(${data.request.creator})에게 JD 검토를 요청한 상태입니다. 해당 부서가 수정 의견을 보내면 이곳에서 AI 재작성을 진행할 수 있습니다.</p>
       </div>`;
     return;
   }
