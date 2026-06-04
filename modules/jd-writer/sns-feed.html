@@ -177,6 +177,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .creative { container-type: inline-size; width: 100%; height: 100%; position: relative; overflow: hidden; font-family: 'Wooridaum','Malgun Gothic',sans-serif; --accent: #0067AC; }
 .creative * { box-sizing: border-box; }
 .cr-bg { position: absolute; inset: 0; background: linear-gradient(165deg, #FFFFFF 0%, #F3F8FD 52%, #E9F2FB 100%); }
+.v-b .cr-bg { background: linear-gradient(165deg, #FFFFFF 0%, #FFF4F9 48%, #FFEBF4 100%); }
 .cr-glow { position: absolute; width: 88cqw; height: 88cqw; right: -30cqw; top: -30cqw; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent), transparent 62%); pointer-events: none; }
 .cr-glow.b { right: auto; left: -34cqw; top: auto; bottom: -34cqw; width: 70cqw; height: 70cqw; background: radial-gradient(circle, rgba(232,85,85,0.10), transparent 62%); }
 .cr-mascot { position: absolute; z-index: 2; filter: drop-shadow(0 4cqw 6cqw rgba(20,40,80,0.16)); }
@@ -285,7 +286,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
         <!-- LEFT: 컨트롤 -->
         <div>
           <div class="panel">
-            <div class="panel-title"><i class="ti ti-file-text"></i> 생성 기준 JD <span class="mini" id="jdMini">불러오는 중…</span></div>
+            <div class="panel-title"><i class="ti ti-file-text"></i> 생성 기준 JD</div>
             <div class="jd-src" id="jdSrc"></div>
             <div class="src-tags" id="srcTags"></div>
           </div>
@@ -393,32 +394,43 @@ const reqId = getParam('id') || 'req-001';
 function goBack(e) { e.preventDefault(); window.location.href = 'detail.html?id=' + reqId + (_asParam ? '&as=' + _asParam : ''); }
 function logout() { sessionStorage.clear(); window.location.href = '../../index.html'; }
 
-// ===== 직무 테마 (detail.html과 동일 로직) =====
+// ===== 직무 테마 (employment type이 아니라 '직무' 기반. 색만 신입이면 초록 유지) =====
 function getJobTheme(office, dept, position, recruitType) {
   const s = ((office || '') + (dept || '') + (position || '')).toLowerCase();
-  if (recruitType && recruitType.indexOf('신입') !== -1)
-    return { key: 'newgrad', label: '신입', emoji: '🌱', tagline: '함께 성장할 신입 인재를 찾습니다' };
-  if (/it|디지털|개발|아키텍|클라우드|데이터|시스템/.test(s))
-    return { key: 'it', label: '디지털·IT', emoji: '💻', tagline: '디지털 혁신을 이끌 분을 찾습니다' };
-  if (/상품|계리|pricing|보험수리/.test(s))
-    return { key: 'product', label: '상품기획', emoji: '📊', tagline: '보험상품의 미래를 설계할 분을 찾습니다' };
-  if (/영업|마케팅|세일즈|채널/.test(s))
-    return { key: 'sales', label: '영업·마케팅', emoji: '📈', tagline: '시장을 함께 키워갈 분을 찾습니다' };
-  return { key: 'default', label: '', emoji: '🔍', tagline: '유능하고 역량있는 인재를 찾습니다' };
+  let key = 'default';
+  if (/it|디지털|개발|아키텍|클라우드|데이터|시스템|엔지니어/.test(s)) key = 'it';
+  else if (/자산운용|운용|투자|포트폴리오|asset/.test(s)) key = 'asset';
+  else if (/상품|계리|pricing|보험수리/.test(s)) key = 'product';
+  else if (/마케팅|브랜드|디자인|광고|콘텐츠|크리에이/.test(s)) key = 'marketing';
+  else if (/영업|세일즈|채널/.test(s)) key = 'sales';
+  const META = {
+    product:   { label: '상품기획', emoji: '📊' },
+    it:        { label: '디지털·IT', emoji: '💻' },
+    asset:     { label: '자산운용', emoji: '📈' },
+    marketing: { label: '마케팅기획', emoji: '🎨' },
+    sales:     { label: '영업', emoji: '📈' },
+    default:   { label: '', emoji: '🔍' }
+  }[key];
+  const isNew = !!(recruitType && recruitType.indexOf('신입') !== -1);
+  return { key, colorKey: isNew ? 'newgrad' : key, label: META.label, emoji: META.emoji };
 }
 const THEME_GRAD = {
   product: 'linear-gradient(150deg, #1A2B6B 0%, #273A92 55%, #2563CC 100%)',
   it: 'linear-gradient(150deg, #00538C 0%, #0090D0 55%, #00C2D6 100%)',
+  asset: 'linear-gradient(150deg, #0A6B52 0%, #0E8C6A 55%, #2CC79A 100%)',
+  marketing: 'linear-gradient(150deg, #9C2E70 0%, #D6489B 55%, #F06FB6 100%)',
   newgrad: 'linear-gradient(150deg, #176C43 0%, #2DAE7B 55%, #4CC99A 100%)',
   sales: 'linear-gradient(150deg, #B83232 0%, #E84545 55%, #F56A6A 100%)',
   default: 'linear-gradient(135deg, #0067AC 0%, #2482C5 50%, #00AEC6 100%)'
 };
-const THEME_ACCENT = { product: '#273A92', it: '#0090D0', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
-const THEME_ICON = { product: 'ti-chart-pie', it: 'ti-device-desktop', newgrad: 'ti-seeding', sales: 'ti-trending-up', default: 'ti-briefcase' };
-const THEME_ENG = { product: 'Product', it: 'Engineering', newgrad: 'New Grad', sales: 'Sales · MKT', default: 'Careers' };
+const THEME_ACCENT = { product: '#273A92', it: '#0090D0', asset: '#0E8C6A', marketing: '#D6489B', newgrad: '#2DAE7B', sales: '#E84545', default: '#0067AC' };
+const THEME_ICON = { product: 'ti-chart-pie', it: 'ti-device-desktop', asset: 'ti-coins', marketing: 'ti-palette', newgrad: 'ti-seeding', sales: 'ti-trending-up', default: 'ti-briefcase' };
+const THEME_ENG = { product: 'Product', it: 'Engineering', asset: 'Asset Mgmt', marketing: 'Marketing', newgrad: 'New Grad', sales: 'Sales', default: 'Careers' };
 const THEME_HOOK = {
   product: '보험의 내일을 함께 그릴 동료를 찾아요',
   it: '기술로 금융의 내일을 그릴 동료를 찾아요',
+  asset: '자산의 내일을 함께 키워갈 동료를 찾아요',
+  marketing: '브랜드의 내일을 함께 그릴 동료를 찾아요',
   newgrad: '첫 커리어를 ABL에서 함께 그릴 동료를 찾아요',
   sales: '시장의 내일을 함께 키워갈 동료를 찾아요',
   default: 'ABL의 내일을 함께 그릴 동료를 찾아요'
@@ -459,7 +471,7 @@ function creativeBase(variant, centered) {
   const foot = centered
     ? `<div class="cr-deadline inline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)} · 프로필 링크에서 지원</div>`
     : `<div class="cr-foot"><div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div><div class="cr-cta">지원하기 →</div></div>`;
-  return `<div class="creative ${variant}" style="--accent:${THEME_ACCENT[t.key]}">
+  return `<div class="creative ${variant}" style="--accent:${THEME_ACCENT[t.colorKey] || THEME_ACCENT[t.key]}">
     <div class="cr-bg"></div><div class="cr-glow"></div><div class="cr-glow b"></div>
     <i class="cr-watermark ti ${THEME_ICON[t.key]}"></i>
     <img class="cr-mascot" src="${mascot}" alt="ABL 마스코트">
@@ -539,7 +551,6 @@ function toggleCap() {
 }
 function renderJDPanel() {
   const c = CTX;
-  document.getElementById('jdMini').textContent = reqId;
   document.getElementById('jdSrc').innerHTML = `
     <div class="row"><b>직무</b> &nbsp;${esc(c.position)}</div>
     <div class="row"><b>부서</b> &nbsp;${esc(c.office ? c.office + ' · ' : '')}${esc(c.dept)}</div>
