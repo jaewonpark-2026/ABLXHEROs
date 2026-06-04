@@ -189,6 +189,10 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
 /* 동기 요약 + 성향 맞춤 커뮤니케이션 (§5-1) */
 .motiv-summary { font-size: 12px; color: var(--text-1); line-height: 1.75; font-weight: 600; padding: 12px 14px; background: #FAFCFE; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; }
 .motiv-summary strong { color: var(--main-1); }
+.motiv-key { padding: 12px 14px; background: linear-gradient(135deg, #FFFBEB, #FEF6E0); border: 1px solid #FBE3A8; border-radius: 10px; margin-bottom: 12px; }
+.motiv-key .mk-label { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; color: #B7791F; margin-bottom: 6px; }
+.motiv-key p { margin: 0; font-size: 12px; color: var(--text-1); line-height: 1.7; font-weight: 600; }
+.motiv-key strong { color: #B7791F; font-weight: 800; }
 .comm-tips { margin-top: 12px; padding: 14px 16px; background: linear-gradient(135deg, #F0F7FD, #F7FBFE); border: 1px solid var(--border); border-left: 3px solid var(--main-1); border-radius: 0 10px 10px 0; }
 .comm-tips .ct-title { font-size: 11.5px; font-weight: 700; color: var(--main-1); display: flex; align-items: center; gap: 6px; margin-bottom: 9px; }
 .comm-tips ul { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -519,6 +523,10 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
           <div class="strat-sub-title"><span class="ss-num">1</span> 동기 요인 프로파일</div>
           <p class="ss-desc">면접·자소서 분석 기반, 후보자의 관심사·성과·동기와 효과적인 커뮤니케이션 방식입니다. 협상 시 금액만큼이나 이 요인을 자극하는 것이 효과적입니다.</p>
           <div class="ss-body">
+            <div class="motiv-key">
+              <span class="mk-label"><i class="ti ti-key"></i> 이직 핵심 동기 · 입사 설득 포인트</span>
+              <p>이 후보는 <strong>연봉보다 역할·성장</strong>에 의해 움직입니다. 면접에서 "맡고 싶은 프로젝트"로 IFRS17·K-ICS 환경의 상품 포트폴리오 재설계를 직접 꼽았고, 본인이 설계한 시나리오 매트릭스가 의사결정에 그대로 반영되는 환경에서 에너지를 얻는다고 반복 언급했습니다. 협상은 금액 경쟁보다 <strong>오너십·성장 기회</strong>를 전면에 제시하는 방향이 효과적입니다.</p>
+            </div>
             <div class="motiv-summary">
               현재 관심은 <strong>IFRS17·K-ICS 규제 환경에서의 상품 Pricing</strong>에 집중되어 있습니다. 변액·종신·정기보험 신상품 3건을 직접 런칭하고 IFRS17 대응 TF에 12개월 자발 참여했으며, 무배당종신 CSM 재산정 과정에서 <strong>사업비 12% 절감</strong>, GA채널 정기보험은 보수·기준·공격 3종 손익 시나리오로 본부장 결재를 단순화해 <strong>출시 6개월 만에 매출 1위</strong>를 만들었습니다. 이 성과들은 면접 답변과 자소서에서 일관되게 검증되었고(답변 일관성 ★★★★★), 본인이 설계한 시나리오 매트릭스가 본부장 의사결정에 직접 반영되는 환경에서 가장 큰 에너지를 얻는다고 면접 전반에 걸쳐 반복 언급했습니다.
             </div>
@@ -584,15 +592,16 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
                 <label class="check-item"><input type="checkbox"> <span>오퍼 확정 후 처우 변경은 합류 6개월차 점검 1회만 가능</span></label>
               </div>
               <div class="check-group">
-                <div class="cg-label"><i class="ti ti-alert-triangle"></i> 후보자 강점 · 협상 카드</div>
-                <label class="check-item"><input type="checkbox"> <span>IFRS17 CSM 산정 + K-ICS 가정 설계 <strong>직접 경험자</strong> — 시장에 드뭄</span></label>
-                <label class="check-item"><input type="checkbox"> <span>정량 성과 검증됨: <strong>CSM 5.8%·사업비 12% 절감</strong> (자소서·면접 일관)</span></label>
+                <div class="cg-label"><i class="ti ti-alert-triangle"></i> 내부 리스크 · 주의 사항</div>
+                <label class="check-item"><input type="checkbox"> <span>본 오퍼(7,200만원) 기준 <strong>재직자 6명 역전</strong> — 역전 발생 범위 사전 확인 및 정기인상 시 조정 계획 필요</span></label>
+                <label class="check-item"><input type="checkbox"> <span>현업 부서(상품본부) 기대치와 HR 오퍼 기준 간 <strong>사전 조율 필수</strong> — 미흡 시 입사 후 처우 갈등 소지</span></label>
+                <label class="check-item"><input type="checkbox"> <span>본부장 최종 의사결정 사전 정렬 — 합의 전 1회 보고</span></label>
               </div>
               <div class="check-group">
-                <div class="cg-label"><i class="ti ti-shield-check"></i> 내부 리스크 · 주의 사항</div>
-                <label class="check-item"><input type="checkbox"> <span>밴드 상단 진입 시 <strong>재직자 5명 역전</strong> — 정기인상 시 추가 조정 필요</span></label>
-                <label class="check-item"><input type="checkbox"> <span>본부장(상품본부) 의사결정 사전 정렬 필수 — 최종 합의 전 1회 보고</span></label>
-                <label class="check-item"><input type="checkbox"> <span>처우 협의 결렬 시 합류 지연 영향: 신상품 출시 일정 약 2개월 지연 가능</span></label>
+                <div class="cg-label"><i class="ti ti-bulb"></i> 후보자 강점 · 맞춤 설득 전략</div>
+                <label class="check-item"><input type="checkbox"> <span><strong>성과 요약</strong> — IFRS17 CSM 산정·K-ICS 가정 설계 직접 경험 + CSM 5.8%·사업비 12% 절감. 즉시 기여 가능한 희소 인재</span></label>
+                <label class="check-item"><input type="checkbox"> <span><strong>동기 맞춤 전략</strong> — 연봉보다 역할·성장에 반응. Pricing 풀 오너십·본인 분석이 의사결정에 반영되는 환경을 전면에 제시</span></label>
+                <label class="check-item"><input type="checkbox"> <span><strong>회사 강점 체크</strong> — 그룹 채널 시너지·IFRS17 선도 도입·사내 도메인 강사 권한으로 성장 기회를 구체화해 설득</span></label>
               </div>
             </div>
           </div>
@@ -713,13 +722,13 @@ button { cursor: pointer; border: 0; background: transparent; font-family: inher
       </div>
 
       <div class="resume-block">
-        <div class="resume-block-title">2차 면접 (2026.06.03 15:00 · 본사 12층 임원실)</div>
+        <div class="resume-block-title">2차 면접 (2026.06.19 13:00 · 본사 12층 임원실)</div>
         <div class="eval-interview">
           <div class="ei-head">
             <span class="ei-stage">2차 · 박성준 상무</span>
-            <span class="ei-when">예정</span>
+            <span class="ei-when">완료</span>
           </div>
-          <div class="ei-text">2차 면접 예정 — 본부 향후 3년 상품 전략(CSM 안정 보장성 상품) 견해, ABL 합류 후 첫 6개월 마일스톤, 조직 문화 적합성 중심으로 검토 예정.</div>
+          <div class="ei-text">본부 향후 3년 상품 전략(CSM 안정 보장성 상품)에 대한 견해가 명확하고 본부 방향성과 부합. ABL 합류 후 첫 6개월 마일스톤을 구체적으로 제시했으며, 조직 문화 적합성도 우수. 최종 합류 추천 — 처우 협의 진행.</div>
         </div>
       </div>
 
