@@ -84,7 +84,7 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
 .ph-title { font-size: 23px; font-weight: 700; letter-spacing: -0.5px; display: flex; align-items: center; gap: 11px; }
 .ph-spark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #7B61FF, #00AEC6); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 19px; box-shadow: 0 6px 16px -4px rgba(123,97,255,0.5); }
-.ph-sub { font-size: 13.5px; color: var(--text-2); margin-top: 7px; line-height: 1.55; max-width: 560px; }
+.ph-sub { font-size: 13.5px; color: var(--text-2); margin-top: 7px; line-height: 1.55; max-width: 560px; word-break: keep-all; }
 .ph-new { display:inline-flex; align-items:center; gap:5px; background: linear-gradient(135deg, #FFEDED, #FFE0E0); color: var(--abl-red); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
 
 /* ===== WHY 배너 ===== */
@@ -209,14 +209,14 @@ body { font-family: 'Wooridaum', 'Malgun Gothic', sans-serif; background: var(--
 .cr-deadline.inline { margin-top: 4cqw; }
 .cr-cta { background: var(--accent); color: white; font-size: 3.4cqw; font-weight: 800; padding: 2.2cqw 4.6cqw; border-radius: 6cqw; box-shadow: 0 2cqw 5cqw rgba(0,103,172,0.22); }
 
-/* Variant A — 라이트 센터 (마스코트 가운데 하단, 얼굴 위주로 올라옴) */
-.v-a .cr-mascot { left: 50%; transform: translateX(-50%); bottom: -45cqw; width: 64cqw; }
+/* Variant A — 라이트 센터 (놀란 곰, 가운데 하단에서 얼굴 위주로 올라옴) */
+.v-a .cr-mascot { left: 50%; transform: translateX(-50%); bottom: -36cqw; width: 56cqw; }
 
-/* Variant B — 곰돌이 상단 중앙, 본문 하단 (가운데 정렬) */
+/* Variant B — 곰돌이 상단 중앙(돋보기 곰), 본문 하단 (가운데 정렬) */
 .v-b .cr-pad { align-items: center; text-align: center; }
 .v-b .cr-top { width: 100%; }
-.v-b .cr-mascot { left: 50%; transform: translateX(-50%); top: 12cqw; bottom: auto; width: 37cqw; }
-.v-b .cr-slogan { margin-top: 51cqw; }
+.v-b .cr-mascot { left: 50%; transform: translateX(-50%); top: 13cqw; bottom: auto; width: 53cqw; }
+.v-b .cr-slogan { margin-top: 40cqw; }
 .v-b .cr-tags { justify-content: center; }
 .v-b .cr-title { margin-top: 2.4cqw; }
 .v-b .cr-foot { justify-content: center; }
@@ -418,10 +418,10 @@ const THEME_ICON = { product: 'ti-chart-pie', it: 'ti-device-desktop', newgrad: 
 const THEME_ENG = { product: 'Product', it: 'Engineering', newgrad: 'New Grad', sales: 'Sales · MKT', default: 'Careers' };
 const THEME_HOOK = {
   product: '보험의 내일을 함께 그릴 동료를 찾아요',
-  it: '기술로 금융을 더 편하게 만들 동료를 찾아요',
-  newgrad: '첫 커리어, ABL에서 시작하세요',
-  sales: '시장을 함께 키워갈 동료를 찾아요',
-  default: 'ABL과 함께 성장할 동료를 찾아요'
+  it: '기술로 금융의 내일을 그릴 동료를 찾아요',
+  newgrad: '첫 커리어를 ABL에서 함께 그릴 동료를 찾아요',
+  sales: '시장의 내일을 함께 키워갈 동료를 찾아요',
+  default: 'ABL의 내일을 함께 그릴 동료를 찾아요'
 };
 // SNS 피드용으로 격식 직함(시니어/매니저/직급 등) 제거
 function cleanRole(pos) {
@@ -431,6 +431,8 @@ function cleanRole(pos) {
   return r || String(pos || '').trim();
 }
 const MASCOT = '../../assets/mascot/abl-bear.png';
+const MASCOT_A = '../../assets/mascot/abl-bear-wow.png';
+const MASCOT_B = '../../assets/mascot/abl-bear-search.png';
 const LOGO_ABL = '../../assets/logos/abl-logo.png';
 const LOGO_WOORI = '../../assets/logos/woori-logo.png';
 
@@ -449,17 +451,18 @@ function crTags() {
   const t = THEME, c = CTX;
   return `<span class="cr-icon-badge"><i class="ti ${THEME_ICON[t.key]}"></i></span>
         <span class="cr-tag">${esc(c.type)}</span>
-        <span class="cr-tag">${esc(THEME_ENG[t.key])}</span>`;
+        <span class="cr-tag">${esc(t.label || c.dept || c.position)}</span>`;
 }
 function creativeBase(variant, centered) {
   const t = THEME, c = CTX;
+  const mascot = centered ? MASCOT_A : MASCOT_B;
   const foot = centered
     ? `<div class="cr-deadline inline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)} · 프로필 링크에서 지원</div>`
     : `<div class="cr-foot"><div class="cr-deadline"><i class="ti ti-calendar-event"></i> ~ ${esc(c.deadlineShort)}</div><div class="cr-cta">지원하기 →</div></div>`;
   return `<div class="creative ${variant}" style="--accent:${THEME_ACCENT[t.key]}">
     <div class="cr-bg"></div><div class="cr-glow"></div><div class="cr-glow b"></div>
     <i class="cr-watermark ti ${THEME_ICON[t.key]}"></i>
-    <img class="cr-mascot" src="${MASCOT}" alt="ABL 마스코트">
+    <img class="cr-mascot" src="${mascot}" alt="ABL 마스코트">
     <div class="cr-pad">
       <div class="cr-top">
         <div class="cr-brand"><img class="cr-logo-abl" src="${LOGO_ABL}" alt="ABL생명"><span class="cr-logo-sep"></span><img class="cr-logo-woori" src="${LOGO_WOORI}" alt="우리금융그룹"></div>
@@ -481,8 +484,10 @@ const VARIANT_LABELS = { a: '센터 히어로', b: '사이드 클린' };
 // ===== 캡션 자동 작성 =====
 function buildCaptionParts() {
   const c = CTX;
-  const lead = firstSentence(JD && JD.role_summary) || `${c.dept}에서 함께할 ${c.position}를 모십니다.`;
-  const head = `🐻 ABL생명이 함께 성장할 ${c.position}를 찾습니다!`;
+  let duties = firstSentence(JD && JD.role_summary) || '';
+  duties = duties.replace(/^.*?(로서|로써)[,，]\s*/, '').trim();
+  const lead = duties ? `${c.dept}에서 ${duties}` : `${c.dept}에서 함께할 동료를 찾습니다`;
+  const head = `🐻 ABL생명이 함께 성장할 소중한 동료를 찾습니다!`;
   const lines = [
     head, '',
     lead + '.', '',
@@ -491,9 +496,8 @@ function buildCaptionParts() {
     `🔗 지원은 프로필 링크에서!`
   ];
   const baseTags = ['ABL생명', '에이비엘생명', '우리금융그룹', '채용', `${tagify(c.type)}채용`, tagify(c.dept)];
-  const skillTags = c.skills.slice(0, 4).map(tagify);
   const extra = ['보험사채용', 'hiring', '채용공고', 'jobs'];
-  const tags = [...new Set([...baseTags, ...skillTags, ...extra])].filter(Boolean);
+  const tags = [...new Set([...baseTags, ...extra])].filter(Boolean);
   return { text: lines.join('\n'), tags };
 }
 
@@ -541,7 +545,7 @@ function renderJDPanel() {
     <div class="row"><b>부서</b> &nbsp;${esc(c.office ? c.office + ' · ' : '')}${esc(c.dept)}</div>
     <div class="row"><b>채용형태</b> &nbsp;${esc(c.type)}</div>
     <div class="row"><b>직무 테마</b> &nbsp;${THEME.emoji} ${esc(THEME.label || '일반')}</div>`;
-  document.getElementById('srcTags').innerHTML = c.skills.map(s => `<span class="src-tag">#${esc(tagify(s))}</span>`).join('');
+  document.getElementById('srcTags').innerHTML = '';
 }
 function renderMeta() {
   // 좋아요/댓글 수 (시연용 의사난수 — 직무명 기반 고정)
@@ -553,7 +557,7 @@ function renderMeta() {
 }
 
 // ===== 생성 애니메이션 =====
-const GEN_STEPS = ['JD 데이터 분석', '직무 특성 매칭', '비주얼 레이아웃 3종 생성', '캡션·해시태그 작성'];
+const GEN_STEPS = ['JD 데이터 분석', '직무 특성 매칭', '비주얼 레이아웃 2종 생성', '캡션·해시태그 작성'];
 let genTimers = [];
 function runGeneration(done) {
   const ov = document.getElementById('genOverlay');
@@ -617,7 +621,7 @@ async function loadData() {
   renderVariants();
   renderCaption();
   renderMeta();
-  runGeneration(() => { renderStage(); });
+  renderStage();
 }
 loadData();
 </script>
